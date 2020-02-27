@@ -35,7 +35,7 @@ before_install:
 install:
   - echo pass
 script:
-  - singularity pull docker://python:2.7.17-alpine
+  - singularity pull docker://alpine:lastest
   - python test.py
   - tree /deps
 
