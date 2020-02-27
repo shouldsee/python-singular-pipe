@@ -7,6 +7,7 @@ python:
   - "3.5"
 cache: pip
 before_install:
+  - eval "$(gimme 1.13.1)"
   # - golang
   - sudo bash install_singular.sh
 #   - pip install . 

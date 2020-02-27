@@ -21,6 +21,7 @@ echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc
 source ~/.bashrc    
 export GOPATH=${HOME}/go
 export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+mkdir -p $GOPATH
 go --help
 echo "[installed] go"
 	
