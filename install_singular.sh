@@ -1,6 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
- apt-get update && \
-  apt-get install -qy build-essential \
+ sudo apt-get update && \
+  sudo apt-get install -qy build-essential \
    libssl-dev uuid-dev libseccomp-dev \
    pkg-config squashfs-tools cryptsetup
 
@@ -34,7 +34,8 @@ tar -xf singularity-$VERSION.tar.gz
 {
 	cd singularity
 	go run mlocal/checks/version.go
-	./mconfig && \
+	mkdir -p /opt/singularity
+	./mconfig --prefix=/opt/singularity && \
     make -C ./builddir && \
     make -C ./builddir install
     cd ..

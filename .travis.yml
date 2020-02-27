@@ -7,10 +7,10 @@ python:
   - "3.5"
 cache: pip
 before_install:
-  # - sudo gimme 1.13.5
-  - sudo eval "$(gimme 1.13.5)"
-  - sudo go version
-  - sudo -E bash install_singular.sh
+  - gimme 1.13.5
+  - eval "$(gimme 1.13.5)"
+  # - sudo go version
+  - bash install_singular.sh
 #   - pip install . 
 #   - docker pull quay.io/singularity/singularity:v3.5.3-slim
 install:
