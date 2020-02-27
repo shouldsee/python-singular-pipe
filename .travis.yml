@@ -7,7 +7,8 @@ python:
   - "3.5"
 cache: pip
 before_install:
-  - bash install_singular.sh
+  # - golang
+  - sudo bash install_singular.sh
 #   - pip install . 
 #   - docker pull quay.io/singularity/singularity:v3.5.3-slim
 script:
