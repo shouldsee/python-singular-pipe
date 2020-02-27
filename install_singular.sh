@@ -48,7 +48,9 @@ tar -xf singularity-$VERSION.tar.gz
 }
 fi
 sudo ln -sf $EXE /usr/local/bin
-sudo chmod 4755 $prefix/libexec/singularity/bin/starter-suid
+# sudo chmod 4755 $prefix/libexec/singularity/bin/starter-suid
+sudo chmod 4755 $prefix/libexec/singularity/bin/*-suid
+cat $prefix/etc/singularity/singularity.conf
 ls -lhtr $prefix/libexec/singularity/bin/
 # sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 
