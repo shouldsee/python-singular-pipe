@@ -32,6 +32,8 @@ before_install:
 #   - pip install . 
 #   - docker pull quay.io/singularity/singularity:v3.5.3-slim
 install:
+  - singularity pull docker://python:2.7.17-alpine
+  # - singularity pull 
   - echo pass
   # - pip install .
 script:
