@@ -21,7 +21,7 @@ install:
   - echo pass
 script:
   - singularity pull docker://alpine:lastest
-  - python test.py
+  - sudo python test.py
   # - ls -lhtr /deps/*
   # - tree /deps
 
