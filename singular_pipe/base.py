@@ -5,7 +5,7 @@ import subprocess
 from six import string_types
 
 import functools
-from singular_pipe.types import InputFile,OutputFile,File,TempFile,FileTracer, Prefix
+from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix
 
 
 
@@ -36,6 +36,7 @@ if 1:
 		# d = get_func_default_dict(func)
 		@functools.wraps(func)
 		def gunc(*a,**kw):
+			a[0].dirname().makedirs_p()
 			return  func(func,*a,**kw)
 		res = inspect.getargspec(func)
 		args = res.args or []
@@ -118,17 +119,21 @@ if 1:
 	def make_files_for(cmd):
 		FS = []
 		for F in cmd:
-			if isinstance(F,File):
+			if isinstance(F, (File,Prefix)):
 				F.dirname().makedirs_p()
 				if not isinstance(F, InputFile):
 					F.touch()
 				FS.append(F)
 		return FS
+
 	def bind_files(files):
 		files = list_flatten_strict(files)
 		lst = []
 		for F in files:
 			F = F.realpath()
+			#### bind the whole directory for a prefix
+			if isinstance(F,Prefix):
+				F = F.dirname()
 			if isinstance(F, InputFile):
 				mode = 'ro'
 			else:

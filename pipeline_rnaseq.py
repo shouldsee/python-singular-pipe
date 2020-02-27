@@ -94,7 +94,7 @@ def job_hisat2_index(
 	CMD = [
 	'hisat2-build',
 	 InputFile(FASTA_FILE),
-	 OutputFile(_out.index_prefix),
+	 Prefix(_out.index_prefix),
 	 '&>', OutputFile(_out.log),
 	 ]
 	res = singularity_run(CMD, _IMAGE)

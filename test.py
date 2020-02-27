@@ -7,6 +7,9 @@ WKDIR  = Path('/deps/test_build/').makedirs_p()
 THREADS = 2
 from singular_pipe.runner import cache_run, cache_check, force_run
 from pipeline_rnaseq import get_output_files
+_ = '''
+singularity pull docker://quay.io/singularity/singularity:v3.5.3-slim
+'''
 # from pipeutil.runner import cache_run, cache_check, force_run
 # run = force_run
 # run = cache_run
@@ -22,12 +25,13 @@ for run in [
 	lambda *a:cache_run(*a, verbose=1) ]:
 
 	index = run(job_hisat2_index,
-		DATA_DIR/'phiX.fasta',
+		'/deps/index/phiX.fasta.hisat2',
 		DATA_DIR/'phiX.fasta'
 		)
 
 	tups = (job_hisat2_index,
-		DATA_DIR/'phiX.fasta',
+		'/deps/index/phiX.fasta.hisat2',
+		# DATA_DIR/'phiX.fasta',
 		DATA_DIR/'phiX.fasta'
 		)
 	print('[CACHE_CHECK]%s'%cache_check(*tups))
