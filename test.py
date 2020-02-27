@@ -18,7 +18,8 @@ def test_basic():
 	for run in [
 		force_run, 
 		cache_run_verbose,
-		cache_run_verbose,]:
+		cache_run_verbose,
+		]:
 
 		index = run(job_hisat2_index,
 			'/deps/index/phiX.fasta.hisat2',
@@ -52,6 +53,7 @@ def test_basic():
 			curr.output.fastq_2,
 			THREADS)
 
+test_basic()
 
 		'''
 		singularity exec docker://quay.io/biocontainers/ucsc-genepredtogtf:377--h35c10e6_2 bash -c  "cut -f 2- temp.genepred | genePredToGtf file stdin out.gtf"
