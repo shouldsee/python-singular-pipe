@@ -23,7 +23,7 @@ ln -sf /usr/local/go/bin/go /usr/local/bin/go
 VERSION=3.5.3
 URL=https://github.com/singularityware/singularity/releases/download/v$VERSION/singularity-$VERSION.tar.gz
 _down -o $(basename $URL) $URL
-tar xvf singularity-$VERSION.tar.gz
+tar -xf singularity-$VERSION.tar.gz
 
 {
 	cd singularity
