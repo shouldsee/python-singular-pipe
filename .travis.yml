@@ -1,6 +1,6 @@
 language: python
-services:
-  - go
+# services:
+  # - go
   # - singularity
 python:
   # - "2.7"
@@ -8,6 +8,7 @@ python:
 cache: pip
 before_install:
   - eval "$(gimme 1.13.1)"
+  - go --version
   # - golang
   - sudo bash install_singular.sh
 #   - pip install . 

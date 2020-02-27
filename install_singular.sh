@@ -10,20 +10,21 @@ _down(){
 }
 
 
-#### downlaoad go
-export VERSION=1.13.5 OS=linux ARCH=amd64 
-_down -o go-$VERSION.tar.gz https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz
-tar -C /usr/local/ -xzf go-$VERSION.tar.gz
-# ln -sf /usr/local/go/bin/go /usr/local/bin/go
-# ls -lhtr /usr/local/go
-echo 'export GOPATH=${HOME}/go' >> ~/.bashrc 
-echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc 
-source ~/.bashrc    
-export GOPATH=${HOME}/go
-export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
-mkdir -p $GOPATH
-go --help
-echo "[installed] go"
+# #### downlaoad go
+# export VERSION=1.13.5 OS=linux ARCH=amd64 
+# _down -o go-$VERSION.tar.gz https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz
+# tar -C /usr/local/ -xzf go-$VERSION.tar.gz
+# # ln -sf /usr/local/go/bin/go /usr/local/bin/go
+# # ls -lhtr /usr/local/go
+# echo 'export GOPATH=${HOME}/go' >> ~/.bashrc 
+# echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc 
+# source ~/.bashrc    
+# export GOPATH=${HOME}/go
+# export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
+# mkdir -p $GOPATH
+# go --help
+go --version
+# echo "[installed] go"
 	
 VERSION=3.5.3
 URL=https://github.com/singularityware/singularity/releases/download/v$VERSION/singularity-$VERSION.tar.gz
@@ -32,6 +33,7 @@ tar -xf singularity-$VERSION.tar.gz
 
 {
 	cd singularity
+	go run mlocal/checks/version.go
 	./mconfig && \
     make -C ./builddir && \
     make -C ./builddir install
