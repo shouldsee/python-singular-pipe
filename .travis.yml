@@ -16,11 +16,11 @@ before_install:
   - gimme 1.13.5
   - eval "$(gimme 1.13.5)"
   - bash install_singular.sh
-  - pip install .
 install:
   - echo pass
 script:
   - singularity pull docker://alpine:lastest
+  - sudo pip install .
   - sudo python test.py
   # - ls -lhtr /deps/*
   # - tree /deps
