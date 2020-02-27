@@ -1,9 +1,4 @@
 # which singularity
-export DEBIAN_FRONTEND=noninteractive
- sudo -E apt-get update && \
-  sudo -E apt-get install -qy build-essential \
-   libssl-dev uuid-dev libseccomp-dev \
-   pkg-config squashfs-tools cryptsetup
 
 prefix=/opt/singularity
 EXE=$prefix/bin/singularity
@@ -16,6 +11,11 @@ else
 _down(){
         curl -LC- "$@"
 }
+export DEBIAN_FRONTEND=noninteractive
+ sudo -E apt-get update && \
+  sudo -E apt-get install -qy build-essential \
+   libssl-dev uuid-dev libseccomp-dev \
+   pkg-config squashfs-tools cryptsetup
 
 # #### downlaoad go
 # export VERSION=1.13.5 OS=linux ARCH=amd64 

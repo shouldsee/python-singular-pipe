@@ -11,9 +11,10 @@ cache:
     - $HOME/.pip
     - /opt/singularity
 
-# addons:
-#   apt:
-#     packages:
+addons:
+  apt:
+    packages:
+      - tree
 #       - flawfinder
 #       - squashfs-tools
 #       - uuid-dev
@@ -36,6 +37,7 @@ install:
 script:
   - singularity pull docker://python:2.7.17-alpine
   - python test.py
+  - tree /deps
 
 
 
