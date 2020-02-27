@@ -39,7 +39,7 @@ tar -xf singularity-$VERSION.tar.gz
     make -C ./builddir && \
     make -C ./builddir install
     cd ..
-	ln -sf /opt/singularity/bin/singularity /usr/local/bin
+	sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 }
 
 singularity --help
