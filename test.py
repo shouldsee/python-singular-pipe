@@ -44,7 +44,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			cache_run_verbose,
 			cache_run_verbose,
 			]:
-
+			assert 0
 			index = run(job_hisat2_index,
 				self.DIR / 'phiX.fasta.prefix',
 				DATA_DIR/'phiX.fasta'
@@ -63,7 +63,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 
 			root_prefix = self.DIR/'root'
 			curr = run(
-				    job_trimmomatic,
+					job_trimmomatic,
 					root_prefix, 
 					DATA_DIR/"test_R1_.fastq", 
 					DATA_DIR/"test_R2_.fastq",
@@ -81,24 +81,27 @@ class BaseCase(unittest2.TestCase,SharedObject):
 import pdb
 import traceback
 def debugTestRunner(post_mortem=None):
-    """unittest runner doing post mortem debugging on failing tests"""
-    if post_mortem is None:
-        post_mortem = pdb.post_mortem
-    class DebugTestResult(unittest2.TextTestResult):
-        def addError(self, test, err):
-            # called before tearDown()
-            traceback.print_exception(*err)
-            post_mortem(err[2])
-            super(DebugTestResult, self).addError(test, err)
-        def addFailure(self, test, err):
-            traceback.print_exception(*err)
-            post_mortem(err[2])
-            super(DebugTestResult, self).addFailure(test, err)
-    return unittest2.TextTestRunner(resultclass=DebugTestResult)
+	"""unittest runner doing post mortem debugging on failing tests"""
+	if post_mortem is None:
+		post_mortem = pdb.post_mortem
+	class DebugTestResult(unittest2.TextTestResult):
+		def addError(self, test, err):
+			# called before tearDown()
+			traceback.print_exception(*err)
+			post_mortem(err[2])
+			super(DebugTestResult, self).addError(test, err)
+		def addFailure(self, test, err):
+			traceback.print_exception(*err)
+			post_mortem(err[2])
+			super(DebugTestResult, self).addFailure(test, err)
+	return unittest2.TextTestRunner(resultclass=DebugTestResult)
 
 
 if __name__ == '__main__':
 
-    with SharedObject.DIR:
-        unittest2.main(testRunner=debugTestRunner())
+	with SharedObject.DIR:
+		if '--pdb' in sys.argv:
+			unittest2.main(testRunner=debugTestRunner())
+		else:
+			unittest2.main(testRunner=None)
 
