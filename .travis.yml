@@ -6,10 +6,10 @@ python:
   # - "2.7"
   - "3.5"
 
-# cache:
-#   directories: 
-#     - $HOME/.pip
-#     - /opt/singularity
+cache:
+  directories: 
+    - $HOME/.pip
+    - /opt/singularity
 
 # addons:
 #   apt:
