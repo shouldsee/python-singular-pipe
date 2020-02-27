@@ -1,16 +1,18 @@
 # which singularity
-prefix=/opt/singularity
-EXE=$prefix/bin/singularity
-if [ -e $EXE ]; then
-	# sudo ln -sf $EXE /usr/local/bin
-	echo [SKIP] singularity install
-else
-
 export DEBIAN_FRONTEND=noninteractive
  sudo -E apt-get update && \
   sudo -E apt-get install -qy build-essential \
    libssl-dev uuid-dev libseccomp-dev \
    pkg-config squashfs-tools cryptsetup
+
+prefix=/opt/singularity
+EXE=$prefix/bin/singularity
+
+if [ -e $EXE ]; then
+	# sudo ln -sf $EXE /usr/local/bin
+	echo [SKIP] singularity install
+else
+
 
 
 _down(){
