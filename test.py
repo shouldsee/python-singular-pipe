@@ -54,7 +54,3 @@ def test_basic():
 			THREADS)
 
 test_basic()
-
-		'''
-		singularity exec docker://quay.io/biocontainers/ucsc-genepredtogtf:377--h35c10e6_2 bash -c  "cut -f 2- temp.genepred | genePredToGtf file stdin out.gtf"
-		'''

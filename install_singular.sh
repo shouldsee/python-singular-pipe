@@ -1,5 +1,4 @@
-# which singularity
-
+#### Assuming has write access to /opt/
 prefix=/opt/singularity
 EXE=$prefix/bin/singularity
 

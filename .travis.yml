@@ -11,22 +11,6 @@ cache:
     - $HOME/.pip
     - /opt/singularity
 
-addons:
-  apt:
-    packages:
-      - tree
-#       - flawfinder
-#       - squashfs-tools
-#       - uuid-dev
-#       - libuuid1
-#       - libffi-dev
-#       - libssl-dev
-#       - libssl1.0.0
-#       - libarchive-dev
-#       - libgpgme11-dev
-#       - libseccomp-dev
-#       -
-
 before_install:
   - gimme 1.13.5
   - eval "$(gimme 1.13.5)"
@@ -37,7 +21,8 @@ install:
 script:
   - singularity pull docker://alpine:lastest
   - python test.py
-  - tree /deps
+  - ls -lhtr /deps/*
+  # - tree /deps
 
 
 
