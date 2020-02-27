@@ -13,8 +13,6 @@ if [ -e $EXE ]; then
 	echo [SKIP] singularity install
 else
 
-
-
 _down(){
         curl -LC- "$@"
 }
@@ -50,6 +48,7 @@ tar -xf singularity-$VERSION.tar.gz
     cd ..
 }
 fi
-sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
+sudo ln -sf $EXE /usr/local/bin
+# sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 
 singularity --help
