@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/shouldsee/python-singular-pipe.svg?token=f6G1tkP8yesCfYdyDVrj&branch=master)](https://travis-ci.com/shouldsee/python-singular-pipe)
+
 ## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
 
 ### Requirement
