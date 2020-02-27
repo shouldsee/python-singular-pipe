@@ -2,7 +2,8 @@
 prefix=/opt/singularity
 EXE=$prefix/bin/singularity
 
-if [ -e $EXE ]; then
+if [ -e /devvvvvvvvvvvvvvvvvvv ]; then
+# if [ -e $EXE ]; then
 	# sudo ln -sf $EXE /usr/local/bin
 	echo [SKIP] singularity install
 else
@@ -41,7 +42,7 @@ tar -xf singularity-$VERSION.tar.gz
 	cd singularity
 	go run mlocal/checks/version.go
 	mkdir -p /opt/singularity
-	./mconfig --prefix=$prefix && \
+	./mconfig --prefix=$prefix --without-suid && \
     make -C ./builddir && \
     make -C ./builddir install
     cd ..
@@ -53,5 +54,4 @@ sudo chmod 4755 $prefix/libexec/singularity/bin/*-suid
 cat $prefix/etc/singularity/singularity.conf
 ls -lhtr $prefix/libexec/singularity/bin/
 # sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
-
-singularity --help
+singularity version
