@@ -17,8 +17,8 @@ def test_basic():
 	##### which could be md5sum or timestamp
 	for run in [
 		force_run, 
-		lambda *a:cache_run(*a, verbose=1),
-		lambda *a:cache_run(*a, verbose=1) ]:
+		cache_run_verbose,
+		cache_run_verbose,]:
 
 		index = run(job_hisat2_index,
 			'/deps/index/phiX.fasta.hisat2',
