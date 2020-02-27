@@ -1,0 +1,26 @@
+language: python
+services:
+  - singularity
+python:
+  # - "2.7"
+  - "3.5"
+cache: pip
+# install:
+#   - pip install . 
+#   - docker pull quay.io/singularity/singularity:v3.5.3-slim
+script:
+  - singularity --help
+  # - docker run -v $PWD:/srv/ -w /srv /bin/bash -c "pip install .;  "
+  - python test.py
+
+
+
+# before_install:
+# - docker pull carlad/sinatra
+# - docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
+# - docker ps -a
+# - docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
+
+# script:
+# - bundle exec rake test  
+# docker://quay.io/singularity/singularity:v3.5.3-slim
