@@ -5,7 +5,7 @@ import subprocess
 from six import string_types
 
 import functools
-from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix
+from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix,Path
 
 
 
@@ -91,6 +91,12 @@ if 1:
 		if extra_files is None:
 			extra_files  = []
 		cmd = list_flatten_strict(cmd)
+		out = []
+		for x in cmd:
+			if isinstance(x,Path):
+				x = x.realpath()
+			out.append(x)
+		cmd = out
 		FS = make_files_for(cmd)
 
 		# cmd_curr = [
@@ -104,13 +110,16 @@ if 1:
 		# return (cmd_curr, res)
 
 		cmd_curr = [
+		# '\n',
 		'singularity','exec',
-		'--bind',','.join( bind_files( FS + extra_files) ),
+		['--bind',','.join( bind_files( FS + extra_files + [File('/tmp')]) ),''],
+		# [-1],'--bind','/tmp:/tmp',
 		image,
 		'bash',
 			'<<EOF\n',
 			cmd,
 			'\nEOF',
+		# '\n',
 		]
 		cmd_curr = list_flatten_strict(cmd_curr)
 		res = subprocess.check_output(' '.join(cmd_curr),shell=1)
@@ -131,7 +140,10 @@ if 1:
 		lst = []
 		for F in files:
 			F = F.realpath()
+			F.dirname().makedirs_p()
 			#### bind the whole directory for a prefix
+			if F.startswith('/tmp/'):
+					continue
 			if isinstance(F,Prefix):
 				F = F.dirname()
 			if isinstance(F, InputFile):

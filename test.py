@@ -1,56 +1,99 @@
+import unittest2
+import subprocess
+import os,sys,shutil
+from path import Path
 from pipeline_rnaseq import job_trimmomatic, job_hisat2_index, job_hisat2_align
 #from pipeline_rnaseq import *
 from path import Path
 from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_verbose
-def test_basic():
-	DATA_DIR = Path(__file__).dirname()/'tests/data'
-	# print(DATA_DIR.glob("*"))
-	WKDIR  = Path('/deps/test_build/').makedirs_p()
-	THREADS = 2
-	_ = '''
-	singularity pull docker://quay.io/singularity/singularity:v3.5.3-slim
-	'''
 
-	##### we want to avoid re-calculating the output if they already exist and is intact
-	##### this is done by storing an identity information on disk 
-	##### this identity information is calculated from the outputted files
-	##### which could be md5sum or timestamp
-	for run in [
-		force_run, 
-		cache_run_verbose,
-		cache_run_verbose,
-		]:
+class SharedObject(object):
+	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').makedirs_p()
+	# DIR = Path('~/singular-pipe_test_build/').expand().makedirs_p()
+	DIR = Path('/tmp/singular-pipe_test_build/').expand().makedirs_p()
+	# DIR = Path('$HOME/singular-pipe_test_build/').expand().makedirs_p()
+	shutil.rmtree(DIR)
+	DIR.makedirs_p()
+	DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'
 
-		index = run(job_hisat2_index,
-			'/deps/index/phiX.fasta.hisat2',
-			DATA_DIR/'phiX.fasta'
-			)
-
-		tups = (job_hisat2_index,
-			'/deps/index/phiX.fasta.hisat2',
-			# DATA_DIR/'phiX.fasta',
-			DATA_DIR/'phiX.fasta'
-			)
-		print('[CACHE_CHECK]%s'%cache_check(*tups))
-		# print( get_identity( index.output) )
+class BaseCase(unittest2.TestCase,SharedObject):
+	DIR = SharedObject.DIR
+	DATA_DIR = SharedObject.DATA_DIR
+	def test_basic(self,):
+		DATA_DIR = self.DATA_DIR
+		# print(DATA_DIR)
 		# assert 0
-		import pickle
-		with open('test1.pkl' ,'wb') as f:
-			pickle.dump(index,f)
+		# print(DATA_DIR.glob("*"))
+		# WKDIR  = Path('/opt/singular-pipe_test_build/').makedirs_p()
+		THREADS = 2
+		_ = '''
+		singularity pull docker://quay.io/singularity/singularity:v3.5.3-slim
+		'''
 
-		root_prefix = WKDIR/'root'
-		curr = run(job_trimmomatic,
-				root_prefix, 
-				DATA_DIR/"test_R1_.fastq", 
-				DATA_DIR/"test_R2_.fastq",
+		##### we want to avoid re-calculating the output if they already exist and is intact
+		##### this is done by storing an identity information on disk 
+		##### this identity information is calculated from the outputted files
+		##### which could be md5sum or timestamp
+		for run in [
+			force_run, 
+			cache_run_verbose,
+			cache_run_verbose,
+			]:
+
+			index = run(job_hisat2_index,
+				self.DIR / 'phiX.fasta.prefix',
+				DATA_DIR/'phiX.fasta'
+				)
+
+			tups = (job_hisat2_index,
+				self.DIR / 'phiX.fasta.prefix',
+				DATA_DIR/'phiX.fasta'
+				)
+			print('[CACHE_CHECK]%s'%cache_check(*tups))
+			# print( get_identity( index.output) )
+			# assert 0
+			import pickle
+			with open('test1.pkl' ,'wb') as f:
+				pickle.dump(index,f)
+
+			root_prefix = self.DIR/'root'
+			curr = run(
+				    job_trimmomatic,
+					root_prefix, 
+					DATA_DIR/"test_R1_.fastq", 
+					DATA_DIR/"test_R2_.fastq",
+					THREADS)
+
+
+			curr = run( job_hisat2_align,
+				root_prefix,
+				index.output.index_prefix,
+				curr.output.fastq_1,
+				curr.output.fastq_2,
 				THREADS)
 
+	# test_basic()
+import pdb
+import traceback
+def debugTestRunner(post_mortem=None):
+    """unittest runner doing post mortem debugging on failing tests"""
+    if post_mortem is None:
+        post_mortem = pdb.post_mortem
+    class DebugTestResult(unittest2.TextTestResult):
+        def addError(self, test, err):
+            # called before tearDown()
+            traceback.print_exception(*err)
+            post_mortem(err[2])
+            super(DebugTestResult, self).addError(test, err)
+        def addFailure(self, test, err):
+            traceback.print_exception(*err)
+            post_mortem(err[2])
+            super(DebugTestResult, self).addFailure(test, err)
+    return unittest2.TextTestRunner(resultclass=DebugTestResult)
 
-		curr = run( job_hisat2_align,
-			root_prefix,
-			index.output.index_prefix,
-			curr.output.fastq_1,
-			curr.output.fastq_2,
-			THREADS)
 
-test_basic()
+if __name__ == '__main__':
+
+    with SharedObject.DIR:
+        unittest2.main(testRunner=debugTestRunner())
+
