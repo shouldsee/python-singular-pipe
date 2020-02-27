@@ -89,6 +89,13 @@ import warnings
 
 if 1:
 	def singularity_run( cmd, image, extra_files = None, debug =0):	
+		'''
+		return a tuple (executed command, command_stdout)
+			cmd: a list of str-like objects that gets concatenated into a shell command
+			image: a singularity image url
+			extra_files: to-be-deprecated
+			debug: print dbg info
+		'''
 		if extra_files is None:
 			extra_files  = []
 		cmd = list_flatten_strict(cmd)

@@ -98,6 +98,7 @@ def debugTestRunner(post_mortem=None):
 
 if __name__ == '__main__':
 
+	print('[testing]%s'%__file__)
 	with SharedObject.DIR:
 		if '--pdb' in sys.argv:
 			unittest2.main(testRunner=debugTestRunner())
