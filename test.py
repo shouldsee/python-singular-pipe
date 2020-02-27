@@ -22,6 +22,9 @@ class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
 	DATA_DIR = SharedObject.DATA_DIR
 	def test_basic(self,):
+		'''
+		Write assertions
+		'''
 		DATA_DIR = self.DATA_DIR
 		# print(DATA_DIR)
 		# assert 0
