@@ -6,6 +6,21 @@ python:
   # - "2.7"
   - "3.5"
 cache: pip
+# addons:
+#   apt:
+#     packages:
+#       - flawfinder
+#       - squashfs-tools
+#       - uuid-dev
+#       - libuuid1
+#       - libffi-dev
+#       - libssl-dev
+#       - libssl1.0.0
+#       - libarchive-dev
+#       - libgpgme11-dev
+#       - libseccomp-dev
+#       -
+
 before_install:
   - gimme 1.13.5
   - eval "$(gimme 1.13.5)"
