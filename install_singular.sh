@@ -15,6 +15,8 @@ export VERSION=1.13.5 OS=linux ARCH=amd64
 _down -o go-$VERSION.tar.gz https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz
 tar -C /usr/local/ -xzf go-$VERSION.tar.gz
 ln -sf /usr/local/go/bin/go /usr/local/bin/go
+go --help
+echo "[installed] go"
 
 # echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
 #     echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' >> ~/.bashrc && \
