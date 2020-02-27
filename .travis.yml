@@ -7,16 +7,17 @@ python:
   - "3.5"
 cache: pip
 before_install:
-  - gimme 1.13.5
-  - eval "$(gimme 1.13.5)"
-  - go version
-  # - golang
+  # - sudo gimme 1.13.5
+  - sudo eval "$(gimme 1.13.5)"
+  - sudo go version
   - sudo -E bash install_singular.sh
 #   - pip install . 
 #   - docker pull quay.io/singularity/singularity:v3.5.3-slim
+install:
+  - pip install .
 script:
   - singularity --help
-  - pip install . 
+  # - pip install . 
   # - docker run -v $PWD:/srv/ -w /srv /bin/bash -c "pip install .;  "
   - python test.py
 
