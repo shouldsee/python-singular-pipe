@@ -20,8 +20,9 @@ install:
   - echo pass
 script:
   - singularity pull docker://alpine:lastest
-  - sudo pip install .
-  - sudo python test.py
+  - sudo -E python -V
+  - sudo -E pip install .
+  - sudo -E python test.py
   # - ls -lhtr /deps/*
   # - tree /deps
 
