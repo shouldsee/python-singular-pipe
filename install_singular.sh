@@ -19,7 +19,7 @@ echo 'export GOPATH=${HOME}/go' >> ~/.bashrc && \
     source ~/.bashrc    
 
 VERSION=3.5.3
-URL=https://github.com/singularityware/singularity/releases/download/v$VERSION/singularity-$VERSION.ta$
+URL=https://github.com/singularityware/singularity/releases/download/v$VERSION/singularity-$VERSION.tar.gz
 _down -o $(basename $URL) $URL
 tar xvf singularity-$VERSION.tar.gz
 
@@ -29,3 +29,4 @@ cd singularity
     make -C ./builddir && \
     sudo make -C ./builddir install
 }
+
