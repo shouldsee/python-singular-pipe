@@ -30,15 +30,11 @@ before_install:
   - gimme 1.13.5
   - eval "$(gimme 1.13.5)"
   - bash install_singular.sh
-#   - docker pull quay.io/singularity/singularity:v3.5.3-slim
+  - pip install .
 install:
-  - singularity pull docker://python:2.7.17-alpine
-  # - singularity pull docker://python:2.7.17-alpine
-  # - singularity pull 
   - echo pass
-  # - pip install .
 script:
-  - singularity --help
+  - singularity pull docker://python:2.7.17-alpine
   - python test.py
 
 

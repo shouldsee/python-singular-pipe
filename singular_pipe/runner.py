@@ -18,6 +18,8 @@ def cache_check(job, *args):
 	'''
 	return cache_run(job,*args,check_only=True)
 
+def cache_run_verbose(job,*args):
+	return cache_run(job,*args,verbose=True)
 def cache_run(job, *args, check_only=False, force=False,verbose=0):
 	'''
 	return: job_result
