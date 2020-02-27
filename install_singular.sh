@@ -41,13 +41,15 @@ tar -xf singularity-$VERSION.tar.gz
 	cd singularity
 	go run mlocal/checks/version.go
 	mkdir -p /opt/singularity
-	./mconfig --prefix=/opt/singularity && \
+	./mconfig --prefix=$prefix && \
     make -C ./builddir && \
     make -C ./builddir install
     cd ..
 }
 fi
 sudo ln -sf $EXE /usr/local/bin
+sudo chmod 4755 $prefix/libexec/singularity/bin/starter-suid
+ls -lhtr $prefix/libexec/singularity/bin/
 # sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 
 singularity --help
