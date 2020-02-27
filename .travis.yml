@@ -11,7 +11,7 @@ before_install:
   - eval "$(gimme 1.13.5)"
   - go version
   # - golang
-  - sudo bash install_singular.sh
+  - sudo -E bash install_singular.sh
 #   - pip install . 
 #   - docker pull quay.io/singularity/singularity:v3.5.3-slim
 script:
