@@ -23,7 +23,7 @@ _down(){
 # export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin
 # mkdir -p $GOPATH
 # go --help
-go --version
+go version
 # echo "[installed] go"
 	
 VERSION=3.5.3
