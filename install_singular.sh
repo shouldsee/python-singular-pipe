@@ -1,3 +1,11 @@
+# which singularity
+prefix=/opt/singularity
+EXE=$prefix/bin/singularity
+if [ -e $EXE ]; then
+	# sudo ln -sf $EXE /usr/local/bin
+	echo [SKIP] singularity install
+else
+
 export DEBIAN_FRONTEND=noninteractive
  sudo -E apt-get update && \
   sudo -E apt-get install -qy build-essential \
@@ -8,7 +16,6 @@ export DEBIAN_FRONTEND=noninteractive
 _down(){
         curl -LC- "$@"
 }
-
 
 # #### downlaoad go
 # export VERSION=1.13.5 OS=linux ARCH=amd64 
@@ -39,7 +46,8 @@ tar -xf singularity-$VERSION.tar.gz
     make -C ./builddir && \
     make -C ./builddir install
     cd ..
-	sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 }
+fi
+sudo ln -sf /opt/singularity/bin/singularity /usr/local/bin
 
 singularity --help
