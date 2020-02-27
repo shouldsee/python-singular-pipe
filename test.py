@@ -9,9 +9,11 @@ from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_ve
 
 class SharedObject(object):
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').makedirs_p()
-	# DIR = Path('~/singular-pipe_test_build/').expand().makedirs_p()
-	DIR = Path('/tmp/singular-pipe_test_build/').expand().makedirs_p()
-	# DIR = Path('$HOME/singular-pipe_test_build/').expand().makedirs_p()
+	DIR = Path('~/.temp/singular-pipe_test_build/').expand().makedirs_p()
+	##### do not use /tmp for testing
+	# DIR = Path('/tmp/singular-pipe_test_build/').expand().makedirs_p()
+
+	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').expand().makedirs_p()
 	shutil.rmtree(DIR)
 	DIR.makedirs_p()
 	DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'

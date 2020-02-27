@@ -84,35 +84,37 @@ if 1:
 			defaults))
 
 
+import json
+import warnings
 
 if 1:
-
-	def singularity_run( cmd, image, extra_files = None):
+	def singularity_run( cmd, image, extra_files = None, debug =0):	
 		if extra_files is None:
 			extra_files  = []
 		cmd = list_flatten_strict(cmd)
+
+		#### potential redundant
+		#### all output path derives from Prefix hence only Prefix needs to be realpath
+		#### for input path, realisation better be done at job calling
 		out = []
 		for x in cmd:
 			if isinstance(x,Path):
 				x = x.realpath()
+			if x.startswith('/tmp'):
+				warnings.warn('[singularity_run] with /tmp is unstable')
 			out.append(x)
 		cmd = out
-		FS = make_files_for(cmd)
 
-		# cmd_curr = [
-		# 'singularity','exec',
-		# '--bind',','.join( bind_files( FS + extra_files) ),
-		# image,
-		# cmd,
-		# ]
-		# cmd_curr = list_flatten_strict(cmd_curr)
-		# res = subprocess.check_output(cmd_curr)
-		# return (cmd_curr, res)
+		FS = make_files_for(cmd)
+		if debug: print(json.dumps(list(map(repr,cmd)),indent=4,))
+
+		bfs = bind_files( FS + extra_files) 
+		if debug: print(json.dumps(list(map(repr,bfs)),indent=4,))
 
 		cmd_curr = [
 		# '\n',
 		'singularity','exec',
-		['--bind',','.join( bind_files( FS + extra_files + [File('/tmp')]) ),''],
+		['--bind',','.join(bfs)] if len(bfs) else [],
 		# [-1],'--bind','/tmp:/tmp',
 		image,
 		'bash',
@@ -142,8 +144,6 @@ if 1:
 			F = F.realpath()
 			F.dirname().makedirs_p()
 			#### bind the whole directory for a prefix
-			if F.startswith('/tmp/'):
-					continue
 			if isinstance(F,Prefix):
 				F = F.dirname()
 			if isinstance(F, InputFile):
