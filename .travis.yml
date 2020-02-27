@@ -19,7 +19,8 @@ before_install:
 install:
   - echo pass
 script:
-  - singularity pull docker://alpine:lastest
+  # - singularity pull docker://alpine:lastest
+  - singularity exec docker://python:2.7.17-alpine python -V
   - sudo -E python -V
   - sudo -E pip install .
   - sudo -E python test.py
