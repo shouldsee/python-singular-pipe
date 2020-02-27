@@ -44,7 +44,6 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			cache_run_verbose,
 			cache_run_verbose,
 			]:
-			assert 0
 			index = run(job_hisat2_index,
 				self.DIR / 'phiX.fasta.prefix',
 				DATA_DIR/'phiX.fasta'
