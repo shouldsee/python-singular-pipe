@@ -1,6 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
- sudo apt-get update && \
-  sudo apt-get install -qy build-essential \
+ sudo -E apt-get update && \
+  sudo -E apt-get install -qy build-essential \
    libssl-dev uuid-dev libseccomp-dev \
    pkg-config squashfs-tools cryptsetup
 
