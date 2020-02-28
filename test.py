@@ -21,11 +21,41 @@ class SharedObject(object):
 class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
 	DATA_DIR = SharedObject.DATA_DIR
-	def test_basic(self,):
+
+	def test_init(self):
+		_ = '''
+		clean up and create a simple node
+		'''
+		return 
+	def test_cacherun_input_change(self):
+		_ = '''
+		if the input files to a simple node changed,
+		then trigger a recalc
+		'''
+		pass
+	def test_cacherun_output_change(self):
+		_ = '''
+		if the output files to a simple node changed
+		trigger a recalc
+		'''
+		pass
+	def test_cacherun_code_change(self):
+		_ = '''
+		the defition of a script change is ambiguous
+		here we used a tuple to identify a function
+			(
+			func_code.co_code
+			func_code.co_consts
+			)
+		'''
+		pass
+	def test_basic(self, quick =1):
 		'''
 		Write assertions
 		'''
-		DATA_DIR = self.DATA_DIR
+		shutil.rmtree(self.DIR)
+		self.DIR.makedirs_p()
+		DATA_DIR = self.DATA_DIR		
 		# print(DATA_DIR)
 		# assert 0
 		# print(DATA_DIR.glob("*"))
@@ -59,6 +89,9 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			import pickle
 			with open('test1.pkl' ,'wb') as f:
 				pickle.dump(index,f)
+
+			if quick:
+				continue
 
 			root_prefix = self.DIR/'root'
 			curr = run(
@@ -99,9 +132,10 @@ def debugTestRunner(post_mortem=None):
 if __name__ == '__main__':
 
 	print('[testing]%s'%__file__)
-	with SharedObject.DIR:
-		if '--pdb' in sys.argv:
-			unittest2.main(testRunner=debugTestRunner())
-		else:
-			unittest2.main(testRunner=None)
+	# with SharedObject.DIR:
+	if '--pdb' in sys.argv:
+		del sys.argv[sys.argv.index('--pdb')]
+		unittest2.main(testRunner=debugTestRunner())
+	else:
+		unittest2.main(testRunner=None)
 

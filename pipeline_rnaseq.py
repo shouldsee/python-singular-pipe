@@ -1,16 +1,8 @@
-from singular_pipe.base import InputFile,OutputFile,File,TempFile, Prefix
-
-from path import Path
+from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix
+from singular_pipe.types import job_result
 from singular_pipe.base import list_flatten_strict, job_from_func, get_output_files, singularity_run
-from collections import namedtuple
+from path import Path
 
-_result = namedtuple(
-	'_result',
-	[
-	'OUTDIR',
-	'cmd_list',
-	'output']
-	)
 
 
 @job_from_func
@@ -61,17 +53,13 @@ def job_trimmomatic(
 		]
 		CMD = list_flatten_strict(CMD)
 		res = singularity_run(CMD, _IMAGE)
-		return _result( Path(_out.fastq_1).dirname(), CMD, _out)
-
-_ = '''
-Prepare reference files
-'''
+		return job_result( None, CMD, _out)
 
 # def genepred_to_gtf():
 # 	CMD = ['','cut','-f','2-']
 # 	CMD = list_flatten_strict(CMD)
 # 	res = singularity_run(CMD, _IMAGE)
-# 	return _result(OUTDIR, CMD, _out)
+# 	return job_result(OUTDIR, CMD, _out)
 # 	# cut -f 2- temp.genepred | genePredToGtf file stdin out.gtf 	
 
 
@@ -98,7 +86,7 @@ def job_hisat2_index(
 	 '&>', OutputFile(_out.log),
 	 ]
 	res = singularity_run(CMD, _IMAGE)
-	return _result( None, CMD, _out)
+	return job_result( None, CMD, _out)
 
 
 @job_from_func
@@ -131,7 +119,7 @@ def job_hisat2_align(
 	]
 	CMD = list_flatten_strict(CMD)
 	res = singularity_run(CMD, _IMAGE, [Path(INDEX_PREFIX).glob("*")])
-	results.append(_result( None, CMD, _out))
+	results.append(job_result( None, CMD, _out))
 
 	_ = '''
 	samtools view /home/feng/temp/187R/187R-S1-2018_06_27_14:02:08/809_S1.sam -b --threads 4 -o 809_S1.bam
@@ -184,7 +172,7 @@ def get_picard_dedup(
 	]
 	CMD = list_flatten_strict(CMD)
 	res = singularity_run(CMD, _IMAGE)
-	return _result( _out.BAM_FILE, CMD, _out)
+	return job_result( _out.BAM_FILE, CMD, _out)
 
 def get_stringtie( 
 	BAM_FILE, 
@@ -212,7 +200,7 @@ def get_stringtie(
 	]
 	CMD = list_flatten_strict(CMD)
 	res = singularity_run(CMD, _IMAGE)
-	return _result( _out.COUNT_FILE, CMD, _out)
+	return job_result( _out.COUNT_FILE, CMD, _out)
 
 def get_htseq():
 	_ = '''

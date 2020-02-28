@@ -20,6 +20,17 @@ def cache_check(job, *args):
 
 def cache_run_verbose(job,*args):
 	return cache_run(job,*args,verbose=True)
+
+
+
+def ident_changed(ident, ident_file):
+	ident_dump     = pickle.dumps(ident)
+	ident_dump_old = open(ident_file,'rb').read() if file_not_empty(ident_file) else b''
+	return ident_dump != ident_dump_old
+def ident_dump(ident, ident_file):
+	with open(ident_file,'wb') as f:
+		pickle.dump( ident,  f )
+
 def cache_run(job, *args, check_only=False, force=False,verbose=0):
 	'''
 	return: job_result
@@ -33,31 +44,34 @@ def cache_run(job, *args, check_only=False, force=False,verbose=0):
 	'''
 	func_name = get_func_name()
 	prefix = args[0]
-	_input = args
-	_input = [t(v) for t,v in zip(job._input_types, _input)]
-	#### calculate output files
-	_output = get_output_files( job, prefix, job._output_type._fields)
-	input_ident =  get_identity(_input,)
-	output_ident = get_identity([Prefix(o) for o in _output])  ### consider all as prefix
+
 	input_ident_file  = '{prefix}.{job.__name__}.input_pk'.format(**locals())
 	output_ident_file = '{prefix}.{job.__name__}.output_pk'.format(**locals())
 	output_cache_file = '{prefix}.{job.__name__}.output_cache'.format(**locals())
 
-	use_cache = 0
-	input_ident_dump    = pickle.dumps(input_ident)
-	input_ident_changed = input_ident_dump != ( 
-		open(input_ident_file,'rb').read() if file_not_empty(input_ident_file) else b'' 
-		)
-	output_ident_dump   = pickle.dumps(output_ident)
-	output_ident_changed= output_ident_dump != (
-			open(output_ident_file,'rb').read() if file_not_empty(output_ident_file) else b''
-			)
+	#### calculate input tuples
+	### cast types for inputs
+	_input = args
+	_input = [t(v) for t,v in zip(job._input_types, _input)]
+	_job_args = _input[:] ### pass to job(*_job_args)
+	_input += [ (job._origin_code.co_code,job._origin_code.co_consts) ]
 
+
+	#### calculate output files
+	### cast all files all as prefix
+	### here we add cache_file as a constitutive output.
+	_output = get_output_files( job, prefix, job._output_type._fields)
+	_output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
+
+
+	use_cache = 0
+	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file)
+	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)
 	use_cache = not input_ident_changed and not output_ident_changed
 	if verbose:
 		print('[{func_name}]'.format(**locals()),
 			json.dumps([
-				('job_name',job.__name__),
+			('job_name',job.__name__),
 			('input_ident_changed',input_ident_changed),
 			('output_ident_chanegd',output_ident_changed)]
 				))
@@ -70,16 +84,14 @@ def cache_run(job, *args, check_only=False, force=False,verbose=0):
 
 	if use_cache:
 		with open(output_cache_file,'rb') as f:
-			res = pickle.load(f)
+			result = pickle.load(f)
+
 	else:
-		res = job(*_input)
-		with open(output_cache_file,'wb') as f:
-			pickle.dump(res, f)
-		with open(output_ident_file,'wb') as f:
-			pickle.dump(get_identity(_output),f)
-		with open(input_ident_file,'wb') as f:
-			pickle.dump(get_identity(_input),f)
-	return res
+		result = job(*_job_args)
+		ident_dump( result, output_cache_file)
+		ident_dump( get_identity(_output), output_ident_file)
+		ident_dump( get_identity(_input), input_ident_file)
+	return result
 
 
 def file_not_empty(fpath):  

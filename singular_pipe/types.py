@@ -1,6 +1,7 @@
 # from file_tracer import InputFile,OutputFile,File,TempFile,FileTracer
 from path import Path
 import glob
+from collections import namedtuple
 
 class File(Path):
     def __init__(self,*a,**kw):
@@ -29,3 +30,10 @@ class Prefix(Path):
 	def fileglob(self, g):
 		return glob.glob("%s%s"%(self,g))
 		pass
+job_result = namedtuple(
+	'job_result',
+	[
+	'OUTDIR',
+	'cmd_list',
+	'output']
+	)

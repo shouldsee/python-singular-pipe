@@ -6,8 +6,7 @@ from six import string_types
 
 import functools
 from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix,Path
-
-
+from singular_pipe.types import job_result
 
 def list_flatten(lst, strict=0, out=None, ):
 	_this = list_flatten
@@ -36,8 +35,8 @@ if 1:
 		# d = get_func_default_dict(func)
 		@functools.wraps(func)
 		def gunc(*a,**kw):
-			a[0].dirname().makedirs_p()
 			return  func(func,*a,**kw)
+
 		res = inspect.getargspec(func)
 		args = res.args or []
 		defaults = res.defaults or []
@@ -47,6 +46,7 @@ if 1:
 		args = args[:-1]
 		gunc._input_names = args[-len(defaults):] ### in case (self=None,) and not (self,)
 		gunc._input_types = defaults
+		gunc._origin_code = getattr(func, '_origin_code', func.__code__)
 
 		if 1:
 			cls = gunc._output_type = func._output_type = namedtuple('_output_type', _output)
@@ -121,10 +121,11 @@ if 1:
 		cmd_curr = [
 		# '\n',
 		'singularity','exec',
+		'--contain',
 		['--bind',','.join(bfs)] if len(bfs) else [],
 		# [-1],'--bind','/tmp:/tmp',
-		image,
-		'bash',
+			image,
+			'bash',
 			'<<EOF\n',
 			cmd,
 			'\nEOF',
