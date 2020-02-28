@@ -63,12 +63,16 @@ if 1:
 		return gunc
 
 	def get_output_files( self, prefix, _output):
+		'''
+		Assuming all output_files are Prefix because types arent checked
+		'''
 		tups = []
 		for suffix in _output:
 			s = "{prefix}.{self.__name__}.{suffix}".format(**locals())
+			s = singular_pipe.types.Prefix(s)
 			tups.append(s)
 		tups = self._output_type(*tups)
-		return tups		
+		return tups
 
 	def get_func_name(frame=None):
 		if frame is None:
@@ -118,8 +122,11 @@ if 1:
 			out.append(x)
 		cmd = out
 
-		FS = make_files_for(cmd)
+		debug = 1
 		if debug: print(json.dumps(list(map(repr,cmd)),indent=4,))
+
+		FS = make_files_for(cmd)
+		if debug: print(json.dumps(list(map(repr,FS)),indent=4,))
 
 		bfs = bind_files( FS + extra_files) 
 		if debug: print(json.dumps(list(map(repr,bfs)),indent=4,))
@@ -145,26 +152,42 @@ if 1:
 		FS = []
 		for F in cmd:
 			if isinstance(F, (File,Prefix)):
-				F.dirname().makedirs_p()
-				if not isinstance(F, InputFile):
-					F.touch()
-				FS.append(F)
+				F = F.realpath()
+				if isinstance(F, Prefix):
+					#### if is prefix, mount the directory
+					F.dirname().makedirs_p()
+					FS.append( File( F.dirname() ) )
+					mode = 'rw'
+				elif isinstance(F, InputFile):
+					#### if is inputFile, dont touch
+					assert F.isfile(),(F,cmd)
+					FS.append( F )
+					mode = 'ro'
+				elif isinstance(F,File):
+					#### if not inputfile, touch to makesure					
+					F.touch() if not F.isfile() else None
+					FS.append( F )
+					mode = 'rw'
+				else:
+					assert 0,(type(F),F)
+				# FS.append(F)	
 		return FS
 
 	def bind_files(files):
-		files = list_flatten_strict(files)
+		files = list_flatten(files)
 		lst = []
 		for F in files:
-			F = F.realpath()
-			F.dirname().makedirs_p()
 			#### bind the whole directory for a prefix
 			if isinstance(F,Prefix):
-				F = F.dirname()
-			if isinstance(F, InputFile):
+				assert 0,(F,'run make_files_for() first', files)
+			elif isinstance(F, InputFile):
 				mode = 'ro'
-			else:
+			elif isinstance(F,File):
 				mode = 'rw'
-			bind_str = "%s:%s:%s"%( F.realpath(), F.realpath(), mode)
+			else:
+				assert 0,(F,"type %s unknown"%type(F),files,)
+			F = F.realpath()
+			bind_str = "%s:%s:%s"%( F, F, mode)
 			lst.append( bind_str )
 		return lst		
 ############### tests #############

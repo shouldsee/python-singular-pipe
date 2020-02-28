@@ -36,12 +36,12 @@ def job_trimmomatic(
 		'trimmomatic','PE',
 		'-threads', str(THREADS), 
 		'-phred33',
-		InputFile ( FASTQ_FILE_1 ),
-		InputFile ( FASTQ_FILE_2 ),
-		OutputFile( _out.fastq_1),
-		TempFile  ( _out.fastq_1 + '.fail'),
-		OutputFile( _out.fastq_2),
-		TempFile  ( _out.fastq_2 +'.fail'),
+		File( FASTQ_FILE_1 ),
+		File( FASTQ_FILE_2 ),
+		File( _out.fastq_1),
+		File( _out.fastq_1 + '.fail'),
+		File( _out.fastq_2),
+		File( _out.fastq_2 +'.fail'),
 		'ILLUMINACLIP:'
 		'/usr/local/share/trimmomatic-0.35-6/adapters/TruSeq3-PE-2.fa'
 		':6:30:10',
@@ -49,7 +49,8 @@ def job_trimmomatic(
 		'TRAILING:3',
 		'MINLEN:36',
 		'SLIDINGWINDOW:4:15',
-		'&>', OutputFile(_out.log)
+		'&>', 
+		File(_out.log)
 		]
 		CMD = list_flatten_strict(CMD)
 		res = singularity_run(CMD, _IMAGE)
@@ -81,9 +82,10 @@ def job_hisat2_index(
 
 	CMD = [
 	'hisat2-build',
-	 InputFile(FASTA_FILE),
+	 File(FASTA_FILE),
 	 Prefix(_out.index_prefix),
-	 '&>', OutputFile(_out.log),
+	 '&>', 
+	 File(_out.log),
 	 ]
 	res = singularity_run(CMD, _IMAGE)
 	return job_result( None, CMD, _out)
@@ -104,21 +106,22 @@ def job_hisat2_align(
 	_out = get_output_files(self,prefix,_output)
 	results = []
 	CMD = [
-	 'hisat2','-x',INDEX_PREFIX,
-	 '-1', InputFile( FASTQ_FILE_1),
-	 '-2',InputFile( FASTQ_FILE_2),
+	 'hisat2','-x',
+	 Prefix(INDEX_PREFIX),
+	 '-1', str( FASTQ_FILE_1),
+	 '-2', str( FASTQ_FILE_2),
 	 # '-U', InputFile( FASTQ_FILE_1),
 	 # ['-2',InputFile( FASTQ_FILE_2) ] if FASTQ_FILE_2 else [],
-	 '-S', TempFile( _out.bam +'.sam' ),
+	 '-S', str( _out.bam +'.sam' ),
 	 '--threads', str(THREADS),
 	 '--no-mixed',
 	 '--rna-strandness','RF',
 	 '--dta',
 	 '--fr',
-	 '&>', OutputFile(_out.log),
+	 '&>', str(_out.log),
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE, [Path(INDEX_PREFIX).glob("*")])
+	res = singularity_run(CMD, _IMAGE,)
 	results.append(job_result( None, CMD, _out))
 
 	_ = '''
@@ -126,9 +129,10 @@ def job_hisat2_align(
 	'''
 	CMD = [
 	'samtools','view',
-	TempFile( _out.bam+'.sam'),
+	File( _out.bam+'.sam'),
 	'--threads',str(THREADS),
-	'-o', TempFile(_out.bam+'.unsorted'),
+	'-o', 
+	File(_out.bam+'.unsorted'),
 	]
 	CMD = list_flatten_strict(CMD)
 	res = singularity_run(CMD, _IMAGE_SAMTOOLS)
@@ -136,9 +140,10 @@ def job_hisat2_align(
 
 	CMD = [
 	'samtools','sort',
-	TempFile( _out.bam + '.unsorted'),
+	File( _out.bam + '.unsorted'),
 	'--threads', str(THREADS),
-	'-o', OutputFile( _out.bam),
+	'-o', 
+	File( _out.bam),
 	]
 	CMD = list_flatten_strict(CMD)
 	res = singularity_run(CMD, _IMAGE_SAMTOOLS)

@@ -39,8 +39,7 @@ def cache_run_verbose(job,*args, **kw):
 # 		pickle.dump( ident,  f )
 
 
-def ident_changed(ident, ident_file, key ='ident'):
-	ident_dump = str(pickle.dumps(ident))
+def ident_load(ident_file,key ='ident'):	
 	ident_dump_old = ''
 	try:
 		if file_not_empty(ident_file):
@@ -48,6 +47,10 @@ def ident_changed(ident, ident_file, key ='ident'):
 	except Exception as e:
 		raise e
 		print(e)
+	return ident_dump_old
+def ident_changed(ident, ident_file, key ='ident'):
+	ident_dump = str(pickle.dumps(ident))
+	ident_dump_old = ident_load( ident_file, key )
 	return ident_dump != ident_dump_old
 
 def ident_dump(ident, ident_file, comment=''):	
@@ -159,11 +162,11 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 	suf = 'json'
 	input_ident_file  = '{prefix}.{job.__name__}.input_{suf}'.format(**locals())
 	output_ident_file = '{prefix}.{job.__name__}.output_{suf}'.format(**locals())
-	output_cache_file = '{prefix}.{job.__name__}.cache_{suf}'.format(**locals())
+	output_cache_file = '{prefix}.{job.__name__}.cache_pk'.format(**locals())
 
-	#### calculate input tuples
-	### cast types for inputs
-	##### skip the prefix when calculating _input, in _caller.to_ident()
+	###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
+	###### the prefix is ignored in to_ident() because it would point to a different ident_file
+	#####  Caller.from_input() would also cast types for inputs
 	_input = args
 	_caller = Caller.from_input(job, _input)
 	_input  = [_caller.to_ident()]	
@@ -173,9 +176,9 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 	#### calculate output files
 	### cast all files all as prefix
 	### here we add cache_file as a constitutive output.
-	_output = get_output_files( job, prefix, job._output_type._fields)
+	_output = get_output_files( job, prefix, job._output_type._fields) + (OutputFile(output_cache_file),)
 	# print('[out1]',_output)
-	_output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
+	# _output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
 	# print('[out2]',_output)
 	# print('[out3]',get_identity(_output))
 
@@ -205,14 +208,17 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 		use_cache = False
 
 	if use_cache:
+		# indent
+		# with open(
+		# result = pickle.loads(bytes(ident_load( output_cache_file )))
 		with open(output_cache_file,'rb') as f:
 			result = pickle.load(f)
 
 	else:
 		result = _caller()
-		# result = job(*_job_args)
-		ident_dump( result, output_cache_file, )
-		ident_dump( get_identity(_output), output_ident_file)
+		with open(output_cache_file,'wb') as f: pickle.dump(result, f)
+		# ident_dump( result, output_cache_file, )
+		ident_dump( get_identity(_output), output_ident_file, comment = [(_output,get_identity(_output))] ) ### outputs are all
 		ident_dump( get_identity(_input), input_ident_file, comment = _caller.to_dict())
 	return result
 
