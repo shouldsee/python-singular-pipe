@@ -18,6 +18,18 @@ class SharedObject(object):
 	DIR.makedirs_p()
 	DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'
 
+from singular_pipe.base import job_from_func, get_output_files
+from singular_pipe.runner import cache_run_verbose,cache_check,force_run
+from singular_pipe.types import Default,Prefix, InputFile
+import singular_pipe.types
+
+@job_from_func
+def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, _output=['txt']):
+	_out = get_output_files(self, prefix, _output)
+	with open( _out.txt, 'w') as f:
+		print(s*10)
+		f.write(s*10)
+
 class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
 	DATA_DIR = SharedObject.DATA_DIR
@@ -26,13 +38,37 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		_ = '''
 		clean up and create a simple node
 		'''
+		cache_run_verbose( simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
 		return 
+	def test_tfa_error(self):
+		f = lambda: cache_run_verbose( simple_job, self.DIR/'root', 'ATG',)
+		self.assertRaises(singular_pipe.types.TooFewArgumentsError,f)
+
+	def test_tma_error(self):
+		f = lambda: cache_run_verbose( simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt','2333333random')
+		self.assertRaises(singular_pipe.types.TooManyArgumentsError, f)
+
+	def test_tfd_error(self):
+		def right_job(self = Default, prefix=Prefix, s=str, _output=['txt']):
+			pass
+		job_from_func(right_job)
+
+		def wrong_job(self, prefix=Prefix, s=str, _output=['txt']):
+			pass
+		self.assertRaises(singular_pipe.types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
+		
+		def wrong_job(self, prefix, s=str, _output=['txt']):
+			pass
+		self.assertRaises(singular_pipe.types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
+	
 	def test_cacherun_input_change(self):
 		_ = '''
 		if the input files to a simple node changed,
 		then trigger a recalc
 		'''
+
 		pass
+
 	def test_cacherun_output_change(self):
 		_ = '''
 		if the output files to a simple node changed
@@ -53,6 +89,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		'''
 		Write assertions
 		'''
+		# return
 		shutil.rmtree(self.DIR)
 		self.DIR.makedirs_p()
 		DATA_DIR = self.DATA_DIR		

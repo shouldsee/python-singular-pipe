@@ -1,4 +1,4 @@
-from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix
+from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix, Default
 from singular_pipe.types import job_result
 from singular_pipe.base import list_flatten_strict, job_from_func, get_output_files, singularity_run
 from path import Path
@@ -7,7 +7,7 @@ from path import Path
 
 @job_from_func
 def job_trimmomatic(
-	self,
+	self=Default,
 	prefix = Prefix,
 	FASTQ_FILE_1 = InputFile, 
 	FASTQ_FILE_2 = InputFile, 
@@ -66,7 +66,7 @@ def job_trimmomatic(
 
 @job_from_func
 def job_hisat2_index( 
-	self,
+	self = Default,
 	prefix = Prefix, 
 	FASTA_FILE = InputFile,
 	_IMAGE    = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
@@ -91,7 +91,7 @@ def job_hisat2_index(
 
 @job_from_func
 def job_hisat2_align(
-	self,
+	self = Default,
 	prefix = Prefix,
 	INDEX_PREFIX = Prefix,
 	FASTQ_FILE_1 = InputFile,
@@ -148,9 +148,9 @@ def job_hisat2_align(
 ################################### TBC afterwards ############################
 @job_from_func
 def get_picard_dedup(
-	self,
-	prefix,
-	BAM_FILE,
+	self = Default,
+	prefix = Prefix,
+	BAM_FILE = InputFile,
 	_IMAGE = 'docker://quay.io/biocontainers/picard:2.21.9--0',
 	_output = ['bam'],
 	):
@@ -175,9 +175,9 @@ def get_picard_dedup(
 	return job_result( _out.BAM_FILE, CMD, _out)
 
 def get_stringtie( 
-	BAM_FILE, 
-	GTF_FILE, 
-	THREADS,
+	BAM_FILE = Default,
+	GTF_FILE = InputFile, 
+	THREADS = int,
 	_IMAGE = 'docker://quay.io/biocontainers/stringtie:2.1.1--hc900ff6_0'):
 	_= '''
 	stringtie 

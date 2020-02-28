@@ -3,6 +3,20 @@ from path import Path
 import glob
 from collections import namedtuple
 
+class TooManyArgumentsError(RuntimeError):
+	pass
+class TooFewArgumentsError(RuntimeError):
+	pass
+# class NotEnoughArgumentsError(RuntimeError):
+# 	pass
+class TooFewDefaultsError(RuntimeError):
+	pass
+def Default(x):
+	'''
+	A dummy "class" mocked with a function
+	'''
+	return x
+
 class File(Path):
     def __init__(self,*a,**kw):
         super(File,self).__init__(*a,**kw)

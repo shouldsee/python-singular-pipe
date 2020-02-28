@@ -1,8 +1,14 @@
 from singular_pipe.types import File,InputFile,OutputFile, Prefix
+from singular_pipe.types import TooManyArgumentsError
+import singular_pipe.types
+
 from singular_pipe.base import get_output_files,get_func_name
 import pickle
 import os,sys
 import json
+from itertools import zip_longest
+from collections import namedtuple
+import inspect
 
 def force_run(job, *args):
 	'''
@@ -17,6 +23,8 @@ def cache_check(job, *args):
 	Check whether there is a valid cache for this job
 	'''
 	return cache_run(job,*args,check_only=True)
+def cache_check_changed(job,*args):
+	return cache_run(job,*arg,check_changed=True)
 
 def cache_run_verbose(job,*args):
 	return cache_run(job,*args,verbose=True)
@@ -30,8 +38,9 @@ def ident_changed(ident, ident_file):
 def ident_dump(ident, ident_file):
 	with open(ident_file,'wb') as f:
 		pickle.dump( ident,  f )
-
-def cache_run(job, *args, check_only=False, force=False,verbose=0):
+def _raise(e):
+	raise e
+def cache_run(job, *args, check_only=False, check_changed=False, force=False,verbose=0):
 	'''
 	return: job_result
 		Check whether a valid cache exists for a job receipe.
@@ -52,7 +61,25 @@ def cache_run(job, *args, check_only=False, force=False,verbose=0):
 	#### calculate input tuples
 	### cast types for inputs
 	_input = args
-	_input = [t(v) for t,v in zip(job._input_types, _input)]
+	_tmp  = []
+	_null = namedtuple('_null',[])()
+	_zip = lambda: zip_longest(job._input_names, job._input_types, _input,fillvalue=_null)
+	_dump = lambda: json.dumps([repr(namedtuple('tuple','argname type input_value')(*x)) for x in _zip()],indent=0,default=repr)
+	for n,t,v in _zip():
+		if n[0]=='_':
+			if v is not _null:
+				raise TooManyArgumentsError('{dump}\nToo many arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
+					dump=_dump(),**locals()))
+		elif v is _null:
+			raise singular_pipe.types.TooFewArgumentsError(
+				'{dump}\nToo few arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
+			dump=_dump(),**locals()))
+		else:
+			_tmp.append(t(v))
+	print(_dump()) if verbose>=2 else None
+	_input = _tmp
+
+
 	_job_args = _input[:] ### pass to job(*_job_args)
 	_input += [ (job._origin_code.co_code,job._origin_code.co_consts) ]
 
@@ -63,18 +90,22 @@ def cache_run(job, *args, check_only=False, force=False,verbose=0):
 	_output = get_output_files( job, prefix, job._output_type._fields)
 	_output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
 
-
-	use_cache = 0
 	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file)
-	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)
+	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)		
 	use_cache = not input_ident_changed and not output_ident_changed
+	if check_only:
+		return use_cache
+	if check_changed:
+		return (input_ident_changed, output_ident_changed)
+
 	if verbose:
 		print('[{func_name}]'.format(**locals()),
 			json.dumps([
 			('job_name',job.__name__),
-			('input_ident_changed',input_ident_changed),
-			('output_ident_chanegd',output_ident_changed)]
-				))
+			('input_ident_changed', int(input_ident_changed)),
+			('output_ident_chanegd',int(output_ident_changed))]
+				,separators='_=').replace('"','')
+			)
 
 	if check_only:
 		return bool(use_cache)		

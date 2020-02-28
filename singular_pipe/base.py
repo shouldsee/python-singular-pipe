@@ -7,6 +7,7 @@ from six import string_types
 import functools
 from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix,Path
 from singular_pipe.types import job_result
+import singular_pipe.types 
 
 def list_flatten(lst, strict=0, out=None, ):
 	_this = list_flatten
@@ -42,10 +43,14 @@ if 1:
 		defaults = res.defaults or []
 		assert args[0]  == 'self',(func, args)
 		assert args[-1] == '_output',(func, args)
-		defaults,_output  = defaults[:-1],defaults[-1]
-		args = args[:-1]
-		gunc._input_names = args[-len(defaults):] ### in case (self=None,) and not (self,)
-		gunc._input_types = defaults
+		_output = defaults[-1]
+		# if len(args)
+		if len(args)!=len(defaults):
+			 raise singular_pipe.types.TooFewDefaultsError(
+			 	"Must specify a type for all of {args} for {func.__code__}".format(**locals()))
+
+		gunc._input_names = args[1:] ### in case (self=None,) and not (self,)
+		gunc._input_types = defaults[1:]
 		gunc._origin_code = getattr(func, '_origin_code', func.__code__)
 
 		if 1:
