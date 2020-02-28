@@ -4,19 +4,19 @@ from singular_pipe.base import list_flatten_strict, job_from_func, get_output_fi
 from path import Path
 
 
-
 @job_from_func
 def job_trimmomatic(
 	self=Default,
 	prefix = Prefix,
 	FASTQ_FILE_1 = InputFile, 
 	FASTQ_FILE_2 = InputFile, 
-	THREADS = int,
+	THREADS_ = int,
 	_IMAGE ='docker://quay.io/biocontainers/trimmomatic:0.35--6',
 	_output = [
-		'fastq_1',
-		'fastq_2',
-		'log',],
+		File('fastq_1'),
+		File('fastq_2'),
+		File('log'),
+		],
 	):	
 		_ = '''
 		trimmomatic PE -threads 4 -phred33 
@@ -34,7 +34,7 @@ def job_trimmomatic(
 
 		CMD = [
 		'trimmomatic','PE',
-		'-threads', str(THREADS), 
+		'-threads', str(THREADS_), 
 		'-phred33',
 		File( FASTQ_FILE_1 ),
 		File( FASTQ_FILE_2 ),
@@ -70,8 +70,12 @@ def job_hisat2_index(
 	self = Default,
 	prefix = Prefix, 
 	FASTA_FILE = InputFile,
+	THREADS_  = int,
 	_IMAGE    = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
-	_output   = ['index_prefix', 'log'],
+	_output   = [
+		Prefix('index_prefix'), 
+		File('log')
+	],
 	):
 	_out = get_output_files(self, prefix, _output)
 
@@ -98,10 +102,13 @@ def job_hisat2_align(
 	INDEX_PREFIX = Prefix,
 	FASTQ_FILE_1 = InputFile,
 	FASTQ_FILE_2 = InputFile,
-	THREADS = int,
+	THREADS_ = int,
 	_IMAGE   = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
 	_IMAGE_SAMTOOLS = "docker://quay.io/biocontainers/samtools:1.10--h9402c20_2",
-	_output = ['bam','log']
+	_output = [
+	File('bam'),
+	File('log')
+	]
 	):
 	_out = get_output_files(self,prefix,_output)
 	results = []
@@ -113,7 +120,7 @@ def job_hisat2_align(
 	 # '-U', InputFile( FASTQ_FILE_1),
 	 # ['-2',InputFile( FASTQ_FILE_2) ] if FASTQ_FILE_2 else [],
 	 '-S', str( _out.bam +'.sam' ),
-	 '--threads', str(THREADS),
+	 '--threads', str( THREADS_ ),
 	 '--no-mixed',
 	 '--rna-strandness','RF',
 	 '--dta',
@@ -130,7 +137,7 @@ def job_hisat2_align(
 	CMD = [
 	'samtools','view',
 	File( _out.bam+'.sam'),
-	'--threads',str(THREADS),
+	'--threads',str(THREADS_),
 	'-o', 
 	File(_out.bam+'.unsorted'),
 	]
@@ -141,7 +148,7 @@ def job_hisat2_align(
 	CMD = [
 	'samtools','sort',
 	File( _out.bam + '.unsorted'),
-	'--threads', str(THREADS),
+	'--threads', str(THREADS_),
 	'-o', 
 	File( _out.bam),
 	]

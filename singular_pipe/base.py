@@ -57,20 +57,30 @@ if 1:
 
 		if 1:
 			cls = gunc._output_type = func._output_type = namedtuple('_output_type', _output)
+			cls._typed_fields = _output
 			cls.__module__ = func.__module__
 			cls.__qualname__ = "%s._output_type"%func.__name__
 			# cls.__name__ = "%s._output"%func.__name__
 		# gunc.__defaults__ = func.__defaults__
 		return gunc
 
-	def get_output_files( self, prefix, _output):
+	def get_output_files( self, prefix, _output_typed_fields):
 		'''
 		Assuming all output_files are Prefix because types arent checked
 		'''
 		tups = []
-		for suffix in _output:
-			s = "{prefix}.{self.__name__}.{suffix}".format(**locals())
-			s = singular_pipe.types.Prefix(s)
+		for s in _output_typed_fields:
+			# print('[get-output]',s,type(s))
+			# import pdb; pdb.set_trace();
+			if not isinstance(s,(Prefix,File)):
+				### Assuming type is Prefix  if unspecified
+				assert isinstance(s,str),(type(s),s)
+				typ = Prefix
+			else:
+				typ = type(s)
+			s = "{prefix}.{self.__name__}.{suffix}".format(suffix = s, **locals())
+			s = typ(str(s))
+			assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
 			tups.append(s)
 		tups = self._output_type(*tups)
 		return tups

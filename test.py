@@ -20,12 +20,12 @@ class SharedObject(object):
 
 from singular_pipe.base import job_from_func, get_output_files
 from singular_pipe.runner import cache_run_verbose,cache_check,force_run
-from singular_pipe.types import Default,Prefix, InputFile
+from singular_pipe.types import Default,Prefix, InputFile,File
 import singular_pipe.types
 
 @job_from_func
 def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, 
-	_output=['out_txt']):
+	_output=[File('out_txt')]):
 	_out = get_output_files(self, prefix, _output)
 	with open( _out.out_txt, 'w') as f:
 		print(s*10)
@@ -42,6 +42,26 @@ in bind_files()
 these two functions are kind of similar, but treat OutputPrefix differently
 	in get_identity(), An empty OutputPrefix would reduce to []
 	in bind_files(), An empty OutputPreix would cause the whole directory to be mounted
+additionally, 
+	get_identity() needs to expand objects other than Prefix and File, including Params
+	bind_files() only consider local files for now
+
+[ToDo]capturing get_identity() of Static params
+
+[ToDo]illustrating the different between vars
+static:    argname starts with '_' --> value is static constant of function,            must not override
+temporary: argname endswith '_'    --> value is a type, discarded for cache-validation, necessary arg  
+validated: argname otherwise       --> value is a type, kept for cache-validation,      ncessary
+
+### [add-test] for  
+def test_tempvar_change()  --> assert input_change == 0 
+def test_statvar_change()  --> raise tma error
+def test_validvar_change() --> assert input_change == 1
+
+### [ToDo] get_output_files(), 
+#### currently the returned _output consider all _output object as Prefix, 
+because _output is a list and there isn't a way of specifying their type
+
 '''
 class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
@@ -142,7 +162,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 	def change_job():
 		@job_from_func
 		def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, 
-			_output=['out_txt']):
+			_output=[File('out_txt')]):
 			_out = get_output_files(self, prefix, _output)
 			with open( _out.out_txt, 'w') as f:
 				print(s*10)
@@ -199,12 +219,14 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			]:
 			index = run(job_hisat2_index,
 				self.DIR / 'phiX.fasta.prefix',
-				DATA_DIR/'phiX.fasta'
+				DATA_DIR/'phiX.fasta',
+				THREADS
 				)
 
 			tups = (job_hisat2_index,
 				self.DIR / 'phiX.fasta.prefix',
-				DATA_DIR/'phiX.fasta'
+				DATA_DIR/'phiX.fasta',
+				THREADS
 				)
 			print('[CACHE_CHECK]%s'%cache_check(*tups))
 			# print( get_identity( index.output) )

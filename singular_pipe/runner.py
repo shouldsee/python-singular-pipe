@@ -115,7 +115,9 @@ class Caller(object):
 		'''
 		f = self.f
 		### argument to jobs without prefix
-		_job_args = list(zip(*self.arg_tuples[1:])) 
+		### argument with name ending with '_' will be discarded in idenitty
+		_job_args = [v for k,v in self.arg_tuples[1:] if not k.endswith('_')]
+		# _job_args = list(zip(*self.arg_tuples[1:])) 
 		_input = [
 		(	f.__code__.co_code, 
 			f.__code__.co_consts),
@@ -130,7 +132,15 @@ class Caller(object):
 		res = collections.OrderedDict([
 				('job', repr(f.__code__)),
 				('dotname',"%s.%s"%(inspect.getmodule(f).__name__, f.__qualname__)),
-				('arg_tuples', collections.OrderedDict([(k,repr(v).strip('"'"'")) for k,v in self.arg_tuples]) ),
+				('arg_tuples', collections.OrderedDict([
+					(
+						k,
+						"%s.%s::%s"%(type(v).__module__,type(v).__qualname__, repr(v).strip('"'"'") ),
+						# str(type(v))+':'+repr(v).strip('"'"'") ,
+						# _raise(Exception())
+					) for k,v in self.arg_tuples
+					if not k.endswith('_')
+					]) ),
 				# ('co_code',f.__code__.co_code),
 				# ('co_consts',f.__code__.co_consts),
 				])
@@ -179,7 +189,7 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 	#### calculate output files
 	### cast all files all as prefix
 	### here we add cache_file as a constitutive output.
-	_output = get_output_files( job, prefix, job._output_type._fields) + (OutputFile(output_cache_file),)
+	_output = get_output_files( job, prefix, job._output_type._typed_fields) + (OutputFile(output_cache_file),)
 	# print('[out1]',_output)
 	# _output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
 	# print('[out2]',_output)
@@ -211,17 +221,13 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 		use_cache = False
 
 	if use_cache:
-		# indent
-		# with open(
-		# result = pickle.loads(bytes(ident_load( output_cache_file )))
-		with open(output_cache_file,'rb') as f:
-			result = pickle.load(f)
+		with open(output_cache_file,'rb') as f: result = pickle.load(f)
 
 	else:
 		result = _caller()
 		with open(output_cache_file,'wb') as f: pickle.dump(result, f)
 		# ident_dump( result, output_cache_file, )
-		ident_dump( get_identity(_output), output_ident_file, comment = [(_output,get_identity(_output))] ) ### outputs are all
+		ident_dump( get_identity(_output), output_ident_file, comment = [([repr(x) for x in _output],get_identity(_output))] ) ### outputs are all
 		ident_dump( get_identity(_input), input_ident_file, comment = _caller.to_dict())
 	return result
 
