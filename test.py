@@ -64,7 +64,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 	
 	def test_cacherun_input_change(self):
 		_ = '''
-		if the input files to a simple node changed,
+		if the input files / params to a simple node changed,
 		then trigger a recalc
 		'''
 		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
@@ -78,6 +78,14 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		input_changed = cache_check_changed(*tups,verbose=0)[0]
 		assert input_changed == 1
 
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 0
+
+		tups = (simple_job, self.DIR/'root', 'ATGC','/tmp/digit.txt')
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 1
 
 	def test_cacherun_output_change(self):
 		_ = '''
@@ -137,11 +145,11 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		assert input_changed == 1
 
 		# pass
-	def test_basic(self, quick =1):
+	def test_singularity(self, quick =1):
 		'''
 		Write assertions
 		'''
-		# return
+		return
 		shutil.rmtree(self.DIR)
 		self.DIR.makedirs_p()
 		DATA_DIR = self.DATA_DIR		

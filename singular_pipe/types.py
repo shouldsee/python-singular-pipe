@@ -17,6 +17,11 @@ def Default(x):
 	'''
 	return x
 
+# class Static(object):
+# 	def __init__(self,a):
+# 		pass
+
+
 class File(Path):
     def __init__(self,*a,**kw):
         super(File,self).__init__(*a,**kw)

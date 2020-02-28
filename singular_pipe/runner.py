@@ -2,7 +2,7 @@ from singular_pipe.types import File,InputFile,OutputFile, Prefix
 from singular_pipe.types import TooManyArgumentsError
 import singular_pipe.types
 
-from singular_pipe.base import get_output_files,get_func_name
+from singular_pipe.base import get_output_files,get_func_name, list_flatten
 import pickle
 import os,sys
 import json
@@ -29,17 +29,119 @@ def cache_check_changed(job,*args,**kw):
 def cache_run_verbose(job,*args, **kw):
 	return cache_run(job,*args,verbose=True,**kw)
 
+# def ident_changed(ident, ident_file):
+# 	ident_dump     = pickle.dumps(ident)
+# 	ident_dump_old = open(ident_file,'rb').read() if file_not_empty(ident_file) else b''
+# 	return ident_dump != ident_dump_old
+
+# def ident_dump(ident, ident_file, comment=''):
+# 	with open(ident_file,'wb') as f:
+# 		pickle.dump( ident,  f )
 
 
-def ident_changed(ident, ident_file):
-	ident_dump     = pickle.dumps(ident)
-	ident_dump_old = open(ident_file,'rb').read() if file_not_empty(ident_file) else b''
+def ident_changed(ident, ident_file, key ='ident'):
+	ident_dump = str(pickle.dumps(ident))
+	ident_dump_old = ''
+	try:
+		if file_not_empty(ident_file):
+			ident_dump_old = str(json.loads(open(ident_file,'r').read())[key])
+	except Exception as e:
+		raise e
+		print(e)
 	return ident_dump != ident_dump_old
-def ident_dump(ident, ident_file):
-	with open(ident_file,'wb') as f:
-		pickle.dump( ident,  f )
+
+def ident_dump(ident, ident_file, comment=''):	
+	with open(ident_file,'w') as f:
+		json.dump(collections.OrderedDict([
+			('comment',comment),
+			('ident', str(pickle.dumps(ident)) )
+			]),
+		# .decode('utf8'))]),
+		f,
+		indent=2,
+		)
+		# pickle.dump( ident,  f )
+
 def _raise(e):
 	raise e
+
+_Caller = namedtuple('_Caller',
+	['job',
+	'arg_tuples'])
+def func_orig(func):
+	while hasattr(func,'__wrapped__'):
+		func = func.__wrapped__
+	return func
+
+
+import collections
+# class Caller( _Caller):
+class Caller(object):
+	@classmethod
+	def from_input(Caller, job, _input):
+		_tmp  = []
+		_null = namedtuple('_null',[])()
+		_zip = lambda: zip_longest(job._input_names, job._input_types, _input,fillvalue=_null)
+		_dump = lambda: json.dumps([repr(namedtuple('tuple','argname type input_value')(*x)) for x in _zip()],indent=0,default=repr)
+		for n,t,v in _zip():
+			if n[0]=='_':
+				if v is not _null:
+					raise TooManyArgumentsError('{dump}\nToo many arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
+						dump=_dump(),**locals()))
+			elif v is _null:
+				raise singular_pipe.types.TooFewArgumentsError(
+					'{dump}\nToo few arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
+				dump=_dump(),**locals()))
+			else:
+				_tmp.append( (n, t(v)) )
+		_caller = Caller( job, _tmp[:])
+		return _caller
+
+	def __init__(self, job,arg_tuples):
+		self.job = job
+		self.arg_tuples = arg_tuples
+	@property
+	def f(self):
+		return func_orig(self.job)
+	def to_ident(self):
+		'''
+		For pickle.dumps
+		'''
+		f = self.f
+		### argument to jobs without prefix
+		_job_args = list(zip(*self.arg_tuples[1:])) 
+		_input = [
+		(	f.__code__.co_code, 
+			f.__code__.co_consts),
+			_job_args,
+		]		
+		return _input
+	def to_dict(self):
+		'''
+		For visualisation / json.dumps
+		'''
+		f = self.f
+		res = collections.OrderedDict([
+				('job', repr(f.__code__)),
+				('dotname',"%s.%s"%(inspect.getmodule(f).__name__, f.__qualname__)),
+				('arg_tuples', collections.OrderedDict([(k,repr(v).strip('"'"'")) for k,v in self.arg_tuples]) ),
+				# ('co_code',f.__code__.co_code),
+				# ('co_consts',f.__code__.co_consts),
+				])
+		return res		
+
+	def __repr__(self):
+		f = self.f
+		return '%s.%s(%s)'%(
+			self.__class__.__module__,
+			self.__class__.__name__,
+			json.dumps( self.to_dict(),
+			indent=2,default=repr)
+			)
+	def __call__(self,):
+		return self.job(*[x[1] for x in self.arg_tuples])
+
+
 def cache_run(job, *args, check_only=False, check_changed=False, force=False,verbose=0):
 	'''
 	return: job_result
@@ -54,38 +156,19 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 	func_name = get_func_name()
 	prefix = args[0]
 
-	input_ident_file  = '{prefix}.{job.__name__}.input_pk'.format(**locals())
-	output_ident_file = '{prefix}.{job.__name__}.output_pk'.format(**locals())
-	output_cache_file = '{prefix}.{job.__name__}.output_cache'.format(**locals())
+	suf = 'json'
+	input_ident_file  = '{prefix}.{job.__name__}.input_{suf}'.format(**locals())
+	output_ident_file = '{prefix}.{job.__name__}.output_{suf}'.format(**locals())
+	output_cache_file = '{prefix}.{job.__name__}.cache_{suf}'.format(**locals())
 
 	#### calculate input tuples
 	### cast types for inputs
+	##### skip the prefix when calculating _input, in _caller.to_ident()
 	_input = args
-	_tmp  = []
-	_null = namedtuple('_null',[])()
-	_zip = lambda: zip_longest(job._input_names, job._input_types, _input,fillvalue=_null)
-	_dump = lambda: json.dumps([repr(namedtuple('tuple','argname type input_value')(*x)) for x in _zip()],indent=0,default=repr)
-	for n,t,v in _zip():
-		if n[0]=='_':
-			if v is not _null:
-				raise TooManyArgumentsError('{dump}\nToo many arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
-					dump=_dump(),**locals()))
-		elif v is _null:
-			raise singular_pipe.types.TooFewArgumentsError(
-				'{dump}\nToo few arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
-			dump=_dump(),**locals()))
-		else:
-			_tmp.append(t(v))
-	print(_dump()) if verbose>=2 else None
-	_input = _tmp
-	_job_args = _input[:] ### pass to job(*_job_args)
-
-	#### skip the prefix when calculating _input
-	assert job._input_names[0] =='prefix',job._input_names
-	del _input[0]
-
-	_input += [ (job._origin_code.co_code,job._origin_code.co_consts) ]
-
+	_caller = Caller.from_input(job, _input)
+	_input  = [_caller.to_ident()]	
+	# print(_dump()) if verbose>=2 else None
+	print(repr(_caller)) if verbose >= 3 else None
 
 	#### calculate output files
 	### cast all files all as prefix
@@ -126,10 +209,11 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 			result = pickle.load(f)
 
 	else:
-		result = job(*_job_args)
-		ident_dump( result, output_cache_file)
+		result = _caller()
+		# result = job(*_job_args)
+		ident_dump( result, output_cache_file, )
 		ident_dump( get_identity(_output), output_ident_file)
-		ident_dump( get_identity(_input), input_ident_file)
+		ident_dump( get_identity(_input), input_ident_file, comment = _caller.to_dict())
 	return result
 
 
@@ -152,7 +236,7 @@ def get_identity(lst, out = None,verbose=0):
 	'''
 	if out is None:
 		out = []
-	for ele in lst:
+	for ele in list_flatten(lst):
 		if isinstance(ele, Prefix):
 			res = ele.fileglob("*")
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
@@ -162,6 +246,10 @@ def get_identity(lst, out = None,verbose=0):
 			stat = os_stat_safe(ele)
 			res = (ele, stat.st_mtime, stat.st_size)
 			out.append(res)
+		elif hasattr(ele, 'to_ident'):
+			ele = ele.to_ident()
+			get_identity(ele, out, verbose)
 		else:
 			out.append(ele)
+			# out.append( get_identity())
 	return out
