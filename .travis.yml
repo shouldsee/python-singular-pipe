@@ -22,9 +22,9 @@ script:
   - set -e
   - singularity --verbose --debug exec docker://python:2.7.17-alpine python -V
   # - singularity exec docker://python:2.7.17-alpine python -V || exit 1
-  - sudo -E python -V
-  - sudo -E pip install .
-  - sudo -E python test.py
+  - python -V
+  - pip install .
+  - python test.py
   # - ls -lhtr /deps/*
   # - tree /deps
 
