@@ -19,7 +19,7 @@ before_install:
 install:
   - echo pass
 script:
-  - set -e
+  # - set -e
   - singularity --verbose --debug exec docker://python:2.7.17-alpine python -V
   # - singularity exec docker://python:2.7.17-alpine python -V || exit 1
   - python -V

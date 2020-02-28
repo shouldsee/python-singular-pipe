@@ -2,7 +2,7 @@
 prefix=/opt/singularity
 EXE=$prefix/bin/singularity
 
-# if [ -e /devvvvvvvvvvvvvvvvvvv ]; then
+if [ -e /devvvvvvvvvvvvvvvvvvv ]; then
 if [ -e $EXE ]; then
 	# sudo ln -sf $EXE /usr/local/bin
 	echo [SKIP] singularity install because found exe at $EXE
