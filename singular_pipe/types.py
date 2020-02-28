@@ -42,7 +42,8 @@ class Prefix(Path):
 	def __init__(self,*a,**kw):
 		super(Prefix, self).__init__(*a,**kw)
 	def fileglob(self, g):
-		return glob.glob("%s%s"%(self,g))
+		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
+		return [File(x) for x in glob.glob("%s%s"%(self,g))]
 		pass
 job_result = namedtuple(
 	'job_result',

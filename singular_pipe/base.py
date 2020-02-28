@@ -42,6 +42,7 @@ if 1:
 		args = res.args or []
 		defaults = res.defaults or []
 		assert args[0]  == 'self',(func, args)
+		assert args[1]  == 'prefix',(func, args)
 		assert args[-1] == '_output',(func, args)
 		_output = defaults[-1]
 		# if len(args)

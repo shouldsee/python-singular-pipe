@@ -5,7 +5,7 @@ from path import Path
 from pipeline_rnaseq import job_trimmomatic, job_hisat2_index, job_hisat2_align
 #from pipeline_rnaseq import *
 from path import Path
-from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_verbose
+from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_verbose, cache_check_changed
 
 class SharedObject(object):
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').makedirs_p()
@@ -24,9 +24,10 @@ from singular_pipe.types import Default,Prefix, InputFile
 import singular_pipe.types
 
 @job_from_func
-def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, _output=['txt']):
+def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, 
+	_output=['out_txt']):
 	_out = get_output_files(self, prefix, _output)
-	with open( _out.txt, 'w') as f:
+	with open( _out.out_txt, 'w') as f:
 		print(s*10)
 		f.write(s*10)
 
@@ -66,15 +67,57 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		if the input files to a simple node changed,
 		then trigger a recalc
 		'''
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 0
 
-		pass
+		import time
+		time.sleep(0.1)
+		Path(tups[-1]).touch()
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 1
+
 
 	def test_cacherun_output_change(self):
 		_ = '''
 		if the output files to a simple node changed
 		trigger a recalc
 		'''
-		pass
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+
+		output_changed = cache_check_changed(*tups,verbose=0)[1]
+		assert output_changed == 0
+
+		ofname = self.DIR/'root.simple_job.out_txt'
+		# from singular_pipe.runner import os_stat_safe
+		# print(os_stat_safe(ofname))
+		import time
+		time.sleep(0.1)
+		# subprocess.check_output(['touch','-m',ofname])
+		# with open(ofname,'w') as f:
+		# 	pass
+		Path(ofname).touch()
+		# print(os_stat_safe(ofname))
+		
+		output_changed = cache_check_changed(*tups,verbose=0)[1]
+		assert output_changed == 1
+
+	@staticmethod
+	def change_job():
+		@job_from_func
+		def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, 
+			_output=['out_txt']):
+			_out = get_output_files(self, prefix, _output)
+			with open( _out.out_txt, 'w') as f:
+				print(s*10)
+				f.write(s*10)
+
+				print('do something else')
+		return simple_job
+
+
 	def test_cacherun_code_change(self):
 		_ = '''
 		the defition of a script change is ambiguous
@@ -84,7 +127,16 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			func_code.co_consts
 			)
 		'''
-		pass
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 0
+
+		tups = (self.change_job(), self.DIR/'root', 'ATG','/tmp/digit.txt')
+		input_changed = cache_check_changed(*tups,verbose=0)[0]
+		assert input_changed == 1
+
+		# pass
 	def test_basic(self, quick =1):
 		'''
 		Write assertions

@@ -10,24 +10,24 @@ from itertools import zip_longest
 from collections import namedtuple
 import inspect
 
-def force_run(job, *args):
+def force_run(job, *args,**kw):
 	'''
 	Run a jobs regardless of whether it has a valid cache
 	'''
-	return cache_run(job,*args,force=True)
+	return cache_run(job,*args,force=True,**kw)
 	_input = args
 	res = job(*_input)
 	return res
-def cache_check(job, *args):
+def cache_check(job, *args,**kw):
 	'''
 	Check whether there is a valid cache for this job
 	'''
-	return cache_run(job,*args,check_only=True)
-def cache_check_changed(job,*args):
-	return cache_run(job,*arg,check_changed=True)
+	return cache_run(job,*args,check_only=True,**kw)
+def cache_check_changed(job,*args,**kw):
+	return cache_run(job,*args,check_changed=True,**kw)
 
-def cache_run_verbose(job,*args):
-	return cache_run(job,*args,verbose=True)
+def cache_run_verbose(job,*args, **kw):
+	return cache_run(job,*args,verbose=True,**kw)
 
 
 
@@ -78,9 +78,12 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 			_tmp.append(t(v))
 	print(_dump()) if verbose>=2 else None
 	_input = _tmp
-
-
 	_job_args = _input[:] ### pass to job(*_job_args)
+
+	#### skip the prefix when calculating _input
+	assert job._input_names[0] =='prefix',job._input_names
+	del _input[0]
+
 	_input += [ (job._origin_code.co_code,job._origin_code.co_consts) ]
 
 
@@ -88,8 +91,13 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 	### cast all files all as prefix
 	### here we add cache_file as a constitutive output.
 	_output = get_output_files( job, prefix, job._output_type._fields)
+	# print('[out1]',_output)
 	_output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
+	# print('[out2]',_output)
+	# print('[out3]',get_identity(_output))
 
+	_ddump = lambda *a:json.dumps(*a,indent=2,default=repr)
+	# print(_ddump(list(map(repr,get_identity(_input)))))
 	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file)
 	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)		
 	use_cache = not input_ident_changed and not output_ident_changed
@@ -133,21 +141,27 @@ def file_not_empty(fpath):
 
 _os_stat_result_null = os.stat_result([0 for n in range(os.stat_result.n_sequence_fields)])
 def os_stat_safe(fname):
-    if file_not_empty(fname):
+    if os.path.isfile(fname):
         return os.stat(fname)
     else:
         return _os_stat_result_null
 
-def get_identity(lst, out = None):
+def get_identity(lst, out = None,verbose=0):
 	'''
 	Append to file names with their mtime and st_size
 	'''
-	out = []
+	if out is None:
+		out = []
 	for ele in lst:
 		if isinstance(ele, Prefix):
-			get_identity(ele.fileglob("*"), out)
+			res = ele.fileglob("*")
+			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
+			get_identity( res, out,verbose)
 		elif isinstance(ele, File):
+			print('[identing]%r'%ele) if verbose else None
 			stat = os_stat_safe(ele)
 			res = (ele, stat.st_mtime, stat.st_size)
 			out.append(res)
+		else:
+			out.append(ele)
 	return out
