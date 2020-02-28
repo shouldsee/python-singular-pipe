@@ -13,8 +13,8 @@ cache:
     - /opt/singularity
 
 before_install:
-  - gimme 1.13.5
-  - eval "$(gimme 1.13.5)"
+  # - gimme 1.13.5
+  # - eval "$(gimme 1.13.5)"
   - bash install_singular.sh
 install:
   - echo pass

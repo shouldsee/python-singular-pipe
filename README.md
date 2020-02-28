@@ -4,7 +4,7 @@
 
 ### Requirement
 
-- singularity >= 3.5.3 (installed instruction see `install_singular.sh`)
+- singularity >= 3.5.3 (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
 - see requirements.txt
 
 ### Install
@@ -12,3 +12,10 @@
 ```bash
 pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
 ```
+
+
+### Capabilities:
+
+- [x] check valid cache by verifying input and output file mtime and sizes
+- [ ] import module from online
+- [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
