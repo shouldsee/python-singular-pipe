@@ -31,6 +31,18 @@ def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile,
 		print(s*10)
 		f.write(s*10)
 
+_ = '''
+[ToDo]adding tests for Prefix InputPrefix OutputPrefix
+in get_idenity()
+	InputPrefix should not match nothing
+	OutputPrefix could match empty 
+in bind_files()
+	InputPrefix should not match nothing
+	OutputPrefix could match empty
+these two functions are kind of similar, but treat OutputPrefix differently
+	in get_identity(), An empty OutputPrefix would reduce to []
+	in bind_files(), An empty OutputPreix would cause the whole directory to be mounted
+'''
 class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
 	DATA_DIR = SharedObject.DATA_DIR

@@ -26,8 +26,6 @@ class File(Path):
     def __init__(self,*a,**kw):
         super(File,self).__init__(*a,**kw)
 
-
-
 class TempFile(File):
     def __init__(self,*a,**kw):
         super(TempFile,self).__init__(*a,**kw)
@@ -46,10 +44,21 @@ class OutputFile(File):
 class Prefix(Path):
 	def __init__(self,*a,**kw):
 		super(Prefix, self).__init__(*a,**kw)
-	def fileglob(self, g):
+	def fileglob(self, g, strict):
+		res = [File(x) for x in glob.glob("%s%s"%(self,g))]
+		if strict:
+			assert len(res),'(%r,%r) expanded into nothing!'% (self,g)
 		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
-		return [File(x) for x in glob.glob("%s%s"%(self,g))]
+		return res
 		pass
+class InputPrefix(Prefix):
+    def __init__(self,*a,**kw):
+        super( InputPrefix,self).__init__(*a,**kw)
+
+class OutputPrefix(Prefix):
+    def __init__(self,*a,**kw):
+        super( OutputPrefix,self).__init__(*a,**kw)
+
 job_result = namedtuple(
 	'job_result',
 	[

@@ -5,7 +5,8 @@ import subprocess
 from six import string_types
 
 import functools
-from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix,Path
+from singular_pipe.types import InputFile,OutputFile,File,TempFile, Path
+from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe.types import job_result
 import singular_pipe.types 
 
@@ -122,13 +123,14 @@ if 1:
 			out.append(x)
 		cmd = out
 
-		debug = 1
+		# debug = 1
 		if debug: print(json.dumps(list(map(repr,cmd)),indent=4,))
 
-		FS = make_files_for(cmd)
+		FS,modes = make_files_for(cmd)
 		if debug: print(json.dumps(list(map(repr,FS)),indent=4,))
 
-		bfs = bind_files( FS + extra_files) 
+		bfs = [':'.join([f,f,m]) for f,m in zip(FS,modes)]
+		# bfs = bind_files( FS + extra_files) 
 		if debug: print(json.dumps(list(map(repr,bfs)),indent=4,))
 
 		cmd_curr = [
@@ -150,30 +152,40 @@ if 1:
 
 	def make_files_for(cmd):
 		FS = []
+		modes = []
 		for F in cmd:
 			if isinstance(F, (File,Prefix)):
 				F = F.realpath()
-				if isinstance(F, Prefix):
+				if isinstance(F, InputPrefix):
 					#### if is prefix, mount the directory
+					res = F.fileglob('*',1) 
+					FS += res
+					modes += ['ro']*len(res)
+				elif isinstance(F, Prefix):
+					#### if is not inputPrefix, mount the directory
 					F.dirname().makedirs_p()
 					FS.append( File( F.dirname() ) )
 					mode = 'rw'
+					modes+=[mode]
 				elif isinstance(F, InputFile):
 					#### if is inputFile, dont touch
 					assert F.isfile(),(F,cmd)
 					FS.append( F )
-					mode = 'ro'
+					modes += ['ro']					
 				elif isinstance(F,File):
 					#### if not inputfile, touch to makesure					
 					F.touch() if not F.isfile() else None
 					FS.append( F )
-					mode = 'rw'
+					modes += ['rw']
+					# mode = 'rw'
 				else:
 					assert 0,(type(F),F)
 				# FS.append(F)	
-		return FS
+		assert len(FS) == len(modes)
+		return FS,modes
 
 	def bind_files(files):
+		assert 0,'DEPRECATED'
 		files = list_flatten(files)
 		lst = []
 		for F in files:

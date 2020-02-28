@@ -1,4 +1,7 @@
-from singular_pipe.types import File,InputFile,OutputFile, Prefix
+from singular_pipe.types import File,InputFile,OutputFile
+# from singular_pipe.types import InputFile,OutputFile,File,TempFile,? ,Path,
+from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
+
 from singular_pipe.types import TooManyArgumentsError
 import singular_pipe.types
 
@@ -244,7 +247,7 @@ def get_identity(lst, out = None,verbose=0):
 		out = []
 	for ele in list_flatten(lst):
 		if isinstance(ele, Prefix):
-			res = ele.fileglob("*")
+			res = ele.fileglob("*", Prefix is InputPrefix)
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
 			get_identity( res, out,verbose)
 		elif isinstance(ele, File):
