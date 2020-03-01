@@ -150,20 +150,24 @@ class Caller(object):
 		return Prefix(self.arg_tuples[0][1])
 	
 	# def __getstate__
+	@property
+	def arg_values(self):
+		self._arg_values = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
+		return self._arg_values
+
 	def to_ident(self):
 		'''
 		For pickle.dumps
 		'''
-		f = self.f
 		### argument to jobs without prefix
 		### argument with name ending with '_' will be discarded in idenitty
 		# _job_args = [v for k,v in self.arg_tuples[1:] if not k.endswith('_')]
-		_job_args = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
+		# _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
 		# _job_args = list(zip(*self.arg_tuples[1:])) 
 		_input = [
-		(	f.__code__.co_code, 
-			f.__code__.co_consts),
-			_job_args,
+		(	self.f.__code__.co_code, 
+			self.f.__code__.co_consts),
+			self.arg_values,
 		]		
 		return _input
 	def to_dict(self):
@@ -241,12 +245,7 @@ def cache_run(job, *args,
 	_output = _caller.get_output_files()
 	# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
 	# print('[out1]',_output)
-	# _output = [Prefix(o) for o in _output] + [OutputFile(output_cache_file)]
-	# print('[out2]',_output)
-	# print('[out3]',get_identity(_output))
 
-	_ddump = lambda *a:json.dumps(*a,indent=2,default=repr)
-	# print(_ddump(list(map(repr,get_identity(_input)))))
 	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file)
 	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)		
 	use_cache = not input_ident_changed and not output_ident_changed
@@ -281,7 +280,7 @@ def cache_run(job, *args,
 		_output_ident = get_identity(_output)
 
 		ident_dump( _output_ident , output_ident_file, comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
-		ident_dump( _input_ident  , input_ident_file,  comment = _caller.to_dict())
+		ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
 
 		#### add edge_file to inputs 
 		### add input and output ident to outward_pk
@@ -289,8 +288,9 @@ def cache_run(job, *args,
 		for outward_dir in outward_dir_list:
 			outward_edge_file = outward_dir.makedirs_p() / str( hash_nr( _input_ident ) ) +'.%s.json'%job.__name__
 			# ident_dump( _input_ident,  outward_edge_file, comment=_caller.to_dict() )			
-			ident_dump( (_caller, get_identity(_caller.to_ident())), 
-				outward_edge_file, comment=_caller.to_dict() )			
+			ident_dump( _input_ident  , outward_edge_file,  comment = (_caller.to_dict(), _dumps(_caller) ) )
+			# ident_dump( (_caller, get_identity(_caller.to_ident())), 
+			# 	outward_edge_file, comment=_caller.to_dict() )			
 
 		#### remove edge_file of outputs
 		outward_dir_list = get_outward_json_list( _output, config)
@@ -345,7 +345,7 @@ def get_outward_json_list(lst, config, out = None,verbose=0,):
 		out.append(f) if f is not None else None
 	return out 
 	# return get_files(lst, *a, target = 'outward', **kw)
-def get_identity(lst, out = None, verbose=0, target='ident'):
+def get_identity(lst, out = None, verbose=0, strict=0):
 	'''
 	Append to file names with their mtime and st_size
 	'''
@@ -355,7 +355,7 @@ def get_identity(lst, out = None, verbose=0, target='ident'):
 		if   isinstance(ele, Prefix):
 			res = ele.fileglob("*", Prefix is InputPrefix)
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
-			get_identity( res, out, verbose, target)
+			get_identity( res, out, verbose, strict)
 
 		elif isinstance(ele, File):
 			print('[identing]%r'%ele) if verbose else None
@@ -367,12 +367,18 @@ def get_identity(lst, out = None, verbose=0, target='ident'):
 			assert 0,'call to_ident() yourself before passing into get_files()'
 			#### Caller.to_ident()
 			ele = ele.to_ident()
-			get_identity(ele, out, verbose, target)
-
+			get_identity(ele, out, verbose, strict)
 		else:
+			if strict:
+				raise UndefinedTypeRoutine("get_identity(%s) undefined for %r"%(type(ele),ele))
 			out.append(ele)
 	return out
 
+##################################################
+##################################################
+##################################################
+#### the following computes closures on the DAG ##
+#### aka upstream/downstream
 
 def get_downstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
 	return _get_downstream_targets( obj, level, strict, config, target, flat)
@@ -381,41 +387,138 @@ def get_downstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, 
 	return _get_downstream_targets( obj, level, strict, config, target, flat)
 
 def _get_downstream_targets(obj, level, strict, config, target, flat):
-# def file_downstream(obj, config=DEFAULT_DIR_LAYOUT):
 	'''
 	List downstream files depending on this object
 	'''
-	assert target in ['file','node'],(target,)
-	outward_dir = _get_outward_json_file(obj, config)
+	this = _get_downstream_targets
+
+	#### cast input_obj to a list of downstream nodes
 	nodes = []
-	for outward_file in outward_dir.glob('*.json'):
-		ident = json.load(open(outward_file,'r'))['ident']
-		x,x_ident = _loads(ident)
-		input_ident_file  = IdentFile(config, x.prefix, x.job, 'input_json')
-		x1 = x_ident
-		x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
-		if x1 == x2:
-			if target == 'file':
-				out    = []
-				# nodes += [[x.get_output_files(),　out]]
-				nodes += [(x.get_output_files(),out)]
-			elif target =='node':
-				out    = []
-				nodes += [(x,out)]
-			if level == 0:
+	if isinstance(obj, (File,Prefix)):
+		for outward_file in _get_outward_json_file(obj, config).glob('*.json'):
+			buf = json.load(open(outward_file,'r'))
+			x_ident = _loads(buf['ident'])
+			try:
+				_ = '''[TBC] fragile '''
+				x  =_loads(buf['comment'][-1])
+				input_ident_file  = IdentFile(config, x.prefix, x.job, 'input_json')
+				x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
+			except:
+				x2 = ''
+			x1 = x_ident
+			if x1 == x2:
+				nodes += [x]
 				pass
 			else:
-				for of in x.get_output_files():
-					out += _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
+				if strict:
+					buf = json.dumps([outward_file,obj,x.prefix,],indent=2,default=repr)
+					raise Exception('Broken edge exists between nodes. set get_downstream_nodes(strict=0) to auto-remove outdated edge files %s'%buf)
+				else:
+					os.unlink(outward_file)
+	elif isinstance(obj, Caller):
+		nodes += [obj]
+	else:
+		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
+
+	assert target in ['file','node'],(target,)
+	output_list = []
+	for x in nodes:
+		if target == 'file':
+			out    = []
+			# nodes += [[x.get_output_files(),　out]]
+			output_list += [(x.get_output_files(),out)]
+		elif target =='node':
+			out    = []
+			output_list += [(x,out)]
+		if level == 0:
+			pass
 		else:
-			if strict:
-				buf = json.dumps([outward_file,obj,x.prefix,],indent=2,default=repr)
-				raise Exception('Broken edge exists between nodes. set get_downstream_nodes(strict=0) to auto-remove outdated edge files %s'%buf)
-			else:
-				os.unlink(outward_file)
+			for of in x.get_output_files():
+				out += _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
+
 	if flat:
-		nodes = list_flatten(nodes)
-	return nodes
+		output_list = list_flatten(output_list)
+	return output_list
+
+
+class CantGuessCaller(Exception):
+	pass
+class UndefinedTypeRoutine(Exception):
+	pass
+def file_to_node(obj, strict, config,):
+	'''
+	One can only guess the prefix by removing the suffix
+	'''
+	err = CantGuessCaller("Cannot guess the Caller() for %r"%obj) 
+	res = obj.rsplit('.',2)
+	if len(res)!=3:
+		return (_raise(err) if strict else None)
+		# return x
+
+	prefix, job_name, suffix = res 
+	fake_job = lambda:None
+	fake_job.__name__ = job_name
+	input_ident_file =  IdentFile(config, prefix, fake_job, 'input_json' )
+	output_ident_file = IdentFile(config, prefix, fake_job, 'output_json' )
+	lst = _loads(json.load(open(output_ident_file,'r'))['ident'])  ##[FRAGILE]
+	obj_ident = get_identity([obj])[0]
+	'''
+	[IMPLEMENT]
+	strict=1 should detect a identity change
+	contained in output_ident_file() -> Tracked
+	not contained in output_ident_file() -> Dangling/Untracked
+	'''
+	if obj_ident in lst:
+		x = _loads(json.load(open(input_ident_file,'r'))['comment'][-1])
+	else:
+		return (_raise(err) if strict else None)
+		# _raise(err) if strict else None
+		# x = None
+	return x
+
+#### upstream
+def get_upstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
+	return _get_upstream_targets( obj, level, strict, config, target, flat)
+
+def get_upstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
+	return _get_upstream_targets( obj, level, strict, config, target, flat)
+
+def _get_upstream_targets(obj, level, strict, config, target, flat):
+
+	####
+	assert strict==0,'strict == 1 not implmented'
+	assert target in ['node','file'],target
+	this = _get_upstream_targets
+	nodes = []
+	if isinstance(obj, (Prefix,File)):
+		x = file_to_node(obj, strict, config, )
+		if x is not None:
+			nodes += [x]
+	elif isinstance(obj, Caller):
+		nodes += [obj]
+	else:
+		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
+
+	# node  = nodes[0]
+	output_list = []
+	# print(nodes)
+	for node in nodes:
+		out = []
+		files = [x for x in node.arg_values[1:] if isinstance(x,(File,Prefix))]
+		if target == 'node':
+			output_list += [[node, out]]
+		elif target =='file':
+			output_list += [[files, out]]
+		if level == 0:
+			pass
+		else:
+			out[:] = [ _get_upstream_targets( f, min(level-1,-1), strict, config, target,flat) for f in files]
+
+		# print('[node]',[node.prefix,node.f.__code__])
+
+	if flat:
+		output_list = list_flatten(output_list)
+	return output_list
 
 
 

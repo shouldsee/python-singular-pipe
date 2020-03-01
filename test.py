@@ -43,8 +43,9 @@ _ = '''
 	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
 		- the input_ident is useful 
-	- [ ] produce a dependency graph
-		- graph
+	- [x] produce a dependency graph
+		- get_upstream_files()
+		- get_downstream_nodes()
 	- [ ] capture stderr and stdout of subprocess.check_output(), with optional log file.
 
 [ToDo]
@@ -217,13 +218,14 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		##### no test for nodes
 		print(res)
 
-		res = singular_pipe.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0)
+		res = singular_pipe.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0,flat=1)
 		expect = [
-			File('/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
-			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
-			File('/home/user/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
-			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
+			File('~/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
+			File('~/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
+			File('~/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
+			File('~/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
 			]
+		expect = [x.expand() for x in expect]
 		assert expect == res, json.dumps((res,expect),indent=2)
 
 	def test_upstream(self):
@@ -232,17 +234,17 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
 		force_run(*tups,verbose=0)
 
-		# res = singular_pipe.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
-		##### no test for nodes
+		res = singular_pipe.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
+		##### no test for nodes yet
+		print(res)
+
 		# res ==[]
-		# res = singular_pipe.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0)
+		res = singular_pipe.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0,flat=1)
 		expect = [
-			File('/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
-			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
-			File('/home/user/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
-			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
-			]
-		# assert expect == res, json.dumps((res,expect),indent=2)	
+		 InputFile('~/.temp/singular-pipe_test_build/root.simple_job.out_txt').expand(),
+		 InputFile('/tmp/digit.txt')]
+		expect = [x.expand() for x in expect]
+		assert expect == res, json.dumps((res,expect),indent=2)
 
 
 		return 

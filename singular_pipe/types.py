@@ -69,6 +69,8 @@ job_result = namedtuple(
 
 
 def IdentFile(config, prefix, job, suffix):
+	prefix = Prefix(prefix)
+	
 	if config == 'clean':
 		pre_dir = prefix.dirname()
 		pre_base = prefix.basename()
