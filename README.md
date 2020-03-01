@@ -17,5 +17,5 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
 ### Capabilities:
 
 - [x] check valid cache by verifying input and output file mtime and sizes
-- [ ] import module from online
+- [ ] (abandoned)import module from online.
 - [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency

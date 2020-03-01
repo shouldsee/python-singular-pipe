@@ -66,3 +66,18 @@ job_result = namedtuple(
 	'cmd_list',
 	'output']
 	)
+
+
+def IdentFile(config, prefix, job, suffix):
+	if config == 'clean':
+		pre_dir = prefix.dirname()
+		pre_base = prefix.basename()
+		input_ident_file  = '{pre_dir}/_singular_pipe/{pre_base}.{job.__name__}.{suffix}'.format(**locals())
+	elif config == 'flat':
+		input_ident_file = '{prefix}.{job.__name__}.{suffix}'.format(**locals())
+		pass
+	return File(input_ident_file)
+	pass
+
+class CacheFile(OutputFile):
+	pass

@@ -5,7 +5,9 @@ from path import Path
 from pipeline_rnaseq import job_trimmomatic, job_hisat2_index, job_hisat2_align
 #from pipeline_rnaseq import *
 from path import Path
+import json
 from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_verbose, cache_check_changed
+import singular_pipe.runner
 
 class SharedObject(object):
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').makedirs_p()
@@ -18,7 +20,7 @@ class SharedObject(object):
 	DIR.makedirs_p()
 	DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'
 
-from singular_pipe.base import job_from_func, get_output_files
+from singular_pipe.base import job_from_func, get_output_files, list_flatten
 from singular_pipe.runner import cache_run_verbose,cache_check,force_run
 from singular_pipe.types import Default,Prefix, InputFile,File
 import singular_pipe.types
@@ -37,11 +39,13 @@ def simple_job(
 
 _ = '''
 [ToDo]
-	- logging the command executed into .cmd file
-	- adding an outward_pk file to complement input_pk and auto-sync
+	- [ ] logging the command executed into .cmd file
+	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
 		- the input_ident is useful 
-	- capture stderr and stdout of subprocess.check_output(), with optional log file.
+	- [ ] produce a dependency graph
+		- graph
+	- [ ] capture stderr and stdout of subprocess.check_output(), with optional log file.
 
 [ToDo]
     - adding tests for Prefix InputPrefix OutputPrefix
@@ -59,7 +63,6 @@ additionally,
 	bind_files() only consider local files for now
 
 [ToDo]capturing get_identity() of Static params
-
 [ToDo]illustrating the different between vars
 static:    argname starts with '_' --> value is static constant of function,            must not override
 temporary: argname endswith '_'    --> value is a type, discarded for cache-validation, necessary arg  
@@ -74,8 +77,8 @@ def test_validvar_change() --> assert input_change == 1
   e.g. dont cast File into Prefix through namedtuple() in job_from_func()
 
 ### [ToDo] get_output_files(), 
-#### currently the returned _output consider all _output object as Prefix, 
-because _output is a list and there isn't a way of specifying their type
+### currently the returned _output consider all _output object as Prefix, 
+because _output is a list and there isn't a way of specifying their type.
 
 '''
 class BaseCase(unittest2.TestCase,SharedObject):
@@ -204,14 +207,52 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (self.change_job(), self.DIR/'root', 'ATG','/tmp/digit.txt')
 		input_changed = cache_check_changed(*tups,verbose=0)[0]
 		assert input_changed == 1
+	def test_downstream(self):
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+		tups = (simple_job, self.DIR/'job2', 'ATG', self.DIR/'root.simple_job.out_txt')
+		force_run(*tups,verbose=0)
 
-		# pass
+		res = singular_pipe.runner.get_downstream_nodes(File('/tmp/digit.txt'),strict=0,flat=0)
+		##### no test for nodes
+		print(res)
+
+		res = singular_pipe.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0)
+		expect = [
+			File('/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
+			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
+			File('/home/user/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
+			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
+			]
+		assert expect == res, json.dumps((res,expect),indent=2)
+
+	def test_upstream(self):
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,verbose=0)
+		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
+		force_run(*tups,verbose=0)
+
+		# res = singular_pipe.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
+		##### no test for nodes
+		# res ==[]
+		# res = singular_pipe.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0)
+		expect = [
+			File('/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
+			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
+			File('/home/user/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
+			File('/home/user/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
+			]
+		# assert expect == res, json.dumps((res,expect),indent=2)	
+
+
+		return 
 	def test_singularity(self, quick = 0):
 		'''
 		Write assertions
 		'''
-		# return
-		shutil.rmtree(self.DIR)
+		return
+		if 0:
+			shutil.rmtree(self.DIR)
 		self.DIR.makedirs_p()
 		DATA_DIR = self.DATA_DIR		
 		# print(DATA_DIR)

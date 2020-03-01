@@ -29,7 +29,7 @@ def hash_tree(o):
     elif isinstance(o, tuple):
         return tuple.__hash__(tuple(map(hash_tree,o))) 
     elif isinstance(o, numbers.Number):
-        return o
+        return o.__hash__()
     elif isinstance(o, frozenset):
         return hash_tree(tuple(sorted(x for x in o)))
     elif isinstance(o,set):
