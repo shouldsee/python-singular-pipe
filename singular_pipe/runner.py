@@ -8,10 +8,15 @@ import singular_pipe.types
 from singular_pipe.base import get_output_files,get_func_name, list_flatten
 import pickle
 import os,sys
+import shutil
+# ,shutil
 import json
 from itertools import zip_longest
 from collections import namedtuple
 import inspect
+
+import io
+from singular_pipe.hash import hash_nr
 
 def force_run(job, *args,**kw):
 	'''
@@ -57,7 +62,13 @@ def ident_changed(ident, ident_file, key ='ident'):
 	return ident_dump != ident_dump_old
 
 def ident_dump(ident, ident_file, comment=''):	
-	with open(ident_file,'w') as f:
+	if isinstance(ident_file, io.IOBase):
+		f = ident_file
+	else:
+		f = open(ident_file,'w')
+	with f:
+	# with open(ident_file,'w') as f:
+		# assert 0
 		json.dump(collections.OrderedDict([
 			('comment',comment),
 			('ident', str(pickle.dumps(ident)) )
@@ -227,8 +238,27 @@ def cache_run(job, *args, check_only=False, check_changed=False, force=False,ver
 		result = _caller()
 		with open(output_cache_file,'wb') as f: pickle.dump(result, f)
 		# ident_dump( result, output_cache_file, )
-		ident_dump( get_identity(_output), output_ident_file, comment = [([repr(x) for x in _output],get_identity(_output))] ) ### outputs are all
-		ident_dump( get_identity(_input), input_ident_file, comment = _caller.to_dict())
+		_input_ident  = get_identity( _input)
+		_output_ident = get_identity(_output)
+
+
+		ident_dump( _output_ident , output_ident_file, comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
+		ident_dump( _input_ident  , input_ident_file,  comment = _caller.to_dict())
+
+		#### add edge_file to inputs 
+		### add input and output ident to outward_pk
+		outward_dir_list = get_outward_json_list( _input )
+		for outward_dir in outward_dir_list:
+			outward_edge_file = outward_dir.makedirs_p() / str( hash_nr( _input_ident ) ) +'.json'
+			ident_dump( _input_ident, outward_edge_file, comment=_caller.to_dict() )
+
+		#### remove edge_file of outputs
+		outward_dir_list = get_outward_json_list( _output )
+		for outward_dir in outward_dir_list:
+			shutil.move(outward_dir.makedirs_p() , (outward_dir+'.old').rmtree_p())
+			outward_dir = outward_dir.makedirs_p() 
+
+
 	return result
 
 
@@ -245,26 +275,49 @@ def os_stat_safe(fname):
     else:
         return _os_stat_result_null
 
-def get_identity(lst, out = None,verbose=0):
+
+def get_identity(lst,*a,**kw):
+	return get_files(lst, *a, target = 'ident',   **kw)
+def get_outward_json_list(lst,*a,**kw):
+	return get_files(lst, *a, target = 'outward', **kw)
+
+def get_files(lst, out = None,verbose=0, target='ident'):
 	'''
 	Append to file names with their mtime and st_size
 	'''
 	if out is None:
 		out = []
 	for ele in list_flatten(lst):
-		if isinstance(ele, Prefix):
-			res = ele.fileglob("*", Prefix is InputPrefix)
-			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
-			get_identity( res, out,verbose)
+		if   isinstance(ele, Prefix):
+			if target =='ident':
+				res = ele.fileglob("*", Prefix is InputPrefix)
+				print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
+				get_files( res, out, verbose, target)
+			elif target =='outward':
+				out.append(
+					File( ele + '.outward_edges')
+				)
 		elif isinstance(ele, File):
-			print('[identing]%r'%ele) if verbose else None
-			stat = os_stat_safe(ele)
-			res = (ele, stat.st_mtime, stat.st_size)
-			out.append(res)
+			if target =='ident':
+				print('[identing]%r'%ele) if verbose else None
+				stat = os_stat_safe(ele)
+				res = (ele, stat.st_mtime, stat.st_size)
+				out.append(res)	
+			elif target == 'outward':
+				out.append(
+					File( ele + '.outward_edges')			
+				)
 		elif hasattr(ele, 'to_ident'):
-			ele = ele.to_ident()
-			get_identity(ele, out, verbose)
+			assert 0,'call to_ident() yourself before passing into get_files()'
+			if target =='ident':
+				#### Caller.to_ident()
+				ele = ele.to_ident()
+				get_files(ele, out, verbose, target)
+
 		else:
-			out.append(ele)
+			if target =='ident':
+				out.append(ele)
+			elif target == 'outward':
+				pass
 			# out.append( get_identity())
 	return out

@@ -24,7 +24,11 @@ from singular_pipe.types import Default,Prefix, InputFile,File
 import singular_pipe.types
 
 @job_from_func
-def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile, 
+def simple_job(
+	self = Default, 
+	prefix=Prefix, 
+	s=str,  
+	digitFile=InputFile, 
 	_output=[File('out_txt')]):
 	_out = get_output_files(self, prefix, _output)
 	with open( _out.out_txt, 'w') as f:
@@ -32,7 +36,15 @@ def simple_job(self = Default, prefix=Prefix, s=str,  digitFile=InputFile,
 		f.write(s*10)
 
 _ = '''
-[ToDo]adding tests for Prefix InputPrefix OutputPrefix
+[ToDo]
+	- logging the command executed into .cmd file
+	- adding an outward_pk file to complement input_pk and auto-sync
+		- the outward_pk should record identity of the output file and input file.
+		- the input_ident is useful 
+	- capture stderr and stdout of subprocess.check_output(), with optional log file.
+
+[ToDo]
+    - adding tests for Prefix InputPrefix OutputPrefix
 in get_idenity()
 	InputPrefix should not match nothing
 	OutputPrefix could match empty 
@@ -57,6 +69,9 @@ validated: argname otherwise       --> value is a type, kept for cache-validatio
 def test_tempvar_change()  --> assert input_change == 0 
 def test_statvar_change()  --> raise tma error
 def test_validvar_change() --> assert input_change == 1
+
+[add-test] for get_output_files() to preserve types from the original _output list.
+  e.g. dont cast File into Prefix through namedtuple() in job_from_func()
 
 ### [ToDo] get_output_files(), 
 #### currently the returned _output consider all _output object as Prefix, 
