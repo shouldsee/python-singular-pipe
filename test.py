@@ -48,7 +48,10 @@ _ = '''
 		- get_upstream_files()
 		- get_downstream_nodes()
 	- [ ] capture stderr and stdout of subprocess.check_output(), with optional log file.
-
+	- [ ] Adding InputHTTP() and OutputHTTP() object 
+	- [ ] (abandoned)import module from online.
+	- [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
+	
 [ToDo]
     - adding tests for Prefix InputPrefix OutputPrefix
 in get_idenity()

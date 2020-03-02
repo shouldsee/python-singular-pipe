@@ -14,7 +14,11 @@ import shutil
 import json
 from itertools import zip_longest
 from collections import namedtuple
+import collections
+_dict = collections.OrderedDict
+
 import inspect
+
 
 import io
 from singular_pipe.hash import hash_nr
@@ -59,7 +63,7 @@ def _loads(obj):
 	x = base64.b64decode(obj.encode('ascii'))
 	return pickle.loads(x)
 
-def ident_load(ident_file,key ='ident'):	
+def ident_load(ident_file,key):	
 	ident_dump_old = ''
 	try:
 		if file_not_empty(ident_file):
@@ -69,12 +73,13 @@ def ident_load(ident_file,key ='ident'):
 		raise e
 		print(e)
 	return ident_dump_old
-def ident_changed(ident, ident_file, key ='ident'):
+def ident_changed(ident, ident_file, key):
 	ident_dump = _dumps(ident)
 	ident_dump_old = ident_load( ident_file, key )
 	return ident_dump != ident_dump_old
 
-def ident_dump(ident, ident_file, comment=[],version=VERSION):	
+
+def ident_dump(d, ident_file, comment=[],version=VERSION):	
 	if isinstance(ident_file, io.IOBase):
 		f = ident_file
 	else:
@@ -82,15 +87,17 @@ def ident_dump(ident, ident_file, comment=[],version=VERSION):
 	with f:
 	# with open(ident_file,'w') as f:
 		# assert 0
-		json.dump(collections.OrderedDict([
-			('comment',comment),
+		_d = _dict([
 			('version',version),
-			('ident', _dumps(ident) ),
-			]),
-		# .decode('utf8'))]),
-		f,
-		indent=2,
+			# ('comment',comment),
+			# ('ident', _dumps(ident) ),
+			] + list(_dict(d).items()))
+
+		json.dump(_d,
+			f,
+			indent=2,
 		)
+		# collections.OrderedDict
 		# pickle.dump( ident,  f )
 
 def _raise(e):
@@ -128,6 +135,9 @@ class Caller(object):
 				if v is not _null:
 					raise TooManyArgumentsError('{dump}\nToo many arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
 						dump=_dump(),**locals()))
+				else:
+					## v is _null, t is default value
+					_tmp.append((n,t))
 			elif v is _null:
 				raise singular_pipe.types.TooFewArgumentsError(
 					'{dump}\nToo few arguments specified for {job._origin_code}\n argname started with _ should not have input_value \n'.format(
@@ -249,8 +259,8 @@ def cache_run(job, *args,
 	# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
 	# print('[out1]',_output)
 
-	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file)
-	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file)		
+	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file, 'ident')
+	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file,'ident')		
 	use_cache = not input_ident_changed and not output_ident_changed
 	if check_only:
 		return use_cache
@@ -282,8 +292,21 @@ def cache_run(job, *args,
 		_input_ident  = get_identity( _input)
 		_output_ident = get_identity(_output)
 
-		ident_dump( _output_ident , output_ident_file, comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
-		ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
+		ident_dump( [
+			('comment',[[repr(x) for x in _output],get_identity(_output)]),
+			('ident', _dumps(_output_ident))
+			], output_ident_file,
+			)
+			 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
+		ident_dump(
+			[
+				('comment',  _caller.to_dict()),
+				('caller_dump',  _dumps( _caller)),
+				('ident',_dumps(_input_ident)),
+
+			],
+			input_ident_file)
+		# ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
 
 		#### add edge_file to inputs 
 		### add input and output ident to outward_pk
@@ -291,7 +314,16 @@ def cache_run(job, *args,
 		for outward_dir in outward_dir_list:
 			outward_edge_file = outward_dir.makedirs_p() / str( hash_nr( _input_ident ) ) +'.%s.json'%job.__name__
 			# ident_dump( _input_ident,  outward_edge_file, comment=_caller.to_dict() )			
-			ident_dump( _input_ident  , outward_edge_file,  comment = (_caller.to_dict(), _dumps(_caller) ) )
+
+			ident_dump(
+				[
+					('comment',  _caller.to_dict()),
+					('caller_dump',  _dumps( _caller)),
+					('ident',_dumps(_input_ident)),
+				],
+				outward_edge_file)			
+			# ident_dump( _input_ident  , outward_edge_file,  comment = (_caller.to_dict(), _dumps(_caller) ) )
+
 			# ident_dump( (_caller, get_identity(_caller.to_ident())), 
 			# 	outward_edge_file, comment=_caller.to_dict() )			
 
@@ -311,12 +343,6 @@ def file_not_empty(fpath):
     '''
     return os.path.isfile(fpath) and os.path.getsize(fpath) > 0
 
-_os_stat_result_null = os.stat_result([0 for n in range(os.stat_result.n_sequence_fields)])
-def os_stat_safe(fname):
-    if os.path.isfile(fname):
-        return os.stat(fname)
-    else:
-        return _os_stat_result_null
 
 
 # def get_identity(lst,*a,**kw):
@@ -362,8 +388,9 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 
 		elif isinstance(ele, File):
 			print('[identing]%r'%ele) if verbose else None
-			stat = os_stat_safe(ele)
-			res = (ele, stat.st_mtime, stat.st_size)
+			res = ele.to_ident() #### see types.File, use (mtime and st_size) to identify
+			# stat = os_stat_safe(ele)
+			# res = (ele, stat.st_mtime, stat.st_size)
 			out.append(res)	
 
 		elif hasattr(ele, 'to_ident'):
@@ -403,7 +430,7 @@ def _get_downstream_targets(obj, level, strict, config, target, flat):
 			x_ident = _loads(buf['ident'])
 			try:
 				_ = '''[TBC] fragile '''
-				x  =_loads(buf['comment'][-1])
+				x  =_loads(buf['caller_dump'])
 				input_ident_file  = IdentFile(config, x.prefix, x.job, 'input_json')
 				x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
 			except:
@@ -456,7 +483,6 @@ def file_to_node(obj, strict, config,):
 	res = obj.rsplit('.',2)
 	if len(res)!=3:
 		return (_raise(err) if strict else None)
-		# return x
 
 	prefix, job_name, suffix = res 
 	fake_job = lambda:None
@@ -472,11 +498,9 @@ def file_to_node(obj, strict, config,):
 	not contained in output_ident_file() -> Dangling/Untracked
 	'''
 	if obj_ident in lst:
-		x = _loads(json.load(open(input_ident_file,'r'))['comment'][-1])
+		x = _loads(json.load(open(input_ident_file,'r'))['caller_dump'])
 	else:
 		return (_raise(err) if strict else None)
-		# _raise(err) if strict else None
-		# x = None
 	return x
 
 #### upstream
@@ -502,9 +526,7 @@ def _get_upstream_targets(obj, level, strict, config, target, flat):
 	else:
 		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
 
-	# node  = nodes[0]
 	output_list = []
-	# print(nodes)
 	for node in nodes:
 		out = []
 		files = [x for x in node.arg_values[1:] if isinstance(x,(File,Prefix))]
@@ -517,17 +539,9 @@ def _get_upstream_targets(obj, level, strict, config, target, flat):
 		else:
 			out[:] = [ _get_upstream_targets( f, min(level-1,-1), strict, config, target,flat) for f in files]
 
-		# print('[node]',[node.prefix,node.f.__code__])
 
 	if flat:
 		output_list = list_flatten(output_list)
 	return output_list
 
-
-
-def file_upstream():
-	if isinstance(obj, Prefix):
-		pass
-	elif isinstance(obj, File):
-		pass
 
