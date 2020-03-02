@@ -4,6 +4,7 @@ import glob
 from collections import namedtuple
 import os
 
+
 class TooManyArgumentsError(RuntimeError):
 	pass
 class TooFewArgumentsError(RuntimeError):
@@ -18,6 +19,26 @@ def Default(x):
 	'''
 	return x
 
+# class cached_property(object):
+#     """
+#     Descriptor (non-data) for building an attribute on-demand on first use.
+#     Source: https://stackoverflow.com/a/4037979
+#     """
+#     def __init__(self, factory):
+#         """
+#         <factory> is called such: factory(instance) to build the attribute.
+#         """
+#         self._attr_name = factory.__name__
+#         self._factory = factory
+
+#     def __get__(self, instance, owner):
+#         # Build the attribute.
+#         attr = self._factory(instance)
+
+#         # Cache the value; hide ourselves.
+#         setattr(instance, self._attr_name, attr)
+
+#         return attr
 # class Static(object):
 # 	def __init__(self,a):
 # 		pass
@@ -95,3 +116,38 @@ def IdentFile(config, prefix, job, suffix):
 
 class CacheFile(OutputFile):
 	pass
+
+
+
+import requests
+import json
+# class HttpCheckLengthResult(object):
+class HttpResponse(object):
+	headers = {
+	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36'
+	}
+	def __init__(self, method,url,**kwargs):
+		self.method = method
+		self.url = url
+		kwargs.setdefault('headers', self.headers)
+		self.kwargs =kwargs
+	def __repr__(self):
+		return json.dumps(self.__dict__,default=repr,indent=2)
+	@property
+	def response(self):
+		x = requests.request( self.method, self.url, **self.kwargs)
+		return x
+
+	@property
+	def text(self):
+		return self.response.text
+
+	def to_ident(self):
+		x = self.response
+		d = x.headers
+		return (self.__dict__, d['Content-Length'], d['Content-Type'], x.text)
+
+
+class HttpResponseContentHeader(HttpResponse):
+	def __init__(self,url,**kwargs):
+		super().__init__('head', url,**kwargs)

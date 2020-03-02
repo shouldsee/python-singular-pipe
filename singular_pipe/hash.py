@@ -21,7 +21,7 @@ def hash_tree(o):
     elif o is None:
         return None.__hash__()
     elif isinstance(o,dict):
-        return hash_tree(tuple(sorted(o.items)))
+        return hash_tree(tuple(sorted(o.items())))
     elif isinstance(o,(bytes,str)):
         return hash_str(o)
     elif isinstance(o, list):

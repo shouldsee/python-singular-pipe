@@ -2,11 +2,13 @@ from singular_pipe.types import File,InputFile,OutputFile
 from singular_pipe.types import IdentFile,CacheFile
 # from singular_pipe.types import InputFile,OutputFile,File,TempFile,? ,Path,
 from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
+from singular_pipe.types import HttpResponse
 
 from singular_pipe.types import TooManyArgumentsError
 import singular_pipe.types
 
 from singular_pipe.base import get_output_files,get_func_name, list_flatten
+from singular_pipe.base import job_from_func
 import pickle
 import os,sys
 import shutil
@@ -23,7 +25,17 @@ import inspect
 import io
 from singular_pipe.hash import hash_nr
 import base64
-VERSION = 'v0.0.1'
+import singular_pipe
+# import pkg_resources
+from singular_pipe import get_version
+VERSION = get_version()
+# VERSION = config['version']
+# from qualname import qualname
+# import pdb;pdb.set_trace()
+# pkg_resources.get_distribution("singular_pipe").version
+# __version__ = singular_pipe.__version__
+# from singular_pipe import __version__ as VERSION
+# VERSION = 'v0.0.1'
 
 
 def force_run(job, *args,**kw):
@@ -108,9 +120,17 @@ def _raise(e):
 # 	'arg_tuples'])
 
 def func_orig(func):
-	while hasattr(func,'__wrapped__'):
-		func = func.__wrapped__
+	while True:
+		if hasattr(func,'__wrapped__'):
+			func = func.__wrapped__
+		elif hasattr(func,'__func__'):
+			func = func.__func__
+		else:
+			break
 	return func
+	# while hasattr(func,'__wrapped__'):
+	# 	func = func.__wrapped__
+	# return func
 
 
 import collections
@@ -120,12 +140,18 @@ class Caller(object):
 	def output_cache_file(self):
 		# return self._foo
 		return IdentFile( self.config, self.prefix, self.job, 'cache_pk')
+	@property
+	def output(self):
+		return get_output_files( self.job, self.prefix, self.job._output_type._typed_fields) 
 	def get_output_files( self ):		
-		res = get_output_files( self.job, self.prefix, self.job._output_type._typed_fields) 
+		res = self.output
 		res += (CacheFile(self.output_cache_file),)
 		return res
+
 	@classmethod
 	def from_input(Caller, job, _input, config):
+		if not getattr(job,'_singular_pipe',False):
+			job = job_from_func(job)
 		_tmp  = []
 		_null = namedtuple('_null',[])()
 		_zip = lambda: zip_longest(job._input_names, job._input_types, _input,fillvalue=_null)
@@ -149,12 +175,23 @@ class Caller(object):
 		return _caller
 
 	def __init__(self, job, arg_tuples, config):
+		# if not getattr(job,'_singular_pipe',False):
+		# 	job = job_from_func(job)		
 		self.job = job
 		self.arg_tuples = arg_tuples
 		self.config = config
+		self.__name__ = job.__name__
+		self._output_type = job._output_type
 		# self.code = (self.f.__code__.co_code)
 		assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
 		arg_tuples[0] = ('prefix',OutputPrefix(arg_tuples[0][1]))
+
+		# _output = job._output_type._typed_fields
+		# _output = list(_output) + [CacheFile('_cache')]
+		# cls = gunc._output_type = func._output_type = namedtuple('_output_type', list(_output)+['_cache'])
+		# cls._typed_fields = _output
+		# cls.__module__ = func.__module__
+		# cls.__qualname__ = "%s._output_type"%func.__name__		
 	@property
 	def f(self):
 		return func_orig(self.job)
@@ -214,15 +251,38 @@ class Caller(object):
 			indent=2,default=repr)
 			)
 	def __call__(self,):
-		return self.job(*[x[1] for x in self.arg_tuples])
+		return self.job(self, *[x[1] for x in self.arg_tuples])
 
 
 DEFAULT_DIR_LAYOUT = 'clean'
-def cache_run(job, *args, 
-	# config ='clean',
+# def cache_run(job, *args,
+# 	config ='clean',
+# 	config = DEFAULT_DIR_LAYOUT,
+# 	# config = 'flat',	
+# 	check_only=False, check_changed=False, force=False,verbose=0
+# 	):
+
+# def cache_run(job, *args, **kw):
+# 	# config ='clean',
+# 	# config = DEFAULT_DIR_LAYOUT,
+# 	# # config = 'flat',	
+# 	# check_only=False, check_changed=False, force=False,verbose=0
+# 	# ):
+# 	kw.setdefault('config',DEFAULT_DIR_LAYOUT)
+# 	kw.setdefault('check_only',False)
+# 	kw.setdefault('check_changed',False)
+# 	kw.setdefault('force',False)
+# 	kw.setdefault('verbose',0)
+# 	return _cache_run(job,args,**kw)
+
+# def _cache_run(job, args, config, check_only, check_changed, force, verbose):
+
+def cache_run(job, *args,
 	config = DEFAULT_DIR_LAYOUT,
 	# config = 'flat',	
-	check_only=False, check_changed=False, force=False,verbose=0):
+	check_only=False, check_changed=False, force=False,verbose=0
+	):
+
 	'''
 	return: job_result
 		Check whether a valid cache exists for a job receipe.
@@ -386,7 +446,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
 			get_identity( res, out, verbose, strict)
 
-		elif isinstance(ele, File):
+		elif isinstance(ele, (File, HttpResponse)):
 			print('[identing]%r'%ele) if verbose else None
 			res = ele.to_ident() #### see types.File, use (mtime and st_size) to identify
 			# stat = os_stat_safe(ele)
@@ -455,7 +515,6 @@ def _get_downstream_targets(obj, level, strict, config, target, flat):
 	for x in nodes:
 		if target == 'file':
 			out    = []
-			# nodes += [[x.get_output_files(),　out]]
 			output_list += [(x.get_output_files(),out)]
 		elif target =='node':
 			out    = []

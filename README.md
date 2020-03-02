@@ -2,9 +2,9 @@
 
 ## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
 
-### Requirement
+### Dependencies:
 
-- singularity >= 3.5.3 (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: singularity >= 3.5.3 to use singular_pipe.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
 - see requirements.txt
 
 ### Install
@@ -28,3 +28,4 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
 - [ ] Adding InputHTTP() and OutputHTTP() object 
 - [ ] (abandoned)import module from online.
 - [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
+- [ ] implementing checks for output nodes to make sure Files.to_ident() are changed

@@ -25,6 +25,23 @@ from singular_pipe.runner import cache_run_verbose,cache_check,force_run
 from singular_pipe.types import Default,Prefix, InputFile,File
 import singular_pipe.types
 
+from singular_pipe.types import HttpResponseContentHeader,HttpResponse
+
+def http_job1(self,prefix, 
+	_response1=HttpResponseContentHeader('http://worldtimeapi.org/api/timezone/Europe/London.txt'),
+	_output = [File('cache')],
+	):
+	print(_response1.text[:20])
+
+
+def http_job2(self,prefix,
+	_response1=HttpResponse('GET','http://worldtimeapi.org/api/timezone/Europe/London.txt'),
+	_output = [File('cache')],
+	):
+
+	with open(self.output.cache, 'w') as f: f.write(_response1.text)
+
+
 @job_from_func
 def simple_job(
 	self = Default, 
@@ -48,10 +65,13 @@ _ = '''
 		- get_upstream_files()
 		- get_downstream_nodes()
 	- [ ] capture stderr and stdout of subprocess.check_output(), with optional log file.
-	- [ ] Adding InputHTTP() and OutputHTTP() object 
+	- [x] (Done as HttpResponse(),  ) Adding InputHTTP() 
+		- [ ] better subclassing requests.Request()?
+	- [ ] Adding OutputHTTP() object 
 	- [ ] (abandoned)import module from online.
 	- [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
-	
+	- [ ] implementing checks for output nodes to make sure Files.to_ident() are changed
+
 [ToDo]
     - adding tests for Prefix InputPrefix OutputPrefix
 in get_idenity()
@@ -109,11 +129,16 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			pass
 		job_from_func(right_job)
 
-		def wrong_job(self, prefix=Prefix, s=str, _output=['txt']):
+		def right_job(self, prefix=Prefix, s=str, _output=['txt']):
 			pass
-		self.assertRaises(singular_pipe.types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
+		job_from_func(right_job)
+		# self.assertRaises(singular_pipe.types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
 		
-		def wrong_job(self, prefix, s=str, _output=['txt']):
+		def right_job(self, prefix, s=str, _output=['txt']):
+			pass
+		job_from_func(right_job)
+
+		def wrong_job(self, prefix, s, _output=['txt']):
 			pass
 		self.assertRaises(singular_pipe.types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
 
@@ -262,6 +287,22 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		expect = [x.expand() for x in expect]
 		assert expect == res, json.dumps((res,expect),indent=2)
 
+
+	def test_http_job(self):
+			# from singular_pipe.types import HttpResponseCheckLength
+
+		tups = (http_job1, self.DIR/'test_http_job')
+		cache_run_verbose(*tups)
+		res = cache_check_changed(*tups)
+		assert res[0]==0
+
+		tups = (http_job2, self.DIR/'test_http_job')
+		res = cache_run_verbose(*tups)
+		res = cache_check_changed(*tups)
+		assert res[0]==1
+
+
+		pass
 	def test_dag(self):
 		pass
 

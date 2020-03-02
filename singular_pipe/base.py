@@ -10,6 +10,8 @@ from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe.types import job_result
 import singular_pipe.types 
 
+
+
 def list_flatten(lst, strict=0, out=None, ):
 	_this = list_flatten
 	if out is None:
@@ -35,10 +37,15 @@ def rstrip(s,suffix):
 if 1:
 	def job_from_func(func):
 		# d = get_func_default_dict(func)
-		@functools.wraps(func)
-		def gunc(*a,**kw):
-			return  func(func,*a,**kw)
-
+		# @functools.wraps(func)
+		# def gunc(*a,**kw):
+		# 	return  func(func,*a,**kw)
+		gunc = func
+		try:
+			res = inspect.getargspec(func)
+		except Exception as e:
+			import pdb;pdb.set_trace()
+			raise e
 		res = inspect.getargspec(func)
 		args = res.args or []
 		defaults = res.defaults or []
@@ -46,14 +53,19 @@ if 1:
 		assert args[1]  == 'prefix',(func, args)
 		assert args[-1] == '_output',(func, args)
 		_output = defaults[-1]
-		# if len(args)
-		if len(args)!=len(defaults):
+		if  len(args) - len(defaults) > 2:
 			 raise singular_pipe.types.TooFewDefaultsError(
-			 	"Must specify a type for all of {args} for {func.__code__}".format(**locals()))
+			 	"Must specify a type for all of {args} for {func.__code__} (except first 2)".format(**locals()))
+		defaults = ( singular_pipe.types.Default,OutputPrefix)[: len(args) -len(defaults)]+ defaults
+
+		# if len(args)!=len(defaults):
+		# 	 raise singular_pipe.types.TooFewDefaultsError(
+		# 	 	"Must specify a type for all of {args} for {func.__code__}".format(**locals()))
 
 		gunc._input_names = args[1:] ### in case (self=None,) and not (self,)
 		gunc._input_types = defaults[1:]
 		gunc._origin_code = getattr(func, '_origin_code', func.__code__)
+		gunc._singular_pipe = True
 
 		if 1:
 			cls = gunc._output_type = func._output_type = namedtuple('_output_type', _output)
