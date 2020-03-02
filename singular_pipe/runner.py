@@ -3,6 +3,7 @@ from singular_pipe.types import IdentFile,CacheFile
 # from singular_pipe.types import InputFile,OutputFile,File,TempFile,? ,Path,
 from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe.types import HttpResponse
+from singular_pipe.types import IdentAttrDict
 
 from singular_pipe.types import TooManyArgumentsError
 import singular_pipe.types
@@ -29,14 +30,6 @@ import singular_pipe
 # import pkg_resources
 from singular_pipe import get_version
 VERSION = get_version()
-# VERSION = config['version']
-# from qualname import qualname
-# import pdb;pdb.set_trace()
-# pkg_resources.get_distribution("singular_pipe").version
-# __version__ = singular_pipe.__version__
-# from singular_pipe import __version__ as VERSION
-# VERSION = 'v0.0.1'
-
 
 def force_run(job, *args,**kw):
 	'''
@@ -67,8 +60,12 @@ def cache_run_verbose(job,*args, **kw):
 # 		pickle.dump( ident,  f )
 
 
+# def _dumps(obj):
 def _dumps(obj):
-	# s = base64.b64encode(obj).decode('ascii')
+	# f = lambda obj: base64.b64encode(pickle.dumps(obj)).decode('ascii')
+	# s = f(obj)
+	# x = f(_loads(s))
+	# assert x == s,(x,s)
 	s = base64.b64encode(pickle.dumps(obj)).decode('ascii')
 	return s
 def _loads(obj):
@@ -135,18 +132,51 @@ def func_orig(func):
 
 import collections
 # class Caller( _Caller):
+
+def FakeCode(code):
+	# out = (code.co_code, [])
+	consts = []
+	for const in code.co_consts:
+		if isinstance(const, singular_pipe.types.Code):
+			consts.append( FakeCode(const) )
+		else:
+			consts.append( const )
+	return FakeCode._codecls( code.co_code, consts)
+FakeCode._codecls = _cls= namedtuple('_codecls','co_code co_consts')
+_cls.__qualname__ = 'FakeCode._codecls'
+
+class FakeJob(object):
+	# code_tree = code_tree
+	_codecls = FakeCode._codecls
+	def __init__(self,job):
+		self.__name__     = job.__name__
+		self.__code__     = FakeCode( job.__code__) 
+		# self.__code__     = self._codecls( job.__code__.co_code, job.__code__.co_consts)
+		self.__qualname__ = job.__qualname__
+		self.__module__   = str(job.__module__)
+		self._output_type = job._output_type
+	# def code_tree(self):
+
+
+		# self.__code__  = 
+		return 
+
+CallerDump = namedtuple('CallerDump',['prefix','config',])
 class Caller(object):
+	# def 
+	
 	@property
 	def output_cache_file(self):
 		# return self._foo
-		return IdentFile( self.config, self.prefix, self.job, 'cache_pk')
+		return IdentFile( self.config, self.prefix, self.job.__name__, 'cache_pk')
 	@property
 	def output(self):
-		return get_output_files( self.job, self.prefix, self.job._output_type._typed_fields) 
+		return get_output_files( self.job, self.prefix, self._output_type._typed_fields)
 	def get_output_files( self ):		
 		res = self.output
-		res += (CacheFile(self.output_cache_file),)
-		return res
+		res['_cache_file'] = CacheFile(self.output_cache_file)
+		# res += (CacheFile(self.output_cache_file),)
+		return list(res.values())
 
 	@classmethod
 	def from_input(Caller, job, _input, config):
@@ -174,14 +204,24 @@ class Caller(object):
 		_caller = Caller( job, _tmp[:], config)
 		return _caller
 
+	def __getstate__(self):
+		d = self.__dict__.copy()
+		job = self.job
+		d['job'] = FakeJob(job)
+		# d['returned'] = ('LoadFrom',self.output_cache_file)
+		return d
+
+	def __setstate__(self,d):
+		self.__dict__ = d
+
 	def __init__(self, job, arg_tuples, config):
 		# if not getattr(job,'_singular_pipe',False):
 		# 	job = job_from_func(job)		
 		self.job = job
-		self.arg_tuples = arg_tuples
-		self.config = config
 		self.__name__ = job.__name__
 		self._output_type = job._output_type
+		self.arg_tuples = arg_tuples
+		self.config = config
 		# self.code = (self.f.__code__.co_code)
 		assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
 		arg_tuples[0] = ('prefix',OutputPrefix(arg_tuples[0][1]))
@@ -215,8 +255,9 @@ class Caller(object):
 		# _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
 		# _job_args = list(zip(*self.arg_tuples[1:])) 
 		_input = [
-		(	self.f.__code__.co_code, 
-			self.f.__code__.co_consts),
+		# (	self.f.__code__.co_code, 
+			# self.f.__code__.co_consts),
+			self.f.__code__,
 			self.arg_values,
 		]		
 		return _input
@@ -250,33 +291,15 @@ class Caller(object):
 			json.dumps( self.to_dict(),
 			indent=2,default=repr)
 			)
+	# @property
+	# def returned(self):
+	# 	return pickle.loads(self.output_cache_file)
 	def __call__(self,):
 		return self.job(self, *[x[1] for x in self.arg_tuples])
+		# return self
 
 
 DEFAULT_DIR_LAYOUT = 'clean'
-# def cache_run(job, *args,
-# 	config ='clean',
-# 	config = DEFAULT_DIR_LAYOUT,
-# 	# config = 'flat',	
-# 	check_only=False, check_changed=False, force=False,verbose=0
-# 	):
-
-# def cache_run(job, *args, **kw):
-# 	# config ='clean',
-# 	# config = DEFAULT_DIR_LAYOUT,
-# 	# # config = 'flat',	
-# 	# check_only=False, check_changed=False, force=False,verbose=0
-# 	# ):
-# 	kw.setdefault('config',DEFAULT_DIR_LAYOUT)
-# 	kw.setdefault('check_only',False)
-# 	kw.setdefault('check_changed',False)
-# 	kw.setdefault('force',False)
-# 	kw.setdefault('verbose',0)
-# 	return _cache_run(job,args,**kw)
-
-# def _cache_run(job, args, config, check_only, check_changed, force, verbose):
-
 def cache_run(job, *args,
 	config = DEFAULT_DIR_LAYOUT,
 	# config = 'flat',	
@@ -306,8 +329,8 @@ def cache_run(job, *args,
 	# print(_dump()) if verbose>=2 else None
 	print(repr(_caller)) if verbose >= 3 else None
 
-	input_ident_file =  IdentFile(config, prefix, job, 'input_json' )
-	output_ident_file=  IdentFile(config, prefix, job, 'output_json' )
+	input_ident_file =  IdentFile(config, prefix, job.__name__, 'input_json' )
+	output_ident_file=  IdentFile(config, prefix, job.__name__, 'output_json' )
 	# output_cache_file=  IdentFile(config, prefix, job, 'cache_pk')
 	output_cache_file=  _caller.output_cache_file
 	File(input_ident_file).dirname().makedirs_p()
@@ -438,15 +461,19 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 	'''
 	Append to file names with their mtime and st_size
 	'''
+	this = get_identity
 	if out is None:
 		out = []
-	for ele in list_flatten(lst):
+	# assert isinstance(lst, (tuple, list)),(type(lst), lst)
+	flist = list_flatten(lst)
+	# print('[lst]',lst,'\n[flist]',flist)
+	for ele in flist:
 		if   isinstance(ele, Prefix):
 			res = ele.fileglob("*", Prefix is InputPrefix)
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
 			get_identity( res, out, verbose, strict)
 
-		elif isinstance(ele, (File, HttpResponse)):
+		elif isinstance(ele, (File, HttpResponse, )):
 			print('[identing]%r'%ele) if verbose else None
 			res = ele.to_ident() #### see types.File, use (mtime and st_size) to identify
 			# stat = os_stat_safe(ele)
@@ -457,6 +484,9 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			assert 0,'call to_ident() yourself before passing into get_files()'
 			#### Caller.to_ident()
 			ele = ele.to_ident()
+			get_identity(ele, out, verbose, strict)
+		elif isinstance(ele,singular_pipe.types.Code):
+			ele = (ele.co_code,ele.co_consts)
 			get_identity(ele, out, verbose, strict)
 		else:
 			if strict:
@@ -491,7 +521,7 @@ def _get_downstream_targets(obj, level, strict, config, target, flat):
 			try:
 				_ = '''[TBC] fragile '''
 				x  =_loads(buf['caller_dump'])
-				input_ident_file  = IdentFile(config, x.prefix, x.job, 'input_json')
+				input_ident_file  = IdentFile(config, x.prefix, x.job.__name__, 'input_json')
 				x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
 			except:
 				x2 = ''
@@ -546,8 +576,8 @@ def file_to_node(obj, strict, config,):
 	prefix, job_name, suffix = res 
 	fake_job = lambda:None
 	fake_job.__name__ = job_name
-	input_ident_file =  IdentFile(config, prefix, fake_job, 'input_json' )
-	output_ident_file = IdentFile(config, prefix, fake_job, 'output_json' )
+	input_ident_file =  IdentFile(config, prefix, job_name, 'input_json' )
+	output_ident_file = IdentFile(config, prefix, job_name, 'output_json' )
 	lst = _loads(json.load(open(output_ident_file,'r'))['ident'])  ##[FRAGILE]
 	obj_ident = get_identity([obj])[0]
 	'''
@@ -576,16 +606,19 @@ def _get_upstream_targets(obj, level, strict, config, target, flat):
 	assert target in ['node','file'],target
 	this = _get_upstream_targets
 	nodes = []
+	output_list = []
 	if isinstance(obj, (Prefix,File)):
 		x = file_to_node(obj, strict, config, )
 		if x is not None:
 			nodes += [x]
+	elif isinstance(obj, HttpResponse):
+		nodes += []
+		output_list += [obj]
 	elif isinstance(obj, Caller):
 		nodes += [obj]
 	else:
 		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
 
-	output_list = []
 	for node in nodes:
 		out = []
 		files = [x for x in node.arg_values[1:] if isinstance(x,(File,Prefix))]

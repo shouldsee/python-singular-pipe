@@ -1,0 +1,190 @@
+from singular_pipe._shell import pipe__getResult,pipe__getSafeResult,shellpopen
+import io,time
+
+import json
+import warnings
+from singular_pipe.base import list_flatten_strict, list_flatten
+from singular_pipe.types import File,Prefix,InputFile,InputPrefix
+import json
+from path import Path
+
+def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
+	return _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
+def SafeShellCommand(CMD, check=1, shell=0, encoding='utf8',stdin=None,stdout = None,stderr = None, silent=1):
+	suc,stdout,stderr = _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
+	return stdout
+def _shellcmd(CMD,check,shell,encoding, stdin,stdout,stderr,silent):
+	'''
+	Print [stdout],[stderr] upon failure
+		shell: intepret input as a list.
+
+	'''
+	if not shell:
+		CMD = ['set','-e;','set','-o','pipefail;']+[CMD]
+		CMD = list_flatten_strict(CMD)
+		CMD = ' '.join(CMD)
+		shell = 1
+	else:
+		CMD = u'set -e; set -o pipefail;%s'%CMD
+	p   = shellpopen( CMD, stdin,stdout,stderr, shell=shell,silent=silent,)
+	suc,stdout,stderr = pipe__getResult(p,CMD=CMD,check=check)
+	stdout = stdout.decode(encoding)
+	stderr = stderr.decode(encoding)
+	return suc,stdout,stderr
+if 1:
+	def LoggedShellCommand(
+		CMD, file, check, shell=0,encoding = 'utf8',
+		stdin = None,stdout=None, stderr=None, silent=1,
+		):
+		_ = '''
+		loggedShellCmd
+		logging executed shell command into a json file
+		'''
+		if not isinstance(file,io.IOBase):
+			file = open(file,'a',buffering=1)
+		# with file:
+		t0 = time.time()
+		json.dump( ['CommandStart',-1, t0, ],file)
+		file.write('\n')
+		json.dump(['CommandText',] + ' '.join(CMD).splitlines(), file,indent=2)
+		file.write('\n')
+		# stdout = io.BytesIO(mode='w')
+		# stderr = io.BytesIO()
+		suc,stdout,stderr = _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
+		t1 = time.time()
+		json.dump( ['CommandEnd', suc, t1, (size_humanReadable(t1-t0,'s'), t1-t0)],file)
+		file.write('\n')
+		json.dump(['CommandResult',
+			'stdout',stdout.splitlines(),
+			'stderr',stderr.splitlines()],file,indent=2,default=repr)
+		file.write('\n')
+		file.flush()
+		if check:
+			if not suc:
+				errmsg = 'Command "{CMD}" returned error:\n[stdout]:{stdout}\n[stderr]:{stderr}'.format(**locals())		
+				raise Exception(errmsg)
+			return stdout
+		return suc,stdout,stderr
+
+
+	def size_humanReadable(num,suffix='B',fmt='{0:.2f}',units=['','K','M','G','T', 'P','E'],):
+	    """ Returns a human readable string reprentation of bytes,
+	    Source: https://stackoverflow.com/a/43750422/8083313"""
+	    if num < 1024:
+	    	return fmt.format(num) + units[0] + suffix 
+	    else:
+	    	return size_humanReadable( num/1024.,fmt, suffix,units[1:])
+
+
+
+
+
+if 1:
+	def SingularityShellCommand( cmd, image, log_file, check=1, extra_files = None, debug =0):	
+		'''
+		return a tuple (executed command, command_stdout)
+			cmd: a list of str-like objects that gets concatenated into a shell command
+			image: a singularity image url
+			extra_files: to-be-deprecated
+			debug: print dbg info
+		'''
+		if extra_files is None:
+			extra_files  = []
+		cmd = ['set','-e;',cmd]
+		cmd = list_flatten_strict(cmd)
+
+
+		#### potential redundant
+		#### all output path derives from Prefix hence only Prefix needs to be realpath
+		#### for input path, realisation better be done at job calling
+		out = []
+		for x in cmd:
+			if isinstance(x,Path):
+				x = x.realpath()
+			if x.startswith('/tmp'):
+				warnings.warn('[singularity_run] with /tmp is unstable')
+			out.append(x)
+		cmd = out
+
+		# debug = 1
+		if debug: print(json.dumps(list(map(repr,cmd)),indent=4,))
+
+		FS,modes = make_files_for(cmd)
+		if debug: print(json.dumps(list(map(repr,FS)),indent=4,))
+
+		bfs = [':'.join([f,f,m]) for f,m in zip(FS,modes)]
+		# bfs = bind_files( FS + extra_files) 
+		if debug: print(json.dumps(list(map(repr,bfs)),indent=4,))
+
+		cmd_curr = [
+		# '\n',
+		'singularity','exec',
+		'--contain',
+		['--bind',','.join(bfs)] if len(bfs) else [],
+		# [-1],'--bind','/tmp:/tmp',
+			image,
+			'bash',
+			'<<EOF\n',
+			cmd,
+			'\nEOF',
+		# '\n',
+		]
+		cmd_curr = list_flatten_strict(cmd_curr)
+		stdout = LoggedShellCommand(cmd_curr,log_file, check)
+		# suc,stdout
+		# suc,stdout,stderr = shellcmd(cmd_curr,1,0)
+		# suc , res = shellcmd(' '.join(cmd_curr),1,1)
+		return (cmd_curr, stdout)
+
+	def make_files_for(cmd):
+		FS = []
+		modes = []
+		for F in cmd:
+			if isinstance(F, (File,Prefix)):
+				F = F.realpath()
+				if isinstance(F, InputPrefix):
+					#### if is prefix, mount the directory
+					res = F.fileglob('*',1) 
+					FS += res
+					modes += ['ro']*len(res)
+				elif isinstance(F, Prefix):
+					#### if is not inputPrefix, mount the directory
+					F.dirname().makedirs_p()
+					FS.append( File( F.dirname() ) )
+					mode = 'rw'
+					modes+=[mode]
+				elif isinstance(F, InputFile):
+					#### if is inputFile, dont touch
+					assert F.isfile(),(F,cmd)
+					FS.append( F )
+					modes += ['ro']					
+				elif isinstance(F,File):
+					#### if not inputfile, touch to makesure					
+					F.touch() if not F.isfile() else None
+					FS.append( F )
+					modes += ['rw']
+					# mode = 'rw'
+				else:
+					assert 0,(type(F),F)
+				# FS.append(F)	
+		assert len(FS) == len(modes)
+		return FS,modes
+
+	def bind_files(files):
+		assert 0,'DEPRECATED'
+		files = list_flatten(files)
+		lst = []
+		for F in files:
+			#### bind the whole directory for a prefix
+			if isinstance(F,Prefix):
+				assert 0,(F,'run make_files_for() first', files)
+			elif isinstance(F, InputFile):
+				mode = 'ro'
+			elif isinstance(F,File):
+				mode = 'rw'
+			else:
+				assert 0,(F,"type %s unknown"%type(F),files,)
+			F = F.realpath()
+			bind_str = "%s:%s:%s"%( F, F, mode)
+			lst.append( bind_str )
+		return lst		

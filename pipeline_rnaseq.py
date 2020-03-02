@@ -1,6 +1,7 @@
 from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix, Default
 from singular_pipe.types import job_result
-from singular_pipe.base import list_flatten_strict, job_from_func, get_output_files, singularity_run
+from singular_pipe.base import list_flatten_strict, job_from_func, get_output_files
+from singular_pipe.shell import SingularityShellCommand
 from path import Path
 
 
@@ -16,6 +17,7 @@ def job_trimmomatic(
 		File('fastq_1'),
 		File('fastq_2'),
 		File('log'),
+		File('cmd'),
 		],
 	):	
 		_ = '''
@@ -30,7 +32,7 @@ def job_trimmomatic(
 	ILLUMINACLIP:/home/Program_NGS_sl-pw-srv01/Trimmomatic-0.32/adapters/TruSeq3-PE-2.fa
 	:6:30:10 LEADING:3 TRAILING:3 MINLEN:36 SLIDINGWINDOW:4:15
 		'''
-		_out = get_output_files(self, prefix, _output)
+		# _out = get_output_files(self, prefix, _output)
 
 		CMD = [
 		'trimmomatic','PE',
@@ -38,10 +40,10 @@ def job_trimmomatic(
 		'-phred33',
 		File( FASTQ_FILE_1 ),
 		File( FASTQ_FILE_2 ),
-		File( _out.fastq_1),
-		File( _out.fastq_1 + '.fail'),
-		File( _out.fastq_2),
-		File( _out.fastq_2 +'.fail'),
+		File( self.output.fastq_1 ),
+		File( self.output.fastq_1 + '.fail'),
+		File( self.output.fastq_2 ),
+		File( self.output.fastq_2 + '.fail'),
 		'ILLUMINACLIP:'
 		'/usr/local/share/trimmomatic-0.35-6/adapters/TruSeq3-PE-2.fa'
 		':6:30:10',
@@ -50,20 +52,20 @@ def job_trimmomatic(
 		'MINLEN:36',
 		'SLIDINGWINDOW:4:15',
 		'&>', 
-		File(_out.log)
+		File( self.output.log)
 		]
 		CMD = list_flatten_strict(CMD)
-		res = singularity_run(CMD, _IMAGE)
-		return job_result( None, CMD, _out)
+		# res = SingularityShellCommand(CMD, )
+		res = SingularityShellCommand(CMD, _IMAGE, self.output.cmd)
+		return self
+		# return job_result( None, CMD, self.output)
 
 # def genepred_to_gtf():
 # 	CMD = ['','cut','-f','2-']
 # 	CMD = list_flatten_strict(CMD)
-# 	res = singularity_run(CMD, _IMAGE)
+# 	res = SingularityShellCommand(CMD, _IMAGE)
 # 	return job_result(OUTDIR, CMD, _out)
-# 	# cut -f 2- temp.genepred | genePredToGtf file stdin out.gtf 	
-
-
+# 	# cut -f 2- temp.genepred | genePredToGtf file stdin out.gtf 
 
 @job_from_func
 def job_hisat2_index( 
@@ -74,30 +76,31 @@ def job_hisat2_index(
 	_IMAGE    = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
 	_output   = [
 		Prefix('index_prefix'), 
-		File('log')
+		File('log'),
+		File('cmd'),
 	],
 	):
-	_out = get_output_files(self, prefix, _output)
+	# _out = get_output_files(self, prefix, _output)
 
 	# func_name = get_func_name()
 	# lc = locals()
 	# files = [ "{prefix}.{func_name}.{suffix}".format(suffix=suffix,**lc) for suffix in _output ]
-	# _out = self._output(*files)
 
 	CMD = [
 	'hisat2-build',
-	 File(FASTA_FILE),
-	 Prefix(_out.index_prefix),
+	 File(  FASTA_FILE),
+	 Prefix(self.output.index_prefix),
 	 '&>', 
-	 File(_out.log),
+	 File(  self.output.log),
 	 ]
-	res = singularity_run(CMD, _IMAGE)
-	return job_result( None, CMD, _out)
+	res = SingularityShellCommand(CMD, _IMAGE, self.output.cmd)
+	return self
+	# return job_result( None, CMD, self.output)
 
 
 @job_from_func
 def job_hisat2_align(
-	self = Default,
+	self   = Default,
 	prefix = Prefix,
 	INDEX_PREFIX = Prefix,
 	FASTQ_FILE_1 = InputFile,
@@ -106,11 +109,12 @@ def job_hisat2_align(
 	_IMAGE   = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
 	_IMAGE_SAMTOOLS = "docker://quay.io/biocontainers/samtools:1.10--h9402c20_2",
 	_output = [
-	File('bam'),
-	File('log')
+		File('bam'),
+		File('log'),
+		File('cmd'),
 	]
 	):
-	_out = get_output_files(self,prefix,_output)
+	# _out = get_output_files(self,prefix,_output)
 	results = []
 	CMD = [
 	 'hisat2','-x',
@@ -119,42 +123,43 @@ def job_hisat2_align(
 	 '-2', str( FASTQ_FILE_2),
 	 # '-U', InputFile( FASTQ_FILE_1),
 	 # ['-2',InputFile( FASTQ_FILE_2) ] if FASTQ_FILE_2 else [],
-	 '-S', str( _out.bam +'.sam' ),
+	 '-S', str( self.output.bam +'.sam' ),
 	 '--threads', str( THREADS_ ),
 	 '--no-mixed',
 	 '--rna-strandness','RF',
 	 '--dta',
 	 '--fr',
-	 '&>', str(_out.log),
+	 '&>', str( self.output.log),
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE,)
-	results.append(job_result( None, CMD, _out))
+	res = SingularityShellCommand(CMD, _IMAGE, self.output.cmd)
+	# results.append(job_result( None, CMD, self.output))
 
 	_ = '''
 	samtools view /home/feng/temp/187R/187R-S1-2018_06_27_14:02:08/809_S1.sam -b --threads 4 -o 809_S1.bam
 	'''
 	CMD = [
 	'samtools','view',
-	File( _out.bam+'.sam'),
+	File( self.output.bam+'.sam'),
 	'--threads',str(THREADS_),
 	'-o', 
-	File(_out.bam+'.unsorted'),
+	File( self.output.bam+'.unsorted'),
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE_SAMTOOLS)
+	res = SingularityShellCommand(CMD, _IMAGE_SAMTOOLS, self.output.cmd)
 
 
 	CMD = [
 	'samtools','sort',
-	File( _out.bam + '.unsorted'),
+	File( self.output.bam + '.unsorted'),
 	'--threads', str(THREADS_),
 	'-o', 
-	File( _out.bam),
+	File( self.output.bam),
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE_SAMTOOLS)
-	return results[0]
+	res = SingularityShellCommand(CMD, _IMAGE_SAMTOOLS, self.output.cmd)
+	return self
+	# return results[0]
 
 
 ################################### TBC afterwards ############################
@@ -183,8 +188,8 @@ def get_picard_dedup(
 	'M=%s'% OutputFile(_out.BAM_FILE +'.log') ,
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE)
-	return job_result( _out.BAM_FILE, CMD, _out)
+	res = SingularityShellCommand(CMD, _IMAGE)
+	return job_result( _out.BAM_FILE, CMD, self.output)
 
 def get_stringtie( 
 	BAM_FILE = Default,
@@ -211,8 +216,8 @@ def get_stringtie(
 	'&>', OutputFile(_out.COUNT_FILE + '.log'),
 	]
 	CMD = list_flatten_strict(CMD)
-	res = singularity_run(CMD, _IMAGE)
-	return job_result( _out.COUNT_FILE, CMD, _out)
+	res = SingularityShellCommand(CMD, _IMAGE)
+	return job_result( _out.COUNT_FILE, CMD, self.output)
 
 def get_htseq():
 	_ = '''

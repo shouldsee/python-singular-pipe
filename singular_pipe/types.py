@@ -3,6 +3,9 @@ from path import Path
 import glob
 from collections import namedtuple
 import os
+from attrdict import AttrDict
+
+Code = type((lambda:None).__code__)
 
 
 class TooManyArgumentsError(RuntimeError):
@@ -13,6 +16,38 @@ class TooFewArgumentsError(RuntimeError):
 # 	pass
 class TooFewDefaultsError(RuntimeError):
 	pass
+
+
+# class Data(object):
+# 	pass
+class IdentAttrDict(AttrDict):
+	pass
+# 	def to_ident(self,f):
+# 		return [f[]self.items()
+class PicklableNamedTuple(object):
+	pass
+
+# if 0:
+	def __getstate__(self,):
+		d = self.__dict__.copy()
+		del d['cls']
+		return d
+	def __setstate__(self,d):
+		self.__dict__ = d
+		self.cls = namedtuple(d['name'], d['fields'])
+	def __init__(self,name,fields):
+		self.name = 'myData'
+		self.cls = namedtuple(self.name,fields)
+		self.fields = self.cls._fields
+	def __call__(self,*a,**kw):
+		v = self.cls(*a,**kw)
+		return AttrDict(v._asdict())
+		# if len(v):
+		# 	import pdb;pdb.set_trace()
+		# 	# assert 0
+		# return 
+
+
 def Default(x):
 	'''
 	A dummy "class" mocked with a function
@@ -34,11 +69,10 @@ def Default(x):
 #     def __get__(self, instance, owner):
 #         # Build the attribute.
 #         attr = self._factory(instance)
-
 #         # Cache the value; hide ourselves.
 #         setattr(instance, self._attr_name, attr)
-
 #         return attr
+
 # class Static(object):
 # 	def __init__(self,a):
 # 		pass
@@ -53,7 +87,7 @@ def os_stat_safe(fname):
 class File(Path):
 	def __init__(self,*a,**kw):
 		super(File,self).__init__(*a,**kw)
-	def to_ident(self):
+	def to_ident(self,):
 		stat = os_stat_safe(self)
 		res = (self, stat.st_mtime, stat.st_size)
 		return res
@@ -101,15 +135,16 @@ job_result = namedtuple(
 	)
 
 
-def IdentFile(config, prefix, job, suffix):
+def IdentFile(config, prefix, job_name, suffix):
 	prefix = Prefix(prefix)
-
+	# if  callable(job_name):
+	# 	import pdb;pdb.set_trace();
 	if config == 'clean':
 		pre_dir = prefix.dirname()
 		pre_base = prefix.basename()
-		input_ident_file  = '{pre_dir}/_singular_pipe/{pre_base}.{job.__name__}.{suffix}'.format(**locals())
+		input_ident_file  = '{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}'.format(**locals())
 	elif config == 'flat':
-		input_ident_file = '{prefix}.{job.__name__}.{suffix}'.format(**locals())
+		input_ident_file = '{prefix}.{job_name}.{suffix}'.format(**locals())
 		pass
 	return File(input_ident_file)
 	pass
@@ -142,7 +177,7 @@ class HttpResponse(object):
 	def text(self):
 		return self.response.text
 
-	def to_ident(self):
+	def to_ident(self,):
 		x = self.response
 		d = x.headers
 		return (self.__dict__, d['Content-Length'], d['Content-Type'], x.text)

@@ -6,7 +6,7 @@ from singular_pipe import get_version
 config = dict(
 	name='singular_pipe',
 	version = get_version(),
-    packages=['.',],
+        packages=['.','singular_pipe'],
 	include_package_data=True,
 	license='MIT',
 	author='Feng Geng',

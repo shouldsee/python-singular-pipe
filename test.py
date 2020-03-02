@@ -14,7 +14,6 @@ class SharedObject(object):
 	DIR = Path('~/.temp/singular-pipe_test_build/').expand().makedirs_p()
 	##### do not use /tmp for testing
 	# DIR = Path('/tmp/singular-pipe_test_build/').expand().makedirs_p()
-
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').expand().makedirs_p()
 	shutil.rmtree(DIR)
 	DIR.makedirs_p()
@@ -24,22 +23,28 @@ from singular_pipe.base import job_from_func, get_output_files, list_flatten
 from singular_pipe.runner import cache_run_verbose,cache_check,force_run
 from singular_pipe.types import Default,Prefix, InputFile,File
 import singular_pipe.types
-
 from singular_pipe.types import HttpResponseContentHeader,HttpResponse
+from singular_pipe.shell import shellcmd,LoggedShellCommand,SafeShellCommand
+# from singular_pipe.shell import pipe__getResult,pipe__getSafeResult,shellpopen
+# def shellcmd(CMD, check, shell=0):
+# 	suc, res = pipe__getResult(shellpopen(CMD,shell=0
+# 	),CMD=CMD,check=check)
+# 	return suc, res
 
-def http_job1(self,prefix, 
+
+def http_job1(
+	self,prefix, 
 	_response1=HttpResponseContentHeader('http://worldtimeapi.org/api/timezone/Europe/London.txt'),
-	_output = [File('cache')],
+	_output = [File('cache'),File('cmd')],
 	):
 	print(_response1.text[:20])
 
-
 def http_job2(self,prefix,
 	_response1=HttpResponse('GET','http://worldtimeapi.org/api/timezone/Europe/London.txt'),
-	_output = [File('cache')],
+	_output = [File('cache'),File('cmd')],
 	):
-
 	with open(self.output.cache, 'w') as f: f.write(_response1.text)
+	res = LoggedShellCommand(['wget','-O',self.output.cache+'.2',_response1.url], self.output.cmd, 1)
 
 
 @job_from_func
@@ -49,6 +54,7 @@ def simple_job(
 	s=str,  
 	digitFile=InputFile, 
 	_output=[File('out_txt')]):
+	[x for x in range(10)]
 	_out = get_output_files(self, prefix, _output)
 	with open( _out.out_txt, 'w') as f:
 		print(s*10)
@@ -57,6 +63,10 @@ def simple_job(
 
 _ = '''
 [ToDo]
+	- [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
+	- shellcmd
+		- [x] capture stderr and stdout of subprocess.check_output(), 
+		- [ ] with optional log file.  
 	- [ ] logging the command executed into .cmd file
 	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
@@ -64,7 +74,6 @@ _ = '''
 	- [x] produce a dependency graph
 		- get_upstream_files()
 		- get_downstream_nodes()
-	- [ ] capture stderr and stdout of subprocess.check_output(), with optional log file.
 	- [x] (Done as HttpResponse(),  ) Adding InputHTTP() 
 		- [ ] better subclassing requests.Request()?
 	- [ ] Adding OutputHTTP() object 
@@ -109,6 +118,12 @@ because _output is a list and there isn't a way of specifying their type.
 class BaseCase(unittest2.TestCase,SharedObject):
 	DIR = SharedObject.DIR
 	DATA_DIR = SharedObject.DATA_DIR
+	# level = 0
+	LEVEL = 4
+	def test_shellcmd(self):
+		res=  shellcmd('sleep 0.01',1,1)
+		res = self.assertRaisesRegex( AssertionError, '.*some_error.*', 
+			shellcmd,'echo [some_error] >&2 && exit 1',1,1)	
 
 	def test_init(self):
 		_ = '''
@@ -245,6 +260,8 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (simple_job, self.DIR/'job2', 'ATG', self.DIR/'root.simple_job.out_txt')
 		force_run(*tups,verbose=0)
 
+		import singular_pipe.runner
+		# s = 
 		res = singular_pipe.runner.get_downstream_nodes(File('/tmp/digit.txt'),strict=0,flat=0)
 		print('''##### no test for nodes in get_downstream_nodes()''')
 		# print(res)
@@ -257,7 +274,8 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			File('~/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
 			]
 		expect = [x.expand() for x in expect]
-		assert expect == res, json.dumps((res,expect),indent=2)
+		assert sorted(expect) == sorted(res), json.dumps((res,expect),indent=2)
+
 	def test_caller_struct(self):
 		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
 		res = force_run(*tups,verbose=0)
@@ -285,10 +303,13 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		 InputFile('~/.temp/singular-pipe_test_build/root.simple_job.out_txt').expand(),
 		 InputFile('/tmp/digit.txt')]
 		expect = [x.expand() for x in expect]
-		assert expect == res, json.dumps((res,expect),indent=2)
+		assert sorted(expect) == sorted(res), json.dumps((res,expect),indent=2)
 
 
+	# def test_http_job(self):
 	def test_http_job(self):
+		if self.LEVEL < 1:
+			return 
 			# from singular_pipe.types import HttpResponseCheckLength
 
 		tups = (http_job1, self.DIR/'test_http_job')
@@ -301,24 +322,53 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		res = cache_check_changed(*tups)
 		assert res[0]==1
 
+	def test_loadable_subprocess(self):
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		force_run(*tups,config='flat')		
+		res = SafeShellCommand('''
+set -e
+cd /tmp/
+python3 -<<EOF
+import json
+from path import Path
+from singular_pipe.runner import _loads,_dumps
+fn = Path("~/.temp/singular-pipe_test_build/root.simple_job.input_json").expand()
+d = json.load(open(fn,'r'))
+x = _loads(d['ident'])
+x = _loads(d['caller_dump'])
+s = "_dumps(x) == d['caller_dump']"
+print('#'*10 +' '+ s +' is not True, ')
+print(s)
+print(eval(s))
+# print(x)
+# print(x.job.__dict__)
+EOF
+cd $OLDPWD
+''',1,shell=True)
+		print(res)
+		# print(res.decode('utf8'))
 
-		pass
 	def test_dag(self):
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		res = force_run(*tups,verbose=0)
+		# tups = (simple_job, self.DIR/'job2', 'ATG', res.output.out_txt)
+		# self.DIR/'root.simple_job.out_txt')
+		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
+		force_run(*tups,verbose=0)
 		pass
-
-
 		return 
+
 	def test_singularity(self, quick = 0):
 		'''
 		Write assertions
 		'''
-		return
+		# return
+		if self.LEVEL <=3:
+			return
 		if 0:
 			shutil.rmtree(self.DIR)
 		self.DIR.makedirs_p()
 		DATA_DIR = self.DATA_DIR		
-		# print(DATA_DIR)
-		# assert 0
 		# print(DATA_DIR.glob("*"))
 		# WKDIR  = Path('/opt/singular-pipe_test_build/').makedirs_p()
 		THREADS = 2
@@ -353,12 +403,15 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			with open('/tmp/test1.pkl' ,'wb') as f:
 				pickle.dump(index,f)
 
-			if quick:
+			if self.LEVEL<=5:
 				continue
 
 			root_prefix = self.DIR/'root'
 			curr = run(
-					job_trimmomatic,
+					job_trimmomatic,	# @property
+	# def returned(self):
+	# 	return pickle.loads(self.output_cache_file)
+
 					root_prefix, 
 					DATA_DIR/"test_R1_.fastq", 
 					DATA_DIR/"test_R2_.fastq",
