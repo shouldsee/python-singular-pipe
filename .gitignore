@@ -1,6 +1,6 @@
 # local test env
 _env/
-*.outward_edges/*
+*.outward_edges
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
