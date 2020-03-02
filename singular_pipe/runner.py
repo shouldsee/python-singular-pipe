@@ -19,6 +19,8 @@ import inspect
 import io
 from singular_pipe.hash import hash_nr
 import base64
+VERSION = 'v0.0.1'
+
 
 def force_run(job, *args,**kw):
 	'''
@@ -72,7 +74,7 @@ def ident_changed(ident, ident_file, key ='ident'):
 	ident_dump_old = ident_load( ident_file, key )
 	return ident_dump != ident_dump_old
 
-def ident_dump(ident, ident_file, comment=''):	
+def ident_dump(ident, ident_file, comment=[],version=VERSION):	
 	if isinstance(ident_file, io.IOBase):
 		f = ident_file
 	else:
@@ -82,6 +84,7 @@ def ident_dump(ident, ident_file, comment=''):
 		# assert 0
 		json.dump(collections.OrderedDict([
 			('comment',comment),
+			('version',version),
 			('ident', _dumps(ident) ),
 			]),
 		# .decode('utf8'))]),

@@ -36,6 +36,7 @@ def simple_job(
 	with open( _out.out_txt, 'w') as f:
 		print(s*10)
 		f.write(s*10)
+	# return self
 
 _ = '''
 [ToDo]
@@ -188,6 +189,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 				f.write(s*10)
 
 				print('do something else')
+			# return self #### construct a Caller with .output attr
 		return simple_job
 
 
@@ -208,6 +210,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (self.change_job(), self.DIR/'root', 'ATG','/tmp/digit.txt')
 		input_changed = cache_check_changed(*tups,verbose=0)[0]
 		assert input_changed == 1
+
 	def test_downstream(self):
 		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
 		force_run(*tups,verbose=0)
@@ -215,8 +218,8 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		force_run(*tups,verbose=0)
 
 		res = singular_pipe.runner.get_downstream_nodes(File('/tmp/digit.txt'),strict=0,flat=0)
-		##### no test for nodes
-		print(res)
+		print('''##### no test for nodes in get_downstream_nodes()''')
+		# print(res)
 
 		res = singular_pipe.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0,flat=1)
 		expect = [
@@ -227,16 +230,26 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			]
 		expect = [x.expand() for x in expect]
 		assert expect == res, json.dumps((res,expect),indent=2)
+	def test_caller_struct(self):
+		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
+		res = force_run(*tups,verbose=0)
+		print('#### test_caller_struct() not impled')
+		return
+		tups = (simple_job, self.DIR/'job2', 'ATG', res.output.out_txt)
+		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
+		force_run(*tups,verbose=0)
 
 	def test_upstream(self):
 		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt')
-		force_run(*tups,verbose=0)
+		res = force_run(*tups,verbose=0)
+		# tups = (simple_job, self.DIR/'job2', 'ATG', res.output.out_txt)
+		# self.DIR/'root.simple_job.out_txt')
 		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
 		force_run(*tups,verbose=0)
 
 		res = singular_pipe.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
-		##### no test for nodes yet
-		print(res)
+		print('''##### no test for get_upstream_nodes()''')
+		# print(res)
 
 		# res ==[]
 		res = singular_pipe.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0,flat=1)
@@ -245,6 +258,9 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		 InputFile('/tmp/digit.txt')]
 		expect = [x.expand() for x in expect]
 		assert expect == res, json.dumps((res,expect),indent=2)
+
+	def test_dag(self):
+		pass
 
 
 		return 
@@ -290,7 +306,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 			# print( get_identity( index.output) )
 			# assert 0
 			import pickle
-			with open('test1.pkl' ,'wb') as f:
+			with open('/tmp/test1.pkl' ,'wb') as f:
 				pickle.dump(index,f)
 
 			if quick:
