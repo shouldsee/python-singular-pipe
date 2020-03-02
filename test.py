@@ -44,7 +44,8 @@ def http_job2(self,prefix,
 	_output = [File('cache'),File('cmd')],
 	):
 	with open(self.output.cache, 'w') as f: f.write(_response1.text)
-	res = LoggedShellCommand(['wget','-O',self.output.cache+'.2',_response1.url], self.output.cmd, 1)
+	res = LoggedShellCommand(['curl','-LC-',self.output.cache+'.2', _response1.url], self.output.cmd, 1)
+	res = LoggedShellCommand(['curl','-LC-',self.output.cache+'.2', _response1.url], None, 1)
 
 
 @job_from_func
@@ -66,8 +67,8 @@ _ = '''
 	- [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
 	- shellcmd
 		- [x] capture stderr and stdout of subprocess.check_output(), 
+		- [x] logging the command executed into .cmd file
 		- [ ] with optional log file.  
-	- [ ] logging the command executed into .cmd file
 	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
 		- the input_ident is useful 

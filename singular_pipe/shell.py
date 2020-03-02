@@ -7,6 +7,8 @@ from singular_pipe.base import list_flatten_strict, list_flatten
 from singular_pipe.types import File,Prefix,InputFile,InputPrefix
 import json
 from path import Path
+import tempfile
+
 
 def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
 	return _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
@@ -36,10 +38,19 @@ if 1:
 		CMD, file, check, shell=0,encoding = 'utf8',
 		stdin = None,stdout=None, stderr=None, silent=1,
 		):
-		_ = '''
-		loggedShellCmd
-		logging executed shell command into a json file
 		'''
+		CMD:
+			a list of commands to be joined with ' ' and executed in bash
+		file: None or a string-like filename or a file-handle
+			if None, use a StringIO
+		check:
+			whether to raise error if the shell execution fails.
+		shell:
+			whether to treat CMD as a joined string or a list of string.
+
+		'''
+		if file is None:
+			file = io.StringIO()
 		if not isinstance(file,io.IOBase):
 			file = open(file,'a',buffering=1)
 		# with file:
@@ -64,7 +75,7 @@ if 1:
 				errmsg = 'Command "{CMD}" returned error:\n[stdout]:{stdout}\n[stderr]:{stderr}'.format(**locals())		
 				raise Exception(errmsg)
 			return stdout
-		return suc,stdout,stderr
+		return suc, stdout, stderr, file
 
 
 	def size_humanReadable(num,suffix='B',fmt='{0:.2f}',units=['','K','M','G','T', 'P','E'],):
