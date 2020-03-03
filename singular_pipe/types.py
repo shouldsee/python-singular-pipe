@@ -3,10 +3,9 @@ from path import Path
 import glob
 from collections import namedtuple
 import os
-from attrdict import AttrDict
+from orderedattrdict import AttrDict
 
 Code = type((lambda:None).__code__)
-
 
 class TooManyArgumentsError(RuntimeError):
 	pass
@@ -41,12 +40,9 @@ class PicklableNamedTuple(object):
 		self.fields = self.cls._fields
 	def __call__(self,*a,**kw):
 		v = self.cls(*a,**kw)
-		return AttrDict(v._asdict())
-		# if len(v):
+		# if len(v)>=3:
 		# 	import pdb;pdb.set_trace()
-		# 	# assert 0
-		# return 
-
+		return AttrDict(v._asdict())
 
 def Default(x):
 	'''

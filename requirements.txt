@@ -2,5 +2,8 @@ path.py
 six
 unittest2
 smhasher@https://github.com/phensley/python-smhasher/tarball/d71532c/==0.150.1
-attrdict
+orderedattrdict
+#orderedattrdict
 requests
+asciitree
+graphviz
