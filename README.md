@@ -17,7 +17,7 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
 
 ### Screenshots
 
-![](./tests/test_downstream.node_only.dot.svg]
+![](./tests/test_downstream.node_only.dot.svg)
 
 ### ToDo
 
