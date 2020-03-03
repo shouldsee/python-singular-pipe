@@ -15,6 +15,10 @@
 pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
 ```
 
+### Screenshots
+
+![](./tests/test_downstream.node_only.dot.svg]
+
 ### ToDo
 
     - [ ] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?

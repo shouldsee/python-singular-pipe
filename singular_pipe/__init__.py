@@ -62,6 +62,10 @@ template = '''
 pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
 ```
 
+### Screenshots
+
+![](./tests/test_downstream.node_only.dot.svg]
+
 ### ToDo
 {todo}
 '''
