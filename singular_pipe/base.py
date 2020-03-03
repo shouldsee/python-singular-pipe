@@ -8,34 +8,8 @@ import functools
 from singular_pipe.types import InputFile,OutputFile,File,TempFile, Path
 from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe.types import job_result, PicklableNamedTuple, AttrDict
+from singular_pipe.types import list_flatten,list_flatten_strict
 import singular_pipe.types 
-
-
-def list_flatten(lst, strict=0, out=None, ):
-	_this = list_flatten
-	if out is None:
-		out = []
-	assert isinstance(lst, (tuple, list)),(type(lst), lst)
-	for v in lst:
-		if 0:
-			pass
-		elif isinstance(v,dict):
-			v = v.items()
-			_this(v, strict, out )
-		elif isinstance(v,(list,tuple)):
-			_this(v, strict, out)
-		else:
-			if strict:
-				assert isinstance(v,string_types),(type(v),v)
-			out.append(v)
-	return out
-def list_flatten_strict(lst):
-	return list_flatten(lst,strict=1)
-
-def rstrip(s,suffix):
-	if s.endswith(suffix):
-		s = s[:-len(suffix)]
-	return s
 
 
 
@@ -60,11 +34,17 @@ if 1:
 		assert args[1]  == 'prefix',(func, args)
 		assert args[-1] == '_output',(func, args)
 		_output = defaults[-1]
+		# for i,v in eumerate(_output):
+			# if isinstance(v, File):
+			# 	v = OutputFile(v)
+			# elif isinstance(v,Prefix):
+			# 	v = Out
 		if  len(args) - len(defaults) > 2:
 			 raise singular_pipe.types.TooFewDefaultsError(
 			 	"Must specify a type for all of {args} for {func.__code__} (except first 2)".format(**locals()))
-		defaults = ( singular_pipe.types.Default,OutputPrefix)[: len(args) -len(defaults)]+ defaults
-
+		# defaults = ( singular_pipe.types.Default, OutputPrefix)[: len(args) -len(defaults)]+ defaults
+		defaults = ( singular_pipe.types.Default, File)[: len(args) -len(defaults)]+ defaults
+		assert defaults[1]==File,'default for the second argument must be "File" !'
 		# if len(args)!=len(defaults):
 		# 	 raise singular_pipe.types.TooFewDefaultsError(
 		# 	 	"Must specify a type for all of {args} for {func.__code__}".format(**locals()))
@@ -125,10 +105,6 @@ if 1:
 			defaults))
 
 
-
-# if 1:
-# 	def shell_cmd(cmd):
-# 		pass
 
 ############### tests #############
 

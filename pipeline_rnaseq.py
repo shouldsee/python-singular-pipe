@@ -8,7 +8,7 @@ from path import Path
 @job_from_func
 def job_trimmomatic(
 	self=Default,
-	prefix = Prefix,
+	prefix = File,
 	FASTQ_FILE_1 = InputFile, 
 	FASTQ_FILE_2 = InputFile, 
 	THREADS_ = int,
@@ -70,7 +70,7 @@ def job_trimmomatic(
 @job_from_func
 def job_hisat2_index( 
 	self = Default,
-	prefix = Prefix, 
+	prefix = File, 
 	FASTA_FILE = InputFile,
 	THREADS_  = int,
 	_IMAGE    = "docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4",
@@ -101,7 +101,7 @@ def job_hisat2_index(
 @job_from_func
 def job_hisat2_align(
 	self   = Default,
-	prefix = Prefix,
+	prefix = File,
 	INDEX_PREFIX = Prefix,
 	FASTQ_FILE_1 = InputFile,
 	FASTQ_FILE_2 = InputFile,
@@ -162,71 +162,72 @@ def job_hisat2_align(
 	# return results[0]
 
 
-################################### TBC afterwards ############################
-@job_from_func
-def get_picard_dedup(
-	self = Default,
-	prefix = Prefix,
-	BAM_FILE = InputFile,
-	_IMAGE = 'docker://quay.io/biocontainers/picard:2.21.9--0',
-	_output = ['bam'],
-	):
-	_ ='''
-	java -XX:ParallelGCThreads=4 -jar /home/feng/envs/pipeline_Bd/jar/MarkDuplicates.jar 
-	I=/home/feng/temp/187R/187R-S1-2018_06_27_14:02:08/809_S1.sorted.bam O=809_S1_dedup.bam M=809_S1.dupstat.log REMOVE_DUPLICATES=true
-	'''
-	_out = _picard_dedup_output(
-		BAM_FILE = OutputFile( rstrip( InputFile(BAM_FILE),'.bam') +'.dedup.bam'),
-		)
-	PROG = 'singularity exec docker://quay.io/biocontainers/picard:2.21.9--0 picard'.split()
-	CMD = [
-	'picard',
-	'MarkDuplicates',
-	# 'java','-XX:ParallelGCThreads=%s'%THREADS,
-	'I=%s'% InputFile(  BAM_FILE ),
-	'O=%s'% OutputFile(_out.BAM_FILE ),
-	'M=%s'% OutputFile(_out.BAM_FILE +'.log') ,
-	]
-	CMD = list_flatten_strict(CMD)
-	res = SingularityShellCommand(CMD, _IMAGE)
-	return job_result( _out.BAM_FILE, CMD, self.output)
+if 0:
+	################################### TBC afterwards ############################
+	@job_from_func
+	def get_picard_dedup(
+		self = Default,
+		prefix = Prefix,
+		BAM_FILE = InputFile,
+		_IMAGE = 'docker://quay.io/biocontainers/picard:2.21.9--0',
+		_output = ['bam'],
+		):
+		_ ='''
+		java -XX:ParallelGCThreads=4 -jar /home/feng/envs/pipeline_Bd/jar/MarkDuplicates.jar 
+		I=/home/feng/temp/187R/187R-S1-2018_06_27_14:02:08/809_S1.sorted.bam O=809_S1_dedup.bam M=809_S1.dupstat.log REMOVE_DUPLICATES=true
+		'''
+		_out = _picard_dedup_output(
+			BAM_FILE = OutputFile( rstrip( InputFile(BAM_FILE),'.bam') +'.dedup.bam'),
+			)
+		PROG = 'singularity exec docker://quay.io/biocontainers/picard:2.21.9--0 picard'.split()
+		CMD = [
+		'picard',
+		'MarkDuplicates',
+		# 'java','-XX:ParallelGCThreads=%s'%THREADS,
+		'I=%s'% InputFile(  BAM_FILE ),
+		'O=%s'% OutputFile(_out.BAM_FILE ),
+		'M=%s'% OutputFile(_out.BAM_FILE +'.log') ,
+		]
+		CMD = list_flatten_strict(CMD)
+		res = SingularityShellCommand(CMD, _IMAGE)
+		return job_result( _out.BAM_FILE, CMD, self.output)
 
-def get_stringtie( 
-	BAM_FILE = Default,
-	GTF_FILE = InputFile, 
-	THREADS = int,
-	_IMAGE = 'docker://quay.io/biocontainers/stringtie:2.1.1--hc900ff6_0'):
-	_= '''
-	stringtie 
-	-p 4 
-	--rf 809_S1.bam 
-	-G /home/feng/ref/Arabidopsis_thaliana_TAIR10/annotation/genes.gtf 
-	-o 809_S1.stringtie.gtf 
-	-A 809_S1.stringtie.count &> 809_S1.stringtie.log
-	'''
-	_out = _stringtie_output(
-		COUNT_FILE = BAM_FILE + 'stringtie.count',
-		)
-	CMD = [
-	'stringtie',
-	'-p', str(THREADS), InputFile(BAM_FILE),
-	'--rf',
-	'-G', InputFile(GTF_FILE),
-	'-A', OutputFile(_out.COUNT_FILE),
-	'&>', OutputFile(_out.COUNT_FILE + '.log'),
-	]
-	CMD = list_flatten_strict(CMD)
-	res = SingularityShellCommand(CMD, _IMAGE)
-	return job_result( _out.COUNT_FILE, CMD, self.output)
+	def get_stringtie( 
+		BAM_FILE = Default,
+		GTF_FILE = InputFile, 
+		THREADS = int,
+		_IMAGE = 'docker://quay.io/biocontainers/stringtie:2.1.1--hc900ff6_0'):
+		_= '''
+		stringtie 
+		-p 4 
+		--rf 809_S1.bam 
+		-G /home/feng/ref/Arabidopsis_thaliana_TAIR10/annotation/genes.gtf 
+		-o 809_S1.stringtie.gtf 
+		-A 809_S1.stringtie.count &> 809_S1.stringtie.log
+		'''
+		_out = _stringtie_output(
+			COUNT_FILE = BAM_FILE + 'stringtie.count',
+			)
+		CMD = [
+		'stringtie',
+		'-p', str(THREADS), InputFile(BAM_FILE),
+		'--rf',
+		'-G', InputFile(GTF_FILE),
+		'-A', OutputFile(_out.COUNT_FILE),
+		'&>', OutputFile(_out.COUNT_FILE + '.log'),
+		]
+		CMD = list_flatten_strict(CMD)
+		res = SingularityShellCommand(CMD, _IMAGE)
+		return job_result( _out.COUNT_FILE, CMD, self.output)
 
-def get_htseq():
-	_ = '''
-	#### htseq-count is too slow and not used
-	htseq-count 
-	-s reverse 
-	-f bam 809_S1.bam 
-	/home/feng/ref/Arabidopsis_thaliana_TAIR10/annotation/genes.gtf 
-	-r pos -o 809_S1.htseq.sam >809_S1.htseq.count 2>809_S1.htseq.log
-	'''
-	pass
+	def get_htseq():
+		_ = '''
+		#### htseq-count is too slow and not used
+		htseq-count 
+		-s reverse 
+		-f bam 809_S1.bam 
+		/home/feng/ref/Arabidopsis_thaliana_TAIR10/annotation/genes.gtf 
+		-r pos -o 809_S1.htseq.sam >809_S1.htseq.count 2>809_S1.htseq.log
+		'''
+		pass
 

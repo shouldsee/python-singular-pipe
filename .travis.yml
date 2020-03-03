@@ -24,7 +24,7 @@ script:
   # - singularity exec docker://python:2.7.17-alpine python -V || exit 1
   - python -V
   - pip install .
-  - python test.py
+  - python test.py --all
   # - ls -lhtr /deps/*
   # - tree /deps
 

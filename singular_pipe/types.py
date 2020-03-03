@@ -4,6 +4,8 @@ import glob
 from collections import namedtuple
 import os
 from orderedattrdict import AttrDict
+import six
+
 
 Code = type((lambda:None).__code__)
 
@@ -16,13 +18,15 @@ class TooFewArgumentsError(RuntimeError):
 class TooFewDefaultsError(RuntimeError):
 	pass
 
-
-# class Data(object):
-# 	pass
 class IdentAttrDict(AttrDict):
 	pass
-# 	def to_ident(self,f):
-# 		return [f[]self.items()
+class CantGuessCaller(Exception):
+	pass
+class UndefinedTypeRoutine(Exception):
+	pass
+
+
+
 class PicklableNamedTuple(object):
 	pass
 
@@ -49,6 +53,36 @@ def Default(x):
 	A dummy "class" mocked with a function
 	'''
 	return x
+
+
+
+def list_flatten(lst, strict=0, out=None, ):
+	_this = list_flatten
+	if out is None:
+		out = []
+	assert isinstance(lst, (tuple, list)),(type(lst), lst)
+	for v in lst:
+		if 0:
+			pass
+		elif isinstance(v,dict):
+			v = v.items()
+			_this(v, strict, out )
+		elif isinstance(v,(list,tuple)):
+			_this(v, strict, out)
+		else:
+			if strict:
+				assert isinstance(v, six.string_types),(type(v),v)
+			out.append(v)
+	return out
+def list_flatten_strict(lst):
+	return list_flatten(lst,strict=1)
+
+def rstrip(s,suffix):
+	if s.endswith(suffix):
+		s = s[:-len(suffix)]
+	return s
+
+
 
 # class cached_property(object):
 #     """
@@ -79,14 +113,41 @@ def os_stat_safe(fname):
 	else:
 		return _os_stat_result_null
 
+import json
 
-class File(Path):
+class PrefixedNode(Path):
+	def get_prefix_pointer(self, config):
+		idFile = IdentFile( config, self, [] , '_prefix_pointer')		
+		suc = 0
+		res = None
+		if idFile.exists():
+			with open(idFile,'r') as f:
+				s = json.load(f)[0]
+				# s = f.read()
+				suc = 1
+				res = Prefix(idFile.dirname()/s)
+
+		return suc,res
+
+	def callback_output(self, caller, name):
+		# pass
+		fn = self
+		idFile = IdentFile( caller.config, fn, [] , '_prefix_pointer')
+		with open(idFile,'w') as f:
+			json.dump( [ caller.prefix_named.relpath(idFile.dirname())], f)
+
+			# f.write( self.relpath(idFile.dirname()) )
+# tups =(prefix_job, self.DIR/'root','/tmp/pjob',)
+# job = force_run(*tups)
+
+class File(PrefixedNode):
 	def __init__(self,*a,**kw):
 		super(File,self).__init__(*a,**kw)
 	def to_ident(self,):
 		stat = os_stat_safe(self)
 		res = (self, stat.st_mtime, stat.st_size)
 		return res
+
 
 
 class TempFile(File):
@@ -104,16 +165,28 @@ class OutputFile(File):
 		super(OutputFile,self).__init__(*a,**kw)
 	pass
 
-class Prefix(Path):
+# import pickle
+class Prefix(PrefixedNode):
 	def __init__(self,*a,**kw):
 		super(Prefix, self).__init__(*a,**kw)
+	def callback_output(self, caller, name):
+		super().callback_output(caller, name)
+		fs = self.fileglob('*',strict=1)
+		for fn in fs:
+			idFile = IdentFile( caller.config, fn, [] , '_prefix_pointer')
+			with open(idFile,'w') as f:
+				json.dump( [ self.relpath(idFile.dirname())], f)
+				# f.write(self.relpath(idFile.dirname()))
+		return 
 	def fileglob(self, g, strict):
-		res = [File(x) for x in glob.glob("%s%s"%(self,g))]
+		res = [File(x) for x in glob.glob("%s%s"%(self,g))
+		if not x.endswith('.outward_edges') and not x.endswith('.outward_edges_old') and not x.endswith('._prefix_pointer')
+		]
 		if strict:
 			assert len(res),'(%r,%r) expanded into nothing!'% (self,g)
 		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
 		return res
-		pass
+
 class InputPrefix(Prefix):
 	def __init__(self,*a,**kw):
 		super( InputPrefix,self).__init__(*a,**kw)
@@ -138,10 +211,13 @@ def IdentFile(config, prefix, job_name, suffix):
 	if config == 'clean':
 		pre_dir = prefix.dirname()
 		pre_base = prefix.basename()
-		input_ident_file  = '{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}'.format(**locals())
+		lst = ['{pre_dir}/_singular_pipe/{pre_base}'.format(**locals()),
+				job_name,suffix]
+		# input_ident_file = '{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}'.format(**locals())
 	elif config == 'flat':
-		input_ident_file = '{prefix}.{job_name}.{suffix}'.format(**locals())
-		pass
+		lst = [prefix,job_name,suffix]
+		# input_ident_file = '{prefix}.{job_name}.{suffix}'.format(**locals())
+	input_ident_file = '.'.join(list_flatten_strict(lst))
 	return File(input_ident_file)
 	pass
 
@@ -149,7 +225,7 @@ class CacheFile(OutputFile):
 	pass
 
 
-
+from collections import OrderedDict as _dict
 import requests
 import json
 # class HttpCheckLengthResult(object):
@@ -163,7 +239,12 @@ class HttpResponse(object):
 		kwargs.setdefault('headers', self.headers)
 		self.kwargs =kwargs
 	def __repr__(self):
-		return json.dumps(self.__dict__,default=repr,indent=2)
+		return "%s(%s)"%(
+			self.__class__.__name__,
+			json.dumps(
+				_dict([(k,getattr(self,k)) for k in ['method','url']]),
+				default=repr,separators=',=')
+			)
 	@property
 	def response(self):
 		x = requests.request( self.method, self.url, **self.kwargs)

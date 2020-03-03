@@ -7,3 +7,4 @@ orderedattrdict
 requests
 asciitree
 graphviz
+jinja2

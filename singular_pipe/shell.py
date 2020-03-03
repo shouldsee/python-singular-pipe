@@ -8,6 +8,7 @@ from singular_pipe.types import File,Prefix,InputFile,InputPrefix
 import json
 from path import Path
 import tempfile
+from singular_pipe import VERSION
 
 
 def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
@@ -55,17 +56,19 @@ if 1:
 			file = open(file,'a',buffering=1)
 		# with file:
 		t0 = time.time()
-		json.dump( ['CommandStart',-1, t0, ],file)
+		def _dump(o,f,**kw):
+			return json.dump(list(o)+['VERSION',VERSION],f,**kw)
+		_dump( ['CommandStart',-1, t0, ],file)
 		file.write('\n')
-		json.dump(['CommandText',] + ' '.join(CMD).splitlines(), file,indent=2)
+		_dump( ['CommandText',] + ' '.join(CMD).splitlines(), file,indent=2)
 		file.write('\n')
 		# stdout = io.BytesIO(mode='w')
 		# stderr = io.BytesIO()
 		suc,stdout,stderr = _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
 		t1 = time.time()
-		json.dump( ['CommandEnd', suc, t1, (size_humanReadable(t1-t0,'s'), t1-t0)],file)
+		_dump( ['CommandEnd', suc, t1, (size_humanReadable(t1-t0,'s'), t1-t0)],file)
 		file.write('\n')
-		json.dump(['CommandResult',
+		_dump( ['CommandResult',
 			'stdout',stdout.splitlines(),
 			'stderr',stderr.splitlines()],file,indent=2,default=repr)
 		file.write('\n')

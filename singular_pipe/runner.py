@@ -31,9 +31,12 @@ import singular_pipe
 from singular_pipe import VERSION,DEFAULT_DIR_LAYOUT
 import singular_pipe
 import collections
+from singular_pipe.types import CantGuessCaller, UndefinedTypeRoutine
 
 
-
+from jinja2 import Template, StrictUndefined
+def jinja2_format(s,**context):
+	return Template(s,undefined=StrictUndefined).render(**context)	
 # def ident_changed(ident, ident_file):
 # 	ident_dump     = pickle.dumps(ident)
 # 	ident_dump_old = open(ident_file,'rb').read() if file_not_empty(ident_file) else b''
@@ -96,9 +99,6 @@ def ident_dump(d, ident_file, comment=[],version=VERSION):
 def _raise(e):
 	raise e
 
-# _Caller = namedtuple('_Caller',
-# 	['job',
-# 	'arg_tuples'])
 
 def func_orig(func):
 	while True:
@@ -144,7 +144,6 @@ class FakeJob(object):
 CallerDump = namedtuple('CallerDump',['prefix','config',])
 class Caller(object):
 	# def 
-	
 	@property
 	def output_cache_file(self):
 		# return self._foo
@@ -203,8 +202,11 @@ class Caller(object):
 		self.arg_tuples = arg_tuples
 		self.config = config
 		# self.code = (self.f.__code__.co_code)
-		assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
-		arg_tuples[0] = ('prefix',OutputPrefix(arg_tuples[0][1]))
+
+		# assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
+		# arg_tuples[0] = ('prefix',OutputPrefix(arg_tuples[0][1]))
+		assert isinstance(arg_tuples[0][1], File),(arg_tuples[0])
+		# arg_tuples[0] = ('prefix', File(arg_tuples[0][1]))
 
 		# _output = job._output_type._typed_fields
 		# _output = list(_output) + [CacheFile('_cache')]
@@ -217,7 +219,12 @@ class Caller(object):
 		return func_orig(self.job)
 	@property
 	def prefix(self):
-		return Prefix(self.arg_tuples[0][1])
+		return (self.arg_tuples[0][1])
+	@property	
+	def prefix_named(self):
+		return self.prefix+'.%s'%self.__name__
+		# '.'.join([self.prefix+]
+
 	
 	# def __getstate__
 	@property
@@ -272,8 +279,10 @@ class Caller(object):
 		return '%s.%s(%s)'%(
 			self.__class__.__module__,
 			self.__class__.__name__,
-			json.dumps( self.to_dict(),
-			indent=2,default=repr)
+			','.join(['%s=%r'%(k,getattr(self,k)) for k in ['dotname','prefix_named']]),
+			# self.dotname, self.prefix_named,
+			# json.dumps( self.to_dict(),
+			# indent=2,default=repr)
 			)
 	# @property
 	# def returned(self):
@@ -288,18 +297,28 @@ class Caller(object):
 	<		
 	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 	  <TR>
-	    <TD BGCOLOR="lightblue">Dotname</TD>
-	    <TD BGCOLOR="lightblue">{self.dotname}</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
 	  </TR>
 
-	  <TR>
-	  	<TD ALIGN="RIGHT">Prefix</TD>
-	    <TD ALIGN="RIGHT">{self.prefix}</TD>
+	  {# <TR>
+	  	<TD ALIGN="LEFT">Prefix</TD>
+	    <TD ALIGN="LEFT">{{node.prefix}}</TD>
 	  </TR>
+	  #}
+	  	{% for k,v in [('dotname',node.dotname),('prefix_named', node.prefix_named)] +node.arg_tuples[:] %}
+		  <TR>
+		  	<TD ALIGN="LEFT">{{k}}</TD>
+		  	<TD ALIGN="LEFT">{{v.__class__.__name__}}</TD>
+		    <TD ALIGN="LEFT">{{v}}</TD>
+		  </TR>
+	    {% endfor %}
 	</TABLE>
 	>
 	'''.strip()
-		return s.format(self=self)
+		return jinja2_format(s, node=self)
+		# return s.format(self=self)
 # DEFAULT_DIR_LAYOUT = 'clean'
 def force_run(job, *args,**kw):
 	'''
@@ -314,11 +333,11 @@ def cache_check(job, *args,**kw):
 	Check whether there is a valid cache for this job
 	'''
 	return cache_run(job,*args,check_only=True,**kw)
-def cache_check_changed(job,*args, check_changed=1,**kw):
-	return cache_run(job,*args,check_changed=check_changed,**kw)
+def cache_check_changed(job, *args,  check_changed=1,**kw):
+	return cache_run(   job,  *args, check_changed=check_changed,**kw)
 
-def cache_run_verbose(job,*args, **kw):
-	return cache_run(job,*args,verbose=True,**kw)
+def cache_run_verbose(job,*args, verbose=1, **kw):
+	return cache_run(job,*args,verbose=verbose,**kw)
 def cache_run(job, *args,
 	config = DEFAULT_DIR_LAYOUT,
 	# config = 'flat',	
@@ -368,6 +387,10 @@ def cache_run(job, *args,
 		return use_cache
 	if check_changed:
 		if check_changed >=2:
+			input_ident = get_identity(_input)
+			input_ident_old = _loads(json.load(open(input_ident_file,'r'))['ident'])
+			output_ident = get_identity(_output)
+			output_ident_old = _loads(json.load(open(output_ident_file,'r'))['ident'])
 			import pdb; pdb.set_trace();
 		return (input_ident_changed, output_ident_changed)
 
@@ -379,6 +402,8 @@ def cache_run(job, *args,
 			('output_ident_chanegd',int(output_ident_changed))]
 				,separators='_=').replace('"','')
 			)
+		if verbose >= 2:
+			import pdb; pdb.set_trace()
 
 	if check_only:
 		return bool(use_cache)		
@@ -391,13 +416,20 @@ def cache_run(job, *args,
 
 	else:
 		result = _caller()
+		for k,v in _caller.output.items():
+			func = getattr( v,'callback_output',lambda *x:None)
+			func(_caller,k)
+			# method(_caller)
+			# if hasattr(x,'callback_output'):
+			# 	x.output_callback(_caller)				
 		with open(output_cache_file,'wb') as f: pickle.dump(result, f)
 		# ident_dump( result, output_cache_file, )
 		_input_ident  = get_identity( _input)
 		_output_ident = get_identity(_output)
 
 		ident_dump( [
-			('comment',[[repr(x) for x in _output],get_identity(_output)]),
+			('comment',[[repr(x) for x in _output],_output_ident]),
+			('output_dump', _dumps(_output)),
 			('ident', _dumps(_output_ident))
 			], output_ident_file,
 			)
@@ -434,7 +466,7 @@ def cache_run(job, *args,
 		#### remove edge_file of outputs
 		outward_dir_list = get_outward_json_list( _output, config)
 		for outward_dir in outward_dir_list:
-			shutil.move(outward_dir.makedirs_p() , (outward_dir+'.old').rmtree_p())
+			shutil.move(outward_dir.makedirs_p() , (outward_dir+'_old').rmtree_p())
 			outward_dir = outward_dir.makedirs_p() 
 
 
@@ -480,16 +512,21 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 	Append to file names with their mtime and st_size
 	'''
 	this = get_identity
+	assert out is None
 	out = []
-	debug = 0 
+	debug = 0
+	verbose = 0
 	# assert isinstance(lst, (tuple, list)),(type(lst), lst)
 	flist = list_flatten(lst)
 	# print('[lst]',lst,'\n[flist]',flist)
 	for ele in flist:
-		if   isinstance(ele, Prefix):
-			res = ele.fileglob("*", Prefix is InputPrefix)
+		if  isinstance(ele, Prefix):
+			res = ele.fileglob("*", ele is InputPrefix)
+			###### exclude outward_edges for DIR_LAYOUT=flat
+			res = [x for x in res if x not in [ ele+'.outward_edges', ele+'.outward_edges_old']]
 			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
-			get_identity( res, out, verbose, strict)
+			res = get_identity( res, None, verbose, strict)
+			out.append( res)
 
 		elif isinstance(ele, (File, HttpResponse, )):
 			print('[identing]%r'%ele) if verbose else None
@@ -502,10 +539,13 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			assert 0,'call to_ident() yourself before passing into get_files()'
 			#### Caller.to_ident()
 			ele = ele.to_ident()
-			get_identity(ele, out, verbose, strict)
+			res = get_identity(ele, None, verbose, strict)
+			out.append( res)
 		elif isinstance(ele,singular_pipe.types.Code):
-			res = (ele.co_code, get_identity(ele.co_consts, out, verbose, strict))
+			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
 			out.append(res)
+			print('[identing]%s,%s'%(ele.co_code,ele.co_consts)) if verbose else None
+
 			if debug:
 				# res = (ele.co_code, [get_identity([x], [], verbose, strict) for x in ele.co_consts])
 				# print([ele.co_consts)
@@ -527,98 +567,26 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 #### the following computes closures on the DAG ##
 #### aka upstream/downstream
 
-def get_downstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
-	return _get_downstream_targets( obj, level, strict, config, target, flat)
 
-def get_downstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
-	return _get_downstream_targets( obj, level, strict, config, target, flat)
-
-def get_downstream_targets(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='all', flat=1):
-	return  _get_downstream_targets( obj, level, strict, config, target, flat)
-
-def _get_downstream_targets(obj, level, strict, config, target, flat):
-	'''
-	List downstream files depending on this object
-	'''
-	this = _get_downstream_targets
-
-	#### cast input_obj to a list of downstream nodes
-	nodes = []
-	if isinstance(obj, (File,Prefix)):
-		for outward_file in _get_outward_json_file(obj, config).glob('*.json'):
-			buf = json.load(open(outward_file,'r'))
-			x_ident = _loads(buf['ident'])
-			try:
-				_ = '''[TBC] fragile '''
-				x  =_loads(buf['caller_dump'])
-				input_ident_file  = IdentFile(config, x.prefix, x.job.__name__, 'input_json')
-				x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
-			except:
-				x2 = ''
-			x1 = x_ident
-			if x1 == x2:
-				nodes += [x]
-				pass
-			else:
-				if strict:
-					buf = json.dumps([outward_file,obj,x.prefix,],indent=2,default=repr)
-					raise Exception('Broken edge exists between nodes. set get_downstream_nodes(strict=0) to auto-remove outdated edge files %s'%buf)
-				else:
-					os.unlink(outward_file)
-	elif isinstance(obj, Caller):
-		nodes += [obj]
-	else:
-		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
-
-	assert target in ['file','node','all'],(target,)
-	output_list = []
-	for x in nodes:
-		if target in ['file','all']:
-			out    = [x, []]
-			if target == 'all':
-				pass
-			else:
-				out[0] = []
-
-
-			output_list += [out]
-			# output_list += [(x.get_output_files(),out)]
-			for of in x.get_output_files():
-				down = [] 
-				if level!=0:
-					down[:] = _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
-				out[1].append((of,down))
-
-
-		elif target =='node':
-			out    = []
-			output_list += [(x,out)]
-
-			if level!=0:
-				for of in x.get_output_files():
-					out += [_get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)]
-
-	if flat:
-		output_list = list_flatten(output_list)
-	return output_list
-
-
-class CantGuessCaller(Exception):
-	pass
-class UndefinedTypeRoutine(Exception):
-	pass
+# from singular_pipe.graph import file_to_node
 def file_to_node(obj, strict, config,):
 	'''
 	One can only guess the prefix by removing the suffix
 	'''
 	err = CantGuessCaller("Cannot guess the Caller() for %r"%obj) 
-	res = obj.rsplit('.',2)
-	if len(res)!=3:
+
+	# res = obj.rsplit('.',2)
+	# if len(res)!=3:
+	# 	return (_raise(err) if strict else None)
+	# prefix, job_name, suffix = res 
+
+	suc, prefix_named = obj.get_prefix_pointer(config)
+	if suc:
+		prefix, job_name = prefix_named.split('.',1)
+		succ = 1
+	else:
 		return (_raise(err) if strict else None)
 
-	prefix, job_name, suffix = res 
-	fake_job = lambda:None
-	fake_job.__name__ = job_name
 	input_ident_file =  IdentFile(config, prefix, job_name, 'input_json' )
 	output_ident_file = IdentFile(config, prefix, job_name, 'output_json' )
 	lst = _loads(json.load(open(output_ident_file,'r'))['ident'])  ##[FRAGILE]
@@ -635,48 +603,143 @@ def file_to_node(obj, strict, config,):
 		return (_raise(err) if strict else None)
 	return x
 
-#### upstream
-def get_upstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
-	return _get_upstream_targets( obj, level, strict, config, target, flat)
+if 0:
+	def get_downstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
+		return _get_downstream_targets( obj, level, strict, config, target, flat)
 
-def get_upstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
-	return _get_upstream_targets( obj, level, strict, config, target, flat)
+	def get_downstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
+		return _get_downstream_targets( obj, level, strict, config, target, flat)
 
-def _get_upstream_targets(obj, level, strict, config, target, flat):
+	def get_downstream_targets(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='all', flat=1):
+		return  _get_downstream_targets( obj, level, strict, config, target, flat)
 
-	####
-	assert strict==0,'strict == 1 not implmented'
-	assert target in ['node','file'],target
-	this = _get_upstream_targets
-	nodes = []
-	output_list = []
-	if isinstance(obj, (Prefix,File)):
-		x = file_to_node(obj, strict, config, )
-		if x is not None:
-			nodes += [x]
-	elif isinstance(obj, HttpResponse):
-		nodes += []
-		output_list += [obj]
-	elif isinstance(obj, Caller):
-		nodes += [obj]
-	else:
-		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
 
-	for node in nodes:
-		out = []
-		files = [x for x in node.arg_values[1:] if isinstance(x,(File,Prefix))]
-		if target == 'node':
-			output_list += [[node, out]]
-		elif target =='file':
-			output_list += [[files, out]]
-		if level == 0:
-			pass
+	def _get_downstream_targets(obj, level, strict, config, target, flat):
+		'''
+		List downstream files depending on this object
+		'''
+		this = _get_downstream_targets
+
+		#### cast input_obj to a list of downstream nodes
+		nodes = []
+
+		# if isinstance(obj,File):
+		# 	suc, res = obj.get_prefix_pointer(config)
+		# 	obj = res if suc else obj
+		# 	### if a File has _prefix_pointer, cast it back to Prefix
+
+		if isinstance(obj, (File,Prefix)):
+			for outward_file in _get_outward_json_file(obj, config).glob('*.json'):
+				buf = json.load(open(outward_file,'r'))
+				x_ident = _loads(buf['ident'])
+				try:
+					_ = '''[TBC] fragile '''
+					x  =_loads(buf['caller_dump'])
+					input_ident_file  = IdentFile(config, x.prefix, x.job.__name__, 'input_json')
+					x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
+				except:
+					x2 = ''
+				x1 = x_ident
+				if x1 == x2:
+					nodes += [x]
+					pass
+				else:
+					if strict==1:
+						buf = json.dumps([outward_file,obj,x.prefix,],indent=2,default=repr)
+						raise Exception('Broken edge exists between nodes. set get_downstream_nodes(strict=0) to auto-remove outdated edge files %s'%buf)
+					elif strict == -1:
+						os.unlink(outward_file)
+					else:
+						buf = json.dumps([outward_file,obj,x.prefix,],indent=2,default=repr)
+						if 0:
+							print('[SKIPPING]Outdated %s'%buf)
+						pass
+		elif isinstance(obj, Caller):
+			nodes += [obj]
 		else:
-			out[:] = [ _get_upstream_targets( f, min(level-1,-1), strict, config, target,flat) for f in files]
+			raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
+
+		assert target in ['file','node','all'],(target,)
+		output_list = []
+		for x in nodes:
+			if target in ['file','all']:
+				out    = [x, []]
+				if target == 'all':
+					pass
+				else:
+					out[0] = []
 
 
-	if flat:
-		output_list = list_flatten(output_list)
-	return output_list
+				output_list += [out]
+				# output_list += [(x.get_output_files(),out)]
+				for of in x.get_output_files():
+					down = [] 
+					if level!=0:
+						down[:] = _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
+					out[1].append((of,down))
+
+
+			elif target =='node':
+				out    = []
+				output_list += [(x,out)]
+
+				if level!=0:
+					for of in x.get_output_files():
+						out += [_get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)]
+
+		if flat:
+			output_list = list_flatten(output_list)
+		return output_list
+
+
+
+	#### upstream
+	def get_upstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
+		return _get_upstream_targets( obj, level, strict, config, target, flat)
+
+	def get_upstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='node', flat=1):
+		return _get_upstream_targets( obj, level, strict, config, target, flat)
+
+
+
+	def _get_upstream_targets(obj, level, strict, config, target, flat):
+
+		####
+		assert strict==0,'strict == 1 not implmented'
+		assert target in ['node','file','all'],target
+		this = _get_upstream_targets
+		nodes = []
+		output_list = []
+		if isinstance(obj, (Prefix,File)):
+			'''
+			Try to get Caller of a dangling file
+			'''
+			x = file_to_node(obj, strict, config, )
+			if x is not None:
+				nodes += [x]
+		elif isinstance(obj, HttpResponse):
+			# nodes += [SourceNode('SOURCE')]
+			output_list += [obj]
+		elif isinstance(obj, Caller):
+			nodes += [obj]
+		else:
+			raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
+
+		for node in nodes:
+			out = []
+			files = [x for x in node.arg_values[1:] if isinstance(x,(File,Prefix))]
+			if target == 'node':
+				output_list += [[node, out]]
+			elif target =='file':
+				output_list += [[files, out]]
+			if level == 0:
+				pass
+			else:
+				out[:] = [ _get_upstream_targets( f, min(level-1,-1), strict, config, target,flat) for f in files]
+
+
+		if flat:
+			output_list = list_flatten(output_list)
+		return output_list
 
 
