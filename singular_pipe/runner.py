@@ -28,27 +28,11 @@ from singular_pipe.hash import hash_nr
 import base64
 import singular_pipe
 # import pkg_resources
-from singular_pipe import get_version
-VERSION = get_version()
+from singular_pipe import VERSION,DEFAULT_DIR_LAYOUT
+import singular_pipe
+import collections
 
-def force_run(job, *args,**kw):
-	'''
-	Run a jobs regardless of whether it has a valid cache
-	'''
-	return cache_run(job,*args,force=True,**kw)
-	_input = args
-	res = job(*_input)
-	return res
-def cache_check(job, *args,**kw):
-	'''
-	Check whether there is a valid cache for this job
-	'''
-	return cache_run(job,*args,check_only=True,**kw)
-def cache_check_changed(job,*args,**kw):
-	return cache_run(job,*args,check_changed=True,**kw)
 
-def cache_run_verbose(job,*args, **kw):
-	return cache_run(job,*args,verbose=True,**kw)
 
 # def ident_changed(ident, ident_file):
 # 	ident_dump     = pickle.dumps(ident)
@@ -125,12 +109,8 @@ def func_orig(func):
 		else:
 			break
 	return func
-	# while hasattr(func,'__wrapped__'):
-	# 	func = func.__wrapped__
-	# return func
 
 
-import collections
 # class Caller( _Caller):
 
 def FakeCode(code):
@@ -261,6 +241,9 @@ class Caller(object):
 			self.arg_values,
 		]		
 		return _input
+	@property
+	def dotname(self):
+		return "%s.%s"%(inspect.getmodule(self.f).__name__, self.f.__qualname__)
 	def to_dict(self):
 		'''
 		For visualisation / json.dumps
@@ -268,7 +251,8 @@ class Caller(object):
 		f = self.f
 		res = collections.OrderedDict([
 				('job', repr(f.__code__)),
-				('dotname',"%s.%s"%(inspect.getmodule(f).__name__, f.__qualname__)),
+				('dotname',self.dotname),
+				# ('dotname',"%s.%s"%(inspect.getmodule(f).__name__, f.__qualname__)),
 				('arg_tuples', collections.OrderedDict([
 					(
 						k,
@@ -298,8 +282,43 @@ class Caller(object):
 		return self.job(self, *[x[1] for x in self.arg_tuples])
 		# return self
 
+	def to_table_node_label(self):
+		# node = self
+		s = '''
+	<		
+	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	  <TR>
+	    <TD BGCOLOR="lightblue">Dotname</TD>
+	    <TD BGCOLOR="lightblue">{self.dotname}</TD>
+	  </TR>
 
-DEFAULT_DIR_LAYOUT = 'clean'
+	  <TR>
+	  	<TD ALIGN="RIGHT">Prefix</TD>
+	    <TD ALIGN="RIGHT">{self.prefix}</TD>
+	  </TR>
+	</TABLE>
+	>
+	'''.strip()
+		return s.format(self=self)
+# DEFAULT_DIR_LAYOUT = 'clean'
+def force_run(job, *args,**kw):
+	'''
+	Run a jobs regardless of whether it has a valid cache
+	'''
+	return cache_run(job,*args,force=True,**kw)
+	_input = args
+	res = job(*_input)
+	return res
+def cache_check(job, *args,**kw):
+	'''
+	Check whether there is a valid cache for this job
+	'''
+	return cache_run(job,*args,check_only=True,**kw)
+def cache_check_changed(job,*args, check_changed=1,**kw):
+	return cache_run(job,*args,check_changed=check_changed,**kw)
+
+def cache_run_verbose(job,*args, **kw):
+	return cache_run(job,*args,verbose=True,**kw)
 def cache_run(job, *args,
 	config = DEFAULT_DIR_LAYOUT,
 	# config = 'flat',	
@@ -348,6 +367,8 @@ def cache_run(job, *args,
 	if check_only:
 		return use_cache
 	if check_changed:
+		if check_changed >=2:
+			import pdb; pdb.set_trace();
 		return (input_ident_changed, output_ident_changed)
 
 	if verbose:
@@ -428,9 +449,6 @@ def file_not_empty(fpath):
 
 
 
-# def get_identity(lst,*a,**kw):
-# 	return get_files(lst, *a, target = 'ident',   **kw)
-
 def _get_outward_json_file(ele, config=DEFAULT_DIR_LAYOUT):
 	if isinstance(ele, Prefix):
 		if config == 'clean':
@@ -462,8 +480,8 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 	Append to file names with their mtime and st_size
 	'''
 	this = get_identity
-	if out is None:
-		out = []
+	out = []
+	debug = 0 
 	# assert isinstance(lst, (tuple, list)),(type(lst), lst)
 	flist = list_flatten(lst)
 	# print('[lst]',lst,'\n[flist]',flist)
@@ -486,8 +504,17 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			ele = ele.to_ident()
 			get_identity(ele, out, verbose, strict)
 		elif isinstance(ele,singular_pipe.types.Code):
-			ele = (ele.co_code,ele.co_consts)
-			get_identity(ele, out, verbose, strict)
+			res = (ele.co_code, get_identity(ele.co_consts, out, verbose, strict))
+			out.append(res)
+			if debug:
+				# res = (ele.co_code, [get_identity([x], [], verbose, strict) for x in ele.co_consts])
+				# print([ele.co_consts)
+				print(json.dumps([(type(x),x) for x in ele.co_consts],default=repr,indent=2))
+				# for x in ele.co_consts
+				# print(res[1])
+				print(len(res[1]),list(zip(ele.co_consts,res[1:])))
+				if any([isinstance(x,singular_pipe.types.Code) for x in ele.co_consts]):
+					assert 0
 		else:
 			if strict:
 				raise UndefinedTypeRoutine("get_identity(%s) undefined for %r"%(type(ele),ele))
@@ -505,6 +532,9 @@ def get_downstream_nodes(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, 
 
 def get_downstream_files(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='file', flat=1):
 	return _get_downstream_targets( obj, level, strict, config, target, flat)
+
+def get_downstream_targets(obj, level = -1, strict= 1, config=DEFAULT_DIR_LAYOUT, target='all', flat=1):
+	return  _get_downstream_targets( obj, level, strict, config, target, flat)
 
 def _get_downstream_targets(obj, level, strict, config, target, flat):
 	'''
@@ -540,20 +570,33 @@ def _get_downstream_targets(obj, level, strict, config, target, flat):
 	else:
 		raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
 
-	assert target in ['file','node'],(target,)
+	assert target in ['file','node','all'],(target,)
 	output_list = []
 	for x in nodes:
-		if target == 'file':
-			out    = []
-			output_list += [(x.get_output_files(),out)]
+		if target in ['file','all']:
+			out    = [x, []]
+			if target == 'all':
+				pass
+			else:
+				out[0] = []
+
+
+			output_list += [out]
+			# output_list += [(x.get_output_files(),out)]
+			for of in x.get_output_files():
+				down = [] 
+				if level!=0:
+					down[:] = _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
+				out[1].append((of,down))
+
+
 		elif target =='node':
 			out    = []
 			output_list += [(x,out)]
-		if level == 0:
-			pass
-		else:
-			for of in x.get_output_files():
-				out += _get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)
+
+			if level!=0:
+				for of in x.get_output_files():
+					out += [_get_downstream_targets( of, min(-1,level-1), strict, config, target, flat)]
 
 	if flat:
 		output_list = list_flatten(output_list)
