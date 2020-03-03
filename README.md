@@ -6,6 +6,7 @@
 ### Dependencies:
 
 - Optional: singularity >= 3.5.3 to use singular_pipe.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: dot binary for plotting DAG.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
@@ -16,7 +17,13 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
 
 ### ToDo
 
-    - [ ] implements version_check when reading input_json / output_json
+    - [ ] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
+        - [x] it should come with a pointer pointing back to the Prefix.
+        - Prefix in get_input_identity() will be globbed and snapshotted
+        - Prefix in get_upstream() will be treated as a standalone
+        - If a File has been included in a OutputPrefix(), 
+    - [ ] fix get_upstream() if possible 
+    - [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
     - [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
     - shellcmd
         - [x] capture stderr and stdout of subprocess.check_output(), 
@@ -30,6 +37,7 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
         - get_downstream_nodes()
     - [x] (Done as HttpResponse(),  ) Adding InputHTTP() 
         - [ ] better subclassing requests.Request()?
+    - [ ] implements version_check when reading input_json / output_json
     - [ ] Adding OutputHTTP() object 
     - [ ] (abandoned)import module from online.
     - [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
