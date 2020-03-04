@@ -16,6 +16,7 @@ before_install:
   # - gimme 1.13.5
   # - eval "$(gimme 1.13.5)"
   - bash install_singular.sh
+  - sudo apt-get update
   - sudo apt install -y graphviz
 install:
   - echo pass
