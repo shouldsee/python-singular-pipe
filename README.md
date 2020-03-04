@@ -28,7 +28,7 @@ Formal documentation is not yet available. Please see Examples
 
 
 
-`python3 ('examples/cache_run_shallow_01.py', None)`
+`python3 examples/cache_run_shallow_01.py`
 
 ```python
 '''
