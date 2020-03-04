@@ -1,9 +1,26 @@
-from orderedattrdict import AttrDict
+from orderedattrdict import AttrDict as _dict
 from jinja2 import Template, StrictUndefined
-from singular_pipe.version import get_version,VERSION
+# from singular_pipe.version import get_version,VERSION
+def get_version():
+    VERSION = (  # SEMANTIC
+        0,        # major
+        0,        # minor
+        1,        # patch
+        None,      # pre-release
+        None        # build metadata
+    )
+
+    version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
+    if VERSION[3]:
+        version += "-%s" % VERSION[3]
+    if VERSION[4]:
+        version += "+%s" % VERSION[4]
+    return version
+VERSION = get_version()
 
 # rcParams = OrderedDict()
-rcParams = AttrDict()
+# rcParams = AttrDict()
+rcParams = _dict()
 rcParams['dir_layout'] = 'clean'
 # rcParams['dir_layout'] = 'flat'
 

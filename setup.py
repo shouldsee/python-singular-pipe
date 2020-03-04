@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 #from setuptools import setup
 
-from singular_pipe.version import get_version
+# from version import get_version
+# from singular_pipe.version import get_version
 
 config = dict(
 	name='singular_pipe',
-	version = get_version(),
-        packages=['.','singular_pipe'],
+	version = '0.0.1', ### change in __init__.py in sync
+    packages=['.','singular_pipe'],
 	include_package_data=True,
 	license='MIT',
 	author='Feng Geng',
