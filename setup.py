@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #from setuptools import setup
 
-from singular_pipe import get_version
+from singular_pipe.version import get_version
 
 config = dict(
 	name='singular_pipe',
