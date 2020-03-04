@@ -19,6 +19,19 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
 
 ![](./tests/test_downstream.node_only.dot.svg)
 
+
+### Documentation
+
+Formal documentation is not yet available. Please see Examples
+
+### Examples
+
+
+
+`python3 ('examples/cache_run_shallow_01.py', None)`
+
+```<_io.TextIOWrapper name=Path('/home/user/repos/singular_pipe/examples/cache_run_shallow_01.py') mode='r' encoding='UTF-8'>.read()```
+
 ### ToDo
 
     - [ ] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
@@ -46,4 +59,3 @@ pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tar
     - [ ] (abandoned)import module from online.
     - [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
     - [ ] implementing checks for output nodes to make sure Files.to_ident() are changed
-
