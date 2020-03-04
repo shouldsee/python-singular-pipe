@@ -30,7 +30,8 @@ Formal documentation is not yet available. Please see Examples
 
 `python3 ('examples/cache_run_shallow_01.py', None)`
 
-```'''
+```python
+'''
 This script demo the principle of caching in this module
 The basic element to be cached is a function evaluation tuple (func, prefix,*args),
 which is considered as a Node whose status and last evaluation stored in its prefix. 
