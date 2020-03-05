@@ -4,7 +4,7 @@ import io,time
 import json
 import warnings
 from singular_pipe.base import list_flatten_strict, list_flatten
-from singular_pipe.types import File,Prefix,InputFile,InputPrefix
+from singular_pipe._types import File,Prefix,InputFile,InputPrefix
 import json
 from path import Path
 import tempfile

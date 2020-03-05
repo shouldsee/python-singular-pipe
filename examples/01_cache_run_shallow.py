@@ -68,8 +68,8 @@ if __name__ == '__main__':
 	print(s.strip('\n'))
 	pass
 
-from singular_pipe.types import File
-from singular_pipe.shell import LoggedShellCommand
+from singular_pipe.types import File,LoggedShellCommand
+
 def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 	with input_file.dirname() as d:
 		print('taring %r'%d)

@@ -1,12 +1,12 @@
-from singular_pipe.types import File,InputFile,OutputFile
-from singular_pipe.types import IdentFile,CacheFile
-# from singular_pipe.types import InputFile,OutputFile,File,TempFile,? ,Path,
-from singular_pipe.types import Prefix,InputPrefix,OutputPrefix
-from singular_pipe.types import HttpResponse
-from singular_pipe.types import IdentAttrDict
+from singular_pipe._types import File,InputFile,OutputFile
+from singular_pipe._types import IdentFile,CacheFile
+# from singular_pipe._types import InputFile,OutputFile,File,TempFile,? ,Path,
+from singular_pipe._types import Prefix,InputPrefix,OutputPrefix
+from singular_pipe._types import HttpResponse
+from singular_pipe._types import IdentAttrDict
 
-from singular_pipe.types import TooManyArgumentsError
-import singular_pipe.types
+from singular_pipe._types import TooManyArgumentsError
+import singular_pipe._types
 
 from singular_pipe.base import get_func_name, list_flatten,list_flatten_strict
 from singular_pipe.base import job_from_func
@@ -32,8 +32,8 @@ from singular_pipe import VERSION,jinja2_format
 # ,DEFAULT_DIR_LAYOUT
 import singular_pipe
 import collections
-from singular_pipe.types import CantGuessCaller, UndefinedTypeRoutine
-from singular_pipe.types import NodeFunction,FlowFunction
+from singular_pipe._types import CantGuessCaller, UndefinedTypeRoutine
+from singular_pipe._types import NodeFunction,FlowFunction
 from singular_pipe import rcParams
 
 
@@ -116,7 +116,7 @@ def FakeCode(code):
 	# out = (code.co_code, [])
 	consts = []
 	for const in code.co_consts:
-		if isinstance(const, singular_pipe.types.Code):
+		if isinstance(const, singular_pipe._types.Code):
 			consts.append( FakeCode(const) )
 		else:
 			consts.append( const )
@@ -201,7 +201,7 @@ class Caller(object):
 					## v is _null, t is default value
 					_tmp.append((n,t))
 			elif v is _null:
-				raise singular_pipe.types.TooFewArgumentsError(
+				raise singular_pipe._types.TooFewArgumentsError(
 					'{dump}\nToo few arguments specified for {job._origin_code}\n normal argname are without "_" are necessary for evaluation \n'.format(
 				dump=_dump(),**locals()))
 			else:
@@ -226,7 +226,7 @@ class Caller(object):
 		# if not getattr(job,'_singular_pipe',False):
 		# 	job = job_from_func(job)		
 		if not hasattr(job,'_type',):
-			job = singular_pipe.types.Node(job)
+			job = singular_pipe._types.Node(job)
 		self.job = job
 		self.__name__ = job.__name__
 		self._output_type = job._output_type
@@ -341,13 +341,14 @@ class Caller(object):
 			assert returned in [self,None],"Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow"			
 			if not self._cached:
 				self.cache(returned,)
+			return self
 		else:
 			self._cached = False
 			self._allow_cache = 0
 			returned = self.job(self, *[x[1] for x in self.arg_tuples])
 			self._allow_cache = 1
 			self.cache(returned)
-		return self
+			return returned
 
 	def to_table_node_label(self):
 		# node = self
@@ -494,18 +495,18 @@ def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose
 		with open(output_cache_file,'rb') as f: result = pickle.load(f)
 
 	else:
-		# if not issubclass(_caller.job_type, singular_pipe.types.NodeFunc):
+		# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
 		# 	mock = 0
 		if mock:
 			for k,v in _caller.output.items():
 				for f in v.expanded():
 					if f.isfile():
-						raise singular_pipe.types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
+						raise singular_pipe._types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
 					# assert not f.isfile(),('mock_run() must be done with file uninitialised: %r' % v)
 				vs = (v+'.mock')
 				vs.touch()  if not vs.isfile() else None
 			# result = _caller
-			if issubclass(_caller.job_type, singular_pipe.types.NodeFunction):
+			if issubclass(_caller.job_type, singular_pipe._types.NodeFunction):
 				result = _caller
 			else:
 				### recurse if not a Terminal Node
@@ -644,7 +645,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			ele = ele.to_ident()
 			res = get_identity(ele, None, verbose, strict)
 			out.append( res)
-		elif isinstance(ele,singular_pipe.types.Code):
+		elif isinstance(ele,singular_pipe._types.Code):
 			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
 			out.append(res)
 			print('[identing]%s,%s'%(ele.co_code,ele.co_consts)) if verbose else None
@@ -656,7 +657,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 				# for x in ele.co_consts
 				# print(res[1])
 				print(len(res[1]),list(zip(ele.co_consts,res[1:])))
-				if any([isinstance(x,singular_pipe.types.Code) for x in ele.co_consts]):
+				if any([isinstance(x,singular_pipe._types.Code) for x in ele.co_consts]):
 					assert 0
 		else:
 			if strict:

@@ -1,7 +1,7 @@
 '''
 Showing how Prefix differs from File
 '''
-from singular_pipe.types import File,Prefix,Path
+from singular_pipe._types import File,Prefix,Path
 from singular_pipe.runner import cache_run_verbose, cache_run
 
 from singular_pipe.shell import LoggedShellCommand

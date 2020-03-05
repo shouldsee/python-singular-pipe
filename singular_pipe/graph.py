@@ -9,8 +9,8 @@ from asciitree.drawing import BOX_DOUBLE
 import textwrap
 from path import Path
 # from singular_pipe import DEFAULT_DIR_LAYOUT
-from singular_pipe.types import list_flatten
-from singular_pipe.types import Prefix,File,HttpResponse
+from singular_pipe._types import list_flatten
+from singular_pipe._types import Prefix,File,HttpResponse
 from singular_pipe.runner import Caller,file_to_node
 
 class SymbolicNode(Path):
@@ -190,7 +190,7 @@ if 1:
 
 if 1:
     import json
-    from singular_pipe.types import IdentFile,UndefinedTypeRoutine
+    from singular_pipe._types import IdentFile,UndefinedTypeRoutine
     from singular_pipe.runner import _get_outward_json_file, _loads
 
     def get_downstream_files(x,strict,dir_layout=None,flat=0,verbose=0):

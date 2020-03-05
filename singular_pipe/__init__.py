@@ -64,7 +64,7 @@ Formal documentation is not yet available. Please see Examples
 ### Examples
 
 
-{% for fn in ["examples/cache_run_shallow_01.py"] %}
+{% for fn in ["examples/01_cache_run_shallow.py"] %}
 `python3 {{fn}}`
 
 ```python

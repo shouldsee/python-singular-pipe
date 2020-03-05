@@ -1,5 +1,5 @@
-from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix, Default
-from singular_pipe.types import job_result
+from singular_pipe._types import InputFile,OutputFile,File,TempFile, Prefix, Default
+from singular_pipe._types import job_result
 from singular_pipe.runner import list_flatten_strict, job_from_func, get_output_files
 from singular_pipe.shell import SingularityShellCommand
 from path import Path

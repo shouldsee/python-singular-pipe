@@ -3,7 +3,7 @@ from singular_pipe.test.base import prefix_job,http_job2
 import unittest2
 self = SharedObject
 from singular_pipe.runner import force_run,cache_run,cache_run_verbose, mock_run
-from singular_pipe.types import *
+from singular_pipe._types import *
 import singular_pipe.runner
 import json
 from singular_pipe.graph import graph_from_tree, nodes_only
@@ -145,7 +145,7 @@ class Case(unittest2.TestCase, SharedObject):
 		tarball_main( mock_run , prefix)
 		tarball_main( mock_run , prefix)
 		(prefix.dirname()/'root.tarball_dangerous_cache.tar_gz').touch()
-		self.assertRaises(singular_pipe.types.OverwriteError, tarball_main, mock_run, prefix)
+		self.assertRaises(singular_pipe._types.OverwriteError, tarball_main, mock_run, prefix)
 		singular_pipe.rcParams.update(_d)
 
 	# print

@@ -28,7 +28,7 @@ Formal documentation is not yet available. Please see Examples
 
 
 
-`python3 examples/cache_run_shallow_01.py`
+`python3 examples/01_cache_run_shallow.py`
 
 ```python
 '''
@@ -43,7 +43,7 @@ from path import Path
 from singular_pipe.runner import cache_run, force_run
 def simplest_node(self, prefix, _output=[]):
 	print('Running node:%r'%self)
-	return self ### return Runtime Caller as output is beneficial
+	return self ### This is the default behaviour for singular_pipe.runner.cache_run() 
 
 if __name__ == '__main__':
 	print('\n### running')
@@ -101,8 +101,8 @@ if __name__ == '__main__':
 	print(s.strip('\n'))
 	pass
 
-from singular_pipe.types import File
-from singular_pipe.shell import LoggedShellCommand
+from singular_pipe.types import File,LoggedShellCommand
+
 def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 	with input_file.dirname() as d:
 		print('taring %r'%d)
@@ -140,18 +140,21 @@ if __name__ == '__main__':
 
 
 ### ToDo
-	- [ ] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
+    - [ ] adds error tests for Caller.cache and Caller.__call__
+    - [ ] cache_run_deep() to compute a dynamic graph and recursively 
+        cache_run() from top to bottom.
+    - [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
+	- [x] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
 		- [x] it should come with a pointer pointing back to the Prefix.
 		- Prefix in get_input_identity() will be globbed and snapshotted
 		- Prefix in get_upstream() will be treated as a standalone
 		- If a File has been included in a OutputPrefix(), 
-	- [ ] fix get_upstream() if possible 
-	- [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
+	- [x] fix get_upstream() if possible 
 	- [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
 	- shellcmd
 		- [x] capture stderr and stdout of subprocess.check_output(), 
 		- [x] logging the command executed into .cmd file
-		- [ ] with optional log file.  
+		- [x] with optional log file.  
 	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
 		- the input_ident is useful 

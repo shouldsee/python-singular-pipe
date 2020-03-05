@@ -1,6 +1,6 @@
-from singular_pipe.types import HttpResponse
+from singular_pipe._types import HttpResponse
 import json
-from singular_pipe.types import InputFile
+from singular_pipe._types import InputFile
 def cache_http(self,prefix,
 	_res = HttpResponse('GET','http://dummy.restapiexample.com/api/v1/employees'),
 	_output = ['cache',]

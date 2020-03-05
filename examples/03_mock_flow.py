@@ -4,13 +4,12 @@ but skip the creation of actual output files.
 A symbolic node is a node with all output_files being empty
 '''
 import singular_pipe
-from singular_pipe.types import File,Prefix,HttpResponse, HttpResponseContentHeader
-from singular_pipe.shell import LoggedShellCommand
+from singular_pipe.types  import Node,Flow
+from singular_pipe.types  import Path, File, Prefix
+from singular_pipe.types  import HttpResponse, HttpResponseContentHeader
+from singular_pipe.types  import LoggedShellCommand
 from singular_pipe.runner import mock_run
-from singular_pipe.graph import get_downstream_tree
-from singular_pipe.graph import plot_simple_graph
-from path import Path
-from singular_pipe.types import Flow
+from singular_pipe.graph  import get_downstream_tree, plot_simple_graph
 
 import random
 def random_seq(self, prefix, seed = int, L = int, _output=['seq']):
@@ -30,6 +29,7 @@ def transcribe(self, prefix, input = File, _output=['fasta']):
 			fo.write(fi.read().replace('T','U'))
 	return self
 
+@Node
 def mutate(self, prefix, input=File, _seed = 1, _output=['fasta']):
 	random.seed(_seed)
 	with open(input,'r') as fi:
@@ -41,11 +41,15 @@ def mutate(self, prefix, input=File, _seed = 1, _output=['fasta']):
 
 @Flow
 def workflow(self, prefix, seed =int , L=int, _output = []):
-	print('[Flow runs in %r]'%self.runner)
-	curr = self.runner(random_seq, prefix, seed, L)
-	curr = self.runner(transcribe, prefix, curr.output.seq,)
-	curr = self.runner(mutate,     prefix, curr.output.fasta)
-	return self
+	print('\n[Flow running]')
+	### [ToDo] (func, prefix) must be unique within each workflow
+	self.data = {}
+	self.data[0] = curr = self.runner(random_seq, prefix, seed, L)
+	self.data[1] = curr = self.runner(transcribe, prefix, curr.output.seq,)
+	self.data[2] = curr = self.runner(mutate,     prefix, curr.output.fasta)
+	stdout = LoggedShellCommand(['ls -lhtr',prefix.dirname()],).rstrip()
+	# print(stdout)
+	return self.data
 
 import json
 from singular_pipe.runner import cache_run,force_run
@@ -58,15 +62,17 @@ def main(
 	res = mock_run( workflow, prefix, 1, 100)	
 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
 	### render with graphviz
+	fn = Path('assets/%s.mock.dot'%__file__).basename(); fn =fn.realpath()
 	g = plot_simple_graph(tree,None,0)
-	g.render('assets/%s.mock.dot'%Path(__file__).basename(),format='svg')
+	g.render( fn,format='svg'); print('[see output]%s'%fn)
 
 	res = cache_run( workflow, prefix, 1, 100 )
 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
+	fn = Path('assets/%s.real.dot'%__file__).basename(); fn =fn.realpath()
 	g = plot_simple_graph(tree,None,0)
-	g.render('assets/%s.real.dot'%Path(__file__).basename(),format='svg')
-
-	stdout = LoggedShellCommand(['ls -lhtr',prefix.dirname()],)
-	print(stdout)
+	g.render( fn,format='svg'); print('[see output]%s'%fn)
+	print(res.keys())
+	# stdout = LoggedShellCommand(['ls -lhtr',prefix.dirname()],)
+	# print(stdout)
 if __name__ == '__main__':
 	main()
