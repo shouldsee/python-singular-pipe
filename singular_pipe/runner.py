@@ -1,3 +1,8 @@
+import singular_pipe
+from singular_pipe import rcParams
+from singular_pipe import VERSION,jinja2_format
+
+import singular_pipe._types
 from singular_pipe._types import File,InputFile,OutputFile
 from singular_pipe._types import IdentFile,CacheFile
 # from singular_pipe._types import InputFile,OutputFile,File,TempFile,? ,Path,
@@ -5,58 +10,33 @@ from singular_pipe._types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe._types import HttpResponse
 from singular_pipe._types import IdentAttrDict
 
+from singular_pipe._types import CantGuessCaller, UndefinedTypeRoutine
 from singular_pipe._types import TooManyArgumentsError
-import singular_pipe._types
+from singular_pipe._types import NodeFunction,FlowFunction
+
+# from singular_pipe._types import FakeCode,FakeJob
 
 from singular_pipe.base import get_func_name, list_flatten,list_flatten_strict
 from singular_pipe.base import job_from_func
-import pickle
-import os,sys
-import shutil
-# ,shutil
+
+from  singular_pipe._pickler import MyPickleSession
+
+
+import os,sys,shutil
+import io
+import inspect
 import json
+
 from itertools import zip_longest
 from collections import namedtuple
 import collections
 _dict = collections.OrderedDict
 
-import inspect
+def _dumps(obj):
+	return MyPickleSession().dumps_b64(obj)
 
-
-import io
-from singular_pipe.hash import hash_nr
-import base64
-import singular_pipe
-# import pkg_resources
-from singular_pipe import VERSION,jinja2_format
-# ,DEFAULT_DIR_LAYOUT
-import singular_pipe
-import collections
-from singular_pipe._types import CantGuessCaller, UndefinedTypeRoutine
-from singular_pipe._types import NodeFunction,FlowFunction
-from singular_pipe import rcParams
-
-
-
-# def ident_changed(ident, ident_file):
-# 	ident_dump     = pickle.dumps(ident)
-# 	ident_dump_old = open(ident_file,'rb').read() if file_not_empty(ident_file) else b''
-# 	return ident_dump != ident_dump_old
-
-# def ident_dump(ident, ident_file, comment=''):
-# 	with open(ident_file,'wb') as f:
-# 		pickle.dump( ident,  f )
-
-
-# def _dumps(obj):
-def _dumps(obj,):
-	s = base64.b64encode(pickle.dumps(obj)).decode('ascii')
-	return s
-	
 def _loads(obj):
-	# return pickle.loads(obj.encode('ascii'))
-	x = base64.b64decode(obj.encode('ascii'))
-	return pickle.loads(x)
+	return MyPickleSession().loads_b64(obj)
 
 def ident_load(ident_file,key):	
 	ident_dump_old = ''
@@ -68,8 +48,9 @@ def ident_load(ident_file,key):
 		raise e
 		print(e)
 	return ident_dump_old
+
 def ident_changed(ident, ident_file, key):
-	ident_dump = _dumps(ident)
+	ident_dump = MyPickleSession().dumps_b64(ident)
 	ident_dump_old = ident_load( ident_file, key )
 	return ident_dump != ident_dump_old
 
@@ -176,6 +157,26 @@ class Caller(object):
 	def output(self):
 		return self._output_dict
 		# return get_output_files( self.job, self.prefix, self._output_type._typed_fields)
+
+	@property
+	def f(self):
+		return func_orig(self.job)
+	@property
+	def prefix(self):
+		return (self.arg_tuples[0][1])
+	@property	
+	def prefix_named(self):
+		return self.prefix+'.%s'%self.__name__
+		# '.'.join([self.prefix+]
+
+	@property
+	def arg_values(self):
+		self._arg_values = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
+		return self._arg_values
+	@property
+	def dotname(self):
+		return "%s.%s"%(inspect.getmodule(self.f).__name__, self.f.__qualname__)
+
 	def get_output_files( self ):
 		return list(self._output_dict.values())
 		res = self.output
@@ -213,7 +214,6 @@ class Caller(object):
 		job = self.job
 		d['job'] = FakeJob(job)
 		self.runner = None
-		# print(sorted(d))
 		# d['returned'] = ('LoadFrom',self.output_cache_file)
 		return d
 
@@ -242,38 +242,10 @@ class Caller(object):
 			self._output_dict[k] = self._output_dict[k].realpath() 
 		self.runner = None
 
-		# assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
-
-		# arg_tuples[0] 
-		# arg_tuples[0] = ('prefix', File(arg_tuples[0][1]))
-
-		# _output = job._output_type._typed_fields
-		# _output = list(_output) + [CacheFile('_cache')]
-		# cls = gunc._output_type = func._output_type = namedtuple('_output_type', list(_output)+['_cache'])
-		# cls._typed_fields = _output
-		# cls.__module__ = func.__module__
-		# cls.__qualname__ = "%s._output_type"%func.__name__		
-	@property
-	def f(self):
-		return func_orig(self.job)
-	@property
-	def prefix(self):
-		return (self.arg_tuples[0][1])
-	@property	
-	def prefix_named(self):
-		return self.prefix+'.%s'%self.__name__
-		# '.'.join([self.prefix+]
-
-	
-	# def __getstate__
-	@property
-	def arg_values(self):
-		self._arg_values = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
-		return self._arg_values
 
 	def to_ident(self):
 		'''
-		For pickle.dumps
+		
 		'''
 		### argument to jobs without prefix
 		### argument with name ending with '_' will be discarded in idenitty
@@ -281,15 +253,10 @@ class Caller(object):
 		# _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
 		# _job_args = list(zip(*self.arg_tuples[1:])) 
 		_input = [
-		# (	self.f.__code__.co_code, 
-			# self.f.__code__.co_consts),
-			self.f.__code__,
+			FakeCode( self.f.__code__),
 			self.arg_values,
 		]		
 		return _input
-	@property
-	def dotname(self):
-		return "%s.%s"%(inspect.getmodule(self.f).__name__, self.f.__qualname__)
 	def to_dict(self):
 		'''
 		For visualisation / json.dumps
@@ -327,8 +294,20 @@ class Caller(object):
 	def cache(self, obj, check=1):
 		assert not self._cached,"Cannot cache twice in a function"
 		assert self._allow_cache, "self.cache is not available for %r"%(self.job_type,)
-		with open( self.output_cache_file,'wb') as f: pickle.dump( obj, f)
+		with open( self.output_cache_file,'wb') as f: 
+			p = MyPickleSession()
+			p.dump_sniff( obj, f)
+		with open( self.output_cache_file+'.json','w') as  f:
+			json.dump( dict(modules=p.pop_modules_list()), f, indent=2)
 		self._cached = True
+
+	def load_cache(self, ):
+		with open(self.output_cache_file+'.json','r') as f:
+			modules = json.load(f)['modules']
+		## inplement modules check
+		with open(self.output_cache_file,'rb') as f: 
+			result = MyPickleSession().load(f)
+		return result 
 
 	def __call__(self, runner):
 		self.runner = runner
@@ -339,6 +318,7 @@ class Caller(object):
 			assert returned in [self,None],"Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow"			
 			if not self._cached:
 				self.cache(returned,)
+			self.runner = None
 			return self
 		else:
 			self._cached = False
@@ -346,6 +326,7 @@ class Caller(object):
 			returned = self.job(self, *[x[1] for x in self.arg_tuples])
 			self._allow_cache = 1
 			self.cache(returned)
+			self.runner = None
 			return returned
 
 	def to_table_node_label(self):
@@ -441,7 +422,6 @@ def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose
 
 	input_ident_file =  IdentFile( dir_layout, prefix, job.__name__, 'input_json' )
 	output_ident_file=  IdentFile( dir_layout, prefix, job.__name__, 'output_json' )
-	# output_cache_file=  IdentFile(config, prefix, job, 'cache_pk')
 	output_cache_file=  _caller.output_cache_file
 	File(input_ident_file).dirname().makedirs_p()
 
@@ -490,7 +470,7 @@ def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose
 		use_cache = False
 
 	if use_cache:
-		with open(output_cache_file,'rb') as f: result = pickle.load(f)
+		result = _caller.load_cache()
 
 	else:
 		# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
@@ -525,43 +505,35 @@ def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose
 		_input_ident  = get_identity( _input)
 		_output_ident = get_identity(_output)
 
+		p = MyPickleSession()
 		ident_dump( [
 			('comment',[[repr(x) for x in _output],_output_ident]),
-			('output_dump', _dumps(_output)),
-			('ident', _dumps(_output_ident))
-			], output_ident_file,
+			('modules',     p.pop_modules_list(   lambda:  p.dumps_sniff_b64(_output))),
+			('output_dump', p.pop_buffer()),
+			('ident',       p.dumps_b64(_output_ident)),
+			], 
+			output_ident_file,
 			)
 			 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
-		ident_dump(
-			[
-				('comment',  _caller.to_dict()),
-				('caller_dump',  _dumps( _caller)),
-				('ident',_dumps(_input_ident)),
+		input_image = [
+				('comment',      _caller.to_dict()),
+				('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
+				('caller_dump',  p.pop_buffer()),
+				('ident',        p.dumps_b64(_input_ident)),
 
-			],
-			input_ident_file)
+			]
+		ident_dump( input_image, input_ident_file)
 		# ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
 
 		#### add edge_file to inputs 
 		### add input and output ident to outward_pk
 		# outward_dir_list = get_outward_json_list( _input, config)
+		
 		outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
-		# print(outward_dir_list)
+		_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
 		for outward_dir in outward_dir_list:
-			outward_edge_file = outward_dir.makedirs_p() / str( hash_nr( _input_ident ) ) +'.%s.json'%job.__name__
-			# ident_dump( _input_ident,  outward_edge_file, comment=_caller.to_dict() )			
-
-			ident_dump(
-				[
-					('comment',  _caller.to_dict()),
-					('caller_dump',  _dumps( _caller)),
-					('ident',_dumps(_input_ident)),
-				],
-				outward_edge_file)			
-			# ident_dump( _input_ident  , outward_edge_file,  comment = (_caller.to_dict(), _dumps(_caller) ) )
-
-			# ident_dump( (_caller, get_identity(_caller.to_ident())), 
-			# 	outward_edge_file, comment=_caller.to_dict() )			
+			outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%(job.__name__, _input_ident_hash)
+			ident_dump( input_image, outward_edge_file)			
 
 		#### remove edge_file of outputs
 		outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)

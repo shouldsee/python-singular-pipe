@@ -16,6 +16,7 @@ def hash_tree(o):
     Here a deterministic hash function is used to replace default hash function
 
     '''
+    assert 0,'Obsolete'
     if hasattr(o,'_hash_method'):
         return o._hash_method()
     elif o is None:
