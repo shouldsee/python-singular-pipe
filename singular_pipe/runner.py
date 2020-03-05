@@ -49,14 +49,12 @@ from singular_pipe import rcParams
 
 
 # def _dumps(obj):
-def _dumps(obj):
-	# f = lambda obj: base64.b64encode(pickle.dumps(obj)).decode('ascii')
-	# s = f(obj)
-	# x = f(_loads(s))
-	# assert x == s,(x,s)
+def _dumps(obj,):
 	s = base64.b64encode(pickle.dumps(obj)).decode('ascii')
 	return s
+	
 def _loads(obj):
+	# return pickle.loads(obj.encode('ascii'))
 	x = base64.b64decode(obj.encode('ascii'))
 	return pickle.loads(x)
 
