@@ -100,6 +100,8 @@ class MyPickleSession(object):
 
 class MyPickler(pickle._Pickler):
 	def __init__(self, file, modules, protocol=None, fix_imports=True):
+		if protocol is None:
+			protocol = 3
 		super().__init__(file, protocol,fix_imports=fix_imports)
 		self.modules = modules
 		self.sniff = modules is not None
