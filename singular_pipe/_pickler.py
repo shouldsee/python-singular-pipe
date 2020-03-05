@@ -2,6 +2,7 @@ import pickle,base64
 import io
 import pickle
 import smhasher
+DEFAULT_PROTOCOL = 3
 
 def _dumps(obj,):
 	s = base64.b64encode(pickle.dumps(obj)).decode('ascii')
@@ -97,11 +98,10 @@ class MyPickleSession(object):
 		return self.bytes_to_ascii(self.dumps(obj,protocol))
 
 
-
 class MyPickler(pickle._Pickler):
 	def __init__(self, file, modules, protocol=None, fix_imports=True):
 		if protocol is None:
-			protocol = 3
+			protocol = DEFAULT_PROTOCOL
 		super().__init__(file, protocol,fix_imports=fix_imports)
 		self.modules = modules
 		self.sniff = modules is not None
