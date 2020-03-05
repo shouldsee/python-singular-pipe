@@ -2,12 +2,14 @@ from singular_pipe.test.base import debugTestRunner,SharedObject
 from singular_pipe.test.base import prefix_job,http_job2
 import unittest2
 self = SharedObject
-from singular_pipe.runner import force_run,cache_run,cache_run_verbose
+from singular_pipe.runner import force_run,cache_run,cache_run_verbose, mock_run
 from singular_pipe.types import *
 import singular_pipe.runner
 import json
 from singular_pipe.graph import graph_from_tree, nodes_only
 import singular_pipe.graph
+from singular_pipe.examples.input_validation_tarball import main as tarball_main
+
 def dimple_job(self,prefix,
 	s=str,  
 	digitFile=InputFile, 
@@ -132,6 +134,20 @@ class Case(unittest2.TestCase, SharedObject):
 		# print(res2)
 		# import pdb;pdb.set_trace()
 		# print(_tree_as_string(res))
+	def test_mock_overwrite(self):
+		prefix = None
+		if prefix is None:
+			prefix = Path('/tmp/singular_pipe.symbolic/root')
+			
+		prefix.dirname().rmtree_p()	
+		_d = singular_pipe.rcParams.copy()
+		singular_pipe.rcParams['dir_layout'] = 'clean'
+		tarball_main( mock_run , prefix)
+		tarball_main( mock_run , prefix)
+		(prefix.dirname()/'root.tarball_dangerous_cache.tar_gz').touch()
+		self.assertRaises(singular_pipe.types.OverwriteError, tarball_main, mock_run, prefix)
+		singular_pipe.rcParams.update(_d)
+
 	# print
 
 if __name__ == '__main__':

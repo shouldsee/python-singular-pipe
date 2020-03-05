@@ -1,0 +1,57 @@
+strict digraph G {
+	rankdir=TB
+	"'SOURCE'" -> ")'zg_rat.ehcac_xif
+erp_llabrat.toor/cilobmys.epip_ralugnis/pmt/'(eliF"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_prefix_
+cache',prefix_named=File('/tmp/singular_pipe.symbo
+lic/root.tarball_prefix_cache'))" -> "File('/tmp/singular_pipe.symbolic/root.tarball_pre
+fix_cache.tar_gz')"
+	"'SOURCE'" -> ")'dmc.ehcac_xif
+erp_llabrat.toor/cilobmys.epip_ralugnis/pmt/'(eliF"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_prefix_
+cache',prefix_named=File('/tmp/singular_pipe.symbo
+lic/root.tarball_prefix_cache'))" -> "File('/tmp/singular_pipe.symbolic/root.tarball_pre
+fix_cache.cmd')"
+	"'SOURCE'" -> ")'kp_ehcac.ehcac_xiferp_l
+labrat.toor/cilobmys.epip_ralugnis/pmt/'(eliFehcaC"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_prefix_
+cache',prefix_named=File('/tmp/singular_pipe.symbo
+lic/root.tarball_prefix_cache'))" -> "CacheFile('/tmp/singular_pipe.symbolic/root.tarbal
+l_prefix_cache.cache_pk')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.gen_files
+')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_prefix_
+cache',prefix_named=File('/tmp/singular_pipe.symbo
+lic/root.tarball_prefix_cache'))"
+	"'SOURCE'" -> ")'zg_rat.ehcac_suoreg
+nad_llabrat.toor/cilobmys.epip_ralugnis/pmt/'(eliF"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_dangero
+us_cache',prefix_named=File('/tmp/singular_pipe.sy
+mbolic/root.tarball_dangerous_cache'))" -> "File('/tmp/singular_pipe.symbolic/root.tarball_dan
+gerous_cache.tar_gz')"
+	"'SOURCE'" -> ")'dmc.ehcac_suoreg
+nad_llabrat.toor/cilobmys.epip_ralugnis/pmt/'(eliF"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_dangero
+us_cache',prefix_named=File('/tmp/singular_pipe.sy
+mbolic/root.tarball_dangerous_cache'))" -> "File('/tmp/singular_pipe.symbolic/root.tarball_dan
+gerous_cache.cmd')"
+	"'SOURCE'" -> ")'kp_ehcac.ehcac_suoregnad_l
+labrat.toor/cilobmys.epip_ralugnis/pmt/'(eliFehcaC"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_dangero
+us_cache',prefix_named=File('/tmp/singular_pipe.sy
+mbolic/root.tarball_dangerous_cache'))" -> "CacheFile('/tmp/singular_pipe.symbolic/root.tarbal
+l_dangerous_cache.cache_pk')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.gen_files
+')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.examples.input_validation_tarball.tarball_dangero
+us_cache',prefix_named=File('/tmp/singular_pipe.sy
+mbolic/root.tarball_dangerous_cache'))"
+	"'SINK'" -> "Prefix('/tmp/singular_pipe.symbolic/root.gen_files
+')"
+}

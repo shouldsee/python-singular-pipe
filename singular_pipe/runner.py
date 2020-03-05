@@ -33,6 +33,7 @@ from singular_pipe import VERSION,jinja2_format
 import singular_pipe
 import collections
 from singular_pipe.types import CantGuessCaller, UndefinedTypeRoutine
+from singular_pipe.types import NodeFunction,FlowFunction
 from singular_pipe import rcParams
 
 
@@ -161,8 +162,14 @@ def get_output_files( self, prefix, _output_typed_fields):
 	tups = self._output_type(*tups)
 	return tups		
 
+
 class Caller(object):
 	# def 
+	# runner = None
+	@property
+	def job_type(self):
+		return self._job_type
+	
 	@property
 	def output_cache_file(self):
 		# return self._foo
@@ -207,6 +214,7 @@ class Caller(object):
 		d = self.__dict__.copy()
 		job = self.job
 		d['job'] = FakeJob(job)
+		self.runner = None
 		# print(sorted(d))
 		# d['returned'] = ('LoadFrom',self.output_cache_file)
 		return d
@@ -217,9 +225,12 @@ class Caller(object):
 	def __init__(self, job, arg_tuples, dir_layout):
 		# if not getattr(job,'_singular_pipe',False):
 		# 	job = job_from_func(job)		
+		if not hasattr(job,'_type',):
+			job = singular_pipe.types.Node(job)
 		self.job = job
 		self.__name__ = job.__name__
 		self._output_type = job._output_type
+		self._job_type = self.job._type
 		self.arg_tuples = arg_tuples
 		self.dir_layout = dir_layout
 
@@ -231,6 +242,7 @@ class Caller(object):
 		self._output_dict['_cache_file'] = CacheFile(self.output_cache_file)
 		for k in self._output_dict:
 			self._output_dict[k] = self._output_dict[k].realpath() 
+		self.runner = None
 
 		# assert isinstance(arg_tuples[0][1], Prefix),(arg_tuples[0])
 
@@ -313,12 +325,29 @@ class Caller(object):
 			# json.dumps( self.to_dict(),
 			# indent=2,default=repr)
 			)
-	# @property
-	# def returned(self):
-	# 	return pickle.loads(self.output_cache_file)
-	def __call__(self,):
-		return self.job(self, *[x[1] for x in self.arg_tuples])
-		# return self
+
+	def cache(self, obj, check=1):
+		assert not self._cached,"Cannot cache twice in a function"
+		assert self._allow_cache, "self.cache is not available for %r"%(self.job_type,)
+		with open( self.output_cache_file,'wb') as f: pickle.dump( obj, f)
+		self._cached = True
+
+	def __call__(self, runner):
+		self.runner = runner
+		if issubclass(self.job_type, NodeFunction):
+			self._cached = False
+			self._allow_cache = 1
+			returned = self.job(self, *[x[1] for x in self.arg_tuples])
+			assert returned in [self,None],"Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow"			
+			if not self._cached:
+				self.cache(returned,)
+		else:
+			self._cached = False
+			self._allow_cache = 0
+			returned = self.job(self, *[x[1] for x in self.arg_tuples])
+			self._allow_cache = 1
+			self.cache(returned)
+		return self
 
 	def to_table_node_label(self):
 		# node = self
@@ -367,13 +396,20 @@ def cache_check_changed(job, *args,  check_changed=1,**kw):
 
 def cache_run_verbose(job,*args, verbose=1, **kw):
 	return cache_run(job,*args,verbose=verbose,**kw)
+
+def mock_run(job, *args,force=1, mock = 1,**kw):
+	return cache_run(job,*args,force=force, mock=mock,**kw)
+# symbolicResult =  object()
+# def cache_run(job, *args, dir):
+
 def cache_run(job, *args,
 	dir_layout = None,
-	check_only=False, check_changed=False, force=False,verbose=0
-	):
+	mock = False,
+	check_only=False, check_changed=False, force=False,verbose=0):
 	dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout
-
-
+	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose)
+from functools import partial
+def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose):
 	'''
 	return: job_result
 		Check whether a valid cache exists for a job receipe.
@@ -386,7 +422,14 @@ def cache_run(job, *args,
 	'''
 	func_name = get_func_name()
 	prefix = args[0]
-
+	runner = partial(
+		cache_run, 
+		dir_layout=dir_layout, 
+		mock=mock, 
+		check_only=check_only,
+		check_changed=check_changed,
+		force=force,
+		verbose=verbose)
 
 	###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
 	###### the prefix is ignored in to_ident() because it would point to a different ident_file
@@ -441,19 +484,44 @@ def cache_run(job, *args,
 
 	if force:
 		use_cache = False
+	if mock:
+		use_cache = False
+
+	if (_caller.output_cache_file+'.mock').isfile():
+		use_cache = False
 
 	if use_cache:
 		with open(output_cache_file,'rb') as f: result = pickle.load(f)
 
 	else:
-		result = _caller()
+		# if not issubclass(_caller.job_type, singular_pipe.types.NodeFunc):
+		# 	mock = 0
+		if mock:
+			for k,v in _caller.output.items():
+				for f in v.expanded():
+					if f.isfile():
+						raise singular_pipe.types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
+					# assert not f.isfile(),('mock_run() must be done with file uninitialised: %r' % v)
+				vs = (v+'.mock')
+				vs.touch()  if not vs.isfile() else None
+			# result = _caller
+			if issubclass(_caller.job_type, singular_pipe.types.NodeFunction):
+				result = _caller
+			else:
+				### recurse if not a Terminal Node
+				result = _caller(runner)
+		else:
+			for k,v in _caller.output.items():
+				vs = (v+'.mock')
+				vs.unlink() if vs.isfile() else None				
+			result = _caller(runner)
+
 		for k,v in _caller.output.items():
 			func = getattr( v,'callback_output',lambda *x:None)
 			func(_caller,k)
 			# method(_caller)
 			# if hasattr(x,'callback_output'):
 			# 	x.output_callback(_caller)				
-		with open(output_cache_file,'wb') as f: pickle.dump(result, f)
 		# ident_dump( result, output_cache_file, )
 		_input_ident  = get_identity( _input)
 		_output_ident = get_identity(_output)

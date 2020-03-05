@@ -41,20 +41,19 @@ def tarball_prefix_cache(self,prefix,
 			self.output.cmd)
 	return self
 
-def main():
+def main(force_run=force_run,prefix=None):
 	# singular_pipe.rcParams['dir_layout'] = dir_layout
-
-	prefix = Path('/tmp/singular_pipe.test_run/root')
-	prefix.dirname().rmtree_p()
+	if prefix is None:
+		prefix = Path('/tmp/singular_pipe.test_run/root')
+		prefix.dirname().rmtree_p()
 
 
 	print('\n---------------------Run1---\n## got') if __name__ == '__main__' else None
 	res1 = force_run(gen_files, prefix)
-	tups = (tarball_dangerous_cache, prefix, res1.prefix_named)
-	force_run(*tups)
+	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 	
 	res1 = force_run(gen_files, prefix)
-	cache_run_verbose(*tups)
+	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 
 	s = '''
 ## expect 
@@ -67,12 +66,13 @@ def main():
 
 
 	print('---------------------Run2---\n## got') if __name__ == '__main__' else None
+
 	res1 = force_run(gen_files, prefix)
-	tups = (tarball_prefix_cache, prefix, res1.prefix_named)
-	force_run(*tups)
+	res2 = force_run(tarball_prefix_cache, prefix, res1.prefix_named, verbose=1)
 	
 	res1 = force_run(gen_files, prefix)
-	cache_run_verbose(*tups)
+	res2 = force_run(tarball_prefix_cache, prefix, res1.prefix_named, verbose=1)
+	
 	s = '''
 ## expect 
 [cache_run] {"job_name"="tarball_prefix_cache"_"input_ident_changed"=1_"output_ident_chanegd"=0}
@@ -83,6 +83,7 @@ def main():
 	print(s) if __name__ == '__main__' else None
 	print('------Output Directory. (dir_layout={singular_pipe.rcParams.dir_layout})--------\n'.format(singular_pipe=singular_pipe),
 		LoggedShellCommand(['echo [ls]',prefix,'&&','ls','-lhtr',prefix.dirname(),],'/dev/null'))
+	return res1,res2
 
 if __name__ == '__main__':
 	main()

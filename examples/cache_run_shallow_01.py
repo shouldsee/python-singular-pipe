@@ -10,7 +10,7 @@ from path import Path
 from singular_pipe.runner import cache_run, force_run
 def simplest_node(self, prefix, _output=[]):
 	print('Running node:%r'%self)
-	return self ### return Runtime Caller as output is beneficial
+	return self ### This is the default behaviour for singular_pipe.runner.cache_run() 
 
 if __name__ == '__main__':
 	print('\n### running')

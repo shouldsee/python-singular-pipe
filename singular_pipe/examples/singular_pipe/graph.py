@@ -61,15 +61,22 @@ def plot_simple_graph( trees, g, is_upstream,last = None):
         x = textwrap.fill(repr(x),width=50)
         x = x.replace(':','_')
         return x 
-    revi = 2*int(is_upstream) - 1
+    # revi = 2*int(is_upstream) - 1
     if g is None:
         g = Digraph('G', strict=True)
         g.attr(rankdir='TB')
-    if not trees:
-        g.edge(*(_label('SOURCE'), _label(last or 'SINK')[::revi]))
-    for node, up_trees in trees:
-        this(up_trees, g, is_upstream, node)
-        g.edge(*( _label(node),  _label(last or 'SINK'))[::revi])
+    if is_upstream:
+        if not trees:
+            g.edge(*(_label('SOURCE'), _label(last or 'SINK')))
+        for node, up_trees in trees:
+            this(up_trees, g, is_upstream, node)
+            g.edge(*( _label(node),  _label(last or 'SINK')))
+    else:        
+        if not trees:
+            g.edge(*(_label(last or 'SOURCE'), _label('SINK')))
+        for node, up_trees in trees:
+            this(up_trees, g, is_upstream, node)
+            g.edge(*( _label(last or 'SOURCE'),  _label(node)))
     return g
 
 
@@ -221,6 +228,7 @@ if 1:
         return _get_downstream(obj,strict,dir_layout,verbose)
 
     def _get_downstream(obj,strict,dir_layout,verbose):
+        this = _get_downstream
         out = []
         if isinstance(obj, (File,Prefix)):
             outward_dir = _get_outward_json_file(obj, strict, dir_layout)[0]
@@ -263,7 +271,8 @@ if 1:
 #     fmt = lambda x:"%s:%s"%(x.__class__.__name__,x.recordId,)
 #     d = _dict([(fmt(x), 
 #         _get_upstream_tree(x.input_kw.values())) for x in lst])
-#     return d
+#     return d            # print()
+
 
 # _ID = lambda x:(x.index,x)
 # def _get_root_nodes(self,exclude=None):

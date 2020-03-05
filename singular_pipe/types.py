@@ -19,13 +19,19 @@ class TooFewArgumentsError(RuntimeError):
 class TooFewDefaultsError(RuntimeError):
 	pass
 
-class IdentAttrDict(AttrDict):
-	pass
+
 class CantGuessCaller(Exception):
 	pass
 class UndefinedTypeRoutine(Exception):
 	pass
 
+class OverwriteError(Exception):
+	pass
+
+
+
+class IdentAttrDict(AttrDict):
+	pass
 
 class PicklableNamedTuple(object):
 	pass
@@ -53,6 +59,20 @@ def Default(x):
 	A dummy "class" mocked with a function
 	'''
 	return x
+
+class NodeFunction(object):
+	pass
+
+def Node(func):
+	func._type = NodeFunction
+	return func
+
+class FlowFunction(object):
+	pass
+
+def Flow(func):
+	func._type = FlowFunction
+	return func
 
 
 
@@ -119,6 +139,15 @@ class PrefixedNode(Depend):
 		with open(idFile,'w') as f:
 			json.dump( [ caller.prefix_named.relpath(idFile.dirname())], f)
 
+	def fileglob(self, g, strict):
+		res = [File(x) for x in glob.glob("%s%s"%(self,g))
+		if not x.endswith('.outward_edges') and not x.endswith('.outward_edges_old') and not x.endswith('._prefix_pointer')
+		]
+		if strict:
+			assert len(res),'(%r,%r) expanded into nothing!'% (self,g)
+		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
+		return res
+
 			# f.write( self.relpath(idFile.dirname()) )
 # tups =(prefix_job, self.DIR/'root','/tmp/pjob',)
 # job = force_run(*tups)
@@ -130,6 +159,8 @@ class File(PrefixedNode):
 		stat = os_stat_safe(self)
 		res = (self, stat.st_mtime, stat.st_size)
 		return res
+	def expanded(self):
+		return [self]
 
 
 
@@ -161,14 +192,8 @@ class Prefix(PrefixedNode):
 				json.dump( [ self.relpath(idFile.dirname())], f)
 				# f.write(self.relpath(idFile.dirname()))
 		return 
-	def fileglob(self, g, strict):
-		res = [File(x) for x in glob.glob("%s%s"%(self,g))
-		if not x.endswith('.outward_edges') and not x.endswith('.outward_edges_old') and not x.endswith('._prefix_pointer')
-		]
-		if strict:
-			assert len(res),'(%r,%r) expanded into nothing!'% (self,g)
-		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
-		return res
+	def expaneded(self):
+		return self.fileglob('*',0)
 
 class InputPrefix(Prefix):
 	def __init__(self,*a,**kw):

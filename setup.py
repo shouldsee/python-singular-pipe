@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 #from setuptools import setup
 
-# from version import get_version
-# from singular_pipe.version import get_version
+from distutils.core import setup
 
 config = dict(
 	name='singular_pipe',
@@ -16,6 +15,7 @@ config = dict(
 	# python_requires = '>=3.6',
 	classifiers = [
 	'Programming Language :: Python :: 3.5',
+	'Programming Language :: Python :: 3.7',
 	],
 	install_requires=[
 		x.strip() for x in open("requirements.txt","r")

@@ -77,18 +77,21 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
-	- [ ] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
+    - [ ] adds error tests for Caller.cache and Caller.__call__
+    - [ ] cache_run_deep() to compute a dynamic graph and recursively 
+        cache_run() from top to bottom.
+    - [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
+	- [x] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
 		- [x] it should come with a pointer pointing back to the Prefix.
 		- Prefix in get_input_identity() will be globbed and snapshotted
 		- Prefix in get_upstream() will be treated as a standalone
 		- If a File has been included in a OutputPrefix(), 
-	- [ ] fix get_upstream() if possible 
-	- [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
+	- [x] fix get_upstream() if possible 
 	- [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
 	- shellcmd
 		- [x] capture stderr and stdout of subprocess.check_output(), 
 		- [x] logging the command executed into .cmd file
-		- [ ] with optional log file.  
+		- [x] with optional log file.  
 	- [x] adding an outward_pk file to complement input_pk and auto-sync
 		- the outward_pk should record identity of the output file and input file.
 		- the input_ident is useful 
