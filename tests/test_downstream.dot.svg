@@ -5,343 +5,343 @@
  -->
 <!-- Title: G Pages: 1 -->
 <svg width="2363pt" height="632pt"
- viewBox="0.00 0.00 2363.02 631.81" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 2362.73 631.81" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 627.813)">
 <title>G</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-627.813 2359.02,-627.813 2359.02,4 -4,4"/>
+<polygon fill="white" stroke="none" points="-4,4 -4,-627.813 2358.73,-627.813 2358.73,4 -4,4"/>
 <!-- &#39;SOURCE&#39; -->
 <g id="node1" class="node"><title>&#39;SOURCE&#39;</title>
-<ellipse fill="none" stroke="black" cx="1149.08" cy="-605.813" rx="57.3905" ry="18"/>
-<text text-anchor="middle" x="1149.08" y="-602.113" font-family="Times,serif" font-size="14.00">&#39;SOURCE&#39;</text>
+<ellipse fill="none" stroke="black" cx="1149.79" cy="-605.813" rx="57.3905" ry="18"/>
+<text text-anchor="middle" x="1149.79" y="-602.113" font-family="Times,serif" font-size="14.00">&#39;SOURCE&#39;</text>
 </g>
 <!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.simple_job.out_txt&#39;) -->
+pipe_test_build/job3.dimple_job.out_txt&#39;) -->
 <g id="node2" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job3.dimple_job.out_txt&#39;)</title>
+<ellipse fill="none" stroke="black" cx="217.789" cy="-524.943" rx="217.578" ry="26.7407"/>
+<text text-anchor="middle" x="217.789" y="-528.743" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
+<text text-anchor="middle" x="217.789" y="-513.743" font-family="Times,serif" font-size="14.00">pipe_test_build/job3.dimple_job.out_txt&#39;)</text>
+</g>
+<!-- &#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job3.dimple_job.out_txt&#39;) -->
+<g id="edge1" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job3.dimple_job.out_txt&#39;)</title>
+<path fill="none" stroke="black" d="M1093.98,-601.349C974.695,-593.785 686.127,-574.628 444.789,-551.813 423.994,-549.847 402.149,-547.596 380.566,-545.259"/>
+<polygon fill="black" stroke="black" points="380.657,-541.748 370.336,-544.143 379.898,-548.707 380.657,-541.748"/>
+</g>
+<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;) -->
+<g id="node4" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="726.789" cy="-524.943" rx="272.886" ry="26.7407"/>
+<text text-anchor="middle" x="726.789" y="-528.743" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
+<text text-anchor="middle" x="726.789" y="-513.743" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</text>
+</g>
+<!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;) -->
+<g id="edge3" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M1101.68,-595.843C1043.31,-584.96 942.498,-566.163 860.107,-550.801"/>
+<polygon fill="black" stroke="black" points="860.627,-547.338 850.155,-548.945 859.344,-554.219 860.627,-547.338"/>
+</g>
+<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.dimple_job.cache_pk&#39;) -->
+<g id="node7" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="1027.79" cy="-303.037" rx="272.886" ry="26.7407"/>
+<text text-anchor="middle" x="1027.79" y="-306.837" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
+<text text-anchor="middle" x="1027.79" y="-291.837" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</text>
+</g>
+<!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.dimple_job.cache_pk&#39;) -->
+<g id="edge7" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M1107.14,-593.739C1085.38,-585.778 1060.64,-572.673 1046.79,-551.813 1004.04,-487.417 1011.82,-391.801 1020.34,-340.202"/>
+<polygon fill="black" stroke="black" points="1023.82,-340.643 1022.1,-330.189 1016.92,-339.434 1023.82,-340.643"/>
+</g>
+<!-- File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job2.simple_job.out_txt&#39;) -->
+<g id="node9" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
 pipe_test_build/job2.simple_job.out_txt&#39;)</title>
-<ellipse fill="none" stroke="black" cx="217.082" cy="-524.943" rx="217.164" ry="26.7407"/>
-<text text-anchor="middle" x="217.082" y="-528.743" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
-<text text-anchor="middle" x="217.082" y="-513.743" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.simple_job.out_txt&#39;)</text>
+<ellipse fill="none" stroke="black" cx="1272.79" cy="-524.943" rx="217.164" ry="26.7407"/>
+<text text-anchor="middle" x="1272.79" y="-528.743" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
+<text text-anchor="middle" x="1272.79" y="-513.743" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.simple_job.out_txt&#39;)</text>
 </g>
 <!-- &#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
 pipe_test_build/job2.simple_job.out_txt&#39;) -->
-<g id="edge1" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.simple_job.out_txt&#39;)</title>
-<path fill="none" stroke="black" d="M1093.19,-601.362C973.737,-593.822 684.756,-574.708 443.082,-551.813 422.378,-549.852 400.629,-547.603 379.14,-545.267"/>
-<polygon fill="black" stroke="black" points="379.277,-541.761 368.956,-544.152 378.515,-548.72 379.277,-541.761"/>
-</g>
-<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;) -->
-<g id="node4" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="725.082" cy="-524.943" rx="272.886" ry="26.7407"/>
-<text text-anchor="middle" x="725.082" y="-528.743" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
-<text text-anchor="middle" x="725.082" y="-513.743" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</text>
-</g>
-<!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;) -->
-<g id="edge3" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M1101.27,-595.919C1042.79,-585.041 941.359,-566.174 858.548,-550.77"/>
-<polygon fill="black" stroke="black" points="859.017,-547.297 848.546,-548.909 857.737,-554.179 859.017,-547.297"/>
-</g>
-<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;) -->
-<g id="node7" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1026.08" cy="-303.037" rx="272.886" ry="26.7407"/>
-<text text-anchor="middle" x="1026.08" y="-306.837" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
-<text text-anchor="middle" x="1026.08" y="-291.837" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/root.simple_job.cache_pk&#39;)</text>
-</g>
-<!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;) -->
-<g id="edge7" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M1106.03,-593.844C1084.06,-585.915 1059.08,-572.806 1045.08,-551.813 1002.21,-487.501 1010.04,-391.852 1018.6,-340.225"/>
-<polygon fill="black" stroke="black" points="1022.08,-340.662 1020.36,-330.206 1015.18,-339.448 1022.08,-340.662"/>
-</g>
-<!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;) -->
-<g id="node9" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1272.08" cy="-524.943" rx="217.578" ry="26.7407"/>
-<text text-anchor="middle" x="1272.08" y="-528.743" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
-<text text-anchor="middle" x="1272.08" y="-513.743" font-family="Times,serif" font-size="14.00">pipe_test_build/job3.dimple_job.out_txt&#39;)</text>
-</g>
-<!-- &#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;) -->
 <g id="edge10" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;)</title>
-<path fill="none" stroke="black" d="M1173.09,-589.419C1187.38,-580.257 1206.03,-568.295 1223.29,-557.229"/>
-<polygon fill="black" stroke="black" points="1225.63,-559.887 1232.16,-551.543 1221.85,-553.995 1225.63,-559.887"/>
+pipe_test_build/job2.simple_job.out_txt&#39;)</title>
+<path fill="none" stroke="black" d="M1173.8,-589.419C1188.08,-580.257 1206.74,-568.295 1224,-557.229"/>
+<polygon fill="black" stroke="black" points="1226.34,-559.887 1232.86,-551.543 1222.56,-553.995 1226.34,-559.887"/>
 </g>
 <!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;) -->
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;) -->
 <g id="node11" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1781.08" cy="-524.943" rx="272.886" ry="26.7407"/>
-<text text-anchor="middle" x="1781.08" y="-528.743" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
-<text text-anchor="middle" x="1781.08" y="-513.743" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</text>
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="1780.79" cy="-524.943" rx="272.886" ry="26.7407"/>
+<text text-anchor="middle" x="1780.79" y="-528.743" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
+<text text-anchor="middle" x="1780.79" y="-513.743" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</text>
 </g>
 <!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;) -->
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;) -->
 <g id="edge12" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M1201.34,-598.292C1289.19,-587.328 1470.26,-564.731 1606.81,-547.692"/>
-<polygon fill="black" stroke="black" points="1607.48,-551.135 1616.97,-546.423 1606.62,-544.188 1607.48,-551.135"/>
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M1201.96,-598.292C1289.61,-587.337 1470.17,-564.769 1606.45,-547.734"/>
+<polygon fill="black" stroke="black" points="1607.11,-551.179 1616.6,-546.465 1606.24,-544.233 1607.11,-551.179"/>
 </g>
 <!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.dimple_job.cache_pk&#39;) -->
+ld/_singular_pipe/root.simple_job.cache_pk&#39;) -->
 <g id="node14" class="node"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="2082.08" cy="-413.99" rx="272.886" ry="26.7407"/>
-<text text-anchor="middle" x="2082.08" y="-417.79" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
-<text text-anchor="middle" x="2082.08" y="-402.79" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</text>
+ld/_singular_pipe/root.simple_job.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="2081.79" cy="-413.99" rx="272.886" ry="26.7407"/>
+<text text-anchor="middle" x="2081.79" y="-417.79" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui</text>
+<text text-anchor="middle" x="2081.79" y="-402.79" font-family="Times,serif" font-size="14.00">ld/_singular_pipe/root.simple_job.cache_pk&#39;)</text>
 </g>
 <!-- &#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.dimple_job.cache_pk&#39;) -->
+ld/_singular_pipe/root.simple_job.cache_pk&#39;) -->
 <g id="edge16" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M1206.06,-603.484C1401.08,-598.682 2031.51,-580.954 2063.08,-551.813 2090.16,-526.824 2091.58,-482.551 2088.38,-451.139"/>
-<polygon fill="black" stroke="black" points="2091.84,-450.531 2087.16,-441.026 2084.89,-451.375 2091.84,-450.531"/>
+ld/_singular_pipe/root.simple_job.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M1206.71,-603.482C1401.51,-598.672 2031.25,-580.923 2062.79,-551.813 2089.86,-526.823 2091.28,-482.55 2088.09,-451.139"/>
+<polygon fill="black" stroke="black" points="2091.54,-450.531 2086.86,-441.026 2084.59,-451.375 2091.54,-450.531"/>
 </g>
 <!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;)) -->
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;)) -->
 <g id="node3" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;))</title>
-<ellipse fill="none" stroke="black" cx="519.082" cy="-413.99" rx="277.786" ry="48.1667"/>
-<text text-anchor="middle" x="519.082" y="-432.79" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
-<text text-anchor="middle" x="519.082" y="-417.79" font-family="Times,serif" font-size="14.00">.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us</text>
-<text text-anchor="middle" x="519.082" y="-402.79" font-family="Times,serif" font-size="14.00">er/.temp/singular&#45;</text>
-<text text-anchor="middle" x="519.082" y="-387.79" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.simple_job&#39;))</text>
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;))</title>
+<ellipse fill="none" stroke="black" cx="518.789" cy="-413.99" rx="277.786" ry="48.1667"/>
+<text text-anchor="middle" x="518.789" y="-432.79" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
+<text text-anchor="middle" x="518.789" y="-417.79" font-family="Times,serif" font-size="14.00">.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u</text>
+<text text-anchor="middle" x="518.789" y="-402.79" font-family="Times,serif" font-size="14.00">ser/.temp/singular&#45;</text>
+<text text-anchor="middle" x="518.789" y="-387.79" font-family="Times,serif" font-size="14.00">pipe_test_build/job3.dimple_job&#39;))</text>
 </g>
 <!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;)) -->
+pipe_test_build/job3.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;)) -->
 <g id="edge2" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;))</title>
-<path fill="none" stroke="black" d="M285.233,-499.356C316.614,-488.035 354.908,-474.219 391.35,-461.072"/>
-<polygon fill="black" stroke="black" points="392.85,-464.252 401.069,-457.566 390.475,-457.667 392.85,-464.252"/>
+pipe_test_build/job3.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;))</title>
+<path fill="none" stroke="black" d="M285.714,-499.356C316.991,-488.035 355.159,-474.219 391.48,-461.072"/>
+<polygon fill="black" stroke="black" points="392.955,-464.26 401.167,-457.566 390.573,-457.678 392.955,-464.26"/>
 </g>
 <!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;) -->
+pipe_test_build/job2.dimple_job.out_txt&#39;) -->
 <g id="node5" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;)</title>
-<ellipse fill="none" stroke="black" cx="519.082" cy="-303.037" rx="215.835" ry="26.7407"/>
-<text text-anchor="middle" x="519.082" y="-306.837" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
-<text text-anchor="middle" x="519.082" y="-291.837" font-family="Times,serif" font-size="14.00">pipe_test_build/root.simple_job.out_txt&#39;)</text>
+pipe_test_build/job2.dimple_job.out_txt&#39;)</title>
+<ellipse fill="none" stroke="black" cx="518.789" cy="-303.037" rx="217.578" ry="26.7407"/>
+<text text-anchor="middle" x="518.789" y="-306.837" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
+<text text-anchor="middle" x="518.789" y="-291.837" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.dimple_job.out_txt&#39;)</text>
 </g>
 <!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;) -->
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job2.dimple_job.out_txt&#39;) -->
 <g id="edge5" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;)</title>
-<path fill="none" stroke="black" d="M519.082,-365.835C519.082,-357.181 519.082,-348.277 519.082,-340.016"/>
-<polygon fill="black" stroke="black" points="522.582,-339.964 519.082,-329.964 515.582,-339.964 522.582,-339.964"/>
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job2.dimple_job.out_txt&#39;)</title>
+<path fill="none" stroke="black" d="M518.789,-365.835C518.789,-357.181 518.789,-348.277 518.789,-340.016"/>
+<polygon fill="black" stroke="black" points="522.289,-339.964 518.789,-329.964 515.289,-339.964 522.289,-339.964"/>
 </g>
 <!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;)) -->
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;)) -->
 <g id="edge4" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/job2.simple_job&#39;))</title>
-<path fill="none" stroke="black" d="M676.784,-498.399C657.657,-488.282 634.984,-476.291 612.881,-464.6"/>
-<polygon fill="black" stroke="black" points="614.265,-461.373 603.788,-459.791 610.992,-467.56 614.265,-461.373"/>
+ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job3.dimple_job&#39;))</title>
+<path fill="none" stroke="black" d="M678.022,-498.399C658.623,-488.237 635.613,-476.184 613.201,-464.444"/>
+<polygon fill="black" stroke="black" points="614.8,-461.331 604.318,-459.791 611.552,-467.532 614.8,-461.331"/>
 </g>
 <!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;)) -->
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job2.dimple_job&#39;)) -->
 <g id="node6" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;))</title>
-<ellipse fill="none" stroke="black" cx="1009.08" cy="-192.083" rx="277.786" ry="48.1667"/>
-<text text-anchor="middle" x="1009.08" y="-210.883" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
-<text text-anchor="middle" x="1009.08" y="-195.883" font-family="Times,serif" font-size="14.00">.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us</text>
-<text text-anchor="middle" x="1009.08" y="-180.883" font-family="Times,serif" font-size="14.00">er/.temp/singular&#45;</text>
-<text text-anchor="middle" x="1009.08" y="-165.883" font-family="Times,serif" font-size="14.00">pipe_test_build/root.simple_job&#39;))</text>
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job2.dimple_job&#39;))</title>
+<ellipse fill="none" stroke="black" cx="1010.79" cy="-192.083" rx="277.786" ry="48.1667"/>
+<text text-anchor="middle" x="1010.79" y="-210.883" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
+<text text-anchor="middle" x="1010.79" y="-195.883" font-family="Times,serif" font-size="14.00">.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u</text>
+<text text-anchor="middle" x="1010.79" y="-180.883" font-family="Times,serif" font-size="14.00">ser/.temp/singular&#45;</text>
+<text text-anchor="middle" x="1010.79" y="-165.883" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.dimple_job&#39;))</text>
 </g>
 <!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;)) -->
+pipe_test_build/job2.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job2.dimple_job&#39;)) -->
 <g id="edge6" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/root.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;))</title>
-<path fill="none" stroke="black" d="M621.205,-279.329C681.88,-265.838 760.525,-248.351 831.124,-232.653"/>
-<polygon fill="black" stroke="black" points="832.027,-236.038 841.029,-230.45 830.508,-229.204 832.027,-236.038"/>
+pipe_test_build/job2.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
+ser/.temp/singular&#45;
+pipe_test_build/job2.dimple_job&#39;))</title>
+<path fill="none" stroke="black" d="M621.329,-279.329C682.252,-265.838 761.218,-248.351 832.104,-232.653"/>
+<polygon fill="black" stroke="black" points="833.044,-236.03 842.051,-230.45 831.53,-229.195 833.044,-236.03"/>
 </g>
 <!-- File(&#39;/tmp/digit.txt&#39;) -->
 <g id="node8" class="node"><title>File(&#39;/tmp/digit.txt&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1296.08" cy="-90" rx="102.082" ry="18"/>
-<text text-anchor="middle" x="1296.08" y="-86.3" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/digit.txt&#39;)</text>
-</g>
-<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;) -->
-<g id="edge9" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;)</title>
-<path fill="none" stroke="black" d="M1130.38,-148.784C1169.62,-135.102 1211.12,-120.628 1242.78,-109.588"/>
-<polygon fill="black" stroke="black" points="1243.98,-112.875 1252.27,-106.277 1241.68,-106.265 1243.98,-112.875"/>
-</g>
-<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;)) -->
-<g id="edge8" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
-er/.temp/singular&#45;
-pipe_test_build/root.simple_job&#39;))</title>
-<path fill="none" stroke="black" d="M1022.01,-275.94C1020.8,-268.164 1019.42,-259.317 1018.02,-250.37"/>
-<polygon fill="black" stroke="black" points="1021.45,-249.617 1016.45,-240.276 1014.53,-250.696 1021.45,-249.617"/>
-</g>
-<!-- &#39;SINK&#39; -->
-<g id="node15" class="node"><title>&#39;SINK&#39;</title>
-<ellipse fill="none" stroke="black" cx="1296.08" cy="-18" rx="40.0939" ry="18"/>
-<text text-anchor="middle" x="1296.08" y="-14.3" font-family="Times,serif" font-size="14.00">&#39;SINK&#39;</text>
-</g>
-<!-- File(&#39;/tmp/digit.txt&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge19" class="edge"><title>File(&#39;/tmp/digit.txt&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M1296.08,-71.6966C1296.08,-63.9827 1296.08,-54.7125 1296.08,-46.1124"/>
-<polygon fill="black" stroke="black" points="1299.58,-46.1043 1296.08,-36.1043 1292.58,-46.1044 1299.58,-46.1043"/>
-</g>
-<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;)) -->
-<g id="node10" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;))</title>
-<ellipse fill="none" stroke="black" cx="1513.08" cy="-413.99" rx="277.786" ry="48.1667"/>
-<text text-anchor="middle" x="1513.08" y="-432.79" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
-<text text-anchor="middle" x="1513.08" y="-417.79" font-family="Times,serif" font-size="14.00">.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u</text>
-<text text-anchor="middle" x="1513.08" y="-402.79" font-family="Times,serif" font-size="14.00">ser/.temp/singular&#45;</text>
-<text text-anchor="middle" x="1513.08" y="-387.79" font-family="Times,serif" font-size="14.00">pipe_test_build/job3.dimple_job&#39;))</text>
-</g>
-<!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;)) -->
-<g id="edge11" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job3.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;))</title>
-<path fill="none" stroke="black" d="M1327.37,-498.947C1350.84,-488.335 1379.04,-475.588 1406.29,-463.269"/>
-<polygon fill="black" stroke="black" points="1407.82,-466.42 1415.49,-459.112 1404.93,-460.042 1407.82,-466.42"/>
-</g>
-<!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;) -->
-<g id="node12" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1567.08" cy="-303.037" rx="217.578" ry="26.7407"/>
-<text text-anchor="middle" x="1567.08" y="-306.837" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
-<text text-anchor="middle" x="1567.08" y="-291.837" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.dimple_job.out_txt&#39;)</text>
-</g>
-<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;) -->
-<g id="edge14" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;)</title>
-<path fill="none" stroke="black" d="M1536.45,-365.835C1540.88,-356.893 1545.45,-347.683 1549.66,-339.192"/>
-<polygon fill="black" stroke="black" points="1552.93,-340.478 1554.23,-329.964 1546.65,-337.369 1552.93,-340.478"/>
-</g>
-<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;)) -->
-<g id="edge13" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job3.dimple_job&#39;))</title>
-<path fill="none" stroke="black" d="M1718.92,-498.673C1692.3,-487.849 1660.3,-474.841 1629.56,-462.341"/>
-<polygon fill="black" stroke="black" points="1630.64,-459.006 1620.06,-458.482 1628.01,-465.49 1630.64,-459.006"/>
-</g>
-<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job2.dimple_job&#39;)) -->
-<g id="node13" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job2.dimple_job&#39;))</title>
-<ellipse fill="none" stroke="black" cx="1583.08" cy="-192.083" rx="277.786" ry="48.1667"/>
-<text text-anchor="middle" x="1583.08" y="-210.883" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
-<text text-anchor="middle" x="1583.08" y="-195.883" font-family="Times,serif" font-size="14.00">.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u</text>
-<text text-anchor="middle" x="1583.08" y="-180.883" font-family="Times,serif" font-size="14.00">ser/.temp/singular&#45;</text>
-<text text-anchor="middle" x="1583.08" y="-165.883" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.dimple_job&#39;))</text>
-</g>
-<!-- File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job2.dimple_job&#39;)) -->
-<g id="edge15" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
-pipe_test_build/job2.dimple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
-.test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
-ser/.temp/singular&#45;
-pipe_test_build/job2.dimple_job&#39;))</title>
-<path fill="none" stroke="black" d="M1570.91,-275.94C1572.06,-268.164 1573.36,-259.317 1574.67,-250.37"/>
-<polygon fill="black" stroke="black" points="1578.16,-250.679 1576.15,-240.276 1571.24,-249.662 1578.16,-250.679"/>
+<ellipse fill="none" stroke="black" cx="1297.79" cy="-90" rx="102.082" ry="18"/>
+<text text-anchor="middle" x="1297.79" y="-86.3" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/digit.txt&#39;)</text>
 </g>
 <!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
 .test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
 ser/.temp/singular&#45;
 pipe_test_build/job2.dimple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;) -->
-<g id="edge18" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+<g id="edge9" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
 .test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
 ser/.temp/singular&#45;
 pipe_test_build/job2.dimple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;)</title>
-<path fill="none" stroke="black" d="M1461.78,-148.784C1422.55,-135.102 1381.04,-120.628 1349.39,-109.588"/>
-<polygon fill="black" stroke="black" points="1350.49,-106.265 1339.89,-106.277 1348.18,-112.875 1350.49,-106.265"/>
+<path fill="none" stroke="black" d="M1132.09,-148.784C1171.32,-135.102 1212.83,-120.628 1244.48,-109.588"/>
+<polygon fill="black" stroke="black" points="1245.69,-112.875 1253.98,-106.277 1243.38,-106.265 1245.69,-112.875"/>
 </g>
 <!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
 ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
 .test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
 ser/.temp/singular&#45;
 pipe_test_build/job2.dimple_job&#39;)) -->
-<g id="edge17" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+<g id="edge8" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
 ld/_singular_pipe/job2.dimple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
 .test.graph.dimple_job&#39;,prefix_named=File(&#39;/home/u
 ser/.temp/singular&#45;
 pipe_test_build/job2.dimple_job&#39;))</title>
-<path fill="none" stroke="black" d="M2031.32,-387.58C1974.16,-359.27 1878.25,-312.682 1794.08,-276.167 1765.73,-263.866 1734.92,-251.297 1705.83,-239.78"/>
-<polygon fill="black" stroke="black" points="1707.04,-236.494 1696.46,-236.08 1704.47,-243.006 1707.04,-236.494"/>
+<path fill="none" stroke="black" d="M1023.72,-275.94C1022.5,-268.164 1021.12,-259.317 1019.73,-250.37"/>
+<polygon fill="black" stroke="black" points="1023.15,-249.617 1018.15,-240.276 1016.24,-250.696 1023.15,-249.617"/>
+</g>
+<!-- &#39;SINK&#39; -->
+<g id="node15" class="node"><title>&#39;SINK&#39;</title>
+<ellipse fill="none" stroke="black" cx="1297.79" cy="-18" rx="40.0939" ry="18"/>
+<text text-anchor="middle" x="1297.79" y="-14.3" font-family="Times,serif" font-size="14.00">&#39;SINK&#39;</text>
+</g>
+<!-- File(&#39;/tmp/digit.txt&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge19" class="edge"><title>File(&#39;/tmp/digit.txt&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M1297.79,-71.6966C1297.79,-63.9827 1297.79,-54.7125 1297.79,-46.1124"/>
+<polygon fill="black" stroke="black" points="1301.29,-46.1043 1297.79,-36.1043 1294.29,-46.1044 1301.29,-46.1043"/>
+</g>
+<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;)) -->
+<g id="node10" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;))</title>
+<ellipse fill="none" stroke="black" cx="1512.79" cy="-413.99" rx="277.786" ry="48.1667"/>
+<text text-anchor="middle" x="1512.79" y="-432.79" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
+<text text-anchor="middle" x="1512.79" y="-417.79" font-family="Times,serif" font-size="14.00">.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us</text>
+<text text-anchor="middle" x="1512.79" y="-402.79" font-family="Times,serif" font-size="14.00">er/.temp/singular&#45;</text>
+<text text-anchor="middle" x="1512.79" y="-387.79" font-family="Times,serif" font-size="14.00">pipe_test_build/job2.simple_job&#39;))</text>
+</g>
+<!-- File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job2.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;)) -->
+<g id="edge11" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/job2.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;))</title>
+<path fill="none" stroke="black" d="M1327.85,-498.947C1351.22,-488.335 1379.3,-475.588 1406.44,-463.269"/>
+<polygon fill="black" stroke="black" points="1407.94,-466.432 1415.6,-459.112 1405.05,-460.058 1407.94,-466.432"/>
+</g>
+<!-- File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;) -->
+<g id="node12" class="node"><title>File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;)</title>
+<ellipse fill="none" stroke="black" cx="1567.79" cy="-303.037" rx="215.835" ry="26.7407"/>
+<text text-anchor="middle" x="1567.79" y="-306.837" font-family="Times,serif" font-size="14.00">File(&#39;/home/user/.temp/singular&#45;</text>
+<text text-anchor="middle" x="1567.79" y="-291.837" font-family="Times,serif" font-size="14.00">pipe_test_build/root.simple_job.out_txt&#39;)</text>
+</g>
+<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;) -->
+<g id="edge14" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;))&#45;&gt;File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;)</title>
+<path fill="none" stroke="black" d="M1536.59,-365.835C1541.16,-356.797 1545.86,-347.485 1550.18,-338.918"/>
+<polygon fill="black" stroke="black" points="1553.32,-340.468 1554.7,-329.964 1547.07,-337.314 1553.32,-340.468"/>
+</g>
+<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;)) -->
+<g id="edge13" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/job2.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/job2.simple_job&#39;))</title>
+<path fill="none" stroke="black" d="M1718.63,-498.673C1692.01,-487.849 1660.01,-474.841 1629.26,-462.341"/>
+<polygon fill="black" stroke="black" points="1630.35,-459.006 1619.77,-458.482 1627.71,-465.49 1630.35,-459.006"/>
+</g>
+<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;)) -->
+<g id="node13" class="node"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;))</title>
+<ellipse fill="none" stroke="black" cx="1584.79" cy="-192.083" rx="277.786" ry="48.1667"/>
+<text text-anchor="middle" x="1584.79" y="-210.883" font-family="Times,serif" font-size="14.00">singular_pipe.runner.Caller(dotname=&#39;singular_pipe</text>
+<text text-anchor="middle" x="1584.79" y="-195.883" font-family="Times,serif" font-size="14.00">.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us</text>
+<text text-anchor="middle" x="1584.79" y="-180.883" font-family="Times,serif" font-size="14.00">er/.temp/singular&#45;</text>
+<text text-anchor="middle" x="1584.79" y="-165.883" font-family="Times,serif" font-size="14.00">pipe_test_build/root.simple_job&#39;))</text>
+</g>
+<!-- File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;)) -->
+<g id="edge15" class="edge"><title>File(&#39;/home/user/.temp/singular&#45;
+pipe_test_build/root.simple_job.out_txt&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;))</title>
+<path fill="none" stroke="black" d="M1571.86,-275.94C1573.07,-268.164 1574.45,-259.317 1575.85,-250.37"/>
+<polygon fill="black" stroke="black" points="1579.34,-250.696 1577.43,-240.276 1572.43,-249.617 1579.34,-250.696"/>
+</g>
+<!-- singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;) -->
+<g id="edge18" class="edge"><title>singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;))&#45;&gt;File(&#39;/tmp/digit.txt&#39;)</title>
+<path fill="none" stroke="black" d="M1463.49,-148.784C1424.25,-135.102 1382.75,-120.628 1351.09,-109.588"/>
+<polygon fill="black" stroke="black" points="1352.19,-106.265 1341.6,-106.277 1349.89,-112.875 1352.19,-106.265"/>
+</g>
+<!-- CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/root.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;)) -->
+<g id="edge17" class="edge"><title>CacheFile(&#39;/home/user/.temp/singular&#45;pipe_test_bui
+ld/_singular_pipe/root.simple_job.cache_pk&#39;)&#45;&gt;singular_pipe.runner.Caller(dotname=&#39;singular_pipe
+.test.base.simple_job&#39;,prefix_named=File(&#39;/home/us
+er/.temp/singular&#45;
+pipe_test_build/root.simple_job&#39;))</title>
+<path fill="none" stroke="black" d="M2030.55,-387.547C1973.12,-359.309 1877.01,-312.881 1792.79,-276.167 1764.93,-264.02 1734.69,-251.546 1706.12,-240.076"/>
+<polygon fill="black" stroke="black" points="1707.09,-236.693 1696.5,-236.227 1704.49,-243.192 1707.09,-236.693"/>
 </g>
 </g>
 </svg>
