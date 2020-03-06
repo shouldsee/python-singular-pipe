@@ -102,7 +102,7 @@ if 1:
 
 
 if 1:
-	def SingularityShellCommand( cmd, image, log_file, check=1, extra_files = None, debug =0):	
+	def SingularityShellCommand( cmd, image, log_file,check=1,  mode='w',extra_files = None, debug =0):	
 		'''
 		return a tuple (executed command, command_stdout)
 			cmd: a list of str-like objects that gets concatenated into a shell command
@@ -152,7 +152,7 @@ if 1:
 		# '\n',
 		]
 		cmd_curr = list_flatten_strict(cmd_curr)
-		stdout = LoggedShellCommand(cmd_curr,log_file, check)
+		stdout = LoggedShellCommand(cmd_curr,log_file, check,mode=mode)
 		# suc,stdout
 		# suc,stdout,stderr = shellcmd(cmd_curr,1,0)
 		# suc , res = shellcmd(' '.join(cmd_curr),1,1)

@@ -12,7 +12,9 @@ import singular_pipe.runner
 
 class SharedObject(object):
 	##### do not use /tmp for testing
+	# DIR = Path('~/.temp/singular-pipe_test_build/').expand().makedirs_p()
 	DIR = Path('~/.temp/singular-pipe_test_build/').expand().makedirs_p()
+	# DIR = Path('~/.temp/singular-pipe_test_build/').expand().realpath().makedirs_p()
 	# DIR = Path('/tmp/singular-pipe_test_build/').expand().makedirs_p()
 
 	DATA_DIR = Path(singular_pipe.__path__[0]).realpath().dirname()/'tests/data'
@@ -241,7 +243,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		dir_layout = 'clean'
 		# import singular_pipe
 		# dir_layout = singular_pipe.DEFAULT_DIR_LAYOUT
-
+		(self.DIR/'root').dirname().rmtree_p()
 		tups = (simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt',)
 		force_run(*tups,dir_layout=dir_layout,verbose=0)
 		tups = (simple_job, self.DIR/'job2', 'ATG', self.DIR/'root.simple_job.out_txt',)
@@ -355,6 +357,7 @@ cd $OLDPWD
 		Write assertions
 		'''
 		# return
+		# self.LEVEL = 10
 		if self.LEVEL <=3:
 			return
 		if 0:
@@ -413,8 +416,8 @@ cd $OLDPWD
 			curr = run( job_hisat2_align,
 				root_prefix,
 				index.output.index_prefix,
-				curr.output.fastq_1,
-				curr.output.fastq_2,
+				curr.output.fastq1,
+				curr.output.fastq2,
 				THREADS)
 
 	# test_basic()

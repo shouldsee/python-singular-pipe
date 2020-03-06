@@ -77,7 +77,8 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
-    - [ ] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
+    - [ ] Add timed_run() to print out execution times for each job.
+    - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
     - [ ] adds error tests for Caller.cache and Caller.__call__
     - [ ] cache_run_deep() to compute a dynamic graph and recursively 
         cache_run() from top to bottom.

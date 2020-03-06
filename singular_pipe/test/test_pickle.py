@@ -30,15 +30,16 @@ def _dumps(obj, protocol=None):
 	p.dump(obj)
 	return f.getvalue(), p.modules
 
-# del MyClass
-import json
-# print(json.dumps(list(MyPickler.dispatch_table.items()),default=repr,indent=2))
-# print(json.dumps(list(MyPickler.dispatch.items()),default=repr,indent=2))
-res = _dumps( (MyClass()),protocol=4)
-print(res)
-assert 0
-# unpickled_class = pickle.loads(f.getvalue())
+if __name__ =='__main__':
+	# del MyClass
+	import json
+	# print(json.dumps(list(MyPickler.dispatch_table.items()),default=repr,indent=2))
+	# print(json.dumps(list(MyPickler.dispatch.items()),default=repr,indent=2))
+	res = _dumps( (MyClass()),protocol=4)
+	print(res)
+	assert 0
+	# unpickled_class = pickle.loads(f.getvalue())
 
-assert isinstance(unpickled_class, type)
-assert unpickled_class.__name__ == "MyClass"
-assert unpickled_class.my_attribute == 1
+	assert isinstance(unpickled_class, type)
+	assert unpickled_class.__name__ == "MyClass"
+	assert unpickled_class.my_attribute == 1

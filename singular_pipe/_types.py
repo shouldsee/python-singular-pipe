@@ -139,10 +139,13 @@ class PrefixedNode(Depend):
 		with open(idFile,'w') as f:
 			json.dump( [ caller.prefix_named.relpath(idFile.dirname())], f)
 
-	def fileglob(self, g, strict):
-		res = [File(x) for x in glob.glob("%s%s"%(self,g))
-		if not x.endswith('.outward_edges') and not x.endswith('.outward_edges_old') and not x.endswith('._prefix_pointer')
-		]
+	def fileglob(self, g, strict,filter=1):
+		res = [File(x) for x in glob.glob("%s%s"%(self,g))]
+		if filter:
+			res = [x  for x  in res
+			if not x.endswith('.outward_edges') and not x.endswith('.outward_edges_old') and not x.endswith('._prefix_pointer')
+			and not x.endswith('.mock')
+			]
 		if strict:
 			assert len(res),'(%r,%r) expanded into nothing!'% (self,g)
 		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]

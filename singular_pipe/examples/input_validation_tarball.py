@@ -1,10 +1,10 @@
 '''
 Showing how Prefix differs from File
 '''
-from singular_pipe._types import File,Prefix,Path
+from singular_pipe.types import File,Prefix,Path
 from singular_pipe.runner import cache_run_verbose, cache_run
 
-from singular_pipe.shell import LoggedShellCommand
+from singular_pipe.types import LoggedShellCommand
 from singular_pipe.runner import cache_check_changed,cache_run_verbose,force_run,cache_run
 import singular_pipe
 
@@ -49,10 +49,10 @@ def main(force_run=force_run,prefix=None):
 
 
 	print('\n---------------------Run1---\n## got') if __name__ == '__main__' else None
-	res1 = force_run(gen_files, prefix)
+	res1 = force_run(gen_files, prefix,verbose=0)
 	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 	
-	res1 = force_run(gen_files, prefix)
+	res1 = force_run(gen_files, prefix,verbose=0)
 	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 
 	s = '''

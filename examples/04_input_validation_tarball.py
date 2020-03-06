@@ -49,10 +49,10 @@ def main(force_run=force_run,prefix=None):
 
 
 	print('\n---------------------Run1---\n## got') if __name__ == '__main__' else None
-	res1 = force_run(gen_files, prefix)
+	res1 = force_run(gen_files, prefix,verbose=0)
 	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 	
-	res1 = force_run(gen_files, prefix)
+	res1 = force_run(gen_files, prefix,verbose=0)
 	res2 = force_run(tarball_dangerous_cache, prefix, res1.prefix_named, verbose=1)
 
 	s = '''

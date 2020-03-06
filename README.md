@@ -140,10 +140,11 @@ if __name__ == '__main__':
 
 
 ### ToDo
+    - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
     - [ ] adds error tests for Caller.cache and Caller.__call__
     - [ ] cache_run_deep() to compute a dynamic graph and recursively 
         cache_run() from top to bottom.
-    - [ ] Caller.method() to populate Caller.output() for constructing symbolic graphs.
+    - [x] (see `mock_run()`) Caller.method() to populate Caller.output() for constructing symbolic graphs.
 	- [x] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
 		- [x] it should come with a pointer pointing back to the Prefix.
 		- Prefix in get_input_identity() will be globbed and snapshotted

@@ -4,7 +4,7 @@ from singular_pipe import VERSION,jinja2_format
 
 import singular_pipe._types
 from singular_pipe._types import File,InputFile,OutputFile
-from singular_pipe._types import IdentFile,CacheFile
+from singular_pipe._types import IdentFile,CacheFile, AttrDict
 # from singular_pipe._types import InputFile,OutputFile,File,TempFile,? ,Path,
 from singular_pipe._types import Prefix,InputPrefix,OutputPrefix
 from singular_pipe._types import HttpResponse
@@ -135,7 +135,6 @@ def get_output_files( self, prefix, _output_typed_fields):
 			typ = type(s)
 		s = "{prefix}.{self.__name__}.{suffix}".format(suffix = s, **locals())
 		s = typ(str(s))
-		# s = s.realpath()
 		assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
 		tups.append(s)
 	tups = self._output_type(*tups)
@@ -182,7 +181,18 @@ class Caller(object):
 		res = self.output
 		# res += (CacheFile(self.output_cache_file),)
 		return list(res.values())
-
+	def is_mock(self,call=lambda x:None):
+		mock = 0
+		for k,v in self.output.items():
+			if (v+'.old.mock').isfile():
+				mock = 1
+				call(v+'.old.mock')
+				break
+			if (v+'.empty.mock').isfile():
+				mock = 1
+				call(v+'.empty.mock')
+				break
+		return mock
 	@classmethod
 	def from_input(Caller, job, _input, dir_layout):
 		if not getattr(job,'_singular_pipe',False):
@@ -233,13 +243,17 @@ class Caller(object):
 		self.dir_layout = dir_layout
 
 		assert isinstance(arg_tuples[0][1], File),(arg_tuples[0])
-		arg_tuples[0] = ('prefix', (arg_tuples[0][1]).realpath())
+		# arg_tuples[0] = ('prefix', (arg_tuples[0][1]).expand().realpath())
+		for i,(k,v) in enumerate(self.arg_tuples):
+			if isinstance(v,(Prefix, File)):				
+				arg_tuples[i] = (k,v.expand().realpath())
+
 		### create output directory
 		self.prefix_named.dirname().makedirs() if not self.prefix_named.dirname().isdir() else None
 		self._output_dict = get_output_files( self.job, self.prefix, self._output_type._typed_fields)
 		self._output_dict['_cache_file'] = CacheFile(self.output_cache_file)
 		for k in self._output_dict:
-			self._output_dict[k] = self._output_dict[k].realpath() 
+			self._output_dict[k] = self._output_dict[k].expand().realpath() 
 		self.runner = None
 
 
@@ -302,10 +316,14 @@ class Caller(object):
 		self._cached = True
 
 	def load_cache(self, ):
+		if self.is_mock():
+			output_cache_file = self.output_cache_file + '.old.mock'
+		else:
+			output_cache_file = self.output_cache_file
 		with open(self.output_cache_file+'.json','r') as f:
 			modules = json.load(f)['modules']
 		## inplement modules check
-		with open(self.output_cache_file,'rb') as f: 
+		with open(output_cache_file,'rb') as f: 
 			result = MyPickleSession().load(f)
 		return result 
 
@@ -370,15 +388,15 @@ def cache_check(job, *args,**kw):
 	'''
 	Check whether there is a valid cache for this job
 	'''
-	return cache_run(job,*args,check_only=True,**kw)
+	return cache_run(job,*args, check_only=True,**kw)
 def cache_check_changed(job, *args,  check_changed=1,**kw):
 	return cache_run(   job,  *args, check_changed=check_changed,**kw)
 
 def cache_run_verbose(job,*args, verbose=1, **kw):
 	return cache_run(job,*args,verbose=verbose,**kw)
 
-def mock_run(job, *args,force=1, mock = 1,**kw):
-	return cache_run(job,*args,force=force, mock=mock,**kw)
+def mock_run(job, *args, mock = 1,**kw):
+	return cache_run(job,*args, mock=mock,**kw)
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
 
@@ -388,161 +406,237 @@ def cache_run(job, *args,
 	check_only=False, check_changed=False, force=False,verbose=0):
 	dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout
 	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose)
-from functools import partial
+
 def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose):
-	'''
-	return: job_result
-		Check whether a valid cache exists for a job receipe.
-		Load cache as result if so, otherwise recalculate the job.
+	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args)
 
-	##### we want to avoid re-calculating the output if they already exist and is intact
-	##### this is done by storing an identity information on disk 
-	##### this identity information is calculated from the outputted files
-	##### which could be md5sum or timestamp		
-	'''
-	func_name = get_func_name()
-	prefix = args[0]
-	runner = partial(
-		cache_run, 
-		dir_layout=dir_layout, 
-		mock=mock, 
-		check_only=check_only,
-		check_changed=check_changed,
-		force=force,
-		verbose=verbose)
 
-	###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
-	###### the prefix is ignored in to_ident() because it would point to a different ident_file
-	#####  Caller.from_input() would also cast types for inputs
-	_input = args
-	_caller = Caller.from_input(job, _input, dir_layout)
-	_input  = [_caller.to_ident()]	
-	# print(_dump()) if verbose>=2 else None
-	print(repr(_caller)) if verbose >= 3 else None
+class _Runner(object):
+	def __init__(self, dir_layout,  mock, check_only,check_changed,force,verbose ):
+		self.dir_layout = dir_layout
+		self.mock = mock
+		self.check_only = check_only
+		self.check_changed = check_changed
+		self.force = force
+		self.verbose = verbose
+	def before_run(self, job, args):
+		pass
+	def after_run(self, job, args):
+		pass
+	def __call__(self, job, *args):
+		return self.run(job,*args)
 
-	input_ident_file =  IdentFile( dir_layout, prefix, job.__name__, 'input_json' )
-	output_ident_file=  IdentFile( dir_layout, prefix, job.__name__, 'output_json' )
-	output_cache_file=  _caller.output_cache_file
-	File(input_ident_file).dirname().makedirs_p()
+	def run(self, job, *args):
+		before = self.before_run(job,args)
+		result = self._run(job,args)
+		after  = self.after_run(job,args)
+		return result
 
-	#### calculate output files
-	### cast all files all as prefix
-	### here we add cache_file as a constitutive output.
-	_output = _caller.get_output_files()
-	# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
-	# print('[out1]',_output)
+	def _run(self, job, args):
+		'''
+		return: job_result
+			Check whether a valid cache exists for a job receipe.
+			Load cache as result if so, otherwise recalculate the job.
 
-	input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file, 'ident')
-	output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file,'ident')		
-	use_cache = not input_ident_changed and not output_ident_changed
-	if check_only:
-		return use_cache
-	if check_changed:
-		if check_changed >=2:
-			input_ident = get_identity(_input)
-			input_ident_old = _loads(json.load(open(input_ident_file,'r'))['ident'])
-			output_ident = get_identity(_output)
-			output_ident_old = _loads(json.load(open(output_ident_file,'r'))['ident'])
-			import pdb; pdb.set_trace();
-		return (input_ident_changed, output_ident_changed)
+		##### we want to avoid re-calculating the output if they already exist and is intact
+		##### this is done by storing an identity information on disk 
+		##### this identity information is calculated from the outputted files
+		##### which could be md5sum or timestamp		
+		'''
+		dir_layout      = self.dir_layout
+		mock            = self.mock
+		check_only      = self.check_only
+		check_changed   = self.check_changed
+		force           = self.force
+		verbose         = self.verbose
+		runner          = self.run
 
-	if verbose:
-		print('[{func_name}]'.format(**locals()),
-			json.dumps(_dict([
-			('job_name',job.__name__),
-			('input_ident_changed', int(input_ident_changed)),
-			('output_ident_chanegd',int(output_ident_changed))])
-				,separators='_=')
-			# .replace('"','')
-			)
-		if verbose >= 2:
-			import pdb; pdb.set_trace()
+		func_name = get_func_name()
+		prefix = args[0]
+		# if isinstance(prefix,(tuple,list)):
+		# 	import pdb;pdb.set_trace()
+		# print('[perfi]')
+		# pass
 
-	if check_only:
-		return bool(use_cache)		
 
-	if force:
-		use_cache = False
-	if mock:
-		use_cache = False
+		###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
+		###### the prefix is ignored in to_ident() because it would point to a different ident_file
+		#####  Caller.from_input() would also cast types for inputs
+		_input = args
+		_caller = Caller.from_input(job, _input, dir_layout)
+		_input  = [_caller.to_ident()]	
+		print(repr(_caller)) if verbose >= 3 else None
 
-	if (_caller.output_cache_file+'.mock').isfile():
-		use_cache = False
+		input_ident_file =  IdentFile( dir_layout, prefix, job.__name__, 'input_json' )
+		output_ident_file=  IdentFile( dir_layout, prefix, job.__name__, 'output_json' )
+		output_cache_file=  _caller.output_cache_file
+		File(input_ident_file).dirname().makedirs_p()
+		_caller.output_cache_file.dirname().makedirs_p()
 
-	if use_cache:
-		result = _caller.load_cache()
 
-	else:
-		# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
-		# 	mock = 0
-		if mock:
-			for k,v in _caller.output.items():
-				for f in v.expanded():
-					if f.isfile():
-						raise singular_pipe._types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
-					# assert not f.isfile(),('mock_run() must be done with file uninitialised: %r' % v)
-				vs = (v+'.mock')
-				vs.touch()  if not vs.isfile() else None
-			# result = _caller
-			if issubclass(_caller.job_type, singular_pipe._types.NodeFunction):
-				result = _caller
-			else:
-				### recurse if not a Terminal Node
-				result = _caller(runner)
+		if issubclass(_caller.job_type,(singular_pipe._types.FlowFunction)):
+			_ = '''
+			output can only be derived after node evaluation
+			'''
+			# result = _caller(mock_run)
+			# _output = AttrDict([(k,v.output) for k,v in self.sub_caller_dict]) 
+			# _output = _output.update(_caller.output)
+			_output = _caller.get_output_files()
+
+		elif issubclass(_caller.job_type,(singular_pipe._types.NodeFunction)):
+			_ = '''
+			output can be derived before evaluation
+			'''
+			pass
+
+			#### calculate output files
+			### cast all files all as prefix
+			### here we add cache_file as a constitutive output.
+			_output = _caller.get_output_files()
+
+		# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
+		# print('[out1]',_output)
+
+		input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file, 'ident')
+		if _caller.is_mock():
+			output_ident_changed = (_caller.output_cache_file+'.output_changed.mock').isfile()
 		else:
-			for k,v in _caller.output.items():
-				vs = (v+'.mock')
-				vs.unlink() if vs.isfile() else None				
-			result = _caller(runner)
+			output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file,'ident')
+		use_cache = not input_ident_changed and not output_ident_changed
+		if check_only:
+			return use_cache
+		if check_changed:
+			if check_changed >=2:
+				input_ident = get_identity(_input)
+				# input_ident_old = _loads(json.load(open(input_ident_file,'r'))['ident'])
+				output_ident = get_identity(_output)
+				# output_ident_old = _loads(json.load(open(output_ident_file,'r'))['ident'])
+				import pdb; pdb.set_trace();
+			return (input_ident_changed, output_ident_changed)
 
-		for k,v in _caller.output.items():
-			func = getattr( v,'callback_output',lambda *x:None)
-			func(_caller,k)
-			# method(_caller)
-			# if hasattr(x,'callback_output'):
-			# 	x.output_callback(_caller)				
-		# ident_dump( result, output_cache_file, )
-		_input_ident  = get_identity( _input)
-		_output_ident = get_identity(_output)
+		if verbose:
+			print('[{func_name}]'.format(**locals()),
+				json.dumps(_dict([
+				('job_name',job.__name__),
+				('use_cache',use_cache),
+				('input_ident_changed', int(input_ident_changed)),
+				('output_ident_chanegd',int(output_ident_changed))])
+					,separators='_=')
+				# .replace('"','')
+				)
+			if verbose >= 2:
+				import pdb; pdb.set_trace()
 
-		p = MyPickleSession()
-		ident_dump( [
-			('comment',[[repr(x) for x in _output],_output_ident]),
-			('modules',     p.pop_modules_list(   lambda:  p.dumps_sniff_b64(_output))),
-			('output_dump', p.pop_buffer()),
-			('ident',       p.dumps_b64(_output_ident)),
-			], 
-			output_ident_file,
-			)
-			 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
-		input_image = [
-				('comment',      _caller.to_dict()),
-				('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
-				('caller_dump',  p.pop_buffer()),
-				('ident',        p.dumps_b64(_input_ident)),
+		if check_only:
+			return bool(use_cache)		
 
-			]
-		ident_dump( input_image, input_ident_file)
-		# ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
+		if force:
+			use_cache = False
+		# if mock:
+		# 	use_cache = False
 
-		#### add edge_file to inputs 
-		### add input and output ident to outward_pk
-		# outward_dir_list = get_outward_json_list( _input, config)
-		
-		outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
-		_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
-		for outward_dir in outward_dir_list:
-			outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%(job.__name__, _input_ident_hash)
-			ident_dump( input_image, outward_edge_file)			
+		#### if any of the output file is mock, then do not use cache
+		#### if input and output are not changed, then mocking is skipped.
+		# if (_caller.output_cache_file+'.mock').isfile():
+		# 	use_cache = False
+		# print((job.__name__,use_cache))
+		if use_cache:
+			result = _caller.load_cache()
 
-		#### remove edge_file of outputs
-		outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)
-		for outward_dir in outward_dir_list:
-			shutil.move(outward_dir.makedirs_p() , (outward_dir+'_old').rmtree_p())
-			outward_dir = outward_dir.makedirs_p() 
+		else:
+			# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
+			# 	mock = 0
+			if mock:
+				_ = '''
+				The current file will be replaced with a mock file to propagate the signal downwards
 
+				'''
 
-	return result
+				if issubclass(_caller.job_type, singular_pipe._types.NodeFunction):
+					for k,v in _caller.output.items():
+						f = v
+					# for f in v.expanded():
+						if f.isfile():
+							if not (f+'.old.mock').isfile():
+								f.move(f+'.old.mock')
+								f.touch()
+						else:
+							(f+'.empty.mock').touch()
+							f.touch()
+						print('[CREATING.mock]%s'%f) if verbose >=4 else None
+					if output_ident_changed:
+						(_caller.output_cache_file+'.output_changed.mock').touch()
+					result = _caller
+				else:
+					### recurse if not a Terminal Node
+					result = _caller(runner)
+			else:
+				#### unmock
+				#### restore mocked file if available
+				for k,v in _caller.output.items():
+					if (v+'.old.mock').isfile():
+						(v+'.old.mock').move(v.unlink())
+						print('[REMOVING.mock]%s.old.mock'%v) if verbose >=4 else None
+
+					if (v+'.empty.mock').isfile():
+						(v+'.empty.mock').unlink()
+						v.unlink()
+						print('[REMOVING.mock]%s.empty.mock'%v) if verbose >= 4 else None
+					else:
+						print('[SPARING.mock]%s'%v) if verbose >= 4 else None
+				(_caller.output_cache_file+'.output_changed.mock').unlink_p()
+				assert not _caller.is_mock(lambda x:print(x))
+	
+				result = _caller(runner)
+
+				for k,v in _caller.output.items():
+					func = getattr( v,'callback_output',lambda *x:None)
+					func(_caller,k)
+					# method(_caller)
+					# if hasattr(x,'callback_output'):
+					# 	x.output_callback(_caller)				
+				# ident_dump( result, output_cache_file, )
+				_input_ident  = get_identity( _input)
+				_output_ident = get_identity(_output)
+
+				p = MyPickleSession()
+				ident_dump( [
+					('comment',[[repr(x) for x in _output],_output_ident]),
+					('modules',     p.pop_modules_list(   lambda:  p.dumps_sniff_b64(_output))),
+					('output_dump', p.pop_buffer()),
+					('ident',       p.dumps_b64(_output_ident)),
+					], 
+					output_ident_file,
+					)
+					 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
+				input_image = [
+						('comment',      _caller.to_dict()),
+						('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
+						('caller_dump',  p.pop_buffer()),
+						('ident',        p.dumps_b64(_input_ident)),
+
+					]
+				ident_dump( input_image, input_ident_file)
+				# ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
+
+				#### add edge_file to inputs 
+				### add input and output ident to outward_pk
+				# outward_dir_list = get_outward_json_list( _input, config)
+				
+				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
+				_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
+				for outward_dir in outward_dir_list:
+					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%(job.__name__, _input_ident_hash)
+					ident_dump( input_image, outward_edge_file)			
+
+				#### remove edge_file of outputs
+				outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)
+				for outward_dir in outward_dir_list:
+					shutil.move(outward_dir.makedirs_p() , (outward_dir+'_old').rmtree_p())
+					outward_dir = outward_dir.makedirs_p() 
+
+		return result
+
 
 
 def file_not_empty(fpath):  

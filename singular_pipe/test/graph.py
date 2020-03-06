@@ -134,19 +134,19 @@ class Case(unittest2.TestCase, SharedObject):
 		# print(res2)
 		# import pdb;pdb.set_trace()
 		# print(_tree_as_string(res))
-	def test_mock_overwrite(self):
-		prefix = None
-		if prefix is None:
-			prefix = Path('/tmp/singular_pipe.symbolic/root')
+	# def test_mock_overwrite(self):
+	# 	prefix = None
+	# 	if prefix is None:
+	# 		prefix = Path('/tmp/singular_pipe.symbolic/root')
 			
-		prefix.dirname().rmtree_p()	
-		_d = singular_pipe.rcParams.copy()
-		singular_pipe.rcParams['dir_layout'] = 'clean'
-		tarball_main( mock_run , prefix)
-		tarball_main( mock_run , prefix)
-		(prefix.dirname()/'root.tarball_dangerous_cache.tar_gz').touch()
-		self.assertRaises(singular_pipe._types.OverwriteError, tarball_main, mock_run, prefix)
-		singular_pipe.rcParams.update(_d)
+	# 	prefix.dirname().rmtree_p()	
+	# 	_d = singular_pipe.rcParams.copy()
+	# 	singular_pipe.rcParams['dir_layout'] = 'clean'
+	# 	tarball_main( mock_run , prefix)
+	# 	tarball_main( mock_run , prefix)
+	# 	(prefix.dirname()/'root.tarball_dangerous_cache.tar_gz').touch()
+	# 	self.assertRaises(singular_pipe._types.OverwriteError, tarball_main, mock_run, prefix)
+	# 	singular_pipe.rcParams.update(_d)
 
 	# print
 
