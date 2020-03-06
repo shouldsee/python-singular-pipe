@@ -20,7 +20,7 @@ class SharedObject(object):
 	DATA_DIR = Path(singular_pipe.__path__[0]).realpath().dirname()/'tests/data'
 	# DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'
 
-from singular_pipe.runner import job_from_func, get_output_files, list_flatten
+from singular_pipe.runner import job_from_func,  list_flatten
 from singular_pipe.runner import cache_run_verbose,cache_check,force_run
 from singular_pipe._types import Default,Prefix, InputFile,File
 import singular_pipe._types
@@ -67,8 +67,8 @@ def simple_job(self,prefix,
 	digitFile=InputFile, 
 	_output=[File('out_txt')]):
 	[x for x in range(10)]
-	_out = get_output_files(self, prefix, _output)
-	with open( _out.out_txt, 'w') as f:
+	# _out = get_output_files(self, prefix, _output)
+	with open( self.output.out_txt, 'w') as f:
 		print(s*10)
 		f.write(s*10)
 	return self
@@ -210,8 +210,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		@job_from_func
 		def simple_job(self = Default, prefix= File, s=str,  digitFile=InputFile, 
 			_output=[File('out_txt')]):
-			_out = get_output_files(self, prefix, _output)
-			with open( _out.out_txt, 'w') as f:
+			with open(  self.output.out_txt, 'w') as f:
 				print(s*10)
 				f.write(s*10)
 

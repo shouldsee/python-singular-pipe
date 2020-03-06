@@ -30,7 +30,9 @@ import json
 from itertools import zip_longest
 from collections import namedtuple
 import collections
-_dict = collections.OrderedDict
+from functools import partial
+from orderedattrdict import AttrDict as _dict
+# _dict = collections.OrderedDict
 
 def _dumps(obj):
 	return MyPickleSession().dumps_b64(obj)
@@ -118,30 +120,47 @@ class FakeJob(object):
 
 		# self.__code__  = 
 		return 
+class SubflowOutput(object):
+	def __str__(self):
+		return self.key
 
-def get_output_files( self, prefix, _output_typed_fields):
-	'''
-	Assuming all output_files are Prefix because types arent checked
-	'''
-	tups = []
-	for s in _output_typed_fields:
-		# print('[get-output]',s,type(s))
-		# import pdb; pdb.set_trace();
-		if not isinstance(s,(Prefix,File)):
-			### Assuming type is File  if unspecified
-			assert isinstance(s,str),(type(s),s)
-			typ = File
-		else:
-			typ = type(s)
-		s = "{prefix}.{self.__name__}.{suffix}".format(suffix = s, **locals())
-		s = typ(str(s))
-		assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
-		tups.append(s)
-	tups = self._output_type(*tups)
-	return tups		
+	def __init__(self, key, name=None):
+		raise NotImplementedError
+		# assert 'SubflowOutput' i
+		if name is None:
+			name = key
+		self.name = name
+		self.key  = key
+
+	pass
+
+def is_mock_file(v, call=None,):
+	if (v+'.old.mock').isfile():
+		call(v,v+'.old.mock') if call is not None else None
+		return 1
+	if (v+'.empty.mock').isfile():
+		call(v,v+'.empty.mock') if call is not None else None
+		return 1
+	return 0
 
 
+def get_changed_files(caller):
+	lst = []
+	for f in caller.output.values():
+		if is_mock_file(f,):
+			lst.append(f)
+	for flow in caller.subflow.values():
+		lst.append( get_changed_files(flow))
+	return lst				
+		
 class Caller(object):
+	def get_changed_files(self,flat=1):
+		res = get_changed_files(self)
+		if flat:
+			res = list_flatten(res)
+		return res
+	def is_mock_file(self,v,call):
+		return is_mock_file(v,call)
 	# def 
 	# runner = None
 	@property
@@ -154,7 +173,45 @@ class Caller(object):
 		return IdentFile( self.dir_layout, self.prefix, self.job.__name__, 'cache_pk')
 	@property
 	def output(self):
-		return self._output_dict
+		_caller  = self
+		# if issubclass(_caller.job_type,(singular_pipe._types.FlowFunction)):
+		if 0:
+			_ = '''
+			output can only be derived after a mock evaluation
+			'''
+			# old_mock = self.mock
+			# self.mock = 1
+			# mock_run
+			# _caller( runner )
+			_caller( mock_run )
+			_output = AttrDict([(k,v.output) for k,v in _caller.subflow.items()])
+			_output.update(_caller._output_dict)
+			_caller.subflow.clear()
+
+			# self.mock = -1
+			# _caller(runner)
+			_caller(unmock_run)
+			_caller.subflow.clear()
+
+			# self.mock = old_mock
+			# _output = list(_output.items())
+			# _output =  list(_output.items())
+			# _output['_output'] = _caller.get_output_files()
+			# _output += _caller.get_output_files()
+			return _output
+		# elif issubclass(_caller.job_type,(singular_pipe._types.NodeFunction)):
+		elif 1:
+			_ = '''
+			output can be derived before evaluation
+			'''
+			pass
+
+			#### calculate output files
+			### cast all files all as prefix
+			### here we add cache_file as a constitutive output.		
+			return self._output_dict
+		else:
+			assert 0
 		# return get_output_files( self.job, self.prefix, self._output_type._typed_fields)
 
 	@property
@@ -174,23 +231,29 @@ class Caller(object):
 		return self._arg_values
 	@property
 	def dotname(self):
-		return "%s.%s"%(inspect.getmodule(self.f).__name__, self.f.__qualname__)
+		return "%s.%s"%( (inspect.getmodule(self.f) or object()).__name__, self.f.__qualname__)
+	@property
+	def subflow(self):
+		return self._subflow
+	
+	def get_subflow(self,k):
+		return self.subflow[k]
+	def get_output(self,k):
+		return self.output[k]
 
 	def get_output_files( self ):
-		return list(self._output_dict.values())
-		res = self.output
-		# res += (CacheFile(self.output_cache_file),)
-		return list(res.values())
-	def is_mock(self,call=lambda x:None):
+		return list(self.output.values())
+		# res = self.output
+		# # res += (CacheFile(self.output_cache_file),)
+		# return list(res.values())
+	# @staticmethod
+
+
+	def is_mock(self,call=lambda *x:None,fast=1):
 		mock = 0
 		for k,v in self.output.items():
-			if (v+'.old.mock').isfile():
-				mock = 1
-				call(v+'.old.mock')
-				break
-			if (v+'.empty.mock').isfile():
-				mock = 1
-				call(v+'.empty.mock')
+			mock = self.is_mock_file(v,call)
+			if mock: 
 				break
 		return mock
 	@classmethod
@@ -218,7 +281,8 @@ class Caller(object):
 		# assert isinstance(_tmp[0]
 		_caller = Caller( job, _tmp[:], dir_layout)
 		return _caller
-
+	def __getitem__(self,k):
+		return getattr(self,k)
 	def __getstate__(self):
 		d = self.__dict__.copy()
 		job = self.job
@@ -235,12 +299,13 @@ class Caller(object):
 		# 	job = job_from_func(job)		
 		if not hasattr(job,'_type',):
 			job = singular_pipe._types.Node(job)
-		self.job = job
-		self.__name__ = job.__name__
+		self.job          = job
+		self.__name__     = job.__name__
 		self._output_type = job._output_type
-		self._job_type = self.job._type
-		self.arg_tuples = arg_tuples
-		self.dir_layout = dir_layout
+		self._job_type    = self.job._type
+		self.arg_tuples   = arg_tuples
+		self.dir_layout   = dir_layout
+		self._subflow     = _dict()
 
 		assert isinstance(arg_tuples[0][1], File),(arg_tuples[0])
 		# arg_tuples[0] = ('prefix', (arg_tuples[0][1]).expand().realpath())
@@ -250,13 +315,48 @@ class Caller(object):
 
 		### create output directory
 		self.prefix_named.dirname().makedirs() if not self.prefix_named.dirname().isdir() else None
-		self._output_dict = get_output_files( self.job, self.prefix, self._output_type._typed_fields)
+
+		### initialise FlowFunciton._output_dict differently by mock_do and mock_undo
+		self._output_dict = self._get_output_files( self.prefix, self._output_type._typed_fields)
 		self._output_dict['_cache_file'] = CacheFile(self.output_cache_file)
 		for k in self._output_dict:
 			self._output_dict[k] = self._output_dict[k].expand().realpath() 
 		self.runner = None
 
 
+	def _get_output_files( self, prefix, _output_typed_fields):
+		'''
+		Assuming all output_files are Prefix because types arent checked
+		'''
+		tups = []
+		for s in _output_typed_fields:
+			# print('[get-output]',s,type(s))
+			# import pdb; pdb.set_trace();
+			if isinstance(s, SubflowOutput):
+				pass
+				# if not self.subflow:
+				# 	self( partial(mock_run,last_caller=self) )
+
+				tups.append(self.get_subflow(s.name).output)
+			else:
+				if not isinstance(s,(Prefix,File,SubflowOutput)):
+					### Assuming type is File  if unspecified
+					assert isinstance(s,str),(type(s),s)
+					typ = File
+				else:
+					typ = type(s)
+
+				s = "{prefix}.{self.__name__}.{suffix}".format(suffix = s, **locals())
+				s = typ(str(s))
+				assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
+				tups.append(s)
+
+		tups = self._output_type(*tups)
+		# if self.subflow:
+		# 	self._subflow.clear()
+		# 	self( partial(mock_run,last_caller=self,mock=-1) )
+			# self(mock_undo)	
+		return tups		
 	def to_ident(self):
 		'''
 		
@@ -327,8 +427,11 @@ class Caller(object):
 			result = MyPickleSession().load(f)
 		return result 
 
-	def __call__(self, runner):
+	def __call__(self, runner, ):
+		if not isinstance(runner,partial):
+			runner = partial(runner)
 		self.runner = runner
+		# self.runner = partial( runner, last_caller=last_caller)
 		if issubclass(self.job_type, NodeFunction):
 			self._cached = False
 			self._allow_cache = 1
@@ -347,6 +450,45 @@ class Caller(object):
 			self.runner = None
 			return returned
 
+
+	def mock_undo(self,strict,verbose):
+		_caller = self
+		# print(self)
+		# verbose = 4
+		for k,v in _caller.output.items():
+			if (v+'.old.mock').isfile():
+				(v+'.old.mock').move(v.unlink())
+				print('[REMOVING.mock]%s.old.mock'%v) if verbose >=4 else None
+
+			if (v+'.empty.mock').isfile():
+				(v+'.empty.mock').unlink()
+				v.unlink()
+				print('[REMOVING.mock]%s.empty.mock'%v) if verbose >= 4 else None
+			else:
+				print('[SPARING.mock]%s'%v) if verbose >= 4 else None
+		(_caller.output_cache_file+'.output_changed.mock').unlink_p()
+		if strict:
+			assert not _caller.is_mock(lambda *x:print(x) if verbose >=5 else None)		
+	def mock_do(self, output_ident_changed, strict,verbose):
+		_caller = self
+		# print(self)
+		# verbose = 4
+		for k,v in _caller.output.items():
+			f = v
+		# for f in v.expanded():
+			if f.isfile():
+				if not (f+'.old.mock').isfile():
+					f.move(f+'.old.mock')
+					f.touch()
+			else:
+				(f+'.empty.mock').touch()
+				f.touch()
+			print('[CREATING.mock]%s'%f) if verbose >=4 else None
+		if output_ident_changed:
+			(_caller.output_cache_file+'.output_changed.mock').touch()	
+		if strict:
+			assert _caller.is_mock(lambda *x:print(x) if verbose >=5  else None)		
+				
 	def to_table_node_label(self):
 		# node = self
 		s = '''
@@ -397,18 +539,22 @@ def cache_run_verbose(job,*args, verbose=1, **kw):
 
 def mock_run(job, *args, mock = 1,**kw):
 	return cache_run(job,*args, mock=mock,**kw)
+
+def unmock_run(job, *args, mock = -1,**kw):
+	return cache_run(job,*args, mock=mock,**kw)
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
 
 def cache_run(job, *args,
 	dir_layout = None,
 	mock = False,
-	check_only=False, check_changed=False, force=False,verbose=0):
+	check_only=False, check_changed=False, force=False,verbose=0,
+	last_caller = None):
 	dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout
-	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose)
+	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose,last_caller)
 
-def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose):
-	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args)
+def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller):
+	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args,last_caller=last_caller)
 
 
 class _Runner(object):
@@ -423,16 +569,14 @@ class _Runner(object):
 		pass
 	def after_run(self, job, args):
 		pass
-	def __call__(self, job, *args):
-		return self.run(job,*args)
+	def __call__(self, job, *args, last_caller = None):
+		return self.run(job,*args, last_caller=last_caller)
 
-	def run(self, job, *args):
-		before = self.before_run(job,args)
-		result = self._run(job,args)
-		after  = self.after_run(job,args)
+	def run(self, job, *args, last_caller = None):
+		result = self._run(job, args, last_caller)
 		return result
 
-	def _run(self, job, args):
+	def _run(self, job, args, last_caller):
 		'''
 		return: job_result
 			Check whether a valid cache exists for a job receipe.
@@ -449,21 +593,26 @@ class _Runner(object):
 		check_changed   = self.check_changed
 		force           = self.force
 		verbose         = self.verbose
-		runner          = self.run
-
-		func_name = get_func_name()
-		prefix = args[0]
-		# if isinstance(prefix,(tuple,list)):
-		# 	import pdb;pdb.set_trace()
-		# print('[perfi]')
-		# pass
-
-
 		###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
 		###### the prefix is ignored in to_ident() because it would point to a different ident_file
 		#####  Caller.from_input() would also cast types for inputs
-		_input = args
-		_caller = Caller.from_input(job, _input, dir_layout)
+		_input          = args
+		_caller         = Caller.from_input(job, _input, dir_layout)
+		# runner          = partial(self.run, last_caller=_caller)
+		runner          = partial(self, last_caller=_caller)
+		print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
+		func_name       = get_func_name()
+		prefix          = args[0]
+		_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
+		as argument to self.run
+		'''
+		if last_caller is not None:
+			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%(_caller.__name__, last_caller)
+			last_caller._subflow[_caller.__name__] = _caller
+		# def runner(job,*args,last_caller=_caller):
+		# 	print("%r\n%r"%(job,last_caller))
+		# 	return self.run(job,*args, last_caller=last_caller)
+
 		_input  = [_caller.to_ident()]	
 		print(repr(_caller)) if verbose >= 3 else None
 
@@ -474,25 +623,9 @@ class _Runner(object):
 		_caller.output_cache_file.dirname().makedirs_p()
 
 
-		if issubclass(_caller.job_type,(singular_pipe._types.FlowFunction)):
-			_ = '''
-			output can only be derived after node evaluation
-			'''
-			# result = _caller(mock_run)
-			# _output = AttrDict([(k,v.output) for k,v in self.sub_caller_dict]) 
-			# _output = _output.update(_caller.output)
-			_output = _caller.get_output_files()
 
-		elif issubclass(_caller.job_type,(singular_pipe._types.NodeFunction)):
-			_ = '''
-			output can be derived before evaluation
-			'''
-			pass
 
-			#### calculate output files
-			### cast all files all as prefix
-			### here we add cache_file as a constitutive output.
-			_output = _caller.get_output_files()
+		_output = _caller.get_output_files()
 
 		# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
 		# print('[out1]',_output)
@@ -546,48 +679,27 @@ class _Runner(object):
 		else:
 			# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
 			# 	mock = 0
-			if mock:
+			if mock == 1:
 				_ = '''
 				The current file will be replaced with a mock file to propagate the signal downwards
 
 				'''
 
+				_caller.mock_do(output_ident_changed, 1, verbose)
 				if issubclass(_caller.job_type, singular_pipe._types.NodeFunction):
-					for k,v in _caller.output.items():
-						f = v
-					# for f in v.expanded():
-						if f.isfile():
-							if not (f+'.old.mock').isfile():
-								f.move(f+'.old.mock')
-								f.touch()
-						else:
-							(f+'.empty.mock').touch()
-							f.touch()
-						print('[CREATING.mock]%s'%f) if verbose >=4 else None
-					if output_ident_changed:
-						(_caller.output_cache_file+'.output_changed.mock').touch()
 					result = _caller
 				else:
 					### recurse if not a Terminal Node
-					result = _caller(runner)
-			else:
+					result = _caller(runner, )
+			elif mock == -1:
 				#### unmock
 				#### restore mocked file if available
-				for k,v in _caller.output.items():
-					if (v+'.old.mock').isfile():
-						(v+'.old.mock').move(v.unlink())
-						print('[REMOVING.mock]%s.old.mock'%v) if verbose >=4 else None
+				_caller.mock_undo(1, verbose)
+				result = _caller
 
-					if (v+'.empty.mock').isfile():
-						(v+'.empty.mock').unlink()
-						v.unlink()
-						print('[REMOVING.mock]%s.empty.mock'%v) if verbose >= 4 else None
-					else:
-						print('[SPARING.mock]%s'%v) if verbose >= 4 else None
-				(_caller.output_cache_file+'.output_changed.mock').unlink_p()
-				assert not _caller.is_mock(lambda x:print(x))
-	
-				result = _caller(runner)
+			elif mock == 0:
+				_caller.mock_undo(1, verbose)
+				result = _caller(runner, )
 
 				for k,v in _caller.output.items():
 					func = getattr( v,'callback_output',lambda *x:None)
@@ -634,8 +746,10 @@ class _Runner(object):
 				for outward_dir in outward_dir_list:
 					shutil.move(outward_dir.makedirs_p() , (outward_dir+'_old').rmtree_p())
 					outward_dir = outward_dir.makedirs_p() 
-
+			else:
+				assert 0, 'Mock value not understood mock=%r'%mock
 		return result
+		# return _caller, result
 
 
 

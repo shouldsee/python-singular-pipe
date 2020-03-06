@@ -80,7 +80,7 @@ def list_flatten(lst, strict=0, out=None, ):
 	_this = list_flatten
 	if out is None:
 		out = []
-	assert isinstance(lst, (tuple, list)),(type(lst), lst)
+	assert isinstance(lst, (tuple, list, dict)),(type(lst), lst)
 	for v in lst:
 		if 0:
 			pass
