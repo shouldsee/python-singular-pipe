@@ -144,18 +144,19 @@ def is_mock_file(v, call=None,):
 	return 0
 
 
-def get_changed_files(caller):
+def _get_changed_files(caller):
 	lst = []
 	for f in caller.output.values():
 		if is_mock_file(f,):
 			lst.append(f)
 	for flow in caller.subflow.values():
-		lst.append( get_changed_files(flow))
+		lst.append( _get_changed_files(flow))
 	return lst				
+
 		
 class Caller(object):
 	def get_changed_files(self,flat=1):
-		res = get_changed_files(self)
+		res = _get_changed_files(self)
 		if flat:
 			res = list_flatten(res)
 		return res
@@ -537,11 +538,17 @@ def cache_check_changed(job, *args,  check_changed=1,**kw):
 def cache_run_verbose(job,*args, verbose=1, **kw):
 	return cache_run(job,*args,verbose=verbose,**kw)
 
-def mock_run(job, *args, mock = 1,**kw):
+def mock_run(job, *args, mock = 1, **kw):
 	return cache_run(job,*args, mock=mock,**kw)
 
-def unmock_run(job, *args, mock = -1,**kw):
+def mock_undo(job, *args, mock = -1, **kw):
 	return cache_run(job,*args, mock=mock,**kw)
+
+def get_changed_files(job, *args, flat=1, **kw):
+	res = mock_run(job,*args,**kw).get_changed_files(flat)
+	mock_undo(job,*args,**kw)
+	return res
+
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
 

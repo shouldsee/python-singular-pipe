@@ -59,7 +59,7 @@ def workflow(self, prefix, seed =int , L=int, _output = [
 	return self
 
 import json
-from singular_pipe.runner import cache_run,force_run,is_mock_file
+from singular_pipe.runner import cache_run,force_run,is_mock_file,get_changed_files
 from singular_pipe.shell import LoggedShellCommand
 from singular_pipe.types import File,CacheFile
 def main(
@@ -68,12 +68,8 @@ def main(
 		prefix = Path('/tmp/singular_pipe.symbolic/root')
 		prefix.dirname().rmtree_p()
 	print('\n...[start]%r'%prefix)
-	# print(workflow.output)
-	res = mock_run( workflow, prefix, 1, 100,verbose=1)
 	from pprint import pprint
-	pprint(res.get_changed_files())
-
-	fs = res.get_changed_files()
+	fs = get_changed_files(workflow, prefix, 1, 100, verbose=1)
 	exp = [
 	  File('/tmp/singular_pipe.symbolic/root.workflow.log'),
 	  CacheFile('/tmp/singular_pipe.symbolic/_singular_pipe/root.workflow.cache_pk'),
@@ -88,16 +84,13 @@ def main(
 	res = cache_run( workflow, prefix, 1, 100,verbose=1)
 
 	File('/tmp/singular_pipe.symbolic/root.workflow.log').touch()
-	res = mock_run( workflow, prefix, 1, 100,verbose=1)
-	fs = (res.get_changed_files())
+	fs = get_changed_files(workflow,prefix, 1 ,100 ,verbose=1)
 	assert fs == [
 	  File('/tmp/singular_pipe.symbolic/root.workflow.log'),
  	  CacheFile('/tmp/singular_pipe.symbolic/_singular_pipe/root.workflow.cache_pk')
  	]
-
-
-	res = mock_run( workflow, prefix, 2, 100,verbose=1)
-	fs = (res.get_changed_files())
+ 	
+	fs = get_changed_files(workflow,prefix, 2 ,100 ,verbose=1)
 	assert fs == exp
 
 	print('\n...[Done]')
