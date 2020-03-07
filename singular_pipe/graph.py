@@ -55,16 +55,18 @@ def plot_node_graph(lst,g,last=None):
         g.node( last.prefix_named, label = last.to_table_node_label(), shape='plaintext')
     return g
 
+def plot_simple_graph_label(x):
+    x = r'\l'.join(textwrap.wrap(repr(x),width=50)) 
+    x = x.replace(':','_')
+    return x 
 def plot_simple_graph( trees, g, is_upstream,last = None):
     this = plot_simple_graph
-    def _label(x):
-        x = textwrap.fill(repr(x),width=50)
-        x = x.replace(':','_')
-        return x 
+    _label = plot_simple_graph_label
     # revi = 2*int(is_upstream) - 1
     if g is None:
         g = Digraph('G', strict=True)
         g.attr(rankdir='TB')
+
     if is_upstream:
         if not trees:
             g.edge(*(_label('SOURCE'), _label(last or 'SINK')))
@@ -267,6 +269,43 @@ if 1:
         else:
             raise UndefinedTypeRoutine("%r not defined for type:%s %r"%(this.__code__, type(obj),obj))
         return out
+if 1:
+    def tree_call(call,tree,):
+        lst = []
+        for node,edges in tree:
+            lst.append( [call(node),tree_call(call, edges)])
+        return lst
+
+    def plot_simple_graph_lr(fs,g,strict,is_upstream):
+        if is_upstream:
+            tree = get_upstream_tree( fs, strict)
+        else:
+            tree = get_downstream_tree(fs, strict)
+        if g is None:
+            g = Digraph('G', strict=True,engine='dot')
+            g.attr(rankdir='RL',)
+            g = plot_simple_graph(tree, g, is_upstream)
+        rank  = -1
+        ranks = {}
+        while True:
+            rank += 1
+            for f in fs:
+                ranks[f] = rank
+            fs = sum([get_upstream(f,0) for f in fs],[]) 
+            fs = list(set(fs))
+                # ranks[f] = max(ranks.get(f,0), rank)
+            if not fs:
+                break
+        import collections
+        nodes_by_rank = collections.defaultdict(lambda:[])
+        [nodes_by_rank[rk].append(n) for n,rk in ranks.items()]
+        for rk,ns in nodes_by_rank.items():
+            # nodes_by_rank = sorted([(rk,n) for n,rk in ranks.items()])
+            with g.subgraph(name='cluster_%d'%rk) as c:
+                c.attr(rank='same'); 
+                for f in ns: 
+                    c.node(plot_simple_graph_label(f))
+        return g
 # def _get_upstream_tree(lst):
 #     fmt = lambda x:"%s:%s"%(x.__class__.__name__,x.recordId,)
 #     d = _dict([(fmt(x), 
