@@ -1,0 +1,115 @@
+strict digraph G {
+	rankdir=TB
+	"File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_transcribe_output_fasta.backup')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_transcri
+be_output_fasta'))" -> "File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_transcribe_output_fasta.backup')"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_transcribe_output_fasta
+.cache_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_transcri
+be_output_fasta'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_transcribe_output_fasta
+.cache_pk')"
+	"File('/tmp/singular_pipe.symbolic/root.transcribe.
+fasta')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_transcri
+be_output_fasta'))"
+	"File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_mutate_output_fasta.backup')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_mutate_o
+utput_fasta'))" -> "File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_mutate_output_fasta.backup')"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_mutate_output_fasta.cac
+he_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_mutate_o
+utput_fasta'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_mutate_output_fasta.cac
+he_pk')"
+	"File('/tmp/singular_pipe.symbolic/root.mutate.fast
+a')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_mutate_o
+utput_fasta'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.mutate',prefix_named=File('/tmp/singula
+r_pipe.symbolic/root.mutate'))" -> "File('/tmp/singular_pipe.symbolic/root.mutate.fast
+a')"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.mutate.cache_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.mutate',prefix_named=File('/tmp/singula
+r_pipe.symbolic/root.mutate'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.mutate.cache_pk')"
+	"File('/tmp/singular_pipe.symbolic/root.transcribe.
+fasta')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.mutate',prefix_named=File('/tmp/singula
+r_pipe.symbolic/root.mutate'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.transcribe',prefix_named=File('/tmp/sin
+gular_pipe.symbolic/root.transcribe'))" -> "File('/tmp/singular_pipe.symbolic/root.transcribe.
+fasta')"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.transcribe.cache_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.transcribe',prefix_named=File('/tmp/sin
+gular_pipe.symbolic/root.transcribe'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.transcribe.cache_pk')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.random_se
+q.seq')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.transcribe',prefix_named=File('/tmp/sin
+gular_pipe.symbolic/root.transcribe'))"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.subflow.random_seq.output.seq.cache_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file_single_node',prefix_named=Fil
+e('/tmp/singular_pipe.symbolic/root.subflow.random
+_seq.output.seq'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.subflow.random_seq.output.seq.cache_pk')"
+	"File('/tmp/singular_pipe.symbolic/root.subflow.ran
+dom_seq.output.seq')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file_single_node',prefix_named=Fil
+e('/tmp/singular_pipe.symbolic/root.subflow.random
+_seq.output.seq'))" -> "File('/tmp/singular_pipe.symbolic/root.subflow.ran
+dom_seq.output.seq')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.random_se
+q.seq')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file_single_node',prefix_named=Fil
+e('/tmp/singular_pipe.symbolic/root.subflow.random
+_seq.output.seq'))"
+	"File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_random_seq_output_seq.backup')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_random_s
+eq_output_seq'))" -> "File('/tmp/singular_pipe.symbolic/root.copy_file_s
+ubflow_random_seq_output_seq.backup')"
+	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_random_seq_output_seq.c
+ache_pk')" -> "'SINK'"
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_random_s
+eq_output_seq'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p
+ipe/root.copy_file_subflow_random_seq_output_seq.c
+ache_pk')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.random_se
+q.seq')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.mock.copy_file',prefix_named=File('/tmp/sing
+ular_pipe.symbolic/root.copy_file_subflow_random_s
+eq_output_seq'))"
+	"'SOURCE'" -> "Prefix('/tmp/singular_pipe.symbolic/root.random_se
+q.seq')"
+}

@@ -144,13 +144,17 @@ def is_mock_file(v, call=None,):
 	return 0
 
 
-def _get_changed_files(caller):
+			
+
+def _get_changed_files(caller,):
+	return _get_all_files(caller, 1)
+def _get_all_files(caller,changed):
 	lst = []
 	for f in caller.output.values():
-		if is_mock_file(f,):
+		if not changed or is_mock_file(f):
 			lst.append(f)
 	for flow in caller.subflow.values():
-		lst.append( _get_changed_files(flow))
+		lst.append( _get_all_files(flow,changed))
 	return lst				
 
 		
@@ -160,6 +164,13 @@ class Caller(object):
 		if flat:
 			res = list_flatten(res)
 		return res
+
+	def get_all_files(self,flat=1,):
+		res = _get_all_files(self, 0)
+		if flat:
+			res = list_flatten(res)
+		return res
+
 	def is_mock_file(self,v,call):
 		return is_mock_file(v,call)
 
@@ -170,49 +181,23 @@ class Caller(object):
 	@property
 	def output_cache_file(self):
 		# return self._foo
-		return IdentFile( self.dir_layout, self.prefix, self.__name__, 'cache_pk')
+		return IdentFile( self.dir_layout, self.prefix_named, [], 'cache_pk')
 
 	@property
 	def output(self):
-		_caller  = self
+		return self._output_dict
+		# _caller  = self
 		# if issubclass(_caller.job_type,(singular_pipe._types.FlowFunction)):
-		if 0:
-			_ = '''
-			output can only be derived after a mock evaluation
-			'''
-			# old_mock = self.mock
-			# self.mock = 1
-			# mock_run
-			# _caller( runner )
-			_caller( mock_run )
-			_output = AttrDict([(k,v.output) for k,v in _caller.subflow.items()])
-			_output.update(_caller._output_dict)
-			_caller.subflow.clear()
+		_ = '''
+		output can be derived before evaluation
+		'''
+		pass
 
-			# self.mock = -1
-			# _caller(runner)
-			_caller(unmock_run)
-			_caller.subflow.clear()
+		#### calculate output files
+		### cast all files all as prefix
+		### here we add cache_file as a constitutive output.		
+		return self._output_dict
 
-			# self.mock = old_mock
-			# _output = list(_output.items())
-			# _output =  list(_output.items())
-			# _output['_output'] = _caller.get_output_files()
-			# _output += _caller.get_output_files()
-			return _output
-		# elif issubclass(_caller.job_type,(singular_pipe._types.NodeFunction)):
-		elif 1:
-			_ = '''
-			output can be derived before evaluation
-			'''
-			pass
-
-			#### calculate output files
-			### cast all files all as prefix
-			### here we add cache_file as a constitutive output.		
-			return self._output_dict
-		else:
-			assert 0
 		# return get_output_files( self.job, self.prefix, self._output_type._typed_fields)
 
 	@property
@@ -223,7 +208,10 @@ class Caller(object):
 		return (self.arg_tuples[0][1])
 	@property	
 	def prefix_named(self):
-		return self.prefix+'.%s'%self.__name__
+		if self.named:
+			return self.prefix+'.%s'%self.__name__
+		else:
+			return self.prefix
 		# '.'.join([self.prefix+]
 
 	@property
@@ -284,12 +272,14 @@ class Caller(object):
 				if not isinstance(v,t):
 					v = t(v)
 				_tmp[n] = v
+		# _tmp.setdefault('_single_file',0)
 		# for k,v in _tmp.items():
 		# 	if isinstance(v,Caller):
 		# 		self.upstream
 				# _tmp.append( (n, t(v)) )
 		# assert isinstance(_tmp[0]
-		_caller = Caller( job, list(_tmp.items()), dir_layout, tag)
+		_caller = Caller( job, _tmp, dir_layout, tag)
+		# _caller = Caller( job, list(_tmp.items()), dir_layout, tag)
 		return _caller
 	def __getitem__(self,k):
 		return getattr(self,k)
@@ -305,25 +295,38 @@ class Caller(object):
 	def __setstate__(self,d):
 		self.__dict__ = d
 
-	def __init__(self, job, arg_tuples, dir_layout, tag):
+	def __init__(self, job, arg_dict, dir_layout, tag):
 		# if not getattr(job,'_singular_pipe',False):
 		# 	job = job_from_func(job)		
+		arg_tuples = list(arg_dict.items())
+		arg_dict.setdefault('_single_file', 0)
+		self.named = arg_dict._single_file == 0
+		assert isinstance(arg_tuples[0][1], File),(arg_tuples[0])
+		# arg_tuples[0] = ('prefix', (arg_tuples[0][1]).expand().realpath())
+		for i,(k,v) in enumerate(arg_tuples):
+			if isinstance(v,(Prefix, File)):				
+				arg_tuples[i] = (k,v.expand().realpath())
 		if not hasattr(job,'_type',):
 			job = singular_pipe._types.Node(job)
+		# self.named = named = job._type.named
+		# named = True
+		if self.named:
+			if tag: assert DirtyKey(tag) == tag,(tag,DirtyKey(tag))
+			assert isinstance(tag,(type(None),str)),(type(tag),tag)
+			tag  = tag or []
+			_tag = '_'.join(list_flatten([ job.__name__, tag]))
+		else:
+			# _tag = self.prefix
+			_tag = arg_tuples[0][1]
+			# _tag = job.__name__
+		self.__name__     = _tag
 		self.job          = job
-		self.__name__     = tag
-		# self.__name__     = job.__name__
 		self._output_type = job._output_type
 		self._job_type    = self.job._type
 		self.arg_tuples   = arg_tuples
 		self.dir_layout   = dir_layout
 		self._subflow     = _dict()
 
-		assert isinstance(arg_tuples[0][1], File),(arg_tuples[0])
-		# arg_tuples[0] = ('prefix', (arg_tuples[0][1]).expand().realpath())
-		for i,(k,v) in enumerate(self.arg_tuples):
-			if isinstance(v,(Prefix, File)):				
-				arg_tuples[i] = (k,v.expand().realpath())
 
 		### create output directory
 		self.prefix_named.dirname().makedirs() if not self.prefix_named.dirname().isdir() else None
@@ -331,6 +334,8 @@ class Caller(object):
 		### initialise FlowFunciton._output_dict differently by mock_do and mock_undo
 		self._output_dict = self._get_output_files( self.prefix, self._output_type._typed_fields)
 		self._output_dict['_cache_file'] = CacheFile(self.output_cache_file)
+		if not self.named:
+			self._output_dict['prefix_file'] = File(self.prefix_named)
 		for k in self._output_dict:
 			self._output_dict[k] = self._output_dict[k].expand().realpath() 
 		self.runner = None
@@ -343,25 +348,17 @@ class Caller(object):
 		tups = []
 		for s in _output_typed_fields:
 			# print('[get-output]',s,type(s))
-			# import pdb; pdb.set_trace();
-			if isinstance(s, SubflowOutput):
-				pass
-				# if not self.subflow:
-				# 	self( partial(mock_run,last_caller=self) )
-
-				tups.append(self.get_subflow(s.name).output)
+			if not isinstance(s,(Prefix,File,)):
+				### Assuming type is File  if unspecified
+				assert isinstance(s,str),(type(s),s)
+				typ = File
 			else:
-				if not isinstance(s,(Prefix,File,SubflowOutput)):
-					### Assuming type is File  if unspecified
-					assert isinstance(s,str),(type(s),s)
-					typ = File
-				else:
-					typ = type(s)
+				typ = type(s)
 
-				s = "{prefix}.{self.__name__}.{suffix}".format(suffix = s, **locals())
-				s = typ(str(s))
-				assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
-				tups.append(s)
+			s = "{self.prefix_named}.{suffix}".format(suffix = s, **locals())
+			s = typ(str(s))
+			assert not isinstance(s, (InputFile,InputPrefix)),('Must be Ouputxxx not Input...,%r'%s)
+			tups.append(s)
 
 		tups = self._output_type(*tups)
 		return tups		
@@ -567,6 +564,14 @@ def get_changed_files(job, *args, allow=[File],flat=1, **kw):
 		res = [x for x in res if type(x) in allow]
 	return res
 
+def get_all_files(job, *args, allow=[File],flat=1, **kw):
+	res = mock_run(job,*args,**kw).get_all_files(flat)
+	mock_undo(job,*args,**kw)
+	if allow:
+		#### [FRAGILE]
+		res = [x for x in res if type(x) in allow]
+	return res	
+
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
 
@@ -618,12 +623,9 @@ class _Runner(object):
 		check_changed   = self.check_changed
 		force           = self.force
 		verbose         = self.verbose
-		if tag: assert DirtyKey(tag) == tag,(tag,DirtyKey(tag))
-		# if tag: assert re.match('[0-9a-zA-Z_]+$',tag),(tag,	) 
-		assert isinstance(tag,(type(None),str)),(type(tag),tag)
-		tag             = tag or []
-		_tag            = '_'.join(list_flatten([ job.__name__, tag]))
-		_caller         = Caller.from_input(job, args, dir_layout, _tag)
+
+
+		_caller         = Caller.from_input(job, args, dir_layout, tag)
 		###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
 		###### the prefix is ignored in to_ident() because it would point to a different ident_file
 		#####  Caller.from_input() would also cast types for inputs
@@ -632,8 +634,8 @@ class _Runner(object):
 		runner          = partial(self, last_caller=_caller)
 		config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
 		if last_caller is not None:
-			assert _tag not in last_caller._subflow,'Duplicated subflows %s in %r '%( _tag, last_caller)
-			last_caller._subflow[ _tag ] = _caller
+			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%( _caller.__name__, last_caller)
+			last_caller._subflow[ _caller.__name__ ] = _caller
 
 		print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
 		func_name       = get_func_name()
@@ -649,8 +651,8 @@ class _Runner(object):
 		print(repr(_caller)) if verbose >= 3 else None
 
 
-		input_ident_file =  IdentFile( dir_layout, prefix, _caller.__name__, 'input_json' )
-		output_ident_file=  IdentFile( dir_layout, prefix, _caller.__name__, 'output_json' )
+		input_ident_file =  IdentFile( dir_layout, _caller.prefix_named, [] , 'input_json' )
+		output_ident_file=  IdentFile( dir_layout, _caller.prefix_named, [] , 'output_json' )
 		output_cache_file=  _caller.output_cache_file
 		File(input_ident_file).dirname().makedirs_p()
 		_caller.output_cache_file.dirname().makedirs_p()
@@ -771,7 +773,7 @@ class _Runner(object):
 				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
 				_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
 				for outward_dir in outward_dir_list:
-					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%( _caller.__name__, _input_ident_hash)
+					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
 					ident_dump( input_image, outward_edge_file)			
 
 				#### remove edge_file of outputs
@@ -902,8 +904,8 @@ def file_to_node(obj, strict, dir_layout,):
 	else:
 		return (_raise(err) if strict else None)
 
-	input_ident_file =  IdentFile(dir_layout, prefix, caller_name, 'input_json' )
-	output_ident_file = IdentFile(dir_layout, prefix, caller_name, 'output_json' )
+	input_ident_file =  IdentFile(dir_layout, prefix_named, [] , 'input_json' )
+	output_ident_file = IdentFile(dir_layout, prefix_named, [] , 'output_json' )
 	lst = _loads(json.load(open(output_ident_file,'r'))['ident'])  ##[FRAGILE]
 	obj_ident = get_identity([obj])[0]
 	'''

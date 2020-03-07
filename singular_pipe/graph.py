@@ -242,7 +242,7 @@ if 1:
                 try:
                     _ = '''[TBC] fragile '''
                     x  =_loads(buf['caller_dump'])
-                    input_ident_file  = IdentFile(dir_layout, x.prefix, x.job.__name__, 'input_json')
+                    input_ident_file  = IdentFile(dir_layout, x.prefix_named, [] , 'input_json')
                     x2 = _loads(json.load(open(input_ident_file,'r'))['ident'])
                 except:
                     x2 = ''

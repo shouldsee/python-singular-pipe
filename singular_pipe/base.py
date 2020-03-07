@@ -32,9 +32,9 @@ if 1:
 		res = inspect.getargspec(func)
 		args = res.args or []
 		defaults = res.defaults or []
-		assert args[0]  == 'self',(func, args)
-		assert args[1]  == 'prefix',(func, args)
-		assert args[-1] == '_output',(func, args)
+		assert args[0]  == 'self',(func.__code__, args)
+		assert args[1]  == 'prefix',(func.__code__, args)
+		assert args[-1] == '_output',(func.__code__, args)
 		_output = defaults[-1]
 		if '_output' in _output:
 			raise ReservedKeyword( "%r is a reserved keyword in object:%r" %('_output', _output) )

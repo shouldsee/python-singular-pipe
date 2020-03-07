@@ -64,14 +64,30 @@ def Default(x):
 	'''
 	return x
 
-class NodeFunction(object):
+class _BaseFunction(object):
 	pass
+
+
+
+class NodeFunction(_BaseFunction):
+	named = 1
+	pass
+
+# class SingleFileNodeFunction(NodeFunction):
+# 	named = 0
+	
+# def SingleFileNode(func):
+# 	func._type = SingleFileNodeFunction
+# 	# UnnamedNodeFunction
+# 	return func
+
 
 def Node(func):
 	func._type = NodeFunction
 	return func
 
-class FlowFunction(object):
+class FlowFunction(_BaseFunction):
+	named = 1
 	pass
 
 def Flow(func):

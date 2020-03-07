@@ -1,62 +1,39 @@
 strict digraph G {
 	rankdir=TB
 	"'SOURCE'" -> "File('/home/user/.temp/singular-
-pipe_test_build/job2.simple_job.out_txt')"
-	"File('/home/user/.temp/singular-
-pipe_test_build/job2.simple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/job2.simple_job'))"
-	"'SOURCE'" -> "CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk')"
-	"CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/job2.simple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/job2.simple_job'))"
-	"singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/job2.simple_job'))" -> "File('/home/user/.temp/singular-
-pipe_test_build/root.simple_job.out_txt')"
-	"File('/home/user/.temp/singular-
-pipe_test_build/root.simple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/root.simple_job'))"
-	"'SOURCE'" -> "CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk')"
-	"CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/root.simple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/root.simple_job'))"
-	"singular_pipe.runner.Caller(dotname='base.simple_j
-ob',prefix_named=File('/home/user/.temp/singular-
-pipe_test_build/root.simple_job'))" -> "File('/tmp/digit.txt')"
-	"'SOURCE'" -> "File('/home/user/.temp/singular-
 pipe_test_build/job3.dimple_job.out_txt')"
 	"File('/home/user/.temp/singular-
-pipe_test_build/job3.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+pipe_test_build/job3.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job3.dimple_job'))"
 	"'SOURCE'" -> "CacheFile('/home/user/.temp/singular-pipe_test_bui
 ld/_singular_pipe/job3.dimple_job.cache_pk')"
 	"CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/job3.dimple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+ld/_singular_pipe/job3.dimple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job3.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job3.dimple_job'))" -> "File('/home/user/.temp/singular-
 pipe_test_build/job2.dimple_job.out_txt')"
 	"File('/home/user/.temp/singular-
-pipe_test_build/job2.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+pipe_test_build/job2.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job2.dimple_job'))"
 	"'SOURCE'" -> "CacheFile('/home/user/.temp/singular-pipe_test_bui
 ld/_singular_pipe/job2.dimple_job.cache_pk')"
 	"CacheFile('/home/user/.temp/singular-pipe_test_bui
-ld/_singular_pipe/job2.dimple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+ld/_singular_pipe/job2.dimple_job.cache_pk')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job2.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='graph.dimple_
-job',prefix_named=File('/home/user/.temp/singular-
+	"singular_pipe.runner.Caller(dotname='singular_pipe
+.test.graph.dimple_job',prefix_named=File('/home/u
+ser/.temp/singular-
 pipe_test_build/job2.dimple_job'))" -> "File('/tmp/digit.txt')"
 	"File('/tmp/digit.txt')" -> "'SINK'"
 }

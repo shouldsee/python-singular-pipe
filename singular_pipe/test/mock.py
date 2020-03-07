@@ -158,10 +158,20 @@ def copy_file(self, prefix, input=File, _output=['backup'] ):
 	shutil.copy2(input, self.output.backup+'.temp')
 	shutil.move(self.output.backup+'.temp', self.output.backup)
 
+import shutil
+def copy_file_single_node(self, prefix, input=File, _single_file=1, _output=[]):
+	'''
+	#### One can also use directly move the output file, but this would break the upstream integrity 
+	#### and is hence not recommended
+	'''
+	shutil.copy2(input, self.prefix+'.temp')
+	shutil.move(self.prefix +'.temp', self.prefix)
+
 
 @Flow
 def backup(self, prefix, flow = Caller, _output=[]):
 	key = 'subflow.random_seq.output.seq'
+	self.config_runner()(copy_file_single_node, prefix+'.' + key, rgetattr(flow,key))
 	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
 	key = 'subflow.random_seq_temp.output.seq'
 	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
@@ -208,10 +218,13 @@ def main(self,
  	],fs
 
 	fs = get_changed_files(backup, prefix, res, verbose = 0, )
-	assert fs == [File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
+	pprint(fs)
+	assert fs == [
+ File('/tmp/singular_pipe.symbolic/root.subflow.random_seq.output.seq'),
+ File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
  File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_temp_output_seq.backup'),
  File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')],pprint(fs)
+ File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')]
 
 
 
@@ -228,13 +241,16 @@ def main(self,
 	res  = mock_run( workflow, prefix, 2, 100,verbose=0)
 	fs = get_changed_files(backup, prefix, res, verbose = 0)
 	print('[fs3]')
-	assert fs==[File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
+	assert fs==[
+ File('/tmp/singular_pipe.symbolic/root.subflow.random_seq.output.seq'),
+ File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
  File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
  File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')],pprint(fs)
 	# assert 0
 
 
 	exp = [
+
 	  File('/tmp/singular_pipe.symbolic/root.workflow.log'),
 	  File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
 	  # File('/tmp/singular_pipe.symbolic/root.random_seq_temp.seq'),

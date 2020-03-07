@@ -49,33 +49,37 @@ def workflow(self, prefix, seed =int , L=int,
 	return self
 
 
-from singular_pipe.types import Caller,DirtyKey,rgetattr
+
+from singular_pipe.types import Caller, DirtyKey, rgetattr
 import shutil
-def copy_file(self, prefix, input=File, _output=['backup'] ):
-	shutil.copy2(input, self.output.backup+'.temp')
-	shutil.move(self.output.backup+'.temp', self.output.backup)
-
-#### One can also use directly move the output file, but this would break the upstream integrity 
-#### and is hence not recommended
-
+def copy_file(self, prefix, input=File, 
+	_single_file = 1, ### A single file node only tracks the file at self.prefix
+	_output=[], 
+	):
+	'''
+	#### One can also use directly move the output file, but this would break the upstream integrity 
+	#### and is hence not recommended
+	'''
+	shutil.copy2(input, self.prefix+'.temp')
+	shutil.move(self.prefix +'.temp', self.prefix)
 
 @Flow
 def backup(self, prefix, flow = Caller, _output=[]):
 	key = 'subflow.random_seq.output.seq'
-	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
+	self.config_runner()(copy_file, prefix+'.' + key, rgetattr(flow,key))
 	key = 'subflow.random_seq_const.output.seq'
-	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
+	self.config_runner()(copy_file, prefix+'.' + key, rgetattr(flow,key))
 	key = 'subflow.transcribe.output.fasta'
-	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
+	self.config_runner()(copy_file, prefix+'.' + key, rgetattr(flow,key))
 	key = 'subflow.mutate.output.fasta'
-	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
+	self.config_runner()(copy_file, prefix+'.' + key, rgetattr(flow,key))
 	key = 'output.log'
-	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
+	self.config_runner()(copy_file, prefix+'.' + key, rgetattr(flow,key))
 	return self
 
 @Flow
 def run_and_backup(self, prefix,
-	seed =int , L=int, 
+	seed = int , L = int, 
 	backup_prefix=File, ### we don't want to track backup_prefix
 	_output = [
 	# File('log'),
@@ -83,20 +87,27 @@ def run_and_backup(self, prefix,
 	flow = self.runner(workflow, prefix, seed, L)
 	#### perform backup
 	self.runner(backup, backup_prefix, flow)
+	#### plot a dependency graph into the backup directory
+
 	return self
 
 
-import json
-from singular_pipe.runner import cache_run,mock_run,get_changed_files
+
+from singular_pipe.runner import cache_run, mock_run, get_changed_files, get_all_files
 from singular_pipe.shell import LoggedShellCommand
 from singular_pipe.types import File,CacheFile
 from pprint import pprint
 def main(self=None,
 	prefix = None):
-	if prefix is None:
-		prefix = Path('/tmp/singular_pipe.symbolic/root')
-		prefix.dirname().rmtree_p()
+
+	# if prefix is None:
+	prefix = Path('/tmp/singular_pipe.symbolic/root')
+	backup_prefix = File('/tmp/backup_03_mock_flow/root')
+	prefix.dirname().rmtree_p()
+	backup_prefix.dirname().rmtree_p()	
+
 	print('\n...[start]%r'%prefix)
+
 
 	#### once a workflow is defined, we can view the proposed file changes 
 	fs = get_changed_files(workflow, prefix, 1, 100, verbose=0)
@@ -111,23 +122,49 @@ def main(self=None,
 	### backup is conveniently defined as a workflow taking an executed workflow as an input.
 	### To check the proposed backup, mock_run() the workflow first. 
 	workflow_out = mock_run(workflow, prefix, 1, 100)	
-	fs = get_changed_files(backup, prefix, workflow_out)
+	fs = get_changed_files(backup, backup_prefix, workflow_out)
 	pprint(fs)
 	assert fs == [
- File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
- File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_random_seq_const_output_seq.backup'),
- File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/singular_pipe.symbolic/root.copy_file_subflow_mutate_output_fasta.backup'),
- File('/tmp/singular_pipe.symbolic/root.copy_file_output_log.backup')]
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.output.log')]
 
 
 	### a convenient Flow may be defined to execute the two in chain
 	### If there is certain change to the workflow,
 	### the backup can also be runned
-	backup_prefix = File('/tmp/backup_03_mock_flow/root')
-	prefix.dirname().rmtree_p()
-	backup_prefix.dirname().rmtree_p()	
 	fs = get_changed_files (run_and_backup, prefix, 1, 100, backup_prefix, verbose=0)
+	pprint(fs)
+	assert fs == [
+	File('/tmp/singular_pipe.symbolic/root.workflow.log'),
+ File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
+ File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
+ File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
+ File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.output.log')]
+
+	###### constants that are preserved between runs should be detected unchanged
+	_  = cache_run         (run_and_backup,  prefix, 1, 100, backup_prefix, verbose=0)
+	fs = get_changed_files (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
+	pprint(fs)
+	assert fs == [File('/tmp/singular_pipe.symbolic/root.workflow.log'),
+ File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
+ # File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
+ File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
+ File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
+ # File('/tmp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.output.log')]
+	##### get_all_files() return a leaf file regardless of whether is is changed
+	fs = get_all_files     (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 	pprint(fs)
 	assert fs == [
  File('/tmp/singular_pipe.symbolic/root.workflow.log'),
@@ -135,30 +172,11 @@ def main(self=None,
  File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
  File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
  File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_random_seq_output_seq.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_random_seq_const_output_seq.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_mutate_output_fasta.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_output_log.backup'),
- ]
-
-	###### constants that are preserved between runs should be detected unchanged
-	_  = cache_run         (run_and_backup,  prefix, 1, 100, backup_prefix, verbose=0)
-	fs = get_changed_files (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
-	pprint(fs)
-	assert fs == [
- File('/tmp/singular_pipe.symbolic/root.workflow.log'),
- File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
- # File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
- File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
- File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_random_seq_output_seq.backup'),
- # File('/tmp/backup_03_mock_flow/root.copy_file_subflow_random_seq_const_output_seq.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_subflow_mutate_output_fasta.backup'),
- File('/tmp/backup_03_mock_flow/root.copy_file_output_log.backup')
-]
-
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
+ File('/tmp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
+ File('/tmp/backup_03_mock_flow/root.output.log')]
 
 
 
