@@ -80,9 +80,20 @@ def backup(self, prefix, flow = Caller, _output=[]):
 	self.runner(copy_file, prefix+'.source.py',__file__)
 	return self
 
-from singular_pipe.runner import get_all_files
+
+# from singular_pipe.runner import get_all_files
 from singular_pipe.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
 from graphviz import Digraph
+import json
+def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','deptree_dot_txt']):
+	fs   = backup_result.get_all_files()
+	tree = get_upstream_tree(fs, 0)
+	with open( self.output.deptree_json, 'w') as f:
+		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
+	g = plot_simple_graph_lr(fs, None, 0, 1)
+	fname = g.render( self.output.deptree_dot_txt ,format='svg' )
+	print('[fn]',fname)
+
 @Flow
 def run_and_backup(self, prefix,
 	seed = int , L = int, 
@@ -92,21 +103,14 @@ def run_and_backup(self, prefix,
 	]):
 	
 	#### execute the flow
-	flow = self.runner(workflow, prefix, seed, L)
+	flow          = self.runner(workflow, prefix, seed, L)
 
 	#### perform backup
-	self.runner(backup, backup_prefix, flow)
+	backup_result = self.runner(backup, backup_prefix, flow)
 
 	#### plot a dependency graph into the backup directory
-	fs   = get_all_files(backup, backup_prefix, flow)
-	tree = get_upstream_tree(fs, 0)
-	import json
-	with open(backup_prefix+'.deptree.json', 'w') as f:
-		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
+	graph_out     = self.runner(plot_graph, backup_prefix, backup_result)
 
-	g = plot_simple_graph_lr(fs, None, 0, 1)
-	fname = g.render( backup_prefix + '.deptree.dot.txt',format='svg' )
-	print('[fn]',fname)
 	return self
 
 
@@ -139,6 +143,7 @@ def main(self=None,
  File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
  File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
  File('/tmp/singular_pipe.symbolic/root.source.py'),
+
  # File('/home/user/.temp/backup_03_mock_flow/root.source.py')
  ]
 
@@ -175,7 +180,10 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
- File('/home/user/.temp/backup_03_mock_flow/root.source.py')
+ File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
+
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
 
  ]
 
@@ -195,7 +203,9 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
  # File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
- ]
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
+	 ]
 	##### get_all_files() return a leaf file regardless of whether is is changed
 	fs = get_all_files     (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 	pprint(fs)
@@ -211,7 +221,9 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
- File('/home/user/.temp/backup_03_mock_flow/root.source.py')
+ File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
  ]
 	_  = cache_run         (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 

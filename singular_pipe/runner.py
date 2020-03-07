@@ -165,10 +165,13 @@ class Caller(object):
 			res = list_flatten(res)
 		return res
 
-	def get_all_files(self,flat=1,):
+	def get_all_files(self,allow=[File],flat=1,):
 		res = _get_all_files(self, 0)
 		if flat:
 			res = list_flatten(res)
+			if allow:
+				#### [FRAGILE]
+				res = [x for x in res if type(x) in allow]
 		return res
 
 	def is_mock_file(self,v,call):
@@ -565,12 +568,13 @@ def get_changed_files(job, *args, allow=[File],flat=1, **kw):
 	return res
 
 def get_all_files(job, *args, allow=[File],flat=1, **kw):
-	res = mock_run(job,*args,**kw).get_all_files(flat)
+	res = mock_run(job,*args,**kw).get_all_files(allow=allow,flat=flat)
 	mock_undo(job,*args,**kw)
-	if allow:
-		#### [FRAGILE]
-		res = [x for x in res if type(x) in allow]
-	return res	
+	return res
+	# if allow:
+	# 	#### [FRAGILE]
+	# 	res = [x for x in res if type(x) in allow]
+	# return res	
 
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
