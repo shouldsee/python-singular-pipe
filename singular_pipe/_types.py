@@ -6,6 +6,10 @@ import os
 from orderedattrdict import AttrDict
 import six
 import json
+import re
+
+def DirtyKey(s):
+	return re.sub('[^0-9a-zA-Z_]','_',s)	
 
 
 Code = type((lambda:None).__code__)
@@ -101,6 +105,32 @@ def rstrip(s,suffix):
 	if s.endswith(suffix):
 		s = s[:-len(suffix)]
 	return s
+
+def rgetattr(obj,attr):
+    _this_func = rgetattr
+    sp = attr.split('.',1)
+    if len(sp)==1:
+        l,r = sp[0],''
+    else:
+        l,r = sp
+        
+    obj = getattr(obj,l)
+    if r:
+        obj = _this_func(obj,r)
+    return obj
+
+def rgetattr_dft(obj,attr,dft):
+    _this_func = rgetattr_dft
+    sp = attr.split('.',1)
+    if len(sp)==1:
+        l,r = sp[0],''
+    else:
+        l,r = sp
+        
+    obj = getattr(obj, l, dft)
+    if r:
+        obj = _this_func(obj, r, dft)
+    return obj       
 
 
 

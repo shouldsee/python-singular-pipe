@@ -13,6 +13,7 @@ from singular_pipe._types import IdentAttrDict
 from singular_pipe._types import CantGuessCaller, UndefinedTypeRoutine
 from singular_pipe._types import TooManyArgumentsError
 from singular_pipe._types import NodeFunction,FlowFunction
+from singular_pipe._types import DirtyKey
 
 # from singular_pipe._types import FakeCode,FakeJob
 
@@ -116,10 +117,9 @@ class FakeJob(object):
 		self.__module__   = str(job.__module__)
 		self._output_type = job._output_type
 	# def code_tree(self):
-
-
 		# self.__code__  = 
 		return 
+
 class SubflowOutput(object):
 	def __str__(self):
 		return self.key
@@ -162,8 +162,7 @@ class Caller(object):
 		return res
 	def is_mock_file(self,v,call):
 		return is_mock_file(v,call)
-	# def 
-	# runner = None
+
 	@property
 	def job_type(self):
 		return self._job_type
@@ -171,7 +170,8 @@ class Caller(object):
 	@property
 	def output_cache_file(self):
 		# return self._foo
-		return IdentFile( self.dir_layout, self.prefix, self.job.__name__, 'cache_pk')
+		return IdentFile( self.dir_layout, self.prefix, self.__name__, 'cache_pk')
+
 	@property
 	def output(self):
 		_caller  = self
@@ -248,8 +248,6 @@ class Caller(object):
 		# # res += (CacheFile(self.output_cache_file),)
 		# return list(res.values())
 	# @staticmethod
-
-
 	def is_mock(self,call=lambda *x:None,fast=1):
 		mock = 0
 		for k,v in self.output.items():
@@ -257,11 +255,13 @@ class Caller(object):
 			if mock: 
 				break
 		return mock
+
 	@classmethod
-	def from_input(Caller, job, _input, dir_layout):
+	def from_input(Caller, job, _input, dir_layout, tag):
 		if not getattr(job,'_singular_pipe',False):
 			job = job_from_func(job)
-		_tmp  = []
+		# _tmp  = []
+		_tmp  = AttrDict()
 		_null = namedtuple('_null',[])()
 		_zip = lambda: zip_longest(job._input_names, job._input_types, _input,fillvalue=_null)
 		_dump = lambda: json.dumps([repr(namedtuple('tuple','argname type input_value')(*x)) for x in _zip()],indent=0,default=repr)
@@ -272,15 +272,24 @@ class Caller(object):
 						dump=_dump(),**locals()))
 				else:
 					## v is _null, t is default value
-					_tmp.append((n,t))
+					# _tmp.append((n,t))
+					if callable(t):
+						t = t(args = _tmp)
+					_tmp[n] = t
 			elif v is _null:
 				raise singular_pipe._types.TooFewArgumentsError(
 					'{dump}\nToo few arguments specified for {job._origin_code}\n normal argname are without "_" are necessary for evaluation \n'.format(
 				dump=_dump(),**locals()))
 			else:
-				_tmp.append( (n, t(v)) )
+				if not isinstance(v,t):
+					v = t(v)
+				_tmp[n] = v
+		# for k,v in _tmp.items():
+		# 	if isinstance(v,Caller):
+		# 		self.upstream
+				# _tmp.append( (n, t(v)) )
 		# assert isinstance(_tmp[0]
-		_caller = Caller( job, _tmp[:], dir_layout)
+		_caller = Caller( job, list(_tmp.items()), dir_layout, tag)
 		return _caller
 	def __getitem__(self,k):
 		return getattr(self,k)
@@ -288,20 +297,22 @@ class Caller(object):
 		d = self.__dict__.copy()
 		job = self.job
 		d['job'] = FakeJob(job)
-		self.runner = None
+		d['runner'] = None
+		d['config_runner'] = None
 		# d['returned'] = ('LoadFrom',self.output_cache_file)
 		return d
 
 	def __setstate__(self,d):
 		self.__dict__ = d
 
-	def __init__(self, job, arg_tuples, dir_layout):
+	def __init__(self, job, arg_tuples, dir_layout, tag):
 		# if not getattr(job,'_singular_pipe',False):
 		# 	job = job_from_func(job)		
 		if not hasattr(job,'_type',):
 			job = singular_pipe._types.Node(job)
 		self.job          = job
-		self.__name__     = job.__name__
+		self.__name__     = tag
+		# self.__name__     = job.__name__
 		self._output_type = job._output_type
 		self._job_type    = self.job._type
 		self.arg_tuples   = arg_tuples
@@ -353,6 +364,7 @@ class Caller(object):
 				tups.append(s)
 
 		tups = self._output_type(*tups)
+		return tups		
 		# if self.subflow:
 		# 	self._subflow.clear()
 		# 	self( partial(mock_run,last_caller=self,mock=-1) )
@@ -428,10 +440,11 @@ class Caller(object):
 			result = MyPickleSession().load(f)
 		return result 
 
-	def __call__(self, runner, ):
+	def __call__(self, runner, config_runner=None):
 		if not isinstance(runner,partial):
 			runner = partial(runner)
 		self.runner = runner
+		self.config_runner = config_runner
 		# self.runner = partial( runner, last_caller=last_caller)
 		if issubclass(self.job_type, NodeFunction):
 			self._cached = False
@@ -440,7 +453,7 @@ class Caller(object):
 			assert returned in [self,None],"Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow"			
 			if not self._cached:
 				self.cache(returned,)
-			self.runner = None
+			returned = self
 			return self
 		else:
 			self._cached = False
@@ -448,8 +461,10 @@ class Caller(object):
 			returned = self.job(self, *[x[1] for x in self.arg_tuples])
 			self._allow_cache = 1
 			self.cache(returned)
-			self.runner = None
-			return returned
+
+		self.config_runner = None
+		self.runner = None
+		return returned
 
 
 	def mock_undo(self,strict,verbose):
@@ -544,9 +559,12 @@ def mock_run(job, *args, mock = 1, **kw):
 def mock_undo(job, *args, mock = -1, **kw):
 	return cache_run(job,*args, mock=mock,**kw)
 
-def get_changed_files(job, *args, flat=1, **kw):
+def get_changed_files(job, *args, allow=[File],flat=1, **kw):
 	res = mock_run(job,*args,**kw).get_changed_files(flat)
 	mock_undo(job,*args,**kw)
+	if allow:
+		#### [FRAGILE]
+		res = [x for x in res if type(x) in allow]
 	return res
 
 # symbolicResult =  object()
@@ -563,7 +581,6 @@ def cache_run(job, *args,
 def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller):
 	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args,last_caller=last_caller)
 
-
 class _Runner(object):
 	def __init__(self, dir_layout,  mock, check_only,check_changed,force,verbose ):
 		self.dir_layout = dir_layout
@@ -576,14 +593,15 @@ class _Runner(object):
 		pass
 	def after_run(self, job, args):
 		pass
-	def __call__(self, job, *args, last_caller = None):
-		return self.run(job,*args, last_caller=last_caller)
+	# def __call__(self, job, *args, last_caller = None, tag=None):
+	# 	return self.run(job,*args, last_caller=last_caller, tag =tag )
 
-	def run(self, job, *args, last_caller = None):
-		result = self._run(job, args, last_caller)
+	def run(self, job, *args, last_caller = None, tag = None):
+		result = self._run(job, args, last_caller, tag)
 		return result
+	__call__ = run
 
-	def _run(self, job, args, last_caller):
+	def _run(self, job, args, last_caller, tag):
 		'''
 		return: job_result
 			Check whether a valid cache exists for a job receipe.
@@ -600,22 +618,29 @@ class _Runner(object):
 		check_changed   = self.check_changed
 		force           = self.force
 		verbose         = self.verbose
+		if tag: assert DirtyKey(tag) == tag,(tag,DirtyKey(tag))
+		# if tag: assert re.match('[0-9a-zA-Z_]+$',tag),(tag,	) 
+		assert isinstance(tag,(type(None),str)),(type(tag),tag)
+		tag             = tag or []
+		_tag            = '_'.join(list_flatten([ job.__name__, tag]))
+		_caller         = Caller.from_input(job, args, dir_layout, _tag)
 		###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
 		###### the prefix is ignored in to_ident() because it would point to a different ident_file
 		#####  Caller.from_input() would also cast types for inputs
-		_input          = args
-		_caller         = Caller.from_input(job, _input, dir_layout)
+		_input          = args		
 		# runner          = partial(self.run, last_caller=_caller)
 		runner          = partial(self, last_caller=_caller)
+		config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
+		if last_caller is not None:
+			assert _tag not in last_caller._subflow,'Duplicated subflows %s in %r '%( _tag, last_caller)
+			last_caller._subflow[ _tag ] = _caller
+
 		print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
 		func_name       = get_func_name()
 		prefix          = args[0]
 		_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
 		as argument to self.run
 		'''
-		if last_caller is not None:
-			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%(_caller.__name__, last_caller)
-			last_caller._subflow[_caller.__name__] = _caller
 		# def runner(job,*args,last_caller=_caller):
 		# 	print("%r\n%r"%(job,last_caller))
 		# 	return self.run(job,*args, last_caller=last_caller)
@@ -623,8 +648,9 @@ class _Runner(object):
 		_input  = [_caller.to_ident()]	
 		print(repr(_caller)) if verbose >= 3 else None
 
-		input_ident_file =  IdentFile( dir_layout, prefix, job.__name__, 'input_json' )
-		output_ident_file=  IdentFile( dir_layout, prefix, job.__name__, 'output_json' )
+
+		input_ident_file =  IdentFile( dir_layout, prefix, _caller.__name__, 'input_json' )
+		output_ident_file=  IdentFile( dir_layout, prefix, _caller.__name__, 'output_json' )
 		output_cache_file=  _caller.output_cache_file
 		File(input_ident_file).dirname().makedirs_p()
 		_caller.output_cache_file.dirname().makedirs_p()
@@ -657,7 +683,7 @@ class _Runner(object):
 		if verbose:
 			print('[{func_name}]'.format(**locals()),
 				json.dumps(_dict([
-				('job_name',job.__name__),
+				('job_name',_caller.__name__),
 				('use_cache',use_cache),
 				('input_ident_changed', int(input_ident_changed)),
 				('output_ident_chanegd',int(output_ident_changed))])
@@ -697,7 +723,7 @@ class _Runner(object):
 					result = _caller
 				else:
 					### recurse if not a Terminal Node
-					result = _caller(runner, )
+					result = _caller(runner, config_runner)
 			elif mock == -1:
 				#### unmock
 				#### restore mocked file if available
@@ -706,7 +732,7 @@ class _Runner(object):
 
 			elif mock == 0:
 				_caller.mock_undo(1, verbose)
-				result = _caller(runner, )
+				result = _caller(runner, config_runner )
 
 				for k,v in _caller.output.items():
 					func = getattr( v,'callback_output',lambda *x:None)
@@ -745,7 +771,7 @@ class _Runner(object):
 				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
 				_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
 				for outward_dir in outward_dir_list:
-					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%(job.__name__, _input_ident_hash)
+					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%( _caller.__name__, _input_ident_hash)
 					ident_dump( input_image, outward_edge_file)			
 
 				#### remove edge_file of outputs
@@ -825,10 +851,10 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			out.append(res)	
 
 		elif hasattr(ele, 'to_ident'):
-			assert 0,'call to_ident() yourself before passing into get_files()'
+			# assert 0,'call to_ident() yourself before passing into get_files()'
 			#### Caller.to_ident()
-			ele = ele.to_ident()
-			res = get_identity(ele, None, verbose, strict)
+			res = ele.to_ident()
+			res = get_identity( res, None, verbose, strict)
 			out.append( res)
 		elif isinstance(ele,singular_pipe._types.Code):
 			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
@@ -871,13 +897,13 @@ def file_to_node(obj, strict, dir_layout,):
 
 	suc, prefix_named = obj.get_prefix_pointer(dir_layout)
 	if suc:
-		prefix, job_name = prefix_named.rsplit('.',1)
+		prefix, caller_name = prefix_named.rsplit('.',1)
 		succ = 1
 	else:
 		return (_raise(err) if strict else None)
 
-	input_ident_file =  IdentFile(dir_layout, prefix, job_name, 'input_json' )
-	output_ident_file = IdentFile(dir_layout, prefix, job_name, 'output_json' )
+	input_ident_file =  IdentFile(dir_layout, prefix, caller_name, 'input_json' )
+	output_ident_file = IdentFile(dir_layout, prefix, caller_name, 'output_json' )
 	lst = _loads(json.load(open(output_ident_file,'r'))['ident'])  ##[FRAGILE]
 	obj_ident = get_identity([obj])[0]
 	'''

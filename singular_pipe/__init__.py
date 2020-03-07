@@ -77,6 +77,7 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
+	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [ ] Add timed_run() to print out execution times for each job.
     - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
     - [ ] adds error tests for Caller.cache and Caller.__call__
