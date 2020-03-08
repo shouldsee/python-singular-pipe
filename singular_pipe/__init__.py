@@ -42,8 +42,8 @@ template = '''
 
 ### Dependencies:
 
-- Optional: singularity >= 3.5.3 to use singular_pipe.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
-- Optional: dot binary for plotting DAG.(try install with `sudo apt install -y graphviz`)
+- Optional: singularity >= 3.5.3 to use `singular_pipe.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: dot binary for plotting graphs with `singular_pipe.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
@@ -77,7 +77,10 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
-    - [ ] Adding Glob() and RecursiveGlob() to allow for easy file matching
+    - [ ] Polish graph to have input-output node
+    - [ ] Ability to relocate nodes.
+    - [ ] Auto-backup all output files.
+    - [ ] (not essential) Adding Glob() and RecursiveGlob() to allow for easy file matching
 	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [ ] Add timed_run() to print out execution times for each job.
     - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default

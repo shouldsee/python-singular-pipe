@@ -272,13 +272,13 @@ def main(self,
 	#### this is more visually pleasant 
 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
 	### render with graphviz
-	fn = Path('assets/%s.mock.dot'%__file__).basename(); fn =fn.realpath()
+	fn = Path('assets/%s.mock.dot'%Path(__file__).basename()); fn =fn.realpath()
 	g = plot_simple_graph(tree,None,0)
 	g.render( fn,format='svg'); print('[see output]%s'%fn)
 
 	res = force_run( workflow, prefix, 1, 100 )
 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
-	fn = Path('assets/%s.real.dot'%__file__).basename(); fn =fn.realpath()
+	fn = Path('assets/%s.real.dot'%Path(__file__).basename()); fn =fn.realpath()
 	g = plot_simple_graph(tree,None,0)
 	g.render( fn,format='svg'); print('[see output]%s'%fn)
 Case.test_tag = main

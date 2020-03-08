@@ -102,7 +102,7 @@ if 1:
 
 
 if 1:
-	def SingularityShellCommand( cmd, image, log_file,check=1,  mode='w',extra_files = None, debug =0):	
+	def LoggedSingularityCommand( cmd, image, log_file,check=1,  mode='w',extra_files = None, debug =0):	
 		'''
 		return a tuple (executed command, command_stdout)
 			cmd: a list of str-like objects that gets concatenated into a shell command
@@ -210,3 +210,4 @@ if 1:
 			bind_str = "%s:%s:%s"%( F, F, mode)
 			lst.append( bind_str )
 		return lst		
+	SingularityShellCommand = LoggedSingularityCommand
