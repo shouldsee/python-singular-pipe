@@ -5,7 +5,7 @@ from distutils.core import setup
 
 config = dict(
 	name='singular_pipe',
-	version = '0.0.3', ### change in __init__.py in sync
+	version = '0.0.4', ### change in __init__.py in sync
     packages=['singular_pipe'],
 	include_package_data=True,
 	license='MIT',
