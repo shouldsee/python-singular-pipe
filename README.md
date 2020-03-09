@@ -15,7 +15,7 @@
 ### Install
 
 ```bash
-pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
+pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/master --user
 ```
 
 ### Screenshots
@@ -34,7 +34,10 @@ Formal documentation is not yet available. Please see Examples
 `python3 examples/07_remote_short.py`
 
 ```python
-
+'''
+Since scripts are small, they can be uploaded to remote quickly
+without pain
+'''
 from singular_pipe.types import Node,Flow
 from singular_pipe.types import PythonModule, PythonFunction
 
@@ -416,7 +419,7 @@ if __name__ == '__main__':
 
 ### ToDo
     - [x] Running a remote module
-    	- [ ] add some tests
+    	- [ ] add some tests for singular_pipe._types.PythonModule()
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
     - [ ] Auto-backup all output files. job_backup_copy()

@@ -60,7 +60,7 @@ template = '''
 ### Install
 
 ```bash
-pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
+pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/master --user
 ```
 
 ### Screenshots
