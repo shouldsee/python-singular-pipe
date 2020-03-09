@@ -1,4 +1,7 @@
-
+'''
+Since scripts are small, they can be uploaded to remote quickly
+without pain
+'''
 from singular_pipe.types import Node,Flow
 from singular_pipe.types import PythonModule, PythonFunction
 

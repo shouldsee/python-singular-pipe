@@ -5,7 +5,7 @@ def get_version():
     VERSION = (  # SEMANTIC
         0,        # major
         0,        # minor
-        2,        # patch
+        3,        # patch
         None,      # pre-release
         None        # build metadata
     )
@@ -75,7 +75,7 @@ Formal documentation is not yet available. Please see Examples
 ### Examples
 
 
-{% for fn in ["examples/01_cache_run_shallow.py", "examples/03_mock_flow_backup.py"] %}
+{% for fn in [ "examples/07_remote_short.py","examples/01_cache_run_shallow.py", "examples/03_mock_flow_backup.py"] %}
 `python3 {{fn}}`
 
 ```python
@@ -88,7 +88,8 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
-    - [ ] Running a remote module
+    - [x] Running a remote module
+    	- [ ] add some tests for singular_pipe._types.PythonModule()
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
     - [ ] Auto-backup all output files. job_backup_copy()
