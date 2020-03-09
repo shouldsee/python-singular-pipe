@@ -5,8 +5,11 @@
 
 ### Dependencies:
 
-- Optional: singularity >= 3.5.3 to use singular_pipe.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
-- Optional: dot binary for plotting DAG.(try install with `sudo apt install -y graphviz`)
+- A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
+  - For python3, this means `python3 -m pip install --upgrade pip>=18.1` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
+  - For python2, err python2 is not yet supported 
+- Optional: singularity >= 3.5.3 to use `singular_pipe.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: dot binary for plotting graphs with `singular_pipe.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
@@ -27,6 +30,39 @@ Formal documentation is not yet available. Please see Examples
 ### Examples
 
 
+
+`python3 examples/07_remote_short.py`
+
+```python
+
+from singular_pipe.types import Node,Flow
+from singular_pipe.types import PythonModule, PythonFunction
+
+package_path = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
+@Flow
+def simple_flow(self,prefix,
+ _main= PythonFunction(package_path, 'run_and_backup'),
+ _output=[]):
+	func = _main.loaded()
+	self.runner( func,  prefix, 1, 20, prefix+'_backup')	
+	return self
+
+if __name__ == '__main__':
+	from path import Path
+	from singular_pipe.runner import get_changed_files,get_all_files,cache_run
+	from pprint import pprint
+	
+	prefix = Path('/tmp/test_import/root')
+	prefix.dirname().rmtree_p()
+
+	fs = get_changed_files( simple_flow, prefix)
+	pprint(fs)
+
+	cache_run( simple_flow, prefix)
+
+	fs = get_changed_files( simple_flow, prefix)
+	pprint(fs)
+```
 
 `python3 examples/01_cache_run_shallow.py`
 
@@ -222,11 +258,23 @@ def backup(self, prefix, flow = Caller, _output=[]):
 	self.runner(copy_file, prefix+'.source.py',__file__)
 	return self
 
-from singular_pipe.runner import get_all_files
+
+# from singular_pipe.runner import get_all_files
 from singular_pipe.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
 from graphviz import Digraph
+import json
+def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','deptree_dot_txt']):
+	fs   = backup_result.get_all_files()
+	tree = get_upstream_tree(fs, 0)
+	with open( self.output.deptree_json, 'w') as f:
+		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
+	g = plot_simple_graph_lr(fs, None, 0, 1)
+	fname = g.render( self.output.deptree_dot_txt ,format='svg' )
+	print('[fn]',fname)
+
 @Flow
-def run_and_backup(self, prefix,
+def run_and_backup(
+	self, prefix,
 	seed = int , L = int, 
 	backup_prefix=File, ### we don't want to track backup_prefix
 	_output = [
@@ -234,21 +282,14 @@ def run_and_backup(self, prefix,
 	]):
 	
 	#### execute the flow
-	flow = self.runner(workflow, prefix, seed, L)
+	flow          = self.runner(workflow, prefix, seed, L)
 
 	#### perform backup
-	self.runner(backup, backup_prefix, flow)
+	backup_result = self.runner(backup, backup_prefix, flow)
 
 	#### plot a dependency graph into the backup directory
-	fs   = get_all_files(backup, backup_prefix, flow)
-	tree = get_upstream_tree(fs, 0)
-	import json
-	with open(backup_prefix+'.deptree.json', 'w') as f:
-		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
+	graph_out     = self.runner(plot_graph, backup_prefix, backup_result)
 
-	g = plot_simple_graph_lr(fs, None, 0, 1)
-	fname = g.render( backup_prefix + '.deptree.dot.txt',format='svg' )
-	print('[fn]',fname)
 	return self
 
 
@@ -281,6 +322,7 @@ def main(self=None,
  File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
  File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
  File('/tmp/singular_pipe.symbolic/root.source.py'),
+
  # File('/home/user/.temp/backup_03_mock_flow/root.source.py')
  ]
 
@@ -317,7 +359,10 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
- File('/home/user/.temp/backup_03_mock_flow/root.source.py')
+ File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
+
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
 
  ]
 
@@ -337,7 +382,9 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
  # File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
- ]
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
+	 ]
 	##### get_all_files() return a leaf file regardless of whether is is changed
 	fs = get_all_files     (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 	pprint(fs)
@@ -353,7 +400,9 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
- File('/home/user/.temp/backup_03_mock_flow/root.source.py')
+ File('/home/user/.temp/backup_03_mock_flow/root.source.py'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json'),
+ File('/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt'), 
  ]
 	_  = cache_run         (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 
@@ -366,6 +415,12 @@ if __name__ == '__main__':
 
 
 ### ToDo
+    - [x] Running a remote module
+    	- [ ] add some tests
+    - [ ] Polish graph to have input-output node
+    - [ ] Ability to relocate nodes.
+    - [ ] Auto-backup all output files. job_backup_copy()
+    - [ ] (not essential) Adding Glob() and RecursiveGlob() to allow for easy file matching
 	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [ ] Add timed_run() to print out execution times for each job.
     - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
