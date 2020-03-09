@@ -303,6 +303,7 @@ class HttpResponse(object):
 
 		d = x.headers.copy()
 		via =  d.get('via','')
+		# d['header_ident'] = None
 		if 'varnish' in via:
 			d['header_ident'] = d.get('etag', None)
 		if d['header_ident'] is None:
@@ -487,7 +488,7 @@ class _PythonModule(object):
 				]
 				suc, stdout, stderr = _shellcmd(CMD, 1, 0, 'utf8', None, None, None, 1)
 				assert self.egg_info.isdir(),'Installation of given url did not create a valid egg_info directory:\nurl={self.url}\negg_info={self.egg_info}'.format(**locals())
-				
+
 				print(stdout) if verbose>=2 else None
 				with open(self.ident_file,'w') as f:
 					f.write(self.dumps([self]))

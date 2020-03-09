@@ -1,13 +1,13 @@
 strict digraph G {
 	rankdir=TB
 	"File('/tmp/singular_pipe.symbolic/root.mutate.fast\la')" -> "'SINK'"
-	"singular_pipe.runner.Caller(dotname='mock.mutate',\lprefix_named=File('/tmp/singular_pipe.symbolic/roo\lt.mutate'))" -> "File('/tmp/singular_pipe.symbolic/root.mutate.fast\la')"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.mutate',prefix_named=File('/tmp/singula\lr_pipe.symbolic/root.mutate'))" -> "File('/tmp/singular_pipe.symbolic/root.mutate.fast\la')"
 	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.mutate.cache_pk')" -> "'SINK'"
-	"singular_pipe.runner.Caller(dotname='mock.mutate',\lprefix_named=File('/tmp/singular_pipe.symbolic/roo\lt.mutate'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.mutate.cache_pk')"
-	"File('/tmp/singular_pipe.symbolic/root.transcribe.\lfasta')" -> "singular_pipe.runner.Caller(dotname='mock.mutate',\lprefix_named=File('/tmp/singular_pipe.symbolic/roo\lt.mutate'))"
-	"singular_pipe.runner.Caller(dotname='mock.transcri\lbe',prefix_named=File('/tmp/singular_pipe.symbolic\l/root.transcribe'))" -> "File('/tmp/singular_pipe.symbolic/root.transcribe.\lfasta')"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.mutate',prefix_named=File('/tmp/singula\lr_pipe.symbolic/root.mutate'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.mutate.cache_pk')"
+	"File('/tmp/singular_pipe.symbolic/root.transcribe.\lfasta')" -> "singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.mutate',prefix_named=File('/tmp/singula\lr_pipe.symbolic/root.mutate'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.transcribe',prefix_named=File('/tmp/sin\lgular_pipe.symbolic/root.transcribe'))" -> "File('/tmp/singular_pipe.symbolic/root.transcribe.\lfasta')"
 	"CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.transcribe.cache_pk')" -> "'SINK'"
-	"singular_pipe.runner.Caller(dotname='mock.transcri\lbe',prefix_named=File('/tmp/singular_pipe.symbolic\l/root.transcribe'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.transcribe.cache_pk')"
-	"Prefix('/tmp/singular_pipe.symbolic/root.random_se\lq.seq')" -> "singular_pipe.runner.Caller(dotname='mock.transcri\lbe',prefix_named=File('/tmp/singular_pipe.symbolic\l/root.transcribe'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.transcribe',prefix_named=File('/tmp/sin\lgular_pipe.symbolic/root.transcribe'))" -> "CacheFile('/tmp/singular_pipe.symbolic/_singular_p\lipe/root.transcribe.cache_pk')"
+	"Prefix('/tmp/singular_pipe.symbolic/root.random_se\lq.seq')" -> "singular_pipe.runner.Caller(dotname='singular_pipe\l.test.mock.transcribe',prefix_named=File('/tmp/sin\lgular_pipe.symbolic/root.transcribe'))"
 	"'SOURCE'" -> "Prefix('/tmp/singular_pipe.symbolic/root.random_se\lq.seq')"
 }
