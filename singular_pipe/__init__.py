@@ -5,7 +5,7 @@ def get_version():
     VERSION = (  # SEMANTIC
         0,        # major
         0,        # minor
-        4,        # patch
+        3,        # patch
         None,      # pre-release
         None        # build metadata
     )

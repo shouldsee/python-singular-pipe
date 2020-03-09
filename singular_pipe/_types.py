@@ -301,9 +301,9 @@ class HttpResponse(object):
 		d0=  self.__dict__.copy()
 		d0.pop('response', None)
 
-		d = x.headers.copy()
+		d = dict(x.headers.copy())
 		via =  d.get('via','')
-		# d['header_ident'] = None
+		d['header_ident'] = None
 		if 'varnish' in via:
 			d['header_ident'] = d.get('etag', None)
 		if d['header_ident'] is None:
