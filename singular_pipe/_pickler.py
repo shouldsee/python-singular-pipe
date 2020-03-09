@@ -15,17 +15,19 @@ def _loads(obj):
 
 import pkg_resources
 
+def get_version(distribution_name, strict):
+    try:
+        version = pkg_resources.get_distribution(distribution_name).version
+    except pkg_resources.DistributionNotFound:
+    	if strict:
+    		raise
+    	version = ''
+    return version
+
 class MyPickleSession(object):
 	load = pickle.load
+	get_version = staticmethod(get_version)
 
-	def get_version(self, distribution_name, strict):
-	    try:
-	        version = pkg_resources.get_distribution(distribution_name).version
-	    except pkg_resources.DistributionNotFound:
-	    	if strict:
-	    		raise
-	    	version = ''
-	    return version
 
 	def hash_bytes(self, s):
 	    return smhasher.murmur3_x86_64(s)

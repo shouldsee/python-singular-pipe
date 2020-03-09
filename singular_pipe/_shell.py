@@ -31,6 +31,48 @@ class Error(EnvironmentError):
 # import os
 import stat
 
+
+##### added 20200309 +++++++
+from singular_pipe._header import list_flatten_strict, list_flatten
+
+def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
+	return _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
+
+def _shellcmd(CMD,check,shell,encoding, stdin,stdout,stderr,silent):
+	'''
+	Print [stdout],[stderr] upon failure
+		shell: intepret input as a list.
+
+	'''
+	# print('[shell],shell')
+	if not shell:
+		CMD = ['set','-e;','set','-o','pipefail;']+[CMD]
+		CMD = list_flatten_strict(CMD)
+		CMD = ' '.join(CMD)
+		shell = 1
+		# print("%r"%CMD)
+	else:
+		CMD = u'set -e; set -o pipefail;%s'%CMD
+	p   = shellpopen( CMD, stdin,stdout,stderr, shell=shell,silent=silent,)
+	suc,stdout,stderr = pipe__getResult(p,CMD=CMD,check=check)
+	stdout = stdout.decode(encoding)
+	stderr = stderr.decode(encoding)
+	return suc,stdout,stderr
+
+
+
+##### added 20200309 -------
+
+
+
+
+
+
+
+
+
+
+
 def file__iterlineReversed(filename, buf_size=8192):
 	"""
 	Source:https://stackoverflow.com/a/23646049/8083313

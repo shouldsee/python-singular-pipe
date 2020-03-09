@@ -18,9 +18,17 @@ def get_version():
     return version
 VERSION = get_version()
 
+
 # rcParams = OrderedDict()
 # rcParams = AttrDict()
-rcParams = _dict()
+# if not 'rcParams' in locals():
+
+class RcParams(_dict):
+	def __setitem__(self,k,v):
+		# if v =='clean': import pdb;pdb.set_trace()
+		super().__setitem__(k,v)
+# rcParams = _dict()
+rcParams = RcParams()
 rcParams['dir_layout'] = 'clean'
 # rcParams['dir_layout'] = 'flat'
 
@@ -42,6 +50,9 @@ template = '''
 
 ### Dependencies:
 
+- A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
+  - For python3, this means `python3 -m pip install --upgrade pip>=18.1` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
+  - For python2, err python2 is not yet supported 
 - Optional: singularity >= 3.5.3 to use `singular_pipe.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
 - Optional: dot binary for plotting graphs with `singular_pipe.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
@@ -77,9 +88,10 @@ Formal documentation is not yet available. Please see Examples
 
 todo = '''
 ### ToDo
+    - [ ] Running a remote module
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
-    - [ ] Auto-backup all output files.
+    - [ ] Auto-backup all output files. job_backup_copy()
     - [ ] (not essential) Adding Glob() and RecursiveGlob() to allow for easy file matching
 	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [ ] Add timed_run() to print out execution times for each job.

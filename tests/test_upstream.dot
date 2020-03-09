@@ -1,85 +1,25 @@
 strict digraph G {
 	rankdir=TB
-	"'SOURCE'" -> "HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti
-meapi.org/api/timezone/Europe/London.txt\"})"
-	"HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti
-meapi.org/api/timezone/Europe/London.txt\"})" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.base.http_job2',prefix_named=File('/home/use
-r/.temp/singular-pipe_test_build/root.http_job2'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.base.http_job2',prefix_named=File('/home/use
-r/.temp/singular-pipe_test_build/root.http_job2'))" -> "InputFile('/home/user/.temp/singular-
-pipe_test_build/root.http_job2.cache')"
-	"InputFile('/home/user/.temp/singular-
-pipe_test_build/root.http_job2.cache')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))"
+	"'SOURCE'" -> "HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti\lmeapi.org/api/timezone/Europe/London.txt\"})"
+	"HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti\lmeapi.org/api/timezone/Europe/London.txt\"})" -> "singular_pipe.runner.Caller(dotname='singular_pipe\l.test.base.http_job2',prefix_named=File('/home/use\lr/.temp/singular-pipe_test_build/root.http_job2'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.base.http_job2',prefix_named=File('/home/use\lr/.temp/singular-pipe_test_build/root.http_job2'))" -> "InputFile('/home/user/.temp/singular-\lpipe_test_build/root.http_job2.cache')"
+	"InputFile('/home/user/.temp/singular-\lpipe_test_build/root.http_job2.cache')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))"
 	"'SOURCE'" -> "InputFile('/tmp/letter.txt')"
-	"InputFile('/tmp/letter.txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))" -> "InputFile('/home/user/.temp/singular-
-pipe_test_build/root.dimple_job.out_txt')"
-	"InputFile('/home/user/.temp/singular-
-pipe_test_build/root.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job3.dimple_job'))"
-	"'SOURCE'" -> "HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti
-meapi.org/api/timezone/Europe/London.txt\"})"
-	"HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti
-meapi.org/api/timezone/Europe/London.txt\"})" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.base.http_job2',prefix_named=File('/home/use
-r/.temp/singular-pipe_test_build/root.http_job2'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.base.http_job2',prefix_named=File('/home/use
-r/.temp/singular-pipe_test_build/root.http_job2'))" -> "InputFile('/home/user/.temp/singular-
-pipe_test_build/root.http_job2.cache')"
-	"InputFile('/home/user/.temp/singular-
-pipe_test_build/root.http_job2.cache')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))"
+	"InputFile('/tmp/letter.txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))"
+	"singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))" -> "InputFile('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job.out_txt')"
+	"InputFile('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job3.dimple_job'))"
+	"'SOURCE'" -> "HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti\lmeapi.org/api/timezone/Europe/London.txt\"})"
+	"HttpResponse({\"method\"=\"GET\",\"url\"=\"http_//worldti\lmeapi.org/api/timezone/Europe/London.txt\"})" -> "singular_pipe.runner.Caller(dotname='singular_pipe\l.test.base.http_job2',prefix_named=File('/home/use\lr/.temp/singular-pipe_test_build/root.http_job2'))"
+	"singular_pipe.runner.Caller(dotname='singular_pipe\l.test.base.http_job2',prefix_named=File('/home/use\lr/.temp/singular-pipe_test_build/root.http_job2'))" -> "InputFile('/home/user/.temp/singular-\lpipe_test_build/root.http_job2.cache')"
+	"InputFile('/home/user/.temp/singular-\lpipe_test_build/root.http_job2.cache')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))"
 	"'SOURCE'" -> "InputFile('/tmp/letter.txt')"
-	"InputFile('/tmp/letter.txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/root.dimple_job'))" -> "InputFile('/home/user/.temp/singular-
-pipe_test_build/root.dimple_job.out_txt')"
-	"InputFile('/home/user/.temp/singular-
-pipe_test_build/root.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job2.dimple_job'))"
+	"InputFile('/tmp/letter.txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))"
+	"singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job'))" -> "InputFile('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job.out_txt')"
+	"InputFile('/home/user/.temp/singular-\lpipe_test_build/root.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job2.dimple_job'))"
 	"'SOURCE'" -> "InputFile('/tmp/digit.txt')"
-	"InputFile('/tmp/digit.txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job2.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job2.dimple_job'))" -> "InputFile('/home/user/.temp/singular-
-pipe_test_build/job2.dimple_job.out_txt')"
-	"InputFile('/home/user/.temp/singular-
-pipe_test_build/job2.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job3.dimple_job'))"
-	"singular_pipe.runner.Caller(dotname='singular_pipe
-.test.graph.dimple_job',prefix_named=File('/home/u
-ser/.temp/singular-
-pipe_test_build/job3.dimple_job'))" -> "File('/home/user/.temp/singular-
-pipe_test_build/job3.dimple_job.out_txt')"
-	"File('/home/user/.temp/singular-
-pipe_test_build/job3.dimple_job.out_txt')" -> "'SINK'"
+	"InputFile('/tmp/digit.txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job2.dimple_job'))"
+	"singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job2.dimple_job'))" -> "InputFile('/home/user/.temp/singular-\lpipe_test_build/job2.dimple_job.out_txt')"
+	"InputFile('/home/user/.temp/singular-\lpipe_test_build/job2.dimple_job.out_txt')" -> "singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job3.dimple_job'))"
+	"singular_pipe.runner.Caller(dotname='graph.dimple_\ljob',prefix_named=File('/home/user/.temp/singular-\lpipe_test_build/job3.dimple_job'))" -> "File('/home/user/.temp/singular-\lpipe_test_build/job3.dimple_job.out_txt')"
+	"File('/home/user/.temp/singular-\lpipe_test_build/job3.dimple_job.out_txt')" -> "'SINK'"
 }

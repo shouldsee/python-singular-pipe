@@ -95,7 +95,8 @@ def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','dept
 	print('[fn]',fname)
 
 @Flow
-def run_and_backup(self, prefix,
+def run_and_backup(
+	self, prefix,
 	seed = int , L = int, 
 	backup_prefix=File, ### we don't want to track backup_prefix
 	_output = [

@@ -585,6 +585,8 @@ def cache_run(job, *args,
 	check_only=False, check_changed=False, force=False,verbose=0,
 	last_caller = None):
 	dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout
+	# print('[dir_layout]',dir_layout)
+	# print('[id2]',id(rcParams),rcParams)
 	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose,last_caller)
 
 def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller):
@@ -828,59 +830,7 @@ def get_outward_json_list( arg_tuples, dir_layout, strict=0, out = None, verbose
 	return out 
 
 
-def get_identity(lst, out = None, verbose=0, strict=0):
-	'''
-	Append to file names with their mtime and st_size
-	'''
-	this = get_identity
-	assert out is None
-	out = []
-	debug = 0
-	verbose = 0
-	# assert isinstance(lst, (tuple, list)),(type(lst), lst)
-	flist = list_flatten(lst)
-	# print('[lst]',lst,'\n[flist]',flist)
-	for ele in flist:
-		if  isinstance(ele, Prefix):
-			res = ele.fileglob("*", ele is InputPrefix)
-			###### exclude outward_edges for DIR_LAYOUT=flat
-			res = [x for x in res if x not in [ ele+'.outward_edges', ele+'.outward_edges_old']]
-			print('[expanding]\n  %r\n  %r'%(ele,res)) if verbose else None
-			res = get_identity( res, None, verbose, strict)
-			out.append( res)
-
-		elif isinstance(ele, (File, HttpResponse, )):
-			print('[identing]%r'%ele) if verbose else None
-			res = ele.to_ident() #### see types.File, use (mtime and st_size) to identify
-			# stat = os_stat_safe(ele)
-			# res = (ele, stat.st_mtime, stat.st_size)
-			out.append(res)	
-
-		elif hasattr(ele, 'to_ident'):
-			# assert 0,'call to_ident() yourself before passing into get_files()'
-			#### Caller.to_ident()
-			res = ele.to_ident()
-			res = get_identity( res, None, verbose, strict)
-			out.append( res)
-		elif isinstance(ele,singular_pipe._types.Code):
-			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
-			out.append(res)
-			print('[identing]%s,%s'%(ele.co_code,ele.co_consts)) if verbose else None
-
-			if debug:
-				# res = (ele.co_code, [get_identity([x], [], verbose, strict) for x in ele.co_consts])
-				# print([ele.co_consts)
-				print(json.dumps([(type(x),x) for x in ele.co_consts],default=repr,indent=2))
-				# for x in ele.co_consts
-				# print(res[1])
-				print(len(res[1]),list(zip(ele.co_consts,res[1:])))
-				if any([isinstance(x,singular_pipe._types.Code) for x in ele.co_consts]):
-					assert 0
-		else:
-			if strict:
-				raise UndefinedTypeRoutine("get_identity(%s) undefined for %r"%(type(ele),ele))
-			out.append(ele)
-	return out
+from singular_pipe._types import get_identity
 
 ##################################################
 ##################################################

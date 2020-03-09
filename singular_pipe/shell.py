@@ -1,4 +1,5 @@
 from singular_pipe._shell import pipe__getResult,pipe__getSafeResult,shellpopen
+from singular_pipe._shell import _shellcmd, shellcmd
 import io,time
 
 import json
@@ -11,31 +12,12 @@ import tempfile
 from singular_pipe import VERSION
 
 
-def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
-	return _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
+
+
 def SafeShellCommand(CMD, check=1, shell=0, encoding='utf8',stdin=None,stdout = None,stderr = None, silent=1):
 	suc,stdout,stderr = _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)
 	return stdout
-def _shellcmd(CMD,check,shell,encoding, stdin,stdout,stderr,silent):
-	'''
-	Print [stdout],[stderr] upon failure
-		shell: intepret input as a list.
 
-	'''
-	# print('[shell],shell')
-	if not shell:
-		CMD = ['set','-e;','set','-o','pipefail;']+[CMD]
-		CMD = list_flatten_strict(CMD)
-		CMD = ' '.join(CMD)
-		shell = 1
-		# print("%r"%CMD)
-	else:
-		CMD = u'set -e; set -o pipefail;%s'%CMD
-	p   = shellpopen( CMD, stdin,stdout,stderr, shell=shell,silent=silent,)
-	suc,stdout,stderr = pipe__getResult(p,CMD=CMD,check=check)
-	stdout = stdout.decode(encoding)
-	stderr = stderr.decode(encoding)
-	return suc,stdout,stderr
 if 1:
 	def LoggedShellCommand(
 		CMD, file='/dev/null', check=1, mode='w', encoding = 'utf8',
