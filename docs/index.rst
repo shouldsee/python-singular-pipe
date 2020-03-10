@@ -4,8 +4,9 @@
    contain the root `toctree` directive.
 .. check https://docs.python.org/2/_sources/
 
+*************************************************
 Welcome to :mod:`singular_pipe`'s documentation!
-=========================================
+*************************************************
 
 Contents
 =================
@@ -17,6 +18,11 @@ Contents
    install/index.rst
    license.rst
    lib/index.rst
+
+Introduction
+===================
+
+Some introduction text
    
 Indices and tables
 ==================
