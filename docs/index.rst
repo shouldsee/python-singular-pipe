@@ -5,7 +5,7 @@
 .. check https://docs.python.org/2/_sources/
 
 *************************************************
-Welcome to :mod:`singular_pipe` `version` 's documentation!
+Welcome to :mod:`singular_pipe` :ref:version 's documentation!
 *************************************************
 
 .. _Contents
