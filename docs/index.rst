@@ -15,15 +15,24 @@ Welcome to :mod:`singular_pipe`-|version| 's documentation!
    :numbered:
    
    install/index.rst
-   example_usage.rst
+   examples/index.rst
    lib/index.rst
    indexes.rst
    license.rst
 
-Introduction
+Overview
 ===================
 
-Some introduction text
+Despite plenty of packages out there, writing reproducible python
+scripts is not yet a simple task. :obj:`singular_pipe` is written to address
+serveral aspects:
+    * :ref:`example-workflow-filesync`
+    * :ref:`example-remote-code`
+    * Declaring function-level dependency.
+
+
+
+
 
 
 :Author: Feng Geng

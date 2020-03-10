@@ -27,7 +27,8 @@ Installation
 Install with pip
 ------------------------------
 
-Find the version you want to install. For example, to install version 0.0.3, use::
+Find the version you want to install. For example, to install version 0.0.3, use
+
+.. code-block:: bash
 
 	pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/0.0.3 --user
-
