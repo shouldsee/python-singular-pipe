@@ -9,7 +9,9 @@ Welcome to :mod:`singular_pipe`'s documentation!
 
 .. toctree::
    :maxdepth: 2
+   :numbered:
    :caption: Contents:
+   
    install/index.rst
    license.rst
 
