@@ -1,0 +1,22 @@
+.. _install-index:
+
+******************************************************
+Installation guide
+******************************************************
+
+:Author: Feng Geng
+:Email: shouldsee.gem@gmail.com
+
+
+Dependencies
+====================================
+
+This package is tested to be compatible with python3.5 and python3.7. Please create a github PR if you
+want another version to be added. Python2 is not supported.
+
+.. Essentials::
+  * Python 3.5 / Python 3.7
+  * pip >= 18.1
+
+.. Optional::
+  * singularity >= 3.5.3 to use :obj:`singular_pipe.shell.LoggedSingularityCommand`. 

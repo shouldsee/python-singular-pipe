@@ -10,15 +10,10 @@ Welcome to :mod:`singular_pipe`'s documentation!
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   install/index.rst
+   license.rst
 
 
-.. sidebar:: Summary
-
-    :Version: |version|
-    :Release: |release|
-    :Date: |today|
-    :Author: See `Authors`_ section
-    :ChangeLog: See `ChangeLog`_ section
 
 Indices and tables
 ==================
