@@ -7,7 +7,6 @@ Examples
 
 .. include:: ../examples/workflow-filesync.rst
 
-
 .. _simple-cache
 
 Creating a cached Node

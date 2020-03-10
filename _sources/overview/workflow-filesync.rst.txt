@@ -1,7 +1,7 @@
 .. _workflow-filesync:
 
 Workflow execution as file synchronisation
--------------------------------------------
+=============================================
 
 Any workflow can be divided into two parts: code and data. Given 
 a data state, one can apply some code to check whether these data
