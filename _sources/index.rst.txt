@@ -15,8 +15,8 @@ Welcome to :mod:`singular_pipe`-|version| 's documentation!
    :numbered:
    
    install/index.rst
-   overview/workflow-filesync.rst
-   example_usage.rst
+   examples/workflow-filesync.rst
+   examples/index.rst
    lib/index.rst
    indexes.rst
    license.rst
@@ -27,7 +27,7 @@ Overview
 Despite plenty of packages out there, writing reproducible python
 scripts is not yet a simple task. :obj:`singular_pipe` is written to address
 serveral aspects:
-    * Workflow execution as a file synchronisation process. :ref:`workflow-filesync`
+    * :ref:`workflow-filesync`
     * Separation of code from data.
     * Declaring function-level dependency.
 

@@ -1,0 +1,26 @@
+
+.. _example-usage
+
+*********************************************
+Examples
+*********************************************
+
+
+.. _simple-cache
+
+Creating a cached Node
+==========================================
+
+.. literalinclude:: examples/01_cache_run_shallow.py
+
+.. _running-remote
+
+Running a remote package/function
+======================================
+
+.. literalinclude:: examples/06_remote_package.py
+
+.. _config-layout
+
+Configure directory layout
+===============================
