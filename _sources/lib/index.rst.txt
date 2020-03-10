@@ -4,7 +4,7 @@ Modules
 ******************************************
 
 :mod:`singular_pipe.types` Entry point for all public callables 
-====================================================================
+=================================================================================
 .. automodule:: singular_pipe.types
     :show-inheritance:
     :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
@@ -29,3 +29,12 @@ Modules
     :members:
     :undoc-members:
     :synopsis: Shell utilities
+
+
+:mod:`singular_pipe.runner` Runtime runner to deal with file dependencies
+===============================================================================
+.. automodule:: singular_pipe.runner
+    :show-inheritance:
+    :members:
+    :undoc-members:
+    :synopsis: Runtime runner to deal with file dependencies

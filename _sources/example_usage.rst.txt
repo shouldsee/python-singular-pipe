@@ -54,7 +54,7 @@ local machine states.
 
 There are quite a number of ways to specify a remote object.
 
-.. literalinclude:: ../examples/06_remote_package.py
+.. literalinclude:: ../examples/002_remote_package.py
 
 
 .. _example-dependency-graph:
