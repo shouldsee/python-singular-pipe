@@ -23,6 +23,15 @@ Indices and tables
 
 .. _my-reference-label:
 
+:mod:`singular_pipe.types` Entry point for all public callables 
+---------------------------------------------------------------
+.. automodule:: singular_pipe.types
+    :show-inheritance:
+    :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
+    :undoc-members:
+    :synopsis: Entry point for all public callables
+
+
 :mod:`singular_pipe._types` Internal types for detecting file and package changes 
 -----------------------------------------------------------------------------------
 
@@ -33,22 +42,13 @@ Indices and tables
     :synopsis: Internal types for detecting file and package changes 
 
 
-:mod:`singular_pipe.types` Entry point for all public callables 
----------------------------------------------------------------
-.. automodule:: singular_pipe.types
-    :show-inheritance:
-    :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
-    :undoc-members:
-    :synopsis: Entry point for all public callables
-
-
 :mod:`singular_pipe.shell`
 -------------------------
 .. automodule:: singular_pipe.shell
     :show-inheritance:
     :members:
     :undoc-members:
-    :synopsis:
+    :synopsis: Shell utilities
 
 
 
