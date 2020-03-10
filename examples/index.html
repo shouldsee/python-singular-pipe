@@ -256,11 +256,15 @@ local machine states.</p>
 
 <span class="n">package_path</span> <span class="o">=</span> <span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
 <span class="nd">@Flow</span>
-<span class="k">def</span> <span class="nf">simple_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
- <span class="n">_main</span><span class="o">=</span> <span class="n">RPO</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
- <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+<span class="k">def</span> <span class="nf">simple_flow</span><span class="p">(</span>
+	<span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
+	<span class="n">_main</span><span class="o">=</span> <span class="n">RPO</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+	<span class="n">_output</span><span class="o">=</span><span class="p">[]</span>
+ <span class="p">):</span>
+
 	<span class="n">func</span> <span class="o">=</span> <span class="n">_main</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
 	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span> <span class="n">func</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;_backup&#39;</span><span class="p">)</span>	
+	
 	<span class="k">return</span> <span class="bp">self</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
