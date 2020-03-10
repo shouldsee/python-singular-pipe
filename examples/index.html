@@ -435,13 +435,13 @@ local machine states.</p>
 
 
 
-<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">mock_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.shell</span> <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">CacheFile</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clean&#39;</span>
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 	<span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">mock_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
+	<span class="kn">from</span> <span class="nn">singular_pipe.shell</span> <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
+	<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">CacheFile</span>
+	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+	<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clean&#39;</span>
 
 	<span class="c1"># if prefix is None:</span>
 	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root&#39;</span><span class="p">)</span>
