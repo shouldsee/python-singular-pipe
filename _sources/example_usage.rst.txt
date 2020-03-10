@@ -13,14 +13,14 @@ Examples
 Creating a cached Node
 ==========================================
 
-.. literalinclude:: examples/01_cache_run_shallow.py
+.. literalinclude:: ../examples/01_cache_run_shallow.py
 
 .. _running-remote
 
 Running a remote package/function
 ======================================
 
-.. literalinclude:: examples/06_remote_package.py
+.. literalinclude:: ../examples/06_remote_package.py
 
 .. _config-layout
 

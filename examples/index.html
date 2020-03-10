@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Examples &mdash; singular_pipe 0.0.3 documentation</title>
+  <title>2. Examples &mdash; singular_pipe 0.0.3 documentation</title>
   
 
   
@@ -35,8 +35,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="4. Manual" href="../lib/index.html" />
-    <link rel="prev" title="2. Workflow execution as file synchronisation" href="workflow-filesync.html" /> 
+    <link rel="next" title="3. Manual" href="../lib/index.html" />
+    <link rel="prev" title="1. Installation" href="../install/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -86,18 +86,17 @@
             
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow-filesync.html">2. Workflow execution as file synchronisation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#workflow-execution-as-file-synchronisation">3.1. Workflow execution as file synchronisation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#creating-a-cached-node">3.1.1. Creating a cached Node</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#running-a-remote-package-function">3.1.2. Running a remote package/function</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configure-directory-layout">3.1.3. Configure directory layout</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#workflow-execution-as-file-synchronisation">2.1. Workflow execution as file synchronisation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-cached-node">2.1.1. Creating a cached Node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#running-a-remote-package-function">2.1.2. Running a remote package/function</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-directory-layout">2.1.3. Configure directory layout</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../lib/index.html">4. Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../indexes.html">5. Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lib/index.html">3. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../indexes.html">4. Indices and tables</a></li>
 </ul>
 
             
@@ -143,7 +142,7 @@
     
       <li><a href="../index.html">Docs</a> &raquo;</li>
         
-      <li><span class="section-number">3. </span>Examples</li>
+      <li><span class="section-number">2. </span>Examples</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -163,9 +162,9 @@
            <div itemprop="articleBody">
             
   <div class="section" id="examples">
-<h1><span class="section-number">3. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<h1><span class="section-number">2. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="workflow-execution-as-file-synchronisation">
-<span id="workflow-filesync"></span><h2><span class="section-number">3.1. </span>Workflow execution as file synchronisation<a class="headerlink" href="#workflow-execution-as-file-synchronisation" title="Permalink to this headline">¶</a></h2>
+<span id="workflow-filesync"></span><h2><span class="section-number">2.1. </span>Workflow execution as file synchronisation<a class="headerlink" href="#workflow-execution-as-file-synchronisation" title="Permalink to this headline">¶</a></h2>
 <p>Any workflow can be divided into two parts: code and data. Given
 a data state, one can apply some code to check whether these data
 are outdated. Executing any workflow can be abstracted to a chain of
@@ -228,13 +227,218 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 </pre></div>
 </div>
 <div class="section" id="creating-a-cached-node">
-<h3><span class="section-number">3.1.1. </span>Creating a cached Node<a class="headerlink" href="#creating-a-cached-node" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">2.1.1. </span>Creating a cached Node<a class="headerlink" href="#creating-a-cached-node" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This script demo the principle of caching in this module</span>
+<span class="sd">The basic element to be cached is a function evaluation tuple (func, prefix,*args),</span>
+<span class="sd">which is considered as a Node whose status and last evaluation stored in its prefix. </span>
+
+<span class="sd">cache_run(func,prefix,*args) checks whether a node</span>
+<span class="sd">needs to be updated according to its immediate upstream nodes/inputs.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">force_run</span>
+<span class="k">def</span> <span class="nf">simplest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running node:</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span> <span class="c1">### This is the default behaviour for singular_pipe.runner.cache_run() </span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
+	<span class="nb">print</span><span class="p">()</span>
+
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	### comment</span>
+<span class="s1">	expect: </span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	</span>
+<span class="s1">	got:</span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+
+<span class="s1">	The second run accessed cache</span>
+<span class="s1">	&#39;&#39;&#39;</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">less_simple_node</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">]):</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;writing </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">))</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
+
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;GCTA&#39;</span> <span class="p">)</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	### comment</span>
+<span class="s1">	expect:</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+
+<span class="s1">	got:</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+
+<span class="s1">	Becuase cache file is loaded for the two middle evaluations</span>
+
+<span class="s1">	&#39;&#39;&#39;</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+	<span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">LoggedShellCommand</span>
+
+<span class="k">def</span> <span class="nf">make_tar</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">input_file</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tar_gz&#39;</span><span class="p">]</span> <span class="p">):</span>
+	<span class="k">with</span> <span class="n">input_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;taring </span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">d</span><span class="p">)</span>
+		<span class="n">stdout</span> <span class="o">=</span> <span class="n">LoggedShellCommand</span><span class="p">([</span><span class="s1">&#39;tar&#39;</span><span class="p">,</span><span class="s1">&#39;-zvcf&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">tar_gz</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">],</span> <span class="s1">&#39;/dev/null&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span><span class="p">)</span>
+	<span class="n">res0</span> <span class="o">=</span> <span class="n">caller</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[res0.output.txt]:</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>  <span class="c1">#marked#</span>
+
+
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;GATC&#39;</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	## got</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	[res0.output.txt]:File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
+<span class="s1">	writing GATC to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
+<span class="s1">	[done]</span>
+
+<span class="s1">	## Note make_tar() is detecting the change of res0.output.txt and skipped the #marked# evaluation</span>
+<span class="s1">	&#39;&#39;&#39;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="running-a-remote-package-function">
-<h3><span class="section-number">3.1.2. </span>Running a remote package/function<a class="headerlink" href="#running-a-remote-package-function" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">2.1.2. </span>Running a remote package/function<a class="headerlink" href="#running-a-remote-package-function" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Vanilla python modules present import statements at the beginning of its scripts</span>
+<span class="sd">this prevents the specification of remote package though http:// and produces</span>
+<span class="sd">maintainence problems. Here we propose an in-function import system that</span>
+<span class="sd">install packages only during real-execution of NodeFunction(). This way,</span>
+<span class="sd">package dependency and scripts could live in the same python file, but yet</span>
+<span class="sd">be decoupled in the sense that only execution of a node invokes dependency installation. </span>
+
+<span class="sd">This in-function dependency is compatible with the old setup.py style dependency. The</span>
+<span class="sd">only difference is that previous dependency is specified at the package-level whereas</span>
+<span class="sd">this dep is at function-level.</span>
+
+<span class="sd">The purpose of enabling a remote package specification is to </span>
+<span class="sd">centralise the storage of pipelines to cloud rather than to a local machine, which</span>
+<span class="sd">would force the script creator to write the script in a local-independent way.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">PythonPackage</span><span class="p">,</span> <span class="n">RemotePythonObject</span><span class="p">,</span><span class="n">RPO</span>
+
+<span class="c1"># Github &quot;tarball/master&quot; often take minutes to update,</span>
+<span class="c1"># use the commit hash to ensure integrity. </span>
+<span class="c1"># package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
+<span class="c1"># package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">test_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
+ <span class="c1"># _remote_mod = PythonModule(package_path),</span>
+ <span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
+ 	<span class="c1">### import the top-level module of the package</span>
+ <span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+ 	<span class="kc">None</span><span class="p">,</span>  
+ 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+	 <span class="c1">### import a function from toplevel module</span>
+ <span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+ 	<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
+ 	<span class="c1">### import a module with different name</span>
+ <span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+ 	<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
+ 	<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
+ 	<span class="c1">### import a function from a module</span>
+ <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="n">_mod1</span> <span class="o">=</span> <span class="n">_mod1</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="n">_mod2</span> <span class="o">=</span> <span class="n">_mod2</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[IMPORTED]!!&#39;</span><span class="p">,</span><span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">())</span>
+	<span class="k">return</span> <span class="bp">self</span>
+	
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">simple_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
+ <span class="n">_main</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span> 
+ 	<span class="kc">None</span><span class="p">,</span> 
+ 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+ <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">_main</span><span class="o">.</span><span class="n">loaded</span><span class="p">(),</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;_backup&#39;</span><span class="p">)</span>	
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="kn">import</span> <span class="nn">singular_pipe</span>
+	<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">get_all_files</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">cache_run</span>
+	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+	<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;flat&#39;</span> 
+
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/test_import/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### [Note] currently the package change is not recorded&#39;</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> 
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### [Note] Remote workflow should detect file changes&#39;</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">!=</span> <span class="p">[]</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;### run actual workflow&#39;</span><span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[]</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="configure-directory-layout">
-<h3><span class="section-number">3.1.3. </span>Configure directory layout<a class="headerlink" href="#configure-directory-layout" title="Permalink to this headline">¶</a></h3>
+<h3><span class="section-number">2.1.3. </span>Configure directory layout<a class="headerlink" href="#configure-directory-layout" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 </div>
@@ -247,10 +451,10 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../lib/index.html" class="btn btn-neutral float-right" title="4. Manual" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="../lib/index.html" class="btn btn-neutral float-right" title="3. Manual" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="workflow-filesync.html" class="btn btn-neutral float-left" title="2. Workflow execution as file synchronisation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../install/index.html" class="btn btn-neutral float-left" title="1. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
