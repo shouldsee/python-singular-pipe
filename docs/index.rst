@@ -23,9 +23,8 @@ Indices and tables
 
 .. _my-reference-label:
 
-:mod:`singular_pipe._types` Internal types for detecting file and package 
-changes 
--------------------------------------------------------------------------
+:mod:`singular_pipe._types` Internal types for detecting file and package changes 
+-----------------------------------------------------------------------------------
 
 .. automodule:: singular_pipe._types
     :show-inheritance:
