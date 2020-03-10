@@ -19,7 +19,7 @@ Essentail
 Optional
 ---------------------------
   * singularity >= 3.5.3 to use :obj:`singular_pipe.shell.LoggedSingularityCommand`. 
-    * try
+  Convenience script ``curl -sL https://raw.githubusercontent.com/shouldsee/singular_pipe/7ef9673/scripts/install_singular.sh | bash -s /tmp/singularity2``    
   * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :obj:`singular_pipe.graph.plot_simple_graph`
 
 Installation
