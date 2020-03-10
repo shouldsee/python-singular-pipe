@@ -181,7 +181,68 @@ defined fileset into <code class="xref py py-func docutils literal notranslate">
 </div>
 <div class="section" id="singular-pipe-shell">
 <h2><a class="reference internal" href="#module-singular_pipe.shell" title="singular_pipe.shell"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code></a><a class="headerlink" href="#singular-pipe-shell" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-singular_pipe.shell"></span></div>
+<span class="target" id="module-singular_pipe.shell"></span><dl class="function">
+<dt id="singular_pipe.shell.LoggedShellCommand">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">LoggedShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">file='/dev/null'</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em>, <em class="sig-param">shell=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.LoggedShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>CMD:</dt><dd><p>a list of commands to be joined with ‘ ‘ and executed in bash</p>
+</dd>
+<dt>file: None or a string-like filename or a file-handle</dt><dd><p>if None, use a StringIO</p>
+</dd>
+<dt>check:</dt><dd><p>whether to raise error if the shell execution fails.</p>
+</dd>
+<dt>shell:</dt><dd><p>whether to treat CMD as a joined string or a list of string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.LoggedSingularityCommand">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
+image: a singularity image url
+extra_files: to-be-deprecated
+debug: print dbg info</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.SafeShellCommand">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">SafeShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">check=1</em>, <em class="sig-param">shell=0</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.SafeShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.SingularityShellCommand">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">SingularityShellCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.SingularityShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
+image: a singularity image url
+extra_files: to-be-deprecated
+debug: print dbg info</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.bind_files">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">bind_files</code><span class="sig-paren">(</span><em class="sig-param">files</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.bind_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.make_files_for">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">make_files_for</code><span class="sig-paren">(</span><em class="sig-param">cmd</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.make_files_for" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.shell.size_humanReadable">
+<code class="sig-prename descclassname">singular_pipe.shell.</code><code class="sig-name descname">size_humanReadable</code><span class="sig-paren">(</span><em class="sig-param">num, suffix='B', fmt='{0:.2f}', units=['', 'K', 'M', 'G', 'T', 'P', 'E']</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.shell.size_humanReadable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a human readable string reprentation of bytes,
+Source: <a class="reference external" href="https://stackoverflow.com/a/43750422/8083313">https://stackoverflow.com/a/43750422/8083313</a></p>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="singular-pipe-types-internal-types-to-record-system-status">
 <h1><a class="reference internal" href="#module-singular_pipe._types" title="singular_pipe._types: Internal types for detecting file and package changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code></a> — Internal types to record system status<a class="headerlink" href="#singular-pipe-types-internal-types-to-record-system-status" title="Permalink to this headline">¶</a></h1>

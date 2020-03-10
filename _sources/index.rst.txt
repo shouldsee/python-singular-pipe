@@ -28,7 +28,7 @@ Indices and tables
 
 .. automodule:: singular_pipe._types
     :show-inheritance:
-    :members: Flow, FlowFunction, Node, NodeFunction,    Depend, PrefixedNode, File, Prefix,    LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
+    :members: Flow, FlowFunction, Node, NodeFunction,    Depend, PrefixedNode, File, Prefix   
     :undoc-members:
     :synopsis: Internal types for detecting file and package changes 
 
@@ -45,6 +45,10 @@ Indices and tables
 :mod:`singular_pipe.shell`
 -------------------------
 .. automodule:: singular_pipe.shell
+    :show-inheritance:
+    :members:
+    :undoc-members:
+    :synopsis:
 
 
 
