@@ -162,6 +162,112 @@
 <h1><span class="section-number">2. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="creating-a-cached-node">
 <h2><span class="section-number">2.1. </span>Creating a cached Node<a class="headerlink" href="#creating-a-cached-node" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This script demo the principle of caching in this module</span>
+<span class="sd">The basic element to be cached is a function evaluation tuple (func, prefix,*args),</span>
+<span class="sd">which is considered as a Node whose status and last evaluation stored in its prefix. </span>
+
+<span class="sd">cache_run(func,prefix,*args) checks whether a node</span>
+<span class="sd">needs to be updated according to its immediate upstream nodes/inputs.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">force_run</span>
+<span class="k">def</span> <span class="nf">simplest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running node:</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span> <span class="c1">### This is the default behaviour for singular_pipe.runner.cache_run() </span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
+	<span class="nb">print</span><span class="p">()</span>
+
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	### comment</span>
+<span class="s1">	expect: </span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	</span>
+<span class="s1">	got:</span>
+<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+
+<span class="s1">	The second run accessed cache</span>
+<span class="s1">	&#39;&#39;&#39;</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+	<span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">less_simple_node</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">]):</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;writing </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">))</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">seq</span> <span class="o">*</span> <span class="mi">10</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
+
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;GCTA&#39;</span> <span class="p">)</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	### comment</span>
+<span class="s1">	expect:</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+
+<span class="s1">	got:</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+
+<span class="s1">	Becuase cache file is loaded for the two middle evaluations</span>
+
+<span class="s1">	&#39;&#39;&#39;</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
+	<span class="k">pass</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">LoggedShellCommand</span>
+
+<span class="k">def</span> <span class="nf">make_tar</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">input_file</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tar_gz&#39;</span><span class="p">]</span> <span class="p">):</span>
+	<span class="k">with</span> <span class="n">input_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+		<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;taring </span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">d</span><span class="p">)</span>
+		<span class="n">stdout</span> <span class="o">=</span> <span class="n">LoggedShellCommand</span><span class="p">([</span><span class="s1">&#39;tar&#39;</span><span class="p">,</span><span class="s1">&#39;-zvcf&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">tar_gz</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">],</span> <span class="s1">&#39;/dev/null&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span><span class="p">)</span>
+	<span class="n">res0</span> <span class="o">=</span> <span class="n">caller</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[res0.output.txt]:</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>  <span class="c1">#marked#</span>
+
+
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;GATC&#39;</span><span class="p">)</span>
+	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">make_tar</span><span class="p">,</span>         <span class="n">prefix</span><span class="p">,</span> <span class="n">res0</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	## got</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	[res0.output.txt]:File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
+<span class="s1">	writing GATC to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
+<span class="s1">	[done]</span>
+
+<span class="s1">	## Note make_tar() is detecting the change of res0.output.txt and skipped the #marked# evaluation</span>
+<span class="s1">	&#39;&#39;&#39;</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="running-a-remote-package-function">
 <h2><span class="section-number">2.2. </span>Running a remote package/function<a class="headerlink" href="#running-a-remote-package-function" title="Permalink to this headline">¶</a></h2>
