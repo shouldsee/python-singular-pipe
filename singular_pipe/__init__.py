@@ -44,7 +44,7 @@ def jinja2_format(s,**context):
 
 
 template = '''
-[![Build Status](https://travis-ci.com/shouldsee/python-singular-pipe.svg?token=f6G1tkP8yesCfYdyDVrj&branch=master)](https://travis-ci.com/shouldsee/python-singular-pipe)
+[![Build Status](https://travis-ci.com/shouldsee/singular_pipe.svg?branch=master)](https://travis-ci.com/shouldsee/singular_pipe)
 
 ## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
 

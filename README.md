@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.com/shouldsee/python-singular-pipe.svg?token=f6G1tkP8yesCfYdyDVrj&branch=master)](https://travis-ci.com/shouldsee/python-singular-pipe)
+[![Build Status](https://travis-ci.com/shouldsee/singular_pipe.svg?branch=master)](https://travis-ci.com/shouldsee/singular_pipe)
 
 ## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
 
@@ -39,12 +39,12 @@ Since scripts are small, they can be uploaded to remote quickly
 without pain
 '''
 from singular_pipe.types import Node,Flow
-from singular_pipe.types import PythonModule, PythonFunction
+from singular_pipe.types import RemotePythonObject as RPO
 
 package_path = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
 @Flow
 def simple_flow(self,prefix,
- _main= PythonFunction(package_path, 'run_and_backup'),
+ _main= RPO(package_path, None, 'run_and_backup'),
  _output=[]):
 	func = _main.loaded()
 	self.runner( func,  prefix, 1, 20, prefix+'_backup')	
