@@ -22,7 +22,8 @@ copyright = '2020, Feng Geng'
 author = 'Feng Geng'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.3'
+version = release = '0.0.3'
+
 
 
 # -- General configuration ---------------------------------------------------

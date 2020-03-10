@@ -1,5 +1,7 @@
 set -e
 ### install package first
+
+#mkdir _build_docs; cp -rft _build_docs
 git checkout master
 git commit docs -mdocs || echo no_commit
 rm -rf ./_docs
