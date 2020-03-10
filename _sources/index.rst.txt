@@ -20,7 +20,7 @@ Welcome to :mod:`singular_pipe`-|version| 's documentation!
    indexes.rst
    license.rst
 
-Introduction
+Overview
 ===================
 
 Despite plenty of packages out there, writing reproducible python
@@ -30,6 +30,12 @@ serveral aspects:
   * Separation of code from data.
   * Declaring function-level dependency.
 
+Workflow as file synchronisation
+====================================
+
+Any workflow can be divided into two parts: code and data. Given 
+a data state, one can apply some code to check whether these data
+are outdated.  
 
 :Author: Feng Geng
 :Email: shouldsee.gem@gmail.com
