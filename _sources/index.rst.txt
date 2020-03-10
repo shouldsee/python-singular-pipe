@@ -16,7 +16,7 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
+* :ref:`py-modindex`
 * :ref:`search`
 
 .. * :ref:`my-reference_label`
