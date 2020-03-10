@@ -31,8 +31,7 @@ Indices and tables
     :members: Flow, FlowFunction, Node, NodeFunction,    Depend, PrefixedNode, File, Prefix,    
     LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
     :undoc-members:
-    :synopsis: Internal types for detecting file and package 
-changes 
+    :synopsis: Internal types for detecting file and package changes 
 
 
 :mod:`singular_pipe.types` Entry point for all public callables 
