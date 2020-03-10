@@ -47,9 +47,9 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<div class="section" id="singular-pipe-types-internal-types-for">
-<span id="my-reference-label"></span><h2><a class="reference internal" href="#module-singular_pipe.types" title="singular_pipe.types: see convex module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code></a> Internal types for<a class="headerlink" href="#singular-pipe-types-internal-types-for" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-singular_pipe.types"></span><p>Collections of internal types and fuunctions</p>
+<div class="section" id="module-singular_pipe.types">
+<span id="singular-pipe-types-internal-types-for"></span><span id="my-reference-label"></span><h2><a class="reference internal" href="#module-singular_pipe.types" title="singular_pipe.types: see convex module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code></a> Internal types for<a class="headerlink" href="#module-singular_pipe.types" title="Permalink to this headline">¶</a></h2>
+<p>Collections of internal types and fuunctions</p>
 <dl class="function">
 <dt id="singular_pipe.types.Flow">
 <code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Flow</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Flow" title="Permalink to this definition">¶</a></dt>
@@ -157,138 +157,6 @@ debug: print dbg info</p>
 </dl>
 </dd></dl>
 
-<dl class="class">
-<dt id="singular_pipe.types.Caller">
-<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Caller</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">arg_dict</em>, <em class="sig-param">dir_layout</em>, <em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="method">
-<dt id="singular_pipe.types.Caller.arg_values">
-<em class="property">property </em><code class="sig-name descname">arg_values</code><a class="headerlink" href="#singular_pipe.types.Caller.arg_values" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.cache">
-<code class="sig-name descname">cache</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">check=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.cache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.dotname">
-<em class="property">property </em><code class="sig-name descname">dotname</code><a class="headerlink" href="#singular_pipe.types.Caller.dotname" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.f">
-<em class="property">property </em><code class="sig-name descname">f</code><a class="headerlink" href="#singular_pipe.types.Caller.f" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.from_input">
-<em class="property">classmethod </em><code class="sig-name descname">from_input</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">_input</em>, <em class="sig-param">dir_layout</em>, <em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.from_input" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.get_all_files">
-<code class="sig-name descname">get_all_files</code><span class="sig-paren">(</span><em class="sig-param">allow=[&lt;class 'singular_pipe._types.File'&gt;], flat=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_all_files" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.get_changed_files">
-<code class="sig-name descname">get_changed_files</code><span class="sig-paren">(</span><em class="sig-param">flat=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_changed_files" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.get_output">
-<code class="sig-name descname">get_output</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_output" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.get_output_files">
-<code class="sig-name descname">get_output_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_output_files" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.get_subflow">
-<code class="sig-name descname">get_subflow</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_subflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.is_mock">
-<code class="sig-name descname">is_mock</code><span class="sig-paren">(</span><em class="sig-param">call=&lt;function Caller.&lt;lambda&gt;&gt;</em>, <em class="sig-param">fast=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.is_mock" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.is_mock_file">
-<code class="sig-name descname">is_mock_file</code><span class="sig-paren">(</span><em class="sig-param">v</em>, <em class="sig-param">call</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.is_mock_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.job_type">
-<em class="property">property </em><code class="sig-name descname">job_type</code><a class="headerlink" href="#singular_pipe.types.Caller.job_type" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.load_cache">
-<code class="sig-name descname">load_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.load_cache" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.mock_do">
-<code class="sig-name descname">mock_do</code><span class="sig-paren">(</span><em class="sig-param">output_ident_changed</em>, <em class="sig-param">strict</em>, <em class="sig-param">verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.mock_do" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.mock_undo">
-<code class="sig-name descname">mock_undo</code><span class="sig-paren">(</span><em class="sig-param">strict</em>, <em class="sig-param">verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.mock_undo" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.output">
-<em class="property">property </em><code class="sig-name descname">output</code><a class="headerlink" href="#singular_pipe.types.Caller.output" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.output_cache_file">
-<em class="property">property </em><code class="sig-name descname">output_cache_file</code><a class="headerlink" href="#singular_pipe.types.Caller.output_cache_file" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.prefix">
-<em class="property">property </em><code class="sig-name descname">prefix</code><a class="headerlink" href="#singular_pipe.types.Caller.prefix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.prefix_named">
-<em class="property">property </em><code class="sig-name descname">prefix_named</code><a class="headerlink" href="#singular_pipe.types.Caller.prefix_named" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.subflow">
-<em class="property">property </em><code class="sig-name descname">subflow</code><a class="headerlink" href="#singular_pipe.types.Caller.subflow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.to_dict">
-<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>For visualisation / json.dumps</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.to_ident">
-<code class="sig-name descname">to_ident</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_ident" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="singular_pipe.types.Caller.to_table_node_label">
-<code class="sig-name descname">to_table_node_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_table_node_label" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="singular_pipe.types.FakeCode">
-<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">FakeCode</code><span class="sig-paren">(</span><em class="sig-param">code</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.FakeCode" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
 </div>
 <div class="section" id="singular-pipe-shell">
 <h2><a class="reference internal" href="#module-singular_pipe.shell" title="singular_pipe.shell"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code></a><a class="headerlink" href="#singular-pipe-shell" title="Permalink to this headline">¶</a></h2>
@@ -308,7 +176,7 @@ debug: print dbg info</p>
   <ul>
 <li><a class="reference internal" href="#">Welcome to singular_pipe’s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
-<li><a class="reference internal" href="#singular-pipe-types-internal-types-for"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Internal types for</a></li>
+<li><a class="reference internal" href="#module-singular_pipe.types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Internal types for</a></li>
 <li><a class="reference internal" href="#singular-pipe-shell"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code></a></li>
 </ul>
 </li>
