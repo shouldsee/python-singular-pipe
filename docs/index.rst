@@ -8,7 +8,7 @@
 Welcome to :mod:`singular_pipe`'s documentation!
 *************************************************
 
-.. _Contents:
+.. _Contents
 
 .. toctree::
    :maxdepth: 2
