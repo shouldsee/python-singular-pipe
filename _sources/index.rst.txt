@@ -42,31 +42,10 @@ Indices and tables
     :synopsis: Internal types for detecting file and package changes 
 
 
-:mod:`singular_pipe.shell`
--------------------------
+:mod:`singular_pipe.shell` Shell utilities
+-------------------------------------------
 .. automodule:: singular_pipe.shell
     :show-inheritance:
     :members:
     :undoc-members:
     :synopsis: Shell utilities
-
-
-
-:mod:`singular_pipe._types` --- Internal types to record system status
-=====================================================================
-
-.. .. autofunction:: io.open
-
-.. .. automodule:: `singular_pipe`
-..    :members:
-
-.. :mod:`singular_pipe.types` --- Internal types to record system status
-.. =====================================================================
-
-.. .. module:: singular_pipe.types
-..    :synopsis:  Internal types to record system status
-
-.. .. function:: LoggedShellCommand(cmd_list[, output_handle[, strict]])
-..    Executes a Shell command and save output to a file
-
-.. .. class:: Caller()
