@@ -1,0 +1,1068 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>singular_pipe.runner &mdash; singular_pipe 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> singular_pipe
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">2. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lib/index.html">3. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indexes.html">4. Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">singular_pipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>singular_pipe.runner</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for singular_pipe.runner</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">singular_pipe</span>
+<span class="kn">from</span> <span class="nn">singular_pipe</span> <span class="kn">import</span> <span class="n">rcParams</span>
+<span class="kn">from</span> <span class="nn">singular_pipe</span> <span class="kn">import</span> <span class="n">VERSION</span><span class="p">,</span><span class="n">jinja2_format</span>
+
+<span class="kn">import</span> <span class="nn">singular_pipe._types</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">InputFile</span><span class="p">,</span><span class="n">OutputFile</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">IdentFile</span><span class="p">,</span><span class="n">CacheFile</span><span class="p">,</span> <span class="n">AttrDict</span>
+<span class="c1"># from singular_pipe._types import InputFile,OutputFile,File,TempFile,? ,Path,</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">Prefix</span><span class="p">,</span><span class="n">InputPrefix</span><span class="p">,</span><span class="n">OutputPrefix</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">IdentAttrDict</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">CantGuessCaller</span><span class="p">,</span> <span class="n">UndefinedTypeRoutine</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">TooManyArgumentsError</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">NodeFunction</span><span class="p">,</span><span class="n">FlowFunction</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">DirtyKey</span>
+
+<span class="c1"># from singular_pipe._types import FakeCode,FakeJob</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe.base</span> <span class="kn">import</span> <span class="n">get_func_name</span><span class="p">,</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.base</span> <span class="kn">import</span> <span class="n">job_from_func</span>
+
+<span class="kn">from</span>  <span class="nn">singular_pipe._pickler</span> <span class="kn">import</span> <span class="n">MyPickleSession</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span><span class="nn">sys</span><span class="o">,</span><span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">zip_longest</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">orderedattrdict</span> <span class="kn">import</span> <span class="n">AttrDict</span> <span class="k">as</span> <span class="n">_dict</span>
+<span class="c1"># _dict = collections.OrderedDict</span>
+
+<span class="k">def</span> <span class="nf">_dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">MyPickleSession</span><span class="p">()</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_loads</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">MyPickleSession</span><span class="p">()</span><span class="o">.</span><span class="n">loads_b64</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ident_load"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.ident_load">[docs]</a><span class="k">def</span> <span class="nf">ident_load</span><span class="p">(</span><span class="n">ident_file</span><span class="p">,</span><span class="n">key</span><span class="p">):</span>	
+	<span class="n">ident_dump_old</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">file_not_empty</span><span class="p">(</span><span class="n">ident_file</span><span class="p">):</span>
+			<span class="n">ident_dump_old</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">ident_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())[</span><span class="n">key</span><span class="p">]</span>
+			<span class="c1"># ident_dump_old = str(json.loads(open(ident_file,&#39;r&#39;).read())[key])</span>
+	<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="n">e</span>
+		<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">ident_dump_old</span></div>
+
+<div class="viewcode-block" id="ident_changed"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.ident_changed">[docs]</a><span class="k">def</span> <span class="nf">ident_changed</span><span class="p">(</span><span class="n">ident</span><span class="p">,</span> <span class="n">ident_file</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+	<span class="n">ident_dump</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">ident</span><span class="p">)</span>
+	<span class="n">ident_dump_old</span> <span class="o">=</span> <span class="n">ident_load</span><span class="p">(</span> <span class="n">ident_file</span><span class="p">,</span> <span class="n">key</span> <span class="p">)</span>
+	<span class="k">return</span> <span class="n">ident_dump</span> <span class="o">!=</span> <span class="n">ident_dump_old</span></div>
+
+
+<div class="viewcode-block" id="ident_dump"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.ident_dump">[docs]</a><span class="k">def</span> <span class="nf">ident_dump</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">ident_file</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="p">[],</span><span class="n">version</span><span class="o">=</span><span class="n">VERSION</span><span class="p">):</span>	
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ident_file</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="n">IOBase</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="n">ident_file</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ident_file</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
+	<span class="k">with</span> <span class="n">f</span><span class="p">:</span>
+	<span class="c1"># with open(ident_file,&#39;w&#39;) as f:</span>
+		<span class="c1"># assert 0</span>
+		<span class="n">_d</span> <span class="o">=</span> <span class="n">_dict</span><span class="p">([</span>
+			<span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">,</span><span class="n">version</span><span class="p">),</span>
+			<span class="c1"># (&#39;comment&#39;,comment),</span>
+			<span class="c1"># (&#39;ident&#39;, _dumps(ident) ),</span>
+			<span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">_dict</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+
+		<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">_d</span><span class="p">,</span>
+			<span class="n">f</span><span class="p">,</span>
+			<span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+		<span class="p">)</span></div>
+		<span class="c1"># collections.OrderedDict</span>
+		<span class="c1"># pickle.dump( ident,  f )</span>
+
+<span class="k">def</span> <span class="nf">_raise</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+	<span class="k">raise</span> <span class="n">e</span>
+
+
+<div class="viewcode-block" id="func_orig"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.func_orig">[docs]</a><span class="k">def</span> <span class="nf">func_orig</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+	<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="s1">&#39;__wrapped__&#39;</span><span class="p">):</span>
+			<span class="n">func</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="n">__wrapped__</span>
+		<span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">func</span><span class="p">,</span><span class="s1">&#39;__func__&#39;</span><span class="p">):</span>
+			<span class="n">func</span> <span class="o">=</span> <span class="n">func</span><span class="o">.</span><span class="vm">__func__</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">break</span>
+	<span class="k">return</span> <span class="n">func</span></div>
+
+
+<div class="viewcode-block" id="FakeCode"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.FakeCode">[docs]</a><span class="k">def</span> <span class="nf">FakeCode</span><span class="p">(</span><span class="n">code</span><span class="p">):</span>
+	<span class="c1"># out = (code.co_code, [])</span>
+	<span class="n">consts</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">const</span> <span class="ow">in</span> <span class="n">code</span><span class="o">.</span><span class="n">co_consts</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">const</span><span class="p">,</span> <span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">):</span>
+			<span class="n">consts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">FakeCode</span><span class="p">(</span><span class="n">const</span><span class="p">)</span> <span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">consts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">const</span> <span class="p">)</span>
+	<span class="k">return</span> <span class="n">FakeCode</span><span class="o">.</span><span class="n">_codecls</span><span class="p">(</span> <span class="n">code</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span></div>
+<span class="n">FakeCode</span><span class="o">.</span><span class="n">_codecls</span> <span class="o">=</span> <span class="n">_cls</span><span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_codecls&#39;</span><span class="p">,</span><span class="s1">&#39;co_code co_consts&#39;</span><span class="p">)</span>
+<span class="n">_cls</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="o">=</span> <span class="s1">&#39;FakeCode._codecls&#39;</span>
+
+<div class="viewcode-block" id="FakeJob"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.FakeJob">[docs]</a><span class="k">class</span> <span class="nc">FakeJob</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="c1"># code_tree = code_tree</span>
+	<span class="n">_codecls</span> <span class="o">=</span> <span class="n">FakeCode</span><span class="o">.</span><span class="n">_codecls</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">job</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>     <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="vm">__name__</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__code__</span>     <span class="o">=</span> <span class="n">FakeCode</span><span class="p">(</span> <span class="n">job</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)</span> 
+		<span class="c1"># self.__code__     = self._codecls( job.__code__.co_code, job.__code__.co_consts)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__qualname__</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="vm">__qualname__</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__module__</span>   <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="vm">__module__</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">_output_type</span>
+	<span class="c1"># def code_tree(self):</span>
+		<span class="c1"># self.__code__  = </span>
+		<span class="k">return</span> </div>
+
+<div class="viewcode-block" id="SubflowOutput"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.SubflowOutput">[docs]</a><span class="k">class</span> <span class="nc">SubflowOutput</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">key</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="k">raise</span> <span class="ne">NotImplementedError</span>
+		<span class="c1"># assert &#39;SubflowOutput&#39; i</span>
+		<span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">name</span> <span class="o">=</span> <span class="n">key</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">key</span>  <span class="o">=</span> <span class="n">key</span>
+
+	<span class="k">pass</span></div>
+
+<div class="viewcode-block" id="is_mock_file"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.is_mock_file">[docs]</a><span class="k">def</span> <span class="nf">is_mock_file</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">call</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+		<span class="n">call</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+		<span class="k">return</span> <span class="mi">1</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.empty.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+		<span class="n">call</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.empty.mock&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">call</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+		<span class="k">return</span> <span class="mi">1</span>
+	<span class="k">return</span> <span class="mi">0</span></div>
+
+
+			
+
+<span class="k">def</span> <span class="nf">_get_changed_files</span><span class="p">(</span><span class="n">caller</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">_get_all_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_get_all_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">changed</span><span class="p">):</span>
+	<span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">changed</span> <span class="ow">or</span> <span class="n">is_mock_file</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+			<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">caller</span><span class="o">.</span><span class="n">subflow</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_all_files</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">changed</span><span class="p">)</span>
+		<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">res</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">lst</span>				
+
+		
+<div class="viewcode-block" id="Caller"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller">[docs]</a><span class="k">class</span> <span class="nc">Caller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Caller.get_changed_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.get_changed_files">[docs]</a>	<span class="k">def</span> <span class="nf">get_changed_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_changed_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">flat</span><span class="p">:</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="Caller.get_all_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.get_all_files">[docs]</a>	<span class="k">def</span> <span class="nf">get_all_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">allow</span><span class="o">=</span><span class="p">[</span><span class="n">File</span><span class="p">],</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">,):</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_all_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">flat</span><span class="p">:</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">allow</span><span class="p">:</span>
+				<span class="c1">#### [FRAGILE]</span>
+				<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="n">allow</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="Caller.is_mock_file"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.is_mock_file">[docs]</a>	<span class="k">def</span> <span class="nf">is_mock_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">call</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">is_mock_file</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">call</span><span class="p">)</span></div>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">job_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_type</span>
+	
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">output_cache_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="c1"># return self._foo</span>
+		<span class="k">return</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[],</span> <span class="s1">&#39;cache_pk&#39;</span><span class="p">)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span>
+		<span class="c1"># _caller  = self</span>
+		<span class="c1"># if issubclass(_caller.job_type,(singular_pipe._types.FlowFunction)):</span>
+		<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">		output can be derived before evaluation</span>
+<span class="s1">		&#39;&#39;&#39;</span>
+		<span class="k">pass</span>
+
+		<span class="c1">#### calculate output files</span>
+		<span class="c1">### cast all files all as prefix</span>
+		<span class="c1">### here we add cache_file as a constitutive output.		</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span>
+
+		<span class="c1"># return get_output_files( self.job, self.prefix, self._output_type._typed_fields)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">func_orig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="p">)</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">prefix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+	<span class="nd">@property</span>	
+	<span class="k">def</span> <span class="nf">prefix_named</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">named</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+		<span class="c1"># &#39;.&#39;.join([self.prefix+]</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">arg_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_arg_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">[:]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)]</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arg_values</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">dotname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">object</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">)</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">subflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>
+	
+<div class="viewcode-block" id="Caller.get_subflow"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.get_subflow">[docs]</a>	<span class="k">def</span> <span class="nf">get_subflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subflow</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+<div class="viewcode-block" id="Caller.get_output"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.get_output">[docs]</a>	<span class="k">def</span> <span class="nf">get_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Caller.get_output_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.get_output_files">[docs]</a>	<span class="k">def</span> <span class="nf">get_output_files</span><span class="p">(</span> <span class="bp">self</span> <span class="p">):</span>
+		<span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
+		<span class="c1"># res = self.output</span>
+		<span class="c1"># # res += (CacheFile(self.output_cache_file),)</span>
+		<span class="c1"># return list(res.values())</span>
+	<span class="c1"># @staticmethod</span>
+<div class="viewcode-block" id="Caller.is_mock"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.is_mock">[docs]</a>	<span class="k">def</span> <span class="nf">is_mock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">call</span><span class="o">=</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="kc">None</span><span class="p">,</span><span class="n">fast</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">mock</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="n">mock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_mock_file</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">call</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">mock</span><span class="p">:</span> 
+				<span class="k">break</span>
+		<span class="k">return</span> <span class="n">mock</span></div>
+
+<div class="viewcode-block" id="Caller.from_input"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.from_input">[docs]</a>	<span class="nd">@classmethod</span>
+	<span class="k">def</span> <span class="nf">from_input</span><span class="p">(</span><span class="n">Caller</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">_input</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="s1">&#39;_singular_pipe&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">):</span>
+			<span class="n">job</span> <span class="o">=</span> <span class="n">job_from_func</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+		<span class="c1"># _tmp  = []</span>
+		<span class="n">_tmp</span>  <span class="o">=</span> <span class="n">AttrDict</span><span class="p">()</span>
+		<span class="n">_null</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;_null&#39;</span><span class="p">,[])()</span>
+		<span class="n">_zip</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">zip_longest</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">_input_names</span><span class="p">,</span> <span class="n">job</span><span class="o">.</span><span class="n">_input_types</span><span class="p">,</span> <span class="n">_input</span><span class="p">,</span><span class="n">fillvalue</span><span class="o">=</span><span class="n">_null</span><span class="p">)</span>
+		<span class="n">_dump</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="nb">repr</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s1">&#39;tuple&#39;</span><span class="p">,</span><span class="s1">&#39;argname type input_value&#39;</span><span class="p">)(</span><span class="o">*</span><span class="n">x</span><span class="p">))</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_zip</span><span class="p">()],</span><span class="n">indent</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">n</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_zip</span><span class="p">():</span>
+			<span class="k">if</span> <span class="n">n</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;_&#39;</span><span class="p">:</span>
+				<span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">_null</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="n">TooManyArgumentsError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{dump}</span><span class="se">\n</span><span class="s1">Too many arguments specified for </span><span class="si">{job._origin_code}</span><span class="se">\n</span><span class="s1"> argname started with _ should not have input_value </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+						<span class="n">dump</span><span class="o">=</span><span class="n">_dump</span><span class="p">(),</span><span class="o">**</span><span class="nb">locals</span><span class="p">()))</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="c1">## v is _null, t is default value</span>
+					<span class="c1"># _tmp.append((n,t))</span>
+					<span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+						<span class="n">t</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">args</span> <span class="o">=</span> <span class="n">_tmp</span><span class="p">)</span>
+					<span class="n">_tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span>
+			<span class="k">elif</span> <span class="n">v</span> <span class="ow">is</span> <span class="n">_null</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">TooFewArgumentsError</span><span class="p">(</span>
+					<span class="s1">&#39;</span><span class="si">{dump}</span><span class="se">\n</span><span class="s1">Too few arguments specified for </span><span class="si">{job._origin_code}</span><span class="se">\n</span><span class="s1"> normal argname are without &quot;_&quot; are necessary for evaluation </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+				<span class="n">dump</span><span class="o">=</span><span class="n">_dump</span><span class="p">(),</span><span class="o">**</span><span class="nb">locals</span><span class="p">()))</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
+					<span class="n">v</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+				<span class="n">_tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+		<span class="c1"># _tmp.setdefault(&#39;_single_file&#39;,0)</span>
+		<span class="c1"># for k,v in _tmp.items():</span>
+		<span class="c1"># 	if isinstance(v,Caller):</span>
+		<span class="c1"># 		self.upstream</span>
+				<span class="c1"># _tmp.append( (n, t(v)) )</span>
+		<span class="c1"># assert isinstance(_tmp[0]</span>
+		<span class="n">_caller</span> <span class="o">=</span> <span class="n">Caller</span><span class="p">(</span> <span class="n">job</span><span class="p">,</span> <span class="n">_tmp</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+		<span class="c1"># _caller = Caller( job, list(_tmp.items()), dir_layout, tag)</span>
+		<span class="k">return</span> <span class="n">_caller</span></div>
+	<span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+	<span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span>
+		<span class="n">d</span><span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FakeJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+		<span class="n">d</span><span class="p">[</span><span class="s1">&#39;runner&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="n">d</span><span class="p">[</span><span class="s1">&#39;config_runner&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="c1"># d[&#39;returned&#39;] = (&#39;LoadFrom&#39;,self.output_cache_file)</span>
+		<span class="k">return</span> <span class="n">d</span>
+
+	<span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">d</span>
+
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">arg_dict</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+		<span class="c1"># if not getattr(job,&#39;_singular_pipe&#39;,False):</span>
+		<span class="c1"># 	job = job_from_func(job)		</span>
+		<span class="n">arg_tuples</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">arg_dict</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+		<span class="n">arg_dict</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;_single_file&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">named</span> <span class="o">=</span> <span class="n">arg_dict</span><span class="o">.</span><span class="n">_single_file</span> <span class="o">==</span> <span class="mi">0</span>
+		<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">File</span><span class="p">),(</span><span class="n">arg_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+		<span class="c1"># arg_tuples[0] = (&#39;prefix&#39;, (arg_tuples[0][1]).expand().realpath())</span>
+		<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">arg_tuples</span><span class="p">):</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,(</span><span class="n">Prefix</span><span class="p">,</span> <span class="n">File</span><span class="p">)):</span>				
+				<span class="n">arg_tuples</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">v</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span><span class="o">.</span><span class="n">realpath</span><span class="p">())</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="s1">&#39;_type&#39;</span><span class="p">,):</span>
+			<span class="n">job</span> <span class="o">=</span> <span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Node</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+		<span class="c1"># self.named = named = job._type.named</span>
+		<span class="c1"># named = True</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">named</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">tag</span><span class="p">:</span> <span class="k">assert</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">tag</span><span class="p">,(</span><span class="n">tag</span><span class="p">,</span><span class="n">DirtyKey</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
+			<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">str</span><span class="p">)),(</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">),</span><span class="n">tag</span><span class="p">)</span>
+			<span class="n">tag</span>  <span class="o">=</span> <span class="n">tag</span> <span class="ow">or</span> <span class="p">[]</span>
+			<span class="n">_tag</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_flatten</span><span class="p">([</span> <span class="n">job</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tag</span><span class="p">]))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># _tag = self.prefix</span>
+			<span class="n">_tag</span> <span class="o">=</span> <span class="n">arg_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+			<span class="c1"># _tag = job.__name__</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span>     <span class="o">=</span> <span class="n">_tag</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">job</span>          <span class="o">=</span> <span class="n">job</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">_output_type</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_job_type</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">_type</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span>   <span class="o">=</span> <span class="n">arg_tuples</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span>   <span class="o">=</span> <span class="n">dir_layout</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>     <span class="o">=</span> <span class="n">_dict</span><span class="p">()</span>
+
+
+		<span class="c1">### create output directory</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">isdir</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+
+		<span class="c1">### initialise FlowFunciton._output_dict differently by mock_do and mock_undo</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_output_files</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span><span class="o">.</span><span class="n">_typed_fields</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="s1">&#39;_cache_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">CacheFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">named</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="s1">&#39;prefix_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span><span class="o">.</span><span class="n">realpath</span><span class="p">()</span> 
+		<span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+	<span class="k">def</span> <span class="nf">_get_output_files</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">_output_typed_fields</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Assuming all output_files are Prefix because types arent checked</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">tups</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">_output_typed_fields</span><span class="p">:</span>
+			<span class="c1"># print(&#39;[get-output]&#39;,s,type(s))</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,(</span><span class="n">Prefix</span><span class="p">,</span><span class="n">File</span><span class="p">,)):</span>
+				<span class="c1">### Assuming type is File  if unspecified</span>
+				<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="nb">str</span><span class="p">),(</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">),</span><span class="n">s</span><span class="p">)</span>
+				<span class="n">typ</span> <span class="o">=</span> <span class="n">File</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">typ</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+			<span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{self.prefix_named}</span><span class="s2">.</span><span class="si">{suffix}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">s</span><span class="p">,</span> <span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+			<span class="n">s</span> <span class="o">=</span> <span class="n">typ</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+			<span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">(</span><span class="n">InputFile</span><span class="p">,</span><span class="n">InputPrefix</span><span class="p">)),(</span><span class="s1">&#39;Must be Ouputxxx not Input...,</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">s</span><span class="p">)</span>
+			<span class="n">tups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+		<span class="n">tups</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span><span class="p">(</span><span class="o">*</span><span class="n">tups</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">tups</span>		
+		<span class="c1"># if self.subflow:</span>
+		<span class="c1"># 	self._subflow.clear()</span>
+		<span class="c1"># 	self( partial(mock_run,last_caller=self,mock=-1) )</span>
+			<span class="c1"># self(mock_undo)	</span>
+		<span class="k">return</span> <span class="n">tups</span>		
+<div class="viewcode-block" id="Caller.to_ident"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.to_ident">[docs]</a>	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="c1">### argument to jobs without prefix</span>
+		<span class="c1">### argument with name ending with &#39;_&#39; will be discarded in idenitty</span>
+		<span class="c1"># _job_args = [v for k,v in self.arg_tuples[1:] if not k.endswith(&#39;_&#39;)]</span>
+		<span class="c1"># _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith(&#39;_&#39;)]</span>
+		<span class="c1"># _job_args = list(zip(*self.arg_tuples[1:])) </span>
+		<span class="n">_input</span> <span class="o">=</span> <span class="p">[</span>
+			<span class="n">FakeCode</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">),</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">arg_values</span><span class="p">,</span>
+		<span class="p">]</span>		
+		<span class="k">return</span> <span class="n">_input</span></div>
+<div class="viewcode-block" id="Caller.to_dict"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.to_dict">[docs]</a>	<span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		For visualisation / json.dumps</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">([</span>
+				<span class="p">(</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)),</span>
+				<span class="p">(</span><span class="s1">&#39;dotname&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dotname</span><span class="p">),</span>
+				<span class="c1"># (&#39;dotname&#39;,&quot;%s.%s&quot;%(inspect.getmodule(f).__name__, f.__qualname__)),</span>
+				<span class="p">(</span><span class="s1">&#39;arg_tuples&#39;</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">([</span>
+					<span class="p">(</span>
+						<span class="n">k</span><span class="p">,</span>
+						<span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">::</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span> <span class="p">),</span>
+						<span class="c1"># str(type(v))+&#39;:&#39;+repr(v).strip(&#39;&quot;&#39;&quot;&#39;&quot;) ,</span>
+						<span class="c1"># _raise(Exception())</span>
+					<span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span>
+					<span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+					<span class="p">])</span> <span class="p">),</span>
+				<span class="c1"># (&#39;co_code&#39;,f.__code__.co_code),</span>
+				<span class="c1"># (&#39;co_consts&#39;,f.__code__.co_consts),</span>
+				<span class="p">])</span>
+		<span class="k">return</span> <span class="n">res</span>		</div>
+
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span>
+		<span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">(</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="o">%</span><span class="p">(</span>
+			<span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span>
+			<span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+			<span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;dotname&#39;</span><span class="p">,</span><span class="s1">&#39;prefix_named&#39;</span><span class="p">]]),</span>
+			<span class="c1"># self.dotname, self.prefix_named,</span>
+			<span class="c1"># json.dumps( self.to_dict(),</span>
+			<span class="c1"># indent=2,default=repr)</span>
+			<span class="p">)</span>
+
+<div class="viewcode-block" id="Caller.cache"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.cache">[docs]</a>	<span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="k">assert</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached</span><span class="p">,</span><span class="s2">&quot;Cannot cache twice in a function&quot;</span>
+		<span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span><span class="p">,</span> <span class="s2">&quot;self.cache is not available for </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="p">,)</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> 
+			<span class="n">p</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span>
+			<span class="n">p</span><span class="o">.</span><span class="n">dump_sniff</span><span class="p">(</span> <span class="n">obj</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span>  <span class="n">f</span><span class="p">:</span>
+			<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="nb">dict</span><span class="p">(</span><span class="n">modules</span><span class="o">=</span><span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">()),</span> <span class="n">f</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_cached</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Caller.load_cache"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.load_cache">[docs]</a>	<span class="k">def</span> <span class="nf">load_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_mock</span><span class="p">():</span>
+			<span class="n">output_cache_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span> <span class="o">+</span> <span class="s1">&#39;.old.mock&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">output_cache_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.json&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+			<span class="n">modules</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="s1">&#39;modules&#39;</span><span class="p">]</span>
+		<span class="c1">## inplement modules check</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_cache_file</span><span class="p">,</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> 
+			<span class="n">result</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">result</span> </div>
+
+	<span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">partial</span><span class="p">):</span>
+			<span class="n">runner</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">runner</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="n">runner</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">config_runner</span> <span class="o">=</span> <span class="n">config_runner</span>
+		<span class="c1"># self.runner = partial( runner, last_caller=last_caller)</span>
+		<span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="p">,</span> <span class="n">NodeFunction</span><span class="p">):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_cached</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">])</span>
+			<span class="k">assert</span> <span class="n">returned</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span><span class="s2">&quot;Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow&quot;</span>			
+			<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached</span><span class="p">:</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">returned</span><span class="p">,)</span>
+			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span>
+			<span class="k">return</span> <span class="bp">self</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_cached</span> <span class="o">=</span> <span class="kc">False</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">])</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">returned</span><span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">config_runner</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="k">return</span> <span class="n">returned</span>
+
+
+<div class="viewcode-block" id="Caller.mock_undo"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.mock_undo">[docs]</a>	<span class="k">def</span> <span class="nf">mock_undo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">verbose</span><span class="p">):</span>
+		<span class="n">_caller</span> <span class="o">=</span> <span class="bp">self</span>
+		<span class="c1"># print(self)</span>
+		<span class="c1"># verbose = 4</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+				<span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">unlink</span><span class="p">())</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[REMOVING.mock]</span><span class="si">%s</span><span class="s1">.old.mock&#39;</span><span class="o">%</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.empty.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+				<span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="s1">&#39;.empty.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+				<span class="n">v</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[REMOVING.mock]</span><span class="si">%s</span><span class="s1">.empty.mock&#39;</span><span class="o">%</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[SPARING.mock]</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span>
+		<span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.output_changed.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">unlink_p</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+			<span class="k">assert</span> <span class="ow">not</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">(</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">5</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>		</div>
+<div class="viewcode-block" id="Caller.mock_do"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.mock_do">[docs]</a>	<span class="k">def</span> <span class="nf">mock_do</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_ident_changed</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="n">verbose</span><span class="p">):</span>
+		<span class="n">_caller</span> <span class="o">=</span> <span class="bp">self</span>
+		<span class="c1"># print(self)</span>
+		<span class="c1"># verbose = 4</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="n">f</span> <span class="o">=</span> <span class="n">v</span>
+		<span class="c1"># for f in v.expanded():</span>
+			<span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span>
+					<span class="n">f</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="s1">&#39;.old.mock&#39;</span><span class="p">)</span>
+					<span class="n">f</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="p">(</span><span class="n">f</span><span class="o">+</span><span class="s1">&#39;.empty.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
+				<span class="n">f</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[CREATING.mock]</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">f</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span>
+		<span class="k">if</span> <span class="n">output_ident_changed</span><span class="p">:</span>
+			<span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.output_changed.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>	
+		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">(</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">5</span>  <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>		</div>
+				
+<div class="viewcode-block" id="Caller.to_table_node_label"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.Caller.to_table_node_label">[docs]</a>	<span class="k">def</span> <span class="nf">to_table_node_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="c1"># node = self</span>
+		<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">	&lt;		</span>
+<span class="s1">	&lt;TABLE BORDER=&quot;0&quot; CELLBORDER=&quot;1&quot; CELLSPACING=&quot;0&quot;&gt;</span>
+<span class="s1">	  &lt;TR&gt;</span>
+<span class="s1">	    &lt;TD ALIGN=&quot;LEFT&quot; BGCOLOR=&quot;lightblue&quot;&gt;attr&lt;/TD&gt;</span>
+<span class="s1">	    &lt;TD ALIGN=&quot;LEFT&quot; BGCOLOR=&quot;lightblue&quot;&gt;type&lt;/TD&gt;</span>
+<span class="s1">	    &lt;TD ALIGN=&quot;LEFT&quot; BGCOLOR=&quot;lightblue&quot;&gt;value&lt;/TD&gt;</span>
+<span class="s1">	  &lt;/TR&gt;</span>
+
+<span class="s1">	  {# &lt;TR&gt;</span>
+<span class="s1">	  	&lt;TD ALIGN=&quot;LEFT&quot;&gt;Prefix&lt;/TD&gt;</span>
+<span class="s1">	    &lt;TD ALIGN=&quot;LEFT&quot;&gt;{{node.prefix}}&lt;/TD&gt;</span>
+<span class="s1">	  &lt;/TR&gt;</span>
+<span class="s1">	  #}</span>
+<span class="s1">	  	{</span><span class="si">% f</span><span class="s1">or k,v in [(&#39;dotname&#39;,node.dotname),(&#39;prefix_named&#39;, node.prefix_named)] +node.arg_tuples[:] %}</span>
+<span class="s1">		  &lt;TR&gt;</span>
+<span class="s1">		  	&lt;TD ALIGN=&quot;LEFT&quot;&gt;{{k}}&lt;/TD&gt;</span>
+<span class="s1">		  	&lt;TD ALIGN=&quot;LEFT&quot;&gt;{{v.__class__.__name__}}&lt;/TD&gt;</span>
+<span class="s1">		    &lt;TD ALIGN=&quot;LEFT&quot;&gt;{{v}}&lt;/TD&gt;</span>
+<span class="s1">		  &lt;/TR&gt;</span>
+<span class="s1">	    {</span><span class="si">% e</span><span class="s1">ndfor %}</span>
+<span class="s1">	&lt;/TABLE&gt;</span>
+<span class="s1">	&gt;</span>
+<span class="s1">	&#39;&#39;&#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+		<span class="k">return</span> <span class="n">jinja2_format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div></div>
+		<span class="c1"># return s.format(self=self)</span>
+<span class="c1"># DEFAULT_DIR_LAYOUT = &#39;clean&#39;</span>
+<div class="viewcode-block" id="force_run"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.force_run">[docs]</a><span class="k">def</span> <span class="nf">force_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Run a jobs regardless of whether it has a valid cache</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="n">_input</span> <span class="o">=</span> <span class="n">args</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">job</span><span class="p">(</span><span class="o">*</span><span class="n">_input</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span></div>
+<div class="viewcode-block" id="cache_check"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.cache_check">[docs]</a><span class="k">def</span> <span class="nf">cache_check</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Check whether there is a valid cache for this job</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+<div class="viewcode-block" id="cache_check_changed"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.cache_check_changed">[docs]</a><span class="k">def</span> <span class="nf">cache_check_changed</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>  <span class="n">check_changed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span>   <span class="n">job</span><span class="p">,</span>  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">check_changed</span><span class="o">=</span><span class="n">check_changed</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="cache_run_verbose"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.cache_run_verbose">[docs]</a><span class="k">def</span> <span class="nf">cache_run_verbose</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mock_run"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.mock_run">[docs]</a><span class="k">def</span> <span class="nf">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mock</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mock</span><span class="o">=</span><span class="n">mock</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mock_undo"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.mock_undo">[docs]</a><span class="k">def</span> <span class="nf">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mock</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mock</span><span class="o">=</span><span class="n">mock</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="get_changed_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.get_changed_files">[docs]</a><span class="k">def</span> <span class="nf">get_changed_files</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="p">[</span><span class="n">File</span><span class="p">],</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">get_changed_files</span><span class="p">(</span><span class="n">flat</span><span class="p">)</span>
+	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">allow</span><span class="p">:</span>
+		<span class="c1">#### [FRAGILE]</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="ow">in</span> <span class="n">allow</span><span class="p">]</span>
+	<span class="k">return</span> <span class="n">res</span></div>
+
+<div class="viewcode-block" id="get_all_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.get_all_files">[docs]</a><span class="k">def</span> <span class="nf">get_all_files</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="p">[</span><span class="n">File</span><span class="p">],</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">get_all_files</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="n">allow</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="n">flat</span><span class="p">)</span>
+	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span></div>
+	<span class="c1"># if allow:</span>
+	<span class="c1"># 	#### [FRAGILE]</span>
+	<span class="c1"># 	res = [x for x in res if type(x) in allow]</span>
+	<span class="c1"># return res	</span>
+
+<span class="c1"># symbolicResult =  object()</span>
+<span class="c1"># def cache_run(job, *args, dir):</span>
+
+<div class="viewcode-block" id="cache_run"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.cache_run">[docs]</a><span class="k">def</span> <span class="nf">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+	<span class="n">dir_layout</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+	<span class="n">mock</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+	<span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">check_changed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+	<span class="n">last_caller</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+	<span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
+	<span class="c1"># print(&#39;[dir_layout]&#39;,dir_layout)</span>
+	<span class="c1"># print(&#39;[id2]&#39;,id(rcParams),rcParams)</span>
+	<span class="k">return</span> <span class="n">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="n">args</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span><span class="n">last_caller</span><span class="p">)</span></div>
+
+<span class="k">def</span> <span class="nf">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">_Runner</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">last_caller</span><span class="o">=</span><span class="n">last_caller</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">_Runner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span>  <span class="n">mock</span><span class="p">,</span> <span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span> <span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span> <span class="o">=</span> <span class="n">dir_layout</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">mock</span> <span class="o">=</span> <span class="n">mock</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">check_only</span> <span class="o">=</span> <span class="n">check_only</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">check_changed</span> <span class="o">=</span> <span class="n">check_changed</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">force</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
+	<span class="k">def</span> <span class="nf">before_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+		<span class="k">pass</span>
+	<span class="k">def</span> <span class="nf">after_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+		<span class="k">pass</span>
+
+	<span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">last_caller</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">tag</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+		<span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">result</span>
+	<span class="fm">__call__</span> <span class="o">=</span> <span class="n">run</span>
+
+	<span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		return: job_result</span>
+<span class="sd">			Check whether a valid cache exists for a job receipe.</span>
+<span class="sd">			Load cache as result if so, otherwise recalculate the job.</span>
+
+<span class="sd">		##### we want to avoid re-calculating the output if they already exist and is intact</span>
+<span class="sd">		##### this is done by storing an identity information on disk </span>
+<span class="sd">		##### this identity information is calculated from the outputted files</span>
+<span class="sd">		##### which could be md5sum or timestamp		</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">dir_layout</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span>
+		<span class="n">mock</span>            <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mock</span>
+		<span class="n">check_only</span>      <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_only</span>
+		<span class="n">check_changed</span>   <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_changed</span>
+		<span class="n">force</span>           <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">force</span>
+		<span class="n">verbose</span>         <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span>
+
+
+		<span class="n">_caller</span>         <span class="o">=</span> <span class="n">Caller</span><span class="o">.</span><span class="n">from_input</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">tag</span><span class="p">)</span>
+		<span class="c1">###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed</span>
+		<span class="c1">###### the prefix is ignored in to_ident() because it would point to a different ident_file</span>
+		<span class="c1">#####  Caller.from_input() would also cast types for inputs</span>
+		<span class="n">_input</span>          <span class="o">=</span> <span class="n">args</span>		
+		<span class="c1"># runner          = partial(self.run, last_caller=_caller)</span>
+		<span class="n">runner</span>          <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">)</span>
+		<span class="n">config_runner</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">:</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">last_caller</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">last_caller</span><span class="o">.</span><span class="n">_subflow</span><span class="p">,</span><span class="s1">&#39;Duplicated subflows </span><span class="si">%s</span><span class="s1"> in </span><span class="si">%r</span><span class="s1"> &#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">)</span>
+			<span class="n">last_caller</span><span class="o">.</span><span class="n">_subflow</span><span class="p">[</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="p">]</span> <span class="o">=</span> <span class="n">_caller</span>
+
+		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="se">\n</span><span class="s2">  </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">last_caller</span><span class="p">,</span><span class="n">_caller</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+		<span class="n">func_name</span>       <span class="o">=</span> <span class="n">get_func_name</span><span class="p">()</span>
+		<span class="n">prefix</span>          <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+		<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;self.subflow needs to be appended using the runner by supplyig calling frame </span>
+<span class="s1">		as argument to self.run</span>
+<span class="s1">		&#39;&#39;&#39;</span>
+		<span class="c1"># def runner(job,*args,last_caller=_caller):</span>
+		<span class="c1"># 	print(&quot;%r\n%r&quot;%(job,last_caller))</span>
+		<span class="c1"># 	return self.run(job,*args, last_caller=last_caller)</span>
+
+		<span class="n">_input</span>  <span class="o">=</span> <span class="p">[</span><span class="n">_caller</span><span class="o">.</span><span class="n">to_ident</span><span class="p">()]</span>	
+		<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">_caller</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="kc">None</span>
+
+
+		<span class="n">input_ident_file</span> <span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;input_json&#39;</span> <span class="p">)</span>
+		<span class="n">output_ident_file</span><span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;output_json&#39;</span> <span class="p">)</span>
+		<span class="n">output_cache_file</span><span class="o">=</span>  <span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span>
+		<span class="n">File</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span>
+		<span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span>
+
+
+
+
+		<span class="n">_output</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">get_output_files</span><span class="p">()</span>
+
+		<span class="c1"># _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)</span>
+		<span class="c1"># print(&#39;[out1]&#39;,_output)</span>
+
+		<span class="n">input_ident_changed</span>  <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">,</span> <span class="p">),</span> <span class="n">input_ident_file</span><span class="p">,</span> <span class="s1">&#39;ident&#39;</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">():</span>
+			<span class="n">output_ident_changed</span> <span class="o">=</span> <span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.output_changed.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">()</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">output_ident_changed</span> <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_output</span><span class="p">,</span> <span class="p">),</span> <span class="n">output_ident_file</span><span class="p">,</span><span class="s1">&#39;ident&#39;</span><span class="p">)</span>
+		<span class="n">use_cache</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">input_ident_changed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">output_ident_changed</span>
+		<span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">use_cache</span>
+		<span class="k">if</span> <span class="n">check_changed</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">check_changed</span> <span class="o">&gt;=</span><span class="mi">2</span><span class="p">:</span>
+				<span class="n">input_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
+				<span class="c1"># input_ident_old = _loads(json.load(open(input_ident_file,&#39;r&#39;))[&#39;ident&#39;])</span>
+				<span class="n">output_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_output</span><span class="p">)</span>
+				<span class="c1"># output_ident_old = _loads(json.load(open(output_ident_file,&#39;r&#39;))[&#39;ident&#39;])</span>
+				<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">();</span>
+			<span class="k">return</span> <span class="p">(</span><span class="n">input_ident_changed</span><span class="p">,</span> <span class="n">output_ident_changed</span><span class="p">)</span>
+
+		<span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">{func_name}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()),</span>
+				<span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_dict</span><span class="p">([</span>
+				<span class="p">(</span><span class="s1">&#39;job_name&#39;</span><span class="p">,</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
+				<span class="p">(</span><span class="s1">&#39;use_cache&#39;</span><span class="p">,</span><span class="n">use_cache</span><span class="p">),</span>
+				<span class="p">(</span><span class="s1">&#39;input_ident_changed&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">input_ident_changed</span><span class="p">)),</span>
+				<span class="p">(</span><span class="s1">&#39;output_ident_chanegd&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">output_ident_changed</span><span class="p">))])</span>
+					<span class="p">,</span><span class="n">separators</span><span class="o">=</span><span class="s1">&#39;_=&#39;</span><span class="p">)</span>
+				<span class="c1"># .replace(&#39;&quot;&#39;,&#39;&#39;)</span>
+				<span class="p">)</span>
+			<span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+				<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
+			<span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">use_cache</span><span class="p">)</span>		
+
+		<span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+			<span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="c1"># if mock:</span>
+		<span class="c1"># 	use_cache = False</span>
+
+		<span class="c1">#### if any of the output file is mock, then do not use cache</span>
+		<span class="c1">#### if input and output are not changed, then mocking is skipped.</span>
+		<span class="c1"># if (_caller.output_cache_file+&#39;.mock&#39;).isfile():</span>
+		<span class="c1"># 	use_cache = False</span>
+		<span class="c1"># print((job.__name__,use_cache))</span>
+		<span class="k">if</span> <span class="n">use_cache</span><span class="p">:</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">load_cache</span><span class="p">()</span>
+
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):</span>
+			<span class="c1"># 	mock = 0</span>
+			<span class="k">if</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+				<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">				The current file will be replaced with a mock file to propagate the signal downwards</span>
+
+<span class="s1">				&#39;&#39;&#39;</span>
+
+				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_do</span><span class="p">(</span><span class="n">output_ident_changed</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+				<span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">job_type</span><span class="p">,</span> <span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">NodeFunction</span><span class="p">):</span>
+					<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="c1">### recurse if not a Terminal Node</span>
+					<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+				<span class="c1">#### unmock</span>
+				<span class="c1">#### restore mocked file if available</span>
+				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span>
+
+			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span> <span class="p">)</span>
+
+				<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+					<span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">v</span><span class="p">,</span><span class="s1">&#39;callback_output&#39;</span><span class="p">,</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="kc">None</span><span class="p">)</span>
+					<span class="n">func</span><span class="p">(</span><span class="n">_caller</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+					<span class="c1"># method(_caller)</span>
+					<span class="c1"># if hasattr(x,&#39;callback_output&#39;):</span>
+					<span class="c1"># 	x.output_callback(_caller)				</span>
+				<span class="c1"># ident_dump( result, output_cache_file, )</span>
+				<span class="n">_input_ident</span>  <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">)</span>
+				<span class="n">_output_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_output</span><span class="p">)</span>
+
+				<span class="n">p</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span>
+				<span class="n">ident_dump</span><span class="p">(</span> <span class="p">[</span>
+					<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,[[</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_output</span><span class="p">],</span><span class="n">_output_ident</span><span class="p">]),</span>
+					<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>     <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>   <span class="k">lambda</span><span class="p">:</span>  <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span><span class="n">_output</span><span class="p">))),</span>
+					<span class="p">(</span><span class="s1">&#39;output_dump&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
+					<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>       <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_output_ident</span><span class="p">)),</span>
+					<span class="p">],</span> 
+					<span class="n">output_ident_file</span><span class="p">,</span>
+					<span class="p">)</span>
+					 <span class="c1"># comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all</span>
+				<span class="n">input_image</span> <span class="o">=</span> <span class="p">[</span>
+						<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,</span>      <span class="n">_caller</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()),</span>
+						<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>      <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>  <span class="k">lambda</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span> <span class="n">_caller</span><span class="p">))),</span>
+						<span class="p">(</span><span class="s1">&#39;caller_dump&#39;</span><span class="p">,</span>  <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
+						<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>        <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)),</span>
+
+					<span class="p">]</span>
+				<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">input_ident_file</span><span class="p">)</span>
+				<span class="c1"># ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))</span>
+
+				<span class="c1">#### add edge_file to inputs </span>
+				<span class="c1">### add input and output ident to outward_pk</span>
+				<span class="c1"># outward_dir_list = get_outward_json_list( _input, config)</span>
+				
+				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">)</span>
+				<span class="n">_input_ident_hash</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hash_bytes</span><span class="p">(</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)</span> <span class="p">)</span>
+				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+					<span class="n">outward_edge_file</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> <span class="o">/</span>  <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="n">_input_ident_hash</span><span class="p">)</span>
+					<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">outward_edge_file</span><span class="p">)</span>			
+
+				<span class="c1">#### remove edge_file of outputs</span>
+				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">_output_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">dir_layout</span><span class="p">)</span>
+				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+					<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> <span class="p">,</span> <span class="p">(</span><span class="n">outward_dir</span><span class="o">+</span><span class="s1">&#39;_old&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">())</span>
+					<span class="n">outward_dir</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> 
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Mock value not understood mock=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mock</span>
+		<span class="k">return</span> <span class="n">result</span>
+		<span class="c1"># return _caller, result</span>
+
+
+
+<div class="viewcode-block" id="file_not_empty"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.file_not_empty">[docs]</a><span class="k">def</span> <span class="nf">file_not_empty</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>  
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Source: https://stackoverflow.com/a/15924160/8083313</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_get_outward_json_file</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span> <span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">)):</span>
+		<span class="n">fn</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">ele</span><span class="p">,[],</span><span class="s1">&#39;outward_edges&#39;</span><span class="p">)</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">fn</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="n">UndefinedTypeRoutine</span><span class="p">(</span><span class="s2">&quot;get_identity(</span><span class="si">%s</span><span class="s2">) undefined for </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ele</span><span class="p">),</span><span class="n">ele</span><span class="p">))</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">return</span> <span class="n">res</span>	
+	<span class="c1"># return f</span>
+
+
+<div class="viewcode-block" id="get_outward_json_list"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.get_outward_json_list">[docs]</a><span class="k">def</span> <span class="nf">get_outward_json_list</span><span class="p">(</span> <span class="n">arg_tuples</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,):</span>
+	<span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arg_tuples</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">k</span> <span class="o">==</span><span class="s1">&#39;_output&#39;</span><span class="p">:</span>
+			<span class="k">continue</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">([</span><span class="n">v</span><span class="p">])</span>
+		<span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">_get_outward_json_file</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span>
+			<span class="n">out</span> <span class="o">+=</span> <span class="n">res</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[OUT]&#39;</span><span class="p">,</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="kc">None</span>
+	<span class="k">return</span> <span class="n">out</span> </div>
+
+
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">get_identity</span>
+
+<span class="c1">##################################################</span>
+<span class="c1">##################################################</span>
+<span class="c1">##################################################</span>
+<span class="c1">#### the following computes closures on the DAG ##</span>
+<span class="c1">#### aka upstream/downstream</span>
+
+
+<span class="c1"># from singular_pipe.graph import file_to_node</span>
+<div class="viewcode-block" id="file_to_node"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.file_to_node">[docs]</a><span class="k">def</span> <span class="nf">file_to_node</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	One can only guess the prefix by removing the suffix</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">err</span> <span class="o">=</span> <span class="n">CantGuessCaller</span><span class="p">(</span><span class="s2">&quot;Cannot guess the Caller() for </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="n">obj</span><span class="p">)</span> 
+
+	<span class="c1"># res = obj.rsplit(&#39;.&#39;,2)</span>
+	<span class="c1"># if len(res)!=3:</span>
+	<span class="c1"># 	return (_raise(err) if strict else None)</span>
+	<span class="c1"># prefix, job_name, suffix = res </span>
+
+	<span class="n">suc</span><span class="p">,</span> <span class="n">prefix_named</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_prefix_pointer</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">suc</span><span class="p">:</span>
+		<span class="n">prefix</span><span class="p">,</span> <span class="n">caller_name</span> <span class="o">=</span> <span class="n">prefix_named</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+		<span class="n">succ</span> <span class="o">=</span> <span class="mi">1</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">_raise</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">strict</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+	<span class="n">input_ident_file</span> <span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;input_json&#39;</span> <span class="p">)</span>
+	<span class="n">output_ident_file</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;output_json&#39;</span> <span class="p">)</span>
+	<span class="n">lst</span> <span class="o">=</span> <span class="n">_loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">output_ident_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">))[</span><span class="s1">&#39;ident&#39;</span><span class="p">])</span>  <span class="c1">##[FRAGILE]</span>
+	<span class="n">obj_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">([</span><span class="n">obj</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	[IMPLEMENT]</span>
+<span class="sd">	strict=1 should detect a identity change</span>
+<span class="sd">	contained in output_ident_file() -&gt; Tracked</span>
+<span class="sd">	not contained in output_ident_file() -&gt; Dangling/Untracked</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">if</span> <span class="n">obj_ident</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">_loads</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">))[</span><span class="s1">&#39;caller_dump&#39;</span><span class="p">])</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">_raise</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">strict</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">x</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

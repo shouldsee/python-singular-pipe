@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>singular_pipe.shell &mdash; singular_pipe 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> singular_pipe
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">2. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lib/index.html">3. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indexes.html">4. Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">singular_pipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>singular_pipe.shell</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for singular_pipe.shell</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">pipe__getResult</span><span class="p">,</span><span class="n">pipe__getSafeResult</span><span class="p">,</span><span class="n">shellpopen</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span><span class="p">,</span> <span class="n">shellcmd</span>
+<span class="kn">import</span> <span class="nn">io</span><span class="o">,</span><span class="nn">time</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.base</span> <span class="kn">import</span> <span class="n">list_flatten_strict</span><span class="p">,</span> <span class="n">list_flatten</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">,</span><span class="n">InputFile</span><span class="p">,</span><span class="n">InputPrefix</span>
+<span class="c1"># from ._types import File,Prefix,InputFile,InputPrefix</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">from</span> <span class="nn">singular_pipe</span> <span class="kn">import</span> <span class="n">VERSION</span>
+
+
+
+
+<div class="viewcode-block" id="SafeShellCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.SafeShellCommand">[docs]</a><span class="k">def</span> <span class="nf">SafeShellCommand</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span><span class="n">stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">stdout</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+	<span class="n">suc</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_shellcmd</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span><span class="n">check</span><span class="p">,</span><span class="n">shell</span><span class="p">,</span><span class="n">encoding</span><span class="p">,</span><span class="n">stdin</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span><span class="p">,</span><span class="n">silent</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">stdout</span></div>
+
+<span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+<div class="viewcode-block" id="LoggedShellCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.LoggedShellCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedShellCommand</span><span class="p">(</span>
+		<span class="n">CMD</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
+		<span class="n">stdin</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">stdout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+		<span class="n">silent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+		<span class="n">shell</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+		<span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		CMD:</span>
+<span class="sd">			a list of commands to be joined with &#39; &#39; and executed in bash</span>
+<span class="sd">		file: None or a string-like filename or a file-handle</span>
+<span class="sd">			if None, use a StringIO</span>
+<span class="sd">		check:</span>
+<span class="sd">			whether to raise error if the shell execution fails.</span>
+<span class="sd">		shell:</span>
+<span class="sd">			whether to treat CMD as a joined string or a list of string.</span>
+
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="k">if</span> <span class="n">file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">file</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="n">io</span><span class="o">.</span><span class="n">IOBase</span><span class="p">):</span>
+			<span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="n">buffering</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="c1"># if not shell:</span>
+		<span class="k">assert</span> <span class="ow">not</span> <span class="n">shell</span>
+		<span class="n">CMD</span> <span class="o">=</span> <span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">CMD</span><span class="p">)</span>
+		<span class="c1"># shell = 1</span>
+		<span class="c1"># with file:</span>
+		<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="k">def</span> <span class="nf">_dump</span><span class="p">(</span><span class="n">o</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+			<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">o</span><span class="p">)</span><span class="o">+</span><span class="p">[</span><span class="s1">&#39;VERSION&#39;</span><span class="p">,</span><span class="n">VERSION</span><span class="p">],</span><span class="n">f</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+		<span class="n">_dump</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;CommandStart&#39;</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="p">],</span><span class="n">file</span><span class="p">)</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">_dump</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;CommandText&#39;</span><span class="p">,]</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CMD</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">file</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="c1"># stdout = io.BytesIO(mode=&#39;w&#39;)</span>
+		<span class="c1"># stderr = io.BytesIO()</span>
+		<span class="n">suc</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_shellcmd</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span><span class="n">check</span><span class="p">,</span><span class="n">shell</span><span class="p">,</span><span class="n">encoding</span><span class="p">,</span><span class="n">stdin</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span><span class="p">,</span><span class="n">silent</span><span class="p">)</span>
+		<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+		<span class="n">_dump</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;CommandEnd&#39;</span><span class="p">,</span> <span class="n">suc</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="p">(</span><span class="n">size_humanReadable</span><span class="p">(</span><span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">,</span><span class="s1">&#39;s&#39;</span><span class="p">),</span> <span class="n">t1</span><span class="o">-</span><span class="n">t0</span><span class="p">)],</span><span class="n">file</span><span class="p">)</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">_dump</span><span class="p">(</span> <span class="p">[</span><span class="s1">&#39;CommandResult&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;stdout&#39;</span><span class="p">,</span><span class="n">stdout</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span>
+			<span class="s1">&#39;stderr&#39;</span><span class="p">,</span><span class="n">stderr</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()],</span><span class="n">file</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">)</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">check</span><span class="p">:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">suc</span><span class="p">:</span>
+				<span class="n">errmsg</span> <span class="o">=</span> <span class="s1">&#39;Command &quot;</span><span class="si">{CMD}</span><span class="s1">&quot; returned error:</span><span class="se">\n</span><span class="s1">[stdout]:</span><span class="si">{stdout}</span><span class="se">\n</span><span class="s1">[stderr]:</span><span class="si">{stderr}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>		
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
+			<span class="k">return</span> <span class="n">stdout</span>
+		<span class="k">return</span> <span class="n">suc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">file</span></div>
+
+
+<div class="viewcode-block" id="size_humanReadable"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.size_humanReadable">[docs]</a>	<span class="k">def</span> <span class="nf">size_humanReadable</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{0:.2f}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;K&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">],):</span>
+	    <span class="sd">&quot;&quot;&quot; Returns a human readable string reprentation of bytes,</span>
+<span class="sd">	    Source: https://stackoverflow.com/a/43750422/8083313&quot;&quot;&quot;</span>
+	    <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">:</span>
+	    	<span class="k">return</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">+</span> <span class="n">units</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span> 
+	    <span class="k">else</span><span class="p">:</span>
+	    	<span class="k">return</span> <span class="n">size_humanReadable</span><span class="p">(</span> <span class="n">num</span><span class="o">/</span><span class="mf">1024.</span><span class="p">,</span><span class="n">fmt</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span><span class="n">units</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
+
+
+
+
+
+<span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
+<div class="viewcode-block" id="LoggedSingularityCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.LoggedSingularityCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommand</span><span class="p">(</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">extra_files</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span><span class="mi">0</span><span class="p">):</span>	
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		return a tuple (executed command, command_stdout)</span>
+<span class="sd">			cmd: a list of str-like objects that gets concatenated into a shell command</span>
+<span class="sd">			image: a singularity image url</span>
+<span class="sd">			extra_files: to-be-deprecated</span>
+<span class="sd">			debug: print dbg info</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="k">if</span> <span class="n">extra_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">extra_files</span>  <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">,</span><span class="s1">&#39;-e;&#39;</span><span class="p">,</span><span class="n">cmd</span><span class="p">]</span>
+		<span class="n">cmd</span> <span class="o">=</span> <span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+
+
+		<span class="c1">#### potential redundant</span>
+		<span class="c1">#### all output path derives from Prefix hence only Prefix needs to be realpath</span>
+		<span class="c1">#### for input path, realisation better be done at job calling</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">Path</span><span class="p">):</span>
+				<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">realpath</span><span class="p">()</span>
+			<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/tmp&#39;</span><span class="p">):</span>
+				<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;[singularity_run] with /tmp is unstable&#39;</span><span class="p">)</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+		<span class="n">cmd</span> <span class="o">=</span> <span class="n">out</span>
+
+		<span class="c1"># debug = 1</span>
+		<span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">cmd</span><span class="p">)),</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,))</span>
+
+		<span class="n">FS</span><span class="p">,</span><span class="n">modes</span> <span class="o">=</span> <span class="n">make_files_for</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">FS</span><span class="p">)),</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,))</span>
+
+		<span class="n">bfs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;:&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">f</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">m</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">FS</span><span class="p">,</span><span class="n">modes</span><span class="p">)]</span>
+		<span class="c1"># bfs = bind_files( FS + extra_files) </span>
+		<span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">bfs</span><span class="p">)),</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,))</span>
+
+		<span class="n">cmd_curr</span> <span class="o">=</span> <span class="p">[</span>
+		<span class="c1"># &#39;\n&#39;,</span>
+		<span class="s1">&#39;singularity&#39;</span><span class="p">,</span><span class="s1">&#39;exec&#39;</span><span class="p">,</span>
+		<span class="s1">&#39;--contain&#39;</span><span class="p">,</span>
+		<span class="p">[</span><span class="s1">&#39;--bind&#39;</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bfs</span><span class="p">)]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bfs</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+		<span class="c1"># [-1],&#39;--bind&#39;,&#39;/tmp:/tmp&#39;,</span>
+			<span class="n">image</span><span class="p">,</span>
+			<span class="s1">&#39;bash&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;&lt;&lt;EOF</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+			<span class="n">cmd</span><span class="p">,</span>
+			<span class="s1">&#39;</span><span class="se">\n</span><span class="s1">EOF&#39;</span><span class="p">,</span>
+		<span class="c1"># &#39;\n&#39;,</span>
+		<span class="p">]</span>
+		<span class="n">cmd_curr</span> <span class="o">=</span> <span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">cmd_curr</span><span class="p">)</span>
+		<span class="n">stdout</span> <span class="o">=</span> <span class="n">LoggedShellCommand</span><span class="p">(</span><span class="n">cmd_curr</span><span class="p">,</span><span class="n">log_file</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+		<span class="c1"># suc,stdout</span>
+		<span class="c1"># suc,stdout,stderr = shellcmd(cmd_curr,1,0)</span>
+		<span class="c1"># suc , res = shellcmd(&#39; &#39;.join(cmd_curr),1,1)</span>
+		<span class="k">return</span> <span class="p">(</span><span class="n">cmd_curr</span><span class="p">,</span> <span class="n">stdout</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="make_files_for"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.make_files_for">[docs]</a>	<span class="k">def</span> <span class="nf">make_files_for</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+		<span class="n">FS</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="n">modes</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">F</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">)):</span>
+				<span class="n">F</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">realpath</span><span class="p">()</span>
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">InputPrefix</span><span class="p">):</span>
+					<span class="c1">#### if is prefix, mount the directory</span>
+					<span class="n">res</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> 
+					<span class="n">FS</span> <span class="o">+=</span> <span class="n">res</span>
+					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;ro&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">Prefix</span><span class="p">):</span>
+					<span class="c1">#### if is not inputPrefix, mount the directory</span>
+					<span class="n">F</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span>
+					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">File</span><span class="p">(</span> <span class="n">F</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span> <span class="p">)</span> <span class="p">)</span>
+					<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;rw&#39;</span>
+					<span class="n">modes</span><span class="o">+=</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span>
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">InputFile</span><span class="p">):</span>
+					<span class="c1">#### if is inputFile, dont touch</span>
+					<span class="k">assert</span> <span class="n">F</span><span class="o">.</span><span class="n">isfile</span><span class="p">(),(</span><span class="n">F</span><span class="p">,</span><span class="n">cmd</span><span class="p">)</span>
+					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">F</span> <span class="p">)</span>
+					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;ro&#39;</span><span class="p">]</span>					
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="n">File</span><span class="p">):</span>
+					<span class="c1">#### if not inputfile, touch to makesure					</span>
+					<span class="n">F</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">F</span><span class="o">.</span><span class="n">isfile</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">F</span> <span class="p">)</span>
+					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;rw&#39;</span><span class="p">]</span>
+					<span class="c1"># mode = &#39;rw&#39;</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">assert</span> <span class="mi">0</span><span class="p">,(</span><span class="nb">type</span><span class="p">(</span><span class="n">F</span><span class="p">),</span><span class="n">F</span><span class="p">)</span>
+				<span class="c1"># FS.append(F)	</span>
+		<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">FS</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">FS</span><span class="p">,</span><span class="n">modes</span></div>
+
+<div class="viewcode-block" id="bind_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.bind_files">[docs]</a>	<span class="k">def</span> <span class="nf">bind_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+		<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span><span class="s1">&#39;DEPRECATED&#39;</span>
+		<span class="n">files</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+		<span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">for</span> <span class="n">F</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+			<span class="c1">#### bind the whole directory for a prefix</span>
+			<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="n">Prefix</span><span class="p">):</span>
+				<span class="k">assert</span> <span class="mi">0</span><span class="p">,(</span><span class="n">F</span><span class="p">,</span><span class="s1">&#39;run make_files_for() first&#39;</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">InputFile</span><span class="p">):</span>
+				<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;ro&#39;</span>
+			<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="n">File</span><span class="p">):</span>
+				<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;rw&#39;</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">assert</span> <span class="mi">0</span><span class="p">,(</span><span class="n">F</span><span class="p">,</span><span class="s2">&quot;type </span><span class="si">%s</span><span class="s2"> unknown&quot;</span><span class="o">%</span><span class="nb">type</span><span class="p">(</span><span class="n">F</span><span class="p">),</span><span class="n">files</span><span class="p">,)</span>
+			<span class="n">F</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">realpath</span><span class="p">()</span>
+			<span class="n">bind_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="n">F</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
+			<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">bind_str</span> <span class="p">)</span>
+		<span class="k">return</span> <span class="n">lst</span>		</div>
+	<span class="n">SingularityShellCommand</span> <span class="o">=</span> <span class="n">LoggedSingularityCommand</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

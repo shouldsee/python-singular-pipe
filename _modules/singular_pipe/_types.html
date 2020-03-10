@@ -1,0 +1,872 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>singular_pipe._types &mdash; singular_pipe 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> singular_pipe
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">2. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lib/index.html">3. Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indexes.html">4. Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">singular_pipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>singular_pipe._types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for singular_pipe._types</h1><div class="highlight"><pre>
+<span></span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Interal exceptions, classes, functions to outline the </span>
+<span class="s2">identification system.</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="c1"># from file_tracer import InputFile,OutputFile,File,TempFile,FileTracer</span>
+<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">orderedattrdict</span> <span class="kn">import</span> <span class="n">AttrDict</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._header</span> <span class="kn">import</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span><span class="p">,</span><span class="n">rgetattr</span>
+
+
+
+<span class="kn">import</span> <span class="nn">singular_pipe</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">DirtyKey</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;[^0-9a-zA-Z_]&#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">,</span><span class="n">s</span><span class="p">)</span>	
+
+
+<span class="n">Code</span> <span class="o">=</span> <span class="nb">type</span><span class="p">((</span><span class="k">lambda</span><span class="p">:</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">TooManyArgumentsError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	aaaa</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">pass</span>
+<span class="k">class</span> <span class="nc">TooFewArgumentsError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+	<span class="k">pass</span>
+<span class="c1"># class NotEnoughArgumentsError(RuntimeError):</span>
+<span class="c1"># 	pass</span>
+<span class="k">class</span> <span class="nc">TooFewDefaultsError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">CantGuessCaller</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+	<span class="k">pass</span>
+<span class="k">class</span> <span class="nc">UndefinedTypeRoutine</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">OverwriteError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">UndefinedRoutine</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+
+<span class="k">class</span> <span class="nc">IdentAttrDict</span><span class="p">(</span><span class="n">AttrDict</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+
+
+<span class="k">class</span> <span class="nc">cached_property</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Descriptor (non-data) for building an attribute on-demand on first use.</span>
+<span class="sd">	Source: https://stackoverflow.com/a/4037979</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factory</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		&lt;factory&gt; is called such: factory(instance) to build the attribute.</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_attr_name</span> <span class="o">=</span> <span class="n">factory</span><span class="o">.</span><span class="vm">__name__</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">_factory</span> <span class="o">=</span> <span class="n">factory</span>
+
+	<span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
+		<span class="c1"># Build the attribute.</span>
+		<span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factory</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+		<span class="c1"># Cache the value; hide ourselves.</span>
+		<span class="nb">setattr</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attr_name</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">attr</span>
+
+<span class="k">class</span> <span class="nc">PicklableNamedTuple</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot; </span>
+<span class="s2">	This class mimic `namedtuple`, except that an object of </span>
+<span class="s2">	this class is picklable whereas that of namedtuple is not.</span>
+<span class="s2">	&quot;&quot;&quot;</span>
+	<span class="k">pass</span>
+
+<span class="c1"># if 0:</span>
+	<span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="k">del</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;cls&#39;</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">d</span>
+	<span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">d</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cls</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;fields&#39;</span><span class="p">])</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">fields</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;myData&#39;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">cls</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span><span class="n">fields</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="o">.</span><span class="n">_fields</span>
+	<span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+		<span class="c1"># if len(v)&gt;=3:</span>
+		<span class="c1"># 	import pdb;pdb.set_trace()</span>
+		<span class="k">return</span> <span class="n">AttrDict</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">_asdict</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">Default</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	A dummy &quot;class&quot; mocked with a function</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">return</span> <span class="n">x</span>
+
+<span class="k">class</span> <span class="nc">_BaseFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+
+
+<div class="viewcode-block" id="NodeFunction"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.NodeFunction">[docs]</a><span class="k">class</span> <span class="nc">NodeFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	A :class:`NodeFunction` should not have any subnodes.</span>
+<span class="sd">	`self.runner` is prohibited in a `NodeFunction`. </span>
+<span class="sd">	In other words, a :class:`NodeFunction` cannot have</span>
+<span class="sd">	any children nodes.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">named</span> <span class="o">=</span> <span class="mi">1</span>
+	<span class="k">pass</span></div>
+
+<span class="c1"># class SingleFileNodeFunction(NodeFunction):</span>
+<span class="c1"># 	named = 0</span>
+
+<span class="c1"># def SingleFileNode(func):</span>
+<span class="c1"># 	func._type = SingleFileNodeFunction</span>
+<span class="c1"># 	# UnnamedNodeFunction</span>
+<span class="c1"># 	return func</span>
+
+
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Node">[docs]</a><span class="k">def</span> <span class="nf">Node</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Decorate that marks a function as :class:`NodeFunction`.</span>
+
+<span class="sd">	Args:</span>
+<span class="sd">		func: :obj:`function` the function to be decorated.</span>
+
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">func</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">NodeFunction</span>
+	<span class="k">return</span> <span class="n">func</span></div>
+
+<div class="viewcode-block" id="FlowFunction"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.FlowFunction">[docs]</a><span class="k">class</span> <span class="nc">FlowFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	:class:`FlowFunction`</span>
+<span class="sd">	will always be executed regardless of the :class:`_Runner`</span>
+<span class="sd">	at runtime. Any time-consuming expression should</span>
+<span class="sd">	not be put in a :class:`FlowFunction`.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">named</span> <span class="o">=</span> <span class="mi">1</span>
+	<span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Flow"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Flow">[docs]</a><span class="k">def</span> <span class="nf">Flow</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Mark a function as :class:`FlowFunction`.</span>
+
+<span class="sd">	Args:</span>
+<span class="sd">		func: :obj:`function`: the function to be decorated.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="n">func</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">FlowFunction</span>
+	<span class="k">return</span> <span class="n">func</span></div>
+
+
+
+
+
+<span class="n">_os_stat_result_null</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat_result</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat_result</span><span class="o">.</span><span class="n">n_sequence_fields</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">os_stat_safe</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">return</span> <span class="n">_os_stat_result_null</span>
+
+<div class="viewcode-block" id="Depend"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Depend">[docs]</a><span class="k">class</span> <span class="nc">Depend</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Abstract Dependency</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">pass</span></div>
+
+<div class="viewcode-block" id="PrefixedNode"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode">[docs]</a><span class="k">class</span> <span class="nc">PrefixedNode</span><span class="p">(</span><span class="n">Depend</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	This class represents file(s) that </span>
+<span class="sd">	know(s) how to find its parent `Node`.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="PrefixedNode.get_prefix_pointer"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.get_prefix_pointer">[docs]</a>	<span class="k">def</span> <span class="nf">get_prefix_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">):</span>
+		<span class="n">idFile</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;_prefix_pointer&#39;</span><span class="p">)</span>		
+		<span class="n">suc</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="k">if</span> <span class="n">idFile</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">idFile</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+				<span class="n">s</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+				<span class="c1"># s = f.read()</span>
+				<span class="n">suc</span> <span class="o">=</span> <span class="mi">1</span>
+				<span class="n">res</span> <span class="o">=</span> <span class="n">Prefix</span><span class="p">(</span><span class="n">idFile</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">/</span><span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
+
+		<span class="k">return</span> <span class="n">suc</span><span class="p">,</span><span class="n">res</span></div>
+
+<div class="viewcode-block" id="PrefixedNode.callback_output"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+		<span class="c1"># pass</span>
+		<span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span>
+		<span class="n">idFile</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="n">caller</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;_prefix_pointer&#39;</span><span class="p">)</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">idFile</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+			<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="p">[</span> <span class="n">caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">idFile</span><span class="o">.</span><span class="n">dirname</span><span class="p">())],</span> <span class="n">f</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PrefixedNode.fileglob"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.fileglob">[docs]</a>	<span class="k">def</span> <span class="nf">fileglob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">File</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">g</span><span class="p">))]</span>
+		<span class="k">if</span> <span class="nb">filter</span><span class="p">:</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span>  <span class="k">for</span> <span class="n">x</span>  <span class="ow">in</span> <span class="n">res</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.outward_edges&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.outward_edges_old&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;._prefix_pointer&#39;</span><span class="p">)</span>
+			<span class="ow">and</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.mock&#39;</span><span class="p">)</span>
+			<span class="p">]</span>
+		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+			<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">),</span><span class="s1">&#39;(</span><span class="si">%r</span><span class="s1">,</span><span class="si">%r</span><span class="s1">) expanded into nothing!&#39;</span><span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">g</span><span class="p">)</span>
+		<span class="c1"># return [File(str(x)) for x in glob.glob(&quot;%s%s&quot;%(self,g))]</span>
+		<span class="k">return</span> <span class="n">res</span></div></div>
+
+
+
+<div class="viewcode-block" id="File"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File">[docs]</a><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	As function inputs, :class:`File` will be </span>
+<span class="sd">	fingerprinted with its mtime and byte sizes.</span>
+<span class="sd">	If this fingerprint changed, a downstream </span>
+<span class="sd">	recalculation will be triggered.</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<div class="viewcode-block" id="File.to_ident"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File.to_ident">[docs]</a>	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+		<span class="n">stat</span> <span class="o">=</span> <span class="n">os_stat_safe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_size</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">res</span></div>
+<div class="viewcode-block" id="File.expanded"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File.expanded">[docs]</a>	<span class="k">def</span> <span class="nf">expanded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span></div></div>
+
+
+
+<span class="k">class</span> <span class="nc">TempFile</span><span class="p">(</span><span class="n">File</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">TempFile</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">InputFile</span><span class="p">(</span><span class="n">File</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">InputFile</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">OutputFile</span><span class="p">(</span><span class="n">File</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">OutputFile</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">pass</span>
+
+<span class="c1"># import pickle</span>
+<div class="viewcode-block" id="Prefix"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix">[docs]</a><span class="k">class</span> <span class="nc">Prefix</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	The definition of a Prefix is unclean.</span>
+<span class="sd">	The expansion of :class:`Prefix` cannot</span>
+<span class="sd">	takes place until the upstream job is done.</span>
+<span class="sd">	</span>
+<span class="sd">	For example, a tar archive job may wants to</span>
+<span class="sd">	monitor all files under prefix :file:`./build`</span>
+
+<span class="sd">	This node is useful when specifying a loosely</span>
+<span class="sd">	defined fileset into :func:`LoggedSingularityCommand`</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">Prefix</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+<div class="viewcode-block" id="Prefix.callback_output"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">callback_output</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+		<span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">strict</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
+			<span class="n">idFile</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="n">caller</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;_prefix_pointer&#39;</span><span class="p">)</span>
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">idFile</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+				<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">idFile</span><span class="o">.</span><span class="n">dirname</span><span class="p">())],</span> <span class="n">f</span><span class="p">)</span>
+				<span class="c1"># f.write(self.relpath(idFile.dirname()))</span>
+		<span class="k">return</span> </div>
+<div class="viewcode-block" id="Prefix.expaneded"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix.expaneded">[docs]</a>	<span class="k">def</span> <span class="nf">expaneded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></div></div>
+
+<span class="k">class</span> <span class="nc">InputPrefix</span><span class="p">(</span><span class="n">Prefix</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span> <span class="n">InputPrefix</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">OutputPrefix</span><span class="p">(</span><span class="n">Prefix</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span> <span class="n">OutputPrefix</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+<span class="n">job_result</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+	<span class="s1">&#39;job_result&#39;</span><span class="p">,</span>
+	<span class="p">[</span>
+	<span class="s1">&#39;OUTDIR&#39;</span><span class="p">,</span>
+	<span class="s1">&#39;cmd_list&#39;</span><span class="p">,</span>
+	<span class="s1">&#39;output&#39;</span><span class="p">]</span>
+	<span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">IdentFile</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">job_name</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">CacheFile</span><span class="p">):</span>
+		<span class="n">dir_layout</span> <span class="o">=</span> <span class="s1">&#39;flat&#39;</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Prefix</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span>
+	<span class="c1"># if  callable(job_name):</span>
+	<span class="c1"># 	import pdb;pdb.set_trace();</span>
+	<span class="k">if</span> <span class="n">dir_layout</span> <span class="o">==</span> <span class="s1">&#39;clean&#39;</span><span class="p">:</span>
+		<span class="n">pre_dir</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span>
+		<span class="n">pre_base</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">basename</span><span class="p">()</span>
+		<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{pre_dir}</span><span class="s1">/_singular_pipe/</span><span class="si">{pre_base}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()),</span>
+				<span class="n">job_name</span><span class="p">,</span><span class="n">suffix</span><span class="p">]</span>
+		<span class="c1"># input_ident_file = &#39;{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}&#39;.format(**locals())</span>
+	<span class="k">elif</span> <span class="n">dir_layout</span> <span class="o">==</span> <span class="s1">&#39;flat&#39;</span><span class="p">:</span>
+		<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span><span class="p">,</span><span class="n">job_name</span><span class="p">,</span><span class="n">suffix</span><span class="p">]</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">assert</span> <span class="mi">0</span><span class="p">,(</span><span class="s2">&quot;dir_layout&quot;</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span>
+		<span class="c1"># input_ident_file = &#39;{prefix}.{job_name}.{suffix}&#39;.format(**locals())</span>
+	<span class="n">input_ident_file</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">lst</span><span class="p">))</span>
+	<span class="k">return</span> <span class="n">File</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CacheFile</span><span class="p">(</span><span class="n">OutputFile</span><span class="p">):</span>
+	<span class="k">pass</span>
+
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span> <span class="k">as</span> <span class="n">_dict</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="c1"># class HttpCheckLengthResult(object):</span>
+<span class="k">class</span> <span class="nc">HttpResponse</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Github tarball/master often take minutes to update itself</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36&#39;</span>
+	<span class="p">}</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span><span class="n">url</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+		<span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;headers&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span><span class="n">kwargs</span>
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">(</span><span class="si">%s</span><span class="s2">)&quot;</span><span class="o">%</span><span class="p">(</span>
+			<span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+			<span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+				<span class="n">_dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;method&#39;</span><span class="p">,</span><span class="s1">&#39;url&#39;</span><span class="p">]]),</span>
+				<span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span><span class="n">separators</span><span class="o">=</span><span class="s1">&#39;,=&#39;</span><span class="p">)</span>
+			<span class="p">)</span>
+
+	<span class="c1">##### Evaluate this response only once during the lifespan of this object</span>
+	<span class="nd">@cached_property</span>
+	<span class="c1"># @property</span>
+	<span class="k">def</span> <span class="nf">response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">request</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">x</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span>
+
+	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">response</span>
+		<span class="n">d0</span><span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+		<span class="n">d0</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;response&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+		<span class="c1"># d = dict(x.headers.copy())</span>
+		<span class="n">_d</span> <span class="o">=</span> <span class="p">{}</span>
+		<span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">headers</span>
+		<span class="n">via</span> <span class="o">=</span>  <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;via&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+		<span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="k">if</span> <span class="s1">&#39;varnish&#39;</span> <span class="ow">in</span> <span class="n">via</span><span class="p">:</span>
+			<span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;etag&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-length&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content-disposition&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;HTTP header is not informative!</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_dict</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">headers</span><span class="p">),</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+		<span class="c1"># hd = _dict()</span>
+		<span class="c1"># hd[&#39;clen&#39;] =  d.get(&#39;Content-Length&#39;, None)</span>
+		<span class="c1"># hd[&#39;cdisp&#39;] = d.get(&#39;Content-Disposition&#39;,None)</span>
+		<span class="c1"># hd[&#39;ctype&#39;] = d.get(&#39;Content-Type&#39;, None)</span>
+		<span class="c1"># assert hd[&#39;clen&#39;] or hd[&#39;cdisp&#39;], hd</span>
+
+		<span class="c1"># return [ sorted(d0.items()), (&#39;_header_ident&#39;,list(hd.values())), (&#39;_text&#39;,x.text)]</span>
+		<span class="k">return</span> <span class="p">[</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d0</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="p">(</span><span class="s1">&#39;_header_ident&#39;</span><span class="p">,</span><span class="n">_d</span><span class="p">[</span><span class="s1">&#39;header_ident&#39;</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;_text&#39;</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">text</span><span class="p">)]</span>
+
+
+
+<span class="k">class</span> <span class="nc">HttpResponseContentHeader</span><span class="p">(</span><span class="n">HttpResponse</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">url</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">lstrip</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">s</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):]</span>
+	<span class="k">return</span> <span class="n">x</span>
+<div class="viewcode-block" id="PythonPackage"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PythonPackage">[docs]</a><span class="k">def</span> <span class="nf">PythonPackage</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">imported_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Tries to parse package_path according to pkg_resources.Requirement.parse()</span>
+
+<span class="sd">	Args:</span>
+<span class="sd">	------------------------</span>
+
+<span class="sd">	package_path: (str)</span>
+<span class="sd">		A :pep:`508`-compatible string without version specification</span>
+
+<span class="sd">	&#39;&#39;&#39;</span>
+
+	<span class="c1"># assert version is None</span>
+	<span class="n">err</span> <span class="o">=</span> <span class="n">UndefinedRoutine</span><span class="p">(</span><span class="s1">&#39;PythonModule(</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="o">%</span><span class="p">((</span><span class="n">package_path</span><span class="p">)))</span>
+	<span class="k">if</span> <span class="s1">&#39;@&#39;</span> <span class="ow">in</span> <span class="n">package_path</span><span class="p">:</span>
+		<span class="n">package_name</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="n">package_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">):</span>
+			<span class="n">extras</span> <span class="o">=</span> <span class="n">HttpResponseContentHeader</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span><span class="p">):</span>
+			<span class="n">extras</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">lstrip</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;file://&#39;</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">raise</span> <span class="n">err</span>
+		<span class="n">mod</span> <span class="o">=</span> <span class="n">_PythonPackage</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">extras</span><span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="n">err</span>
+	<span class="k">return</span> <span class="n">mod</span></div>
+
+
+<span class="kn">from</span> <span class="nn">singular_pipe._pickler</span> <span class="kn">import</span> <span class="n">get_version</span> <span class="k">as</span> <span class="n">get_package_version</span>
+<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">pkg_resources</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="c1"># PIP_BIN = &#39;pip3&#39;</span>
+<span class="k">class</span> <span class="nc">_PythonPackage</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Object to manage local module installation status.</span>
+<span class="sd">	``_PythonModule(*args).loaded()`` returns the imported module.</span>
+<span class="sd">	Currently, local modules must be unique with regards to :obj:`package_name`,</span>
+<span class="sd">	Upon name conflict, that is if package `foo` is already installed </span>
+<span class="sd">	through ``PythonModule(&quot;foo&quot;,url1)`` and ``PythonModule(&quot;foo&quot;,url2)`` is called,</span>
+<span class="sd">	then original installation will be cleared and `url2` would be used for a second install.</span>
+<span class="sd">	This solution is *sub-optimal* because back-and-force installations is possible.</span>
+<span class="sd">	Changing this would require a complete re-setup of `pip`-style package management.</span>
+
+<span class="sd">	pip.main()? https://pip.pypa.io/en/stable/user_guide/#using-pip-from-your-program</span>
+
+<span class="sd">	Attributes:</span>
+<span class="sd">		package_name (str): name of this package</span>
+<span class="sd">		url (str): a PEP-508-compatible string without version spec.</span>
+<span class="sd">		extras (dynamic): Any object with a ``to_ident`` method to serve as package fingerprint. </span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span>  <span class="n">url</span><span class="p">,</span> <span class="n">extras</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">package_name</span> <span class="o">=</span> <span class="n">package_name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span> <span class="o">=</span> <span class="n">imported_name</span>
+		 <span class="c1"># or package_name</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">extras</span> <span class="o">=</span> <span class="n">extras</span>
+		<span class="c1"># self._resp = HttpResponseContentHeader(url)</span>
+		<span class="c1"># self.version = version</span>
+
+
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span>
+		<span class="s2">&quot;(imported_name=</span><span class="si">{self.imported_name!r}</span><span class="s2">,&quot;</span>
+		<span class="s2">&quot;url=</span><span class="si">{self.url!r}</span><span class="s2">,&quot;</span>
+		<span class="s2">&quot;extras=</span><span class="si">{self.extras!r}</span><span class="s2">&quot;</span>
+		<span class="c1"># &quot;version={self.version!r}&quot;</span>
+		<span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+
+
+	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+		<span class="c1"># res = _dict(self.__dict__)</span>
+		<span class="c1"># res = list_flatten(res)</span>
+		<span class="k">return</span> <span class="n">res</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">egg_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">verbose</span><span class="o">=</span><span class="mi">0</span>
+		<span class="n">fn</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="n">dist</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">)</span>
+			<span class="n">fn</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span> <span class="n">dist</span><span class="o">.</span><span class="n">egg_info</span> <span class="p">)</span>
+		<span class="k">except</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">DistributionNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+				<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">ident_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="p">:</span> 
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span> <span class="o">/</span> <span class="s1">&#39;URL_RESPONSE_HEADER&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s1">&#39;&#39;</span>
+
+
+	<span class="k">def</span> <span class="nf">get_installed_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="p">):</span>
+		<span class="c1"># ident = &#39;&#39;</span>
+		<span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ident_file</span>
+		<span class="c1"># ident = []</span>
+		<span class="n">ident</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="k">if</span> <span class="n">fn</span> <span class="ow">and</span> <span class="n">fn</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span> 
+			<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="n">fn</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+				<span class="n">ident</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+				<span class="c1"># try:</span>
+				<span class="c1"># 	ident = json.loads(f)</span>
+				<span class="c1"># except:</span>
+				<span class="c1"># 	pass</span>
+		<span class="k">return</span> <span class="n">ident</span>
+	<span class="k">def</span> <span class="nf">dumps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+		<span class="n">x</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span> <span class="n">x</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="nf">is_compatible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="c1"># return 0 </span>
+
+		<span class="c1">#### Use content header to check whether is compatible</span>
+		<span class="n">installed_ident</span>   <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">get_installed_ident</span><span class="p">()</span>
+		<span class="n">self_ident</span>		<span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="bp">self</span><span class="p">])</span>
+		<span class="k">return</span> <span class="n">self_ident</span> <span class="o">==</span> <span class="n">installed_ident</span>
+
+
+	<span class="k">def</span> <span class="nf">is_installed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		If get_package_version did not return</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">version</span> <span class="o">=</span> <span class="n">get_package_version</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+		<span class="k">return</span> <span class="mi">0</span>
+
+	<span class="k">def</span> <span class="nf">is_loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="k">return</span> <span class="mi">0</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span>
+
+	<span class="c1"># def __getattr__(self, key):</span>
+	<span class="c1"># 	&#39;&#39;&#39;</span>
+	<span class="c1"># 	Get module attribute if not </span>
+	<span class="c1"># 	&#39;&#39;&#39;</span>
+
+
+	<span class="k">def</span> <span class="nf">loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="n">PIP_BIN</span> <span class="o">=</span> <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span><span class="s1">&#39;pip&#39;</span><span class="p">,]</span>
+		<span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_loaded</span><span class="p">():</span>
+			<span class="c1"># print(self.ident_file)</span>
+			<span class="c1"># print(self.is_compatible())</span>
+			<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">():</span>
+				<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">				Overwrite the local installation by default</span>
+<span class="sd">				&#39;&#39;&#39;</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[installing]&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span><span class="s1">&#39;@&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+
+				<span class="n">CMD</span> <span class="o">=</span> <span class="p">[</span>
+				<span class="p">[</span><span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;uninstall&#39;</span><span class="p">,</span><span class="s1">&#39;-y&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span><span class="s1">&#39;;&#39;</span><span class="p">],</span>
+				<span class="c1"># CMD = [ </span>
+				<span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;install&#39;</span><span class="p">,</span><span class="s1">&#39;-vvv&#39;</span><span class="p">,</span> 
+				<span class="c1"># &#39;--user&#39;,</span>
+				<span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="o">+</span><span class="s1">&#39;@&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+				<span class="p">]</span>
+				<span class="n">suc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">_shellcmd</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+				<span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">isdir</span><span class="p">(),</span><span class="s1">&#39;Installation of given url did not create a valid egg_info directory:</span><span class="se">\n</span><span class="s1">url=</span><span class="si">{self.url}</span><span class="se">\n</span><span class="s1">egg_info=</span><span class="si">{self.egg_info}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+
+				<span class="nb">print</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span><span class="o">&gt;=</span><span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+				<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident_file</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+					<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="bp">self</span><span class="p">]))</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span><span class="p">:</span>
+				<span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span><span class="p">:</span>
+				<span class="n">mod</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">mod</span>
+
+<span class="k">class</span> <span class="nc">RemotePythonObject</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<span class="c1"># class RemotePythonObject(object):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package_path</span><span class="p">,</span> <span class="n">module_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attribute_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Args:</span>
+<span class="sd">			pacakge_path: str</span>
+<span class="sd">				PEP-508 styled package requirement string</span>
+<span class="sd">			module_name: str or None</span>
+<span class="sd">				the imported module_name. default to package_name extracted from package_path</span>
+<span class="sd">			attribute_name:</span>
+<span class="sd">				the name to be imported from the given module</span>
+
+<span class="sd">		&#39;&#39;&#39;</span>
+
+		<span class="c1"># if len(args)==3:</span>
+		<span class="c1"># 	package_path, module_name, attribute_name = args</span>
+		<span class="c1"># if len(args)==2:</span>
+		<span class="c1"># 	package_path, attribute_name = args</span>
+		<span class="c1"># 	module_name = None</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">package</span> <span class="o">=</span> <span class="n">PythonPackage</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">module_name</span> <span class="o">=</span> <span class="n">module_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">package_name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="n">attribute_name</span>
+	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span>
+		<span class="s2">&quot;(&quot;</span>
+			<span class="s2">&quot;attribute_name=</span><span class="si">{self.attribute_name!r}</span><span class="s2">,&quot;</span>
+			<span class="s2">&quot;module_name=</span><span class="si">{self.module_name!r}</span><span class="s2">&quot;</span>
+		<span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+	<span class="k">def</span> <span class="nf">loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+		<span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">module_name</span><span class="p">)</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">mod</span> <span class="o">=</span>  <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+		<span class="k">return</span> <span class="n">mod</span>
+
+	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+
+<span class="n">ModuleAttr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span>
+<span class="n">PythonModuleAttr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span>
+<span class="n">PythonFunction</span> <span class="o">=</span> <span class="n">RemotePythonObject</span>
+<span class="n">PythonClass</span> <span class="o">=</span> <span class="n">RemotePythonObject</span>
+<span class="n">RPO</span> <span class="o">=</span> <span class="n">RemotePythonObject</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="k">def</span> <span class="nf">get_identity</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span> <span class="n">out</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	Append to file names with their mtime and st_size</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">this</span> <span class="o">=</span> <span class="n">get_identity</span>
+	<span class="k">assert</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span>
+	<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="n">debug</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
+	<span class="c1"># assert isinstance(lst, (tuple, list)),(type(lst), lst)</span>
+	<span class="n">flist</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+	<span class="c1"># print(&#39;[lst]&#39;,lst,&#39;\n[flist]&#39;,flist)</span>
+	<span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">flist</span><span class="p">:</span>
+		<span class="k">if</span>  <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="n">Prefix</span><span class="p">):</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">ele</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">ele</span> <span class="ow">is</span> <span class="n">InputPrefix</span><span class="p">)</span>
+			<span class="c1">###### exclude outward_edges for DIR_LAYOUT=flat</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span> <span class="n">ele</span><span class="o">+</span><span class="s1">&#39;.outward_edges&#39;</span><span class="p">,</span> <span class="n">ele</span><span class="o">+</span><span class="s1">&#39;.outward_edges_old&#39;</span><span class="p">]]</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[expanding]</span><span class="se">\n</span><span class="s1">  </span><span class="si">%r</span><span class="se">\n</span><span class="s1">  </span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span><span class="n">res</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="kc">None</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">strict</span><span class="p">)</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">res</span><span class="p">)</span>
+
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">HttpResponse</span><span class="p">,</span> <span class="p">)):</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[identing]</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">ele</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="kc">None</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">ele</span><span class="o">.</span><span class="n">to_ident</span><span class="p">()</span> <span class="c1">#### see types.File, use (mtime and st_size) to identify</span>
+			<span class="c1"># stat = os_stat_safe(ele)</span>
+			<span class="c1"># res = (ele, stat.st_mtime, stat.st_size)</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>	
+
+		<span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="s1">&#39;to_ident&#39;</span><span class="p">):</span>
+			<span class="c1"># assert 0,&#39;call to_ident() yourself before passing into get_files()&#39;</span>
+			<span class="c1">#### Caller.to_ident()</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">ele</span><span class="o">.</span><span class="n">to_ident</span><span class="p">()</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">strict</span><span class="p">)</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">res</span><span class="p">)</span>
+
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span><span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">):</span>
+			<span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">strict</span><span class="p">))</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[identing]</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="kc">None</span>
+
+			<span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
+				<span class="c1"># res = (ele.co_code, [get_identity([x], [], verbose, strict) for x in ele.co_consts])</span>
+				<span class="c1"># print([ele.co_consts)</span>
+				<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">],</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+				<span class="c1"># for x in ele.co_consts</span>
+				<span class="c1"># print(res[1])</span>
+				<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">,</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
+				<span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">]):</span>
+					<span class="k">assert</span> <span class="mi">0</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">int</span><span class="p">,)):</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
+				<span class="k">raise</span> <span class="n">UndefinedTypeRoutine</span><span class="p">(</span><span class="s2">&quot;get_identity(</span><span class="si">%s</span><span class="s2">) undefined for </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ele</span><span class="p">),</span><span class="n">ele</span><span class="p">))</span>
+			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">out</span>
+
+
+<span class="c1"># class Static(object):</span>
+<span class="c1"># 	def __init__(self,a):</span>
+<span class="c1"># 		pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
