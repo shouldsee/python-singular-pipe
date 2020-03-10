@@ -18,18 +18,11 @@ Welcome to :mod:`singular_pipe`'s documentation!
    license.rst
    lib/index.rst
 
+   indexes.rst
+
 Introduction
 ===================
 
 Some introduction text
 
-.. include:: install/index.rst
-
-   
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
