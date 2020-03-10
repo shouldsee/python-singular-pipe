@@ -48,8 +48,9 @@ extract file dependency graph from the function signatures and use this informat
 to make runtime decisions as to whether to skip a function evaluation.::
     from singular_pipe.types import Node, Flow, File
 
-    @Node  # Omittable because Node is the default.
-    def some_node( self, #### Essn. A runtime object of type singular_pipe.runner.Caller
+    @Node  # Node is omittable, Flow() is not 
+    def some_node( 
+      self,              #### Essn. A runtime object of type singular_pipe.runner.Caller
       prefix,            #### Essn. A local file where a realised node would live
       input = File,      #### remembered argument,
       _some_const='foo', #### private constants, 
@@ -61,6 +62,7 @@ to make runtime decisions as to whether to skip a function evaluation.::
       with open( self.output.txt, 'w') as f:
         f.write(buf)
       return self
+      
     if __name__ == '__main__':
       from singular_pipe.runner import cache_run, get_changed_files
       from pprint import pprint
