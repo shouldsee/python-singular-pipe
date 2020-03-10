@@ -26,9 +26,9 @@ Overview
 Despite plenty of packages out there, writing reproducible python
 scripts is not yet a simple task. :obj:`singular_pipe` is written to address
 serveral aspects:
-  * Workflow execution as a file synchronisation process.
-  * Separation of code from data.
-  * Declaring function-level dependency.
+    * Workflow execution as a file synchronisation process.
+    * Separation of code from data.
+    * Declaring function-level dependency.
 
 Workflow execution as file synchronisation
 -------------------------------------------
