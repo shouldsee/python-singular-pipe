@@ -26,6 +26,20 @@ to make runtime decisions as to whether to skip a function evaluation.
 
 .. literalinclude:: ../examples/001_workflow_exec_as_file_sync.py
 
+.. code-block:: none
+
+	##### all files governed by this node #######
+	[File('/tmp/some_node/root.some_node.txt')]
+	#### files changed in the next execution of this node #######
+	[File('/tmp/some_node/root.some_node.txt')]
+	#### write some input file ###
+	#### actual execution #####
+	... running [some_node]
+	#### the second execution is skipped ###
+	#### files changed in the next execution of this node #######
+	[]
+
+
 
 .. _example-remote-code:
 
