@@ -1,9 +1,0 @@
-
-:mod:`singular_pipe._types` Internal types for detecting file and package changes 
-=================================================================================
-
-.. automodule:: singular_pipe._types
-    :show-inheritance:
-    :members: Flow, FlowFunction, Node, NodeFunction,    Depend, PrefixedNode, File, Prefix , PythonPackage
-    :undoc-members:
-    :synopsis: Internal types for detecting file and package changes 
