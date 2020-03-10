@@ -1,6 +1,6 @@
 set -e
 ### install package first
-git commit docs -mdocs
+git commit docs -mdocs || echo no_commit
 rm -rf ./_docs
 cp -rfT docs _docs
 git checkout gh-pages
