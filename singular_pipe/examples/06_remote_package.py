@@ -35,19 +35,19 @@ def test_import(self,prefix,
  	'run_and_backup'),
 	 ### import a function from toplevel module
  _mod2 = RemotePythonObject(
- 	'beautifulsoup4@https://github.com/waylan/beautifulsoup/tarball/master',
- 	'bs4',),
+ 	'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
+ 	'luigi',),
  	### import a module with different name
-
  _mod2attr = RemotePythonObject(
- 	'beautifulsoup4@https://github.com/waylan/beautifulsoup/tarball/master',
- 	'bs4.dammit', 
- 	'EntitySubstitution'),
- 	### import a function 	
+ 	'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
+ 	'luigi.event', 
+ 	'Event'),
+ 	### import a function from a module
  _output=[]):
 	_mod1 = _mod1.loaded()
 	_mod2 = _mod2.loaded()
 	_mod2attr.loaded()
+	print('[IMPORTED]!!',_mod2attr.loaded())
 	return self
 	
 
