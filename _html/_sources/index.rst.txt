@@ -22,6 +22,9 @@ Introduction
 ===================
 
 Some introduction text
+
+.. include:: install/index.rst
+
    
 Indices and tables
 ==================
