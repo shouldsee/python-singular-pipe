@@ -15,10 +15,10 @@ Welcome to :mod:`singular_pipe`'s documentation!
    :numbered:
    
    install/index.rst
-   license.rst
    lib/index.rst
-
+   example_usage.rst
    indexes.rst
+   license.rst
 
 Introduction
 ===================
