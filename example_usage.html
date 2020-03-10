@@ -153,6 +153,24 @@
             
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="workflow-execution-as-file-synchronisation">
+<span id="example-workflow-filesync"></span><h2>Workflow execution as file synchronisation<a class="headerlink" href="#workflow-execution-as-file-synchronisation" title="Permalink to this headline">¶</a></h2>
+<p>Any workflow can be divided into two parts: code and data. Given
+a data state, one can apply some code to check whether these data
+are outdated. Executing any workflow can be abstracted to a chain of
+sequential changes to local/remote files from upstream to downstream.
+If all files are up-to-date as checked by the code, then nothing needs
+to be updated.</p>
+<p>To write such codes, file states must be explicitly monitored and remembered.
+In <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe</span></code> this is achieved through a set of custom eval-like function
+called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> and functions with a specialised signature called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code>
+or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Flow</span></code>. <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> would
+extract file dependency graph from the function signatures and use this information
+to make runtime decisions as to whether to skip a function evaluation.</p>
+</div>
+<div class="section" id="separation-of-code-from-data-by-executing-remote-code">
+<h2>Separation of code from data by executing remote code<a class="headerlink" href="#separation-of-code-from-data-by-executing-remote-code" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="creating-a-cached-node">
 <h2>Creating a cached Node<a class="headerlink" href="#creating-a-cached-node" title="Permalink to this headline">¶</a></h2>
 </div>
