@@ -47,8 +47,133 @@
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-<div class="section" id="singular-pipe-types-internal-types-for-detecting-file-and-package-changes">
-<span id="my-reference-label"></span><h2><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes<a class="headerlink" href="#singular-pipe-types-internal-types-for-detecting-file-and-package-changes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-singular_pipe._types">
+<span id="singular-pipe-types-internal-types-for-detecting-file-and-package-changes"></span><span id="my-reference-label"></span><h2><a class="reference internal" href="#module-singular_pipe._types" title="singular_pipe._types: Internal types for detecting file and package changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code></a> Internal types for detecting file and package changes<a class="headerlink" href="#module-singular_pipe._types" title="Permalink to this headline">¶</a></h2>
+<p>Interal exceptions, classes, functions to outline the 
+identification system.</p>
+<dl class="function">
+<dt id="singular_pipe._types.Flow">
+<code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">Flow</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark a function as <a class="reference internal" href="#singular_pipe._types.FlowFunction" title="singular_pipe._types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func: <code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>: the function to be decorated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.FlowFunction">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">FlowFunction</code><a class="headerlink" href="#singular_pipe._types.FlowFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types._BaseFunction</span></code></p>
+<p><a class="reference internal" href="#singular_pipe._types.FlowFunction" title="singular_pipe._types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>
+will always be executed regardless of the <code class="xref py py-class docutils literal notranslate"><span class="pre">_Runner</span></code>
+at runtime. Any time-consuming expression should
+not be put in a <a class="reference internal" href="#singular_pipe._types.FlowFunction" title="singular_pipe._types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>.</p>
+<dl class="attribute">
+<dt id="singular_pipe._types.FlowFunction.named">
+<code class="sig-name descname">named</code><em class="property"> = 1</em><a class="headerlink" href="#singular_pipe._types.FlowFunction.named" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe._types.Node">
+<code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorate that marks a function as <a class="reference internal" href="#singular_pipe._types.NodeFunction" title="singular_pipe._types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func: <code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code> the function to be decorated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.NodeFunction">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">NodeFunction</code><a class="headerlink" href="#singular_pipe._types.NodeFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types._BaseFunction</span></code></p>
+<p>A <a class="reference internal" href="#singular_pipe._types.NodeFunction" title="singular_pipe._types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a> should not have any subnodes.
+<cite>self.runner</cite> is prohibited in a <cite>NodeFunction</cite>. 
+In other words, a <a class="reference internal" href="#singular_pipe._types.NodeFunction" title="singular_pipe._types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a> cannot have
+any children nodes.</p>
+<dl class="attribute">
+<dt id="singular_pipe._types.NodeFunction.named">
+<code class="sig-name descname">named</code><em class="property"> = 1</em><a class="headerlink" href="#singular_pipe._types.NodeFunction.named" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.Depend">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">Depend</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Depend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">path.Path</span></code></p>
+<p>Abstract Dependency</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.PrefixedNode">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">PrefixedNode</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.PrefixedNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#singular_pipe._types.Depend" title="singular_pipe._types.Depend"><code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.Depend</span></code></a></p>
+<p>This class represents file(s) that 
+know(s) how to find its parent <cite>Node</cite>.</p>
+<dl class="method">
+<dt id="singular_pipe._types.PrefixedNode.callback_output">
+<code class="sig-name descname">callback_output</code><span class="sig-paren">(</span><em class="sig-param">caller</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.PrefixedNode.callback_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe._types.PrefixedNode.fileglob">
+<code class="sig-name descname">fileglob</code><span class="sig-paren">(</span><em class="sig-param">g</em>, <em class="sig-param">strict</em>, <em class="sig-param">filter=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.PrefixedNode.fileglob" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe._types.PrefixedNode.get_prefix_pointer">
+<code class="sig-name descname">get_prefix_pointer</code><span class="sig-paren">(</span><em class="sig-param">dir_layout</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.PrefixedNode.get_prefix_pointer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.File">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#singular_pipe._types.PrefixedNode" title="singular_pipe._types.PrefixedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.PrefixedNode</span></code></a></p>
+<p>As function inputs, <a class="reference internal" href="#singular_pipe._types.File" title="singular_pipe._types.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> will be 
+fingerprinted with its mtime and byte sizes.
+If this fingerprint changed, a downstream 
+recalculation will be triggered.</p>
+<dl class="method">
+<dt id="singular_pipe._types.File.expanded">
+<code class="sig-name descname">expanded</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.File.expanded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe._types.File.to_ident">
+<code class="sig-name descname">to_ident</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.File.to_ident" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe._types.Prefix">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe._types.</code><code class="sig-name descname">Prefix</code><span class="sig-paren">(</span><em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#singular_pipe._types.PrefixedNode" title="singular_pipe._types.PrefixedNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.PrefixedNode</span></code></a></p>
+<p>The definition of a Prefix is unclean.
+The expansion of <a class="reference internal" href="#singular_pipe._types.Prefix" title="singular_pipe._types.Prefix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Prefix</span></code></a> cannot
+takes place until the upstream job is done.</p>
+<p>For example, a tar archive job may wants to
+monitor all files under prefix <code class="file docutils literal notranslate"><span class="pre">./build</span></code></p>
+<p>This node is useful when specifying a loosely
+defined fileset into <code class="xref py py-func docutils literal notranslate"><span class="pre">LoggedSingularityCommand()</span></code></p>
+<dl class="method">
+<dt id="singular_pipe._types.Prefix.callback_output">
+<code class="sig-name descname">callback_output</code><span class="sig-paren">(</span><em class="sig-param">caller</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Prefix.callback_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe._types.Prefix.expaneded">
+<code class="sig-name descname">expaneded</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe._types.Prefix.expaneded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-singular_pipe.types">
 <span id="singular-pipe-types-entry-point-for-all-public-callables"></span><h2><a class="reference internal" href="#module-singular_pipe.types" title="singular_pipe.types: Entry point for all public callables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code></a> Entry point for all public callables<a class="headerlink" href="#module-singular_pipe.types" title="Permalink to this headline">¶</a></h2>
@@ -59,7 +184,7 @@
 <span class="target" id="module-singular_pipe.shell"></span></div>
 </div>
 <div class="section" id="singular-pipe-types-internal-types-to-record-system-status">
-<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> — Internal types to record system status<a class="headerlink" href="#singular-pipe-types-internal-types-to-record-system-status" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="#module-singular_pipe._types" title="singular_pipe._types: Internal types for detecting file and package changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code></a> — Internal types to record system status<a class="headerlink" href="#singular-pipe-types-internal-types-to-record-system-status" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -72,7 +197,7 @@
   <ul>
 <li><a class="reference internal" href="#">Welcome to singular_pipe’s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
-<li><a class="reference internal" href="#singular-pipe-types-internal-types-for-detecting-file-and-package-changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
+<li><a class="reference internal" href="#module-singular_pipe._types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
 <li><a class="reference internal" href="#module-singular_pipe.types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</a></li>
 <li><a class="reference internal" href="#singular-pipe-shell"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code></a></li>
 </ul>
