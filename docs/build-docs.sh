@@ -1,7 +1,7 @@
 set -e
 ### install package first
 git commit docs -mdocs
-rm -rf _docs
+rm -rf ./_docs
 cp -rfT docs _docs
 git checkout gh-pages
 sphinx-build -b html _docs _html
