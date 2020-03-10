@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to singular_pipe's documentation!
+Welcome to :mod:`singular_pipe`'s documentation!
 =========================================
 
 .. toctree::
@@ -11,6 +11,13 @@ Welcome to singular_pipe's documentation!
    :caption: Contents:
 
 
+.. sidebar:: Summary
+
+    :Version: |version|
+    :Release: |release|
+    :Date: |today|
+    :Author: See `Authors`_ section
+    :ChangeLog: See `ChangeLog`_ section
 
 Indices and tables
 ==================
