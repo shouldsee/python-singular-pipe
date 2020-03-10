@@ -45,57 +45,9 @@ In :mod:`singular_pipe` this is achieved through a set of custom eval-like funct
 called :obj:`Runner` and functions with a specialised signature called :obj:`Node`
 or :obj:`Flow`. :obj:`Runner` would 
 extract file dependency graph from the function signatures and use this information
-to make runtime decisions as to whether to skip a function evaluation.::
-    from singular_pipe.types import Node, Flow, File
+to make runtime decisions as to whether to skip a function evaluation.
 
-    @Node  # Node is omittable, Flow() is not 
-    def some_node( 
-      self,              #### Essn. A runtime object of type singular_pipe.runner.Caller
-      prefix,            #### Essn. A local file where a realised node would live
-      input = File,      #### remembered argument,
-      _some_const='foo', #### private constants, 
-      _output=['txt']    #### Essn. private constants to specify output monitoring
-      ):
-      print('... running [some_node]')
-      with open(input,'r') as f:
-        buf = ( f.read() + _some_const )*5 
-      with open( self.output.txt, 'w') as f:
-        f.write(buf)
-      return self
-      
-    if __name__ == '__main__':
-      from singular_pipe.runner import cache_run, get_changed_files
-      from pprint import pprint
-      fs = get_all_files(some_node, '/tmp/some_node', '/tmp/input_file.txt')
-      print('##### all files governed by this node #######')
-      pprnit(fs)
-
-      fs = get_changed_files(some_node, '/tmp/some_node', '/tmp/input_file.txt')
-      print('##### files changed in the next execution of this node #######')      
-      pprnit(fs) 
-
-      print('#### write some input file ###')
-      with open('/tmp/input_file.txt','w') as f: f.write('barbarfoo\n')
-
-      print('#### actual execution #####')
-      cache_run(some_node, '/tmp/some_node', '/tmp/input_file.txt')
-
-      print('#### the second execution is skipped ###')
-      cache_run(some_node, '/tmp/some_node', '/tmp/input_file.txt')
-
-      #### the fact that the execution is skipped implies
-      #### that executing this node would not change any file
-      fs = get_changed_files(some_node, '/tmp/some_node', '/tmp/input_file.txt')
-      print('##### files changed in the next execution of this node #######')      
-      pprnit(fs) 
-      assert fs == []
-
- 
-
-
-
-
-
+.. literalinclude:: examples/001_work_flow_exe_as_file_sync.py
 
 
 
