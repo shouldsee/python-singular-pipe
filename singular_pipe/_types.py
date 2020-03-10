@@ -1,3 +1,8 @@
+__doc__ = """
+Interal exceptions, classes, functions to outline the 
+identification system.
+
+"""
 # from file_tracer import InputFile,OutputFile,File,TempFile,FileTracer
 from path import Path
 import glob
@@ -7,6 +12,8 @@ from orderedattrdict import AttrDict
 import json
 import re
 from singular_pipe._header import list_flatten,list_flatten_strict,rgetattr
+
+
 
 import singular_pipe
 import sys
@@ -20,6 +27,9 @@ def DirtyKey(s):
 Code = type((lambda:None).__code__)
 
 class TooManyArgumentsError(RuntimeError):
+	'''
+	aaaa
+	'''
 	pass
 class TooFewArgumentsError(RuntimeError):
 	pass
@@ -47,25 +57,29 @@ class IdentAttrDict(AttrDict):
 
 
 class cached_property(object):
-    """
-    Descriptor (non-data) for building an attribute on-demand on first use.
-    Source: https://stackoverflow.com/a/4037979
-    """
-    def __init__(self, factory):
-        """
-        <factory> is called such: factory(instance) to build the attribute.
-        """
-        self._attr_name = factory.__name__
-        self._factory = factory
+	"""
+	Descriptor (non-data) for building an attribute on-demand on first use.
+	Source: https://stackoverflow.com/a/4037979
+	"""
+	def __init__(self, factory):
+		"""
+		<factory> is called such: factory(instance) to build the attribute.
+		"""
+		self._attr_name = factory.__name__
+		self._factory = factory
 
-    def __get__(self, instance, owner):
-        # Build the attribute.
-        attr = self._factory(instance)
-        # Cache the value; hide ourselves.
-        setattr(instance, self._attr_name, attr)
-        return attr
+	def __get__(self, instance, owner):
+		# Build the attribute.
+		attr = self._factory(instance)
+		# Cache the value; hide ourselves.
+		setattr(instance, self._attr_name, attr)
+		return attr
 
 class PicklableNamedTuple(object):
+	__doc__ = """ 
+	This class mimic `namedtuple`, except that an object of 
+	this class is picklable whereas that of namedtuple is not.
+	"""
 	pass
 
 # if 0:
@@ -98,6 +112,12 @@ class _BaseFunction(object):
 
 
 class NodeFunction(_BaseFunction):
+	'''
+	A :class:`NodeFunction` should not have any subnodes.
+	`self.runner` is prohibited in a `NodeFunction`. 
+	In other words, a :class:`NodeFunction` cannot have
+	any children nodes.
+	'''
 	named = 1
 	pass
 
@@ -111,14 +131,33 @@ class NodeFunction(_BaseFunction):
 
 
 def Node(func):
+	"""
+	Decorate that marks a function as :class:`NodeFunction`.
+
+	Args:
+		func: :obj:`function` the function to be decorated.
+
+	"""
 	func._type = NodeFunction
 	return func
 
 class FlowFunction(_BaseFunction):
+	"""
+	:class:`FlowFunction`
+	will always be executed regardless of the :class:`_Runner`
+	at runtime. Any time-consuming expression should
+	not be put in a :class:`FlowFunction`.
+	"""
 	named = 1
 	pass
 
 def Flow(func):
+	"""
+	Mark a function as :class:`FlowFunction`.
+
+	Args:
+		func: :obj:`function`: the function to be decorated.
+	"""
 	func._type = FlowFunction
 	return func
 
@@ -140,6 +179,10 @@ class Depend(Path):
 	pass
 
 class PrefixedNode(Depend):
+	'''
+	This class represents file(s) that 
+	know(s) how to find its parent `Node`.
+	'''
 	def get_prefix_pointer(self, dir_layout):
 		idFile = IdentFile( dir_layout, self, [] , '_prefix_pointer')		
 		suc = 0
@@ -172,11 +215,15 @@ class PrefixedNode(Depend):
 		# return [File(str(x)) for x in glob.glob("%s%s"%(self,g))]
 		return res
 
-			# f.write( self.relpath(idFile.dirname()) )
-# tups =(prefix_job, self.DIR/'root','/tmp/pjob',)
-# job = force_run(*tups)
+
 
 class File(PrefixedNode):
+	'''
+	As function inputs, :class:`File` will be 
+	fingerprinted with its mtime and byte sizes.
+	If this fingerprint changed, a downstream 
+	recalculation will be triggered.
+	'''
 	def __init__(self,*a,**kw):
 		super(File,self).__init__(*a,**kw)
 	def to_ident(self,):
@@ -205,6 +252,17 @@ class OutputFile(File):
 
 # import pickle
 class Prefix(PrefixedNode):
+	'''
+	The definition of a Prefix is unclean.
+	The expansion of :class:`Prefix` cannot
+	takes place until the upstream job is done.
+	
+	For example, a tar archive job may wants to
+	monitor all files under prefix :file:`./build`
+
+	This node is useful when specifying a loosely
+	defined fileset into :func:`LoggedSingularityCommand`
+	'''
 	def __init__(self,*a,**kw):
 		super(Prefix, self).__init__(*a,**kw)
 	def callback_output(self, caller, name):
@@ -301,18 +359,20 @@ class HttpResponse(object):
 		d0=  self.__dict__.copy()
 		d0.pop('response', None)
 
-		d = dict(x.headers.copy())
+		# d = dict(x.headers.copy())
+		_d = {}
+		d = x.headers
 		via =  d.get('via','')
-		d['header_ident'] = None
+		_d['header_ident'] = None
 		if 'varnish' in via:
-			d['header_ident'] = d.get('etag', None)
-		if d['header_ident'] is None:
-			d['header_ident'] = d.get('content-length', None)
-		if d['header_ident'] is None:
-			d['header_ident'] = d.get('content-disposition', None)
-		if d['header_ident'] is None:
+			_d['header_ident'] = d.get('etag', None)
+		if _d['header_ident'] is None:
+			_d['header_ident'] = d.get('content-length', None)
+		if _d['header_ident'] is None:
+			_d['header_ident'] = d.get('content-disposition', None)
+		if _d['header_ident'] is None:
 			if not x.text:
-				raise Exception('HTTP header is not informative!%s'%json.dumps(x.headers,indent=2))
+				raise Exception('HTTP header is not informative!%s'%json.dumps(_dict(x.headers),indent=2))
 		# hd = _dict()
 		# hd['clen'] =  d.get('Content-Length', None)
 		# hd['cdisp'] = d.get('Content-Disposition',None)
@@ -320,7 +380,7 @@ class HttpResponse(object):
 		# assert hd['clen'] or hd['cdisp'], hd
 
 		# return [ sorted(d0.items()), ('_header_ident',list(hd.values())), ('_text',x.text)]
-		return [ sorted(d0.items()), ('_header_ident',d['header_ident']), ('_text',x.text)]
+		return [ sorted(d0.items()), ('_header_ident',_d['header_ident']), ('_text',x.text)]
 
 
 
@@ -333,12 +393,16 @@ def lstrip(x,s):
 	if x.startswith(s):
 		x = x[len(s):]
 	return x
-def PythonModule(package_path, version = None):
+def PythonPackage(package_path, imported_name=None):
 	'''
-	Tries to parse package specificaion
+	Tries to parse package_path according to pkg_resources.Requirement.parse()
+	Args:
+		package_path: (str)
+			A :obj:`PEP 508`-compatible string without version specification
+
 	'''
 
-	assert version is None
+	# assert version is None
 	err = UndefinedRoutine('PythonModule(%r)'%((package_path)))
 	if '@' in package_path:
 		package_name, url = package_path.split('@',1)
@@ -348,7 +412,7 @@ def PythonModule(package_path, version = None):
 			extras = File(lstrip(url, 'file://'))
 		else:
 			raise err
-		mod = _PythonModule(package_name, url, extras)
+		mod = _PythonPackage(package_name, imported_name, url, extras)
 	else:
 		raise err
 	return mod
@@ -360,19 +424,38 @@ import sys,importlib
 import pkg_resources
 import json
 # PIP_BIN = 'pip3'
-class _PythonModule(object):
+class _PythonPackage(object):
 	'''
+	Object to manage local module installation status.
+	``_PythonModule(*args).loaded()`` returns the imported module.
+	Currently, local modules must be unique with regards to :obj:`package_name`,
+	Upon name conflict, that is if package `foo` is already installed 
+	through ``PythonModule("foo",url1)`` and ``PythonModule("foo",url2)`` is called,
+	then original installation will be cleared and `url2` would be used for a second install.
+	This solution is *sub-optimal* because back-and-force installations is possible.
+	Changing this would require a complete re-setup of `pip`-style package management.
+
 	pip.main()? https://pip.pypa.io/en/stable/user_guide/#using-pip-from-your-program
+
+	Attributes:
+		package_name (str): name of this package
+		url (str): a PEP-508-compatible string without version spec.
+		extras (dynamic): Any object with a ``to_ident`` method to serve as package fingerprint. 
 	'''
-	def __init__(self, package_name, url, extras):
+	def __init__(self, package_name, imported_name,  url, extras):
 		self.package_name = package_name
-		# self._resp = HttpResponseContentHeader(url)
+		self.imported_name = imported_name
+		 # or package_name
+
 		self.url = url
-		# self.version = version
 		self.extras = extras
+		# self._resp = HttpResponseContentHeader(url)
+		# self.version = version
+
+
 	def __repr__(self):
 		return ("{self.__class__.__name__}"
-		"(package_name={self.package_name!r},"
+		"(imported_name={self.imported_name!r},"
 		"url={self.url!r},"
 		"extras={self.extras!r}"
 		# "version={self.version!r}"
@@ -427,29 +510,9 @@ class _PythonModule(object):
 
 		#### Use content header to check whether is compatible
 		installed_ident   =  self.get_installed_ident()
-		self_ident        =  self.dumps([self])
-		# from pprint import pprint
-		# pprint(json.loads(self_ident))
-		# pprint(json.loads(installed_ident))
-		# print('[eq]', json.loads(self_ident) == json.loads(installed_ident))
+		self_ident		=  self.dumps([self])
 		return self_ident == installed_ident
 
-		# # return self.to_ident() == self.installed_ident()
-
-		# # if installed_ident != self.get_
-		# # get_package_ident(self.package_name, 0)
-		# # installed_version = get_package_version(self.package_name, 0)
-		# if self.version is None:
-		# 	return bool( installed_version)
-		# if self.version.startswith('>='):
-		# 	val = installed_version[2:] >= self.version
-		# elif self.version.startswith('<='):
-		# 	val = installed_version[2:] <= self.version
-		# elif self.version.startswith('=='):
-		# 	val = installed_version[2:] == self.version
-		# else:
-		# 	assert 0,(self.versoin, installed_version)
-		# return val
 
 	def is_installed(self):
 		'''
@@ -459,7 +522,10 @@ class _PythonModule(object):
 		return 0
 
 	def is_loaded(self):
-		return self.package_name in sys.modules
+		if self.imported_name is None:
+			return 0
+		else:
+			return self.imported_name in sys.modules
 
 	# def __getattr__(self, key):
 	# 	'''
@@ -470,6 +536,7 @@ class _PythonModule(object):
 	def loaded(self):
 		verbose = 0
 		PIP_BIN = [sys.executable,'-m','pip',]
+		mod = None
 		if not self.is_loaded():
 			# print(self.ident_file)
 			# print(self.is_compatible())
@@ -492,33 +559,57 @@ class _PythonModule(object):
 				print(stdout) if verbose>=2 else None
 				with open(self.ident_file,'w') as f:
 					f.write(self.dumps([self]))
-			mod = importlib.import_module(self.package_name)
+			if self.imported_name:
+				mod = importlib.import_module(self.imported_name)
 		else:
-			mod = sys.modules[self.package_name]
+			if self.imported_name:
+				mod = sys.modules[self.imported_name]
 		return mod
 
-class PythonFunction(object):
-	def __init__(self, *args):
-		if len(args)==3:
-			package_path, package_version, function_name = args
-		if len(args)==2:
-			package_path, function_name = args
-			package_version = None
-		self.module = PythonModule(package_path, package_version)
-		self.function_name = function_name
+class RemotePythonObject(object):
+
+# class RemotePythonObject(object):
+	def __init__(self, package_path, module_name=None, attribute_name=None):
+		'''
+		Args:
+			pacakge_path: str
+				PEP-508 styled package requirement string
+			module_name: str or None
+				the imported module_name. default to package_name extracted from package_path
+			attribute_name:
+				the name to be imported from the given module
+
+		'''
+
+		# if len(args)==3:
+		# 	package_path, module_name, attribute_name = args
+		# if len(args)==2:
+		# 	package_path, attribute_name = args
+		# 	module_name = None
+		self.package = PythonPackage(package_path, None)
+		self.module_name = module_name or self.package.package_name
+		self.attribute_name = attribute_name
 	def __repr__(self):
 		return ("{self.__class__.__name__}"
 		"("
-			"function_name={self.function_name!r},"
-			"module={self.module!r}"
+			"attribute_name={self.attribute_name!r},"
+			"module_name={self.module_name!r}"
 		")").format(**locals())
 	def loaded(self):
-		mod = self.module.loaded()
-		return getattr( mod, self.function_name)
+		self.package.loaded()
+		mod = importlib.import_module(self.module_name)
+		if self.attribute_name is not None:
+			mod =  getattr(mod, self.attribute_name)
+		return mod
 
 	def to_ident(self):
 		return sorted(self.__dict__.items())
 
+ModuleAttr = RemotePythonObject
+PythonModuleAttr = RemotePythonObject
+PythonFunction = RemotePythonObject
+PythonClass = RemotePythonObject
+RPO = RemotePythonObject
 import json
 def get_identity(lst, out = None, verbose=0, strict=0):
 	'''

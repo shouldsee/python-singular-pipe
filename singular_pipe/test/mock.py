@@ -6,6 +6,11 @@ from singular_pipe.types import LoggedShellCommand,File
 from singular_pipe.runner import mock_run,cache_run
 from pprint import pprint
 class Case(unittest2.TestCase):
+	def test_rpo(self):
+		import importlib
+		mod = importlib.import_module('singular_pipe.examples.06_remote_package')
+		mod.main()
+		
 	def test_mock_overwrite(self):
 		# assert 0
 		prefix = None
@@ -281,6 +286,8 @@ def main(self,
 	fn = Path('assets/%s.real.dot'%Path(__file__).basename()); fn =fn.realpath()
 	g = plot_simple_graph(tree,None,0)
 	g.render( fn,format='svg'); print('[see output]%s'%fn)
+
+
 Case.test_tag = main
 
 if __name__ == '__main__':

@@ -146,15 +146,16 @@ def is_mock_file(v, call=None,):
 
 			
 
-def _get_changed_files(caller,):
+def _get_changed_files(caller):
 	return _get_all_files(caller, 1)
-def _get_all_files(caller,changed):
+def _get_all_files(caller, changed):
 	lst = []
 	for f in caller.output.values():
 		if not changed or is_mock_file(f):
 			lst.append(f)
 	for flow in caller.subflow.values():
-		lst.append( _get_all_files(flow,changed))
+		res = _get_all_files(flow, changed)
+		lst.append( res)
 	return lst				
 
 		

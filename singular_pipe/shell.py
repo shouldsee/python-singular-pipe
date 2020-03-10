@@ -1,3 +1,4 @@
+import importlib
 from singular_pipe._shell import pipe__getResult,pipe__getSafeResult,shellpopen
 from singular_pipe._shell import _shellcmd, shellcmd
 import io,time
@@ -6,6 +7,7 @@ import json
 import warnings
 from singular_pipe.base import list_flatten_strict, list_flatten
 from singular_pipe._types import File,Prefix,InputFile,InputPrefix
+# from ._types import File,Prefix,InputFile,InputPrefix
 import json
 from path import Path
 import tempfile
