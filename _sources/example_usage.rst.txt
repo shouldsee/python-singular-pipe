@@ -18,6 +18,8 @@ Creating a cached Node
 Running a remote package/function
 ======================================
 
+.. literalinclude:: examples/06_remote_package.py
+
 .. _config-layout
 
 Configure directory layout

@@ -23,7 +23,12 @@ Welcome to :mod:`singular_pipe`-|version| 's documentation!
 Introduction
 ===================
 
-Some introduction text
+Despite plenty of packages out there, writing reproducible python
+scripts is not yet a simple task. Singular_pipe is written to address
+serveral aspects:
+  * Workflow as a file synchronisation process.
+  * Separation of code from data.
+  * Declaring function-level dependency.
 
 
 :Author: Feng Geng

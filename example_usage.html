@@ -271,6 +271,105 @@
 </div>
 <div class="section" id="running-a-remote-package-function">
 <h2><span class="section-number">2.2. </span>Running a remote package/function<a class="headerlink" href="#running-a-remote-package-function" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Vanilla python modules present import statements at the beginning of its scripts</span>
+<span class="sd">this prevents the specification of remote package though http:// and produces</span>
+<span class="sd">maintainence problems. Here we propose an in-function import system that</span>
+<span class="sd">install packages only during real-execution of NodeFunction(). This way,</span>
+<span class="sd">package dependency and scripts could live in the same python file, but yet</span>
+<span class="sd">be decoupled in the sense that only execution of a node invokes dependency installation. </span>
+
+<span class="sd">This in-function dependency is compatible with the old setup.py style dependency. The</span>
+<span class="sd">only difference is that previous dependency is specified at the package-level whereas</span>
+<span class="sd">this dep is at function-level.</span>
+
+<span class="sd">The purpose of enabling a remote package specification is to </span>
+<span class="sd">centralise the storage of pipelines to cloud rather than to a local machine, which</span>
+<span class="sd">would force the script creator to write the script in a local-independent way.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">PythonPackage</span><span class="p">,</span> <span class="n">RemotePythonObject</span><span class="p">,</span><span class="n">RPO</span>
+
+<span class="c1"># Github &quot;tarball/master&quot; often take minutes to update,</span>
+<span class="c1"># use the commit hash to ensure integrity. </span>
+<span class="c1"># package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
+<span class="c1"># package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">test_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
+ <span class="c1"># _remote_mod = PythonModule(package_path),</span>
+ <span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
+ 	<span class="c1">### import the top-level module of the package</span>
+ <span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+ 	<span class="kc">None</span><span class="p">,</span>  
+ 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+	 <span class="c1">### import a function from toplevel module</span>
+ <span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+ 	<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
+ 	<span class="c1">### import a module with different name</span>
+ <span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+ 	<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
+ 	<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
+ 	<span class="c1">### import a function from a module</span>
+ <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="n">_mod1</span> <span class="o">=</span> <span class="n">_mod1</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="n">_mod2</span> <span class="o">=</span> <span class="n">_mod2</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[IMPORTED]!!&#39;</span><span class="p">,</span><span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">())</span>
+	<span class="k">return</span> <span class="bp">self</span>
+	
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">simple_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
+ <span class="n">_main</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+ 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span> 
+ 	<span class="kc">None</span><span class="p">,</span> 
+ 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+ <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">_main</span><span class="o">.</span><span class="n">loaded</span><span class="p">(),</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;_backup&#39;</span><span class="p">)</span>	
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+	<span class="kn">import</span> <span class="nn">singular_pipe</span>
+	<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">get_all_files</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">cache_run</span>
+	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+	<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;flat&#39;</span> 
+
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/test_import/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### [Note] currently the package change is not recorded&#39;</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> 
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">test_import</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### [Note] Remote workflow should detect file changes&#39;</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">!=</span> <span class="p">[]</span>
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;### run actual workflow&#39;</span><span class="p">)</span>
+	<span class="n">cache_run</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span><span class="n">prefix</span><span class="p">)</span>
+
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">simple_flow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[]</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="configure-directory-layout">
 <h2><span class="section-number">2.3. </span>Configure directory layout<a class="headerlink" href="#configure-directory-layout" title="Permalink to this headline">¶</a></h2>
