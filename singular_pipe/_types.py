@@ -396,9 +396,12 @@ def lstrip(x,s):
 def PythonPackage(package_path, imported_name=None):
 	'''
 	Tries to parse package_path according to pkg_resources.Requirement.parse()
+
 	Args:
-		package_path: (str)
-			A :obj:`PEP 508`-compatible string without version specification
+	------------------------
+
+	package_path: (str)
+		A :pep:`508`-compatible string without version specification
 
 	'''
 

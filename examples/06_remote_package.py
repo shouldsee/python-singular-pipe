@@ -23,44 +23,36 @@ from singular_pipe.types import PythonPackage, RemotePythonObject,RPO
 # package_path_with_hash = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
 # package_path           = 'singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master'
 
+
+
+
+
+##### showing many different ways of
 @Flow
 def test_import(self,prefix,
- # _remote_mod = PythonModule(package_path),
- _mod1 = RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'),
- 	### import the top-level module of the package
- _remote_function= RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426',
- 	None,  
- 	'run_and_backup'),
-	 ### import a function from toplevel module
- _mod2 = RemotePythonObject(
- 	'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
- 	'luigi',),
- 	### import a module with different name
- _mod2attr = RemotePythonObject(
- 	'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
- 	'luigi.event', 
- 	'Event'),
- 	### import a function from a module
- _output=[]):
+		_mod1 = RemotePythonObject('singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'),
+			### import the top-level module of the package
+		_remote_function= RemotePythonObject(
+			'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426',
+			None,  
+			'run_and_backup'),
+		 ### import a function from toplevel module
+		_mod2 = RemotePythonObject(
+			'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
+			'luigi',),
+			### import a module with different name
+		_mod2attr = RemotePythonObject(
+			'luigi@https://github.com/spotify/luigi/tarball/2.8.12',
+			'luigi.event', 
+			'Event'),
+			### import a function from a module
+		_output=[]
+	):
 	_mod1 = _mod1.loaded()
 	_mod2 = _mod2.loaded()
 	_mod2attr.loaded()
 	print('[IMPORTED]!!',_mod2attr.loaded())
 	return self
-	
-
-@Flow
-def simple_flow(self,prefix,
- _main= RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426', 
- 	None, 
- 	'run_and_backup'),
- _output=[]):
-	self.runner(_main.loaded(),  prefix, 1, 20, prefix+'_backup')	
-	return self
-
 
 
 def main():

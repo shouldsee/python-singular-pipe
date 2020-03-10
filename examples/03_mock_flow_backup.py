@@ -51,7 +51,7 @@ def workflow(self, prefix, seed =int , L=int,
 
 
 
-from singular_pipe.types import Caller, DirtyKey, rgetattr
+from singular_pipe.types import Caller, rgetattr
 import shutil
 def copy_file(self, prefix, input=File, 
 	_single_file = 1, ### A single file node only tracks the file at self.prefix
@@ -81,7 +81,6 @@ def backup(self, prefix, flow = Caller, _output=[]):
 	return self
 
 
-# from singular_pipe.runner import get_all_files
 from singular_pipe.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
 from graphviz import Digraph
 import json
@@ -116,13 +115,13 @@ def run_and_backup(
 
 
 
-from singular_pipe.runner import cache_run, mock_run, get_changed_files, get_all_files
-from singular_pipe.shell import LoggedShellCommand
-from singular_pipe.types import File,CacheFile
-from pprint import pprint
-singular_pipe.rcParams['dir_layout']='clean'
 def main(self=None,
 	prefix = None):
+	from singular_pipe.runner import cache_run, mock_run, get_changed_files, get_all_files
+	from singular_pipe.shell import LoggedShellCommand
+	from singular_pipe.types import File,CacheFile
+	from pprint import pprint
+	singular_pipe.rcParams['dir_layout']='clean'
 
 	# if prefix is None:
 	prefix = Path('/tmp/singular_pipe.symbolic/root')

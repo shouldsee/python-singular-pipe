@@ -605,8 +605,6 @@ class _Runner(object):
 		pass
 	def after_run(self, job, args):
 		pass
-	# def __call__(self, job, *args, last_caller = None, tag=None):
-	# 	return self.run(job,*args, last_caller=last_caller, tag =tag )
 
 	def run(self, job, *args, last_caller = None, tag = None):
 		result = self._run(job, args, last_caller, tag)

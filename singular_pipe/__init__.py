@@ -63,14 +63,15 @@ template = '''
 pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/master --user
 ```
 
+### Documentation
+
+See https://shouldsee.github.io/singular_pipe/
+
 ### Screenshots
 
 ![](./tests/test_downstream.node_only.dot.svg)
 
 
-### Documentation
-
-Formal documentation is not yet available. Please see Examples
 
 ### Examples
 
