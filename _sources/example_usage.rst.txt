@@ -43,6 +43,11 @@ There are quite a number of ways to specify a remote object.
 .. literalinclude:: ../examples/06_remote_package.py
 
 
+.. _example-dependency-graph:
+Visualising Dependency graph
+=============================================
+
+
 .. _simple-cache:
 
 Creating a cached Node
