@@ -4,8 +4,6 @@
 Installation guide
 ******************************************************
 
-:Author: Feng Geng
-:Email: shouldsee.gem@gmail.com
 
 
 Dependencies
