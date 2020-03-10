@@ -15,8 +15,8 @@ Welcome to :mod:`singular_pipe`'s documentation!
    :numbered:
    
    install/index.rst
-   lib/index.rst
    example_usage.rst
+   lib/index.rst
    indexes.rst
    license.rst
 
@@ -25,4 +25,7 @@ Introduction
 
 Some introduction text
 
+
+:Author: Feng Geng
+:Email: shouldsee.gem@gmail.com
 
