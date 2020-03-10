@@ -317,25 +317,24 @@ local machine states.</p>
 <span class="c1">##### showing many different ways of</span>
 <span class="nd">@Flow</span>
 <span class="k">def</span> <span class="nf">test_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
- <span class="c1"># _remote_mod = PythonModule(package_path),</span>
- <span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
- 	<span class="c1">### import the top-level module of the package</span>
- <span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
- 	<span class="kc">None</span><span class="p">,</span>  
- 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
-	 <span class="c1">### import a function from toplevel module</span>
- <span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
- 	<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
- 	<span class="c1">### import a module with different name</span>
- <span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
- 	<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
- 	<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
- 	<span class="c1">### import a function from a module</span>
- <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+		<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
+			<span class="c1">### import the top-level module of the package</span>
+		<span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+			<span class="kc">None</span><span class="p">,</span>  
+			<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+		 <span class="c1">### import a function from toplevel module</span>
+		<span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
+			<span class="c1">### import a module with different name</span>
+		<span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
+			<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
+			<span class="c1">### import a function from a module</span>
+		<span class="n">_output</span><span class="o">=</span><span class="p">[]</span>
+	<span class="p">):</span>
 	<span class="n">_mod1</span> <span class="o">=</span> <span class="n">_mod1</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
 	<span class="n">_mod2</span> <span class="o">=</span> <span class="n">_mod2</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
 	<span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
@@ -524,25 +523,24 @@ local machine states.</p>
 <span class="c1">##### showing many different ways of</span>
 <span class="nd">@Flow</span>
 <span class="k">def</span> <span class="nf">test_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
- <span class="c1"># _remote_mod = PythonModule(package_path),</span>
- <span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
- 	<span class="c1">### import the top-level module of the package</span>
- <span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
- 	<span class="kc">None</span><span class="p">,</span>  
- 	<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
-	 <span class="c1">### import a function from toplevel module</span>
- <span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
- 	<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
- 	<span class="c1">### import a module with different name</span>
- <span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
- 	<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
- 	<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
- 	<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
- 	<span class="c1">### import a function from a module</span>
- <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+		<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
+			<span class="c1">### import the top-level module of the package</span>
+		<span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+			<span class="kc">None</span><span class="p">,</span>  
+			<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
+		 <span class="c1">### import a function from toplevel module</span>
+		<span class="n">_mod2</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;luigi&#39;</span><span class="p">,),</span>
+			<span class="c1">### import a module with different name</span>
+		<span class="n">_mod2attr</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
+			<span class="s1">&#39;luigi@https://github.com/spotify/luigi/tarball/2.8.12&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;luigi.event&#39;</span><span class="p">,</span> 
+			<span class="s1">&#39;Event&#39;</span><span class="p">),</span>
+			<span class="c1">### import a function from a module</span>
+		<span class="n">_output</span><span class="o">=</span><span class="p">[]</span>
+	<span class="p">):</span>
 	<span class="n">_mod1</span> <span class="o">=</span> <span class="n">_mod1</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
 	<span class="n">_mod2</span> <span class="o">=</span> <span class="n">_mod2</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
 	<span class="n">_mod2attr</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>
