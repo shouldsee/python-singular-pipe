@@ -18,5 +18,16 @@ Essentail
 
 Optional
 ---------------------------
-  * singularity >= 3.5.3 to use :ref:`singular_pipe.shell.LoggedSingularityCommand`. 
-  * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :ref:`singular_pipe.graph.plot_simple_graph`
+  * singularity >= 3.5.3 to use :obj:`singular_pipe.shell.LoggedSingularityCommand`. 
+  * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :obj:`singular_pipe.graph.plot_simple_graph`
+
+Installation
+==============================
+
+
+Install with pip
+------------------------------
+
+Find the version you want to install. For example, to install version 0.0.3, use
+
+	pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/0.0.3 --user
