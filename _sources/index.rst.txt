@@ -47,7 +47,7 @@ or :obj:`Flow`. :obj:`Runner` would
 extract file dependency graph from the function signatures and use this information
 to make runtime decisions as to whether to skip a function evaluation.
 
-.. literalinclude:: examples/001_work_flow_exe_as_file_sync.py
+.. literalinclude:: examples/001_work_flow_exec_as_file_sync.py
 
 
 
