@@ -23,21 +23,26 @@ Indices and tables
 
 .. _my-reference-label:
 
-:mod:`singular_pipe.types` Internal types for 
-----------------------------------------------
+:mod:`singular_pipe._types` Internal types for detecting file and package 
+changes 
+-------------------------------------------------------------------------
 
+.. automodule:: singular_pipe._types
+    :show-inheritance:
+    :members: Flow, FlowFunction, Node, NodeFunction,    Depend, PrefixedNode, File, Prefix,    
+    LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
+    :undoc-members:
+    :synopsis: Internal types for detecting file and package 
+changes 
+
+
+:mod:`singular_pipe.types` Entry point for all public callables 
+---------------------------------------------------------------
 .. automodule:: singular_pipe.types
     :show-inheritance:
-    :members: Flow, FlowFunction, Node, NodeFunction
-
-.. automodule:: singular_pipe.types
-    :show-inheritance:
-    :members: Depend, PrefixedNode, File, Prefix
-
-.. automodule:: singular_pipe.types
-    :show-inheritance:
-    :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
-    :synopsis: see convex module
+    :members:
+    :undoc-members:
+    :synopsis: Entry point for all public callables
 
 
 :mod:`singular_pipe.shell`
