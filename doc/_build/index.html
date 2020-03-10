@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to singular_pipe’s documentation! &#8212; singular_pipe 0.0.3 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="welcome-to-singular-pipe-s-documentation">
+<h1>Welcome to singular_pipe’s documentation!<a class="headerlink" href="#welcome-to-singular-pipe-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+<div class="section" id="singular-pipe-types-internal-types-for">
+<span id="my-reference-label"></span><h2><a class="reference internal" href="#module-singular_pipe.types" title="singular_pipe.types"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code></a> Internal types for<a class="headerlink" href="#singular-pipe-types-internal-types-for" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-singular_pipe.types"></span><p>Collections of internal types and fuunctions</p>
+<dl class="function">
+<dt id="singular_pipe.types.Flow">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Flow</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark a function as <a class="reference internal" href="#singular_pipe.types.FlowFunction" title="singular_pipe.types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func: <code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code>: the function to be decorated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.FlowFunction">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">FlowFunction</code><a class="headerlink" href="#singular_pipe.types.FlowFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types._BaseFunction</span></code></p>
+<p><a class="reference internal" href="#singular_pipe.types.FlowFunction" title="singular_pipe.types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>
+will always be executed regardless of the <code class="xref py py-class docutils literal notranslate"><span class="pre">_Runner</span></code>
+at runtime. Any time-consuming expression should
+not be put in a <a class="reference internal" href="#singular_pipe.types.FlowFunction" title="singular_pipe.types.FlowFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">FlowFunction</span></code></a>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.types.Node">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Node</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorate that marks a function as <a class="reference internal" href="#singular_pipe.types.NodeFunction" title="singular_pipe.types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func: <code class="xref py py-obj docutils literal notranslate"><span class="pre">function</span></code> the function to be decorated.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.NodeFunction">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">NodeFunction</code><a class="headerlink" href="#singular_pipe.types.NodeFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types._BaseFunction</span></code></p>
+<p>A <a class="reference internal" href="#singular_pipe.types.NodeFunction" title="singular_pipe.types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a> should not have any subnodes.
+<cite>self.runner</cite> is prohibited in a <cite>NodeFunction</cite>. 
+In other words, a <a class="reference internal" href="#singular_pipe.types.NodeFunction" title="singular_pipe.types.NodeFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">NodeFunction</span></code></a> cannot have
+any children nodes.</p>
+</dd></dl>
+
+<span class="target" id="module-singular_pipe.types"></span><p>Collections of internal types and fuunctions</p>
+<dl class="class">
+<dt id="singular_pipe.types.Depend">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Depend</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Depend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">path.Path</span></code></p>
+<p>Abstract Dependency</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.PrefixedNode">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">PrefixedNode</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.PrefixedNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.Depend</span></code></p>
+<p>This class represents file(s) that 
+know(s) how to find its parent <cite>Node</cite>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.File">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">File</code><span class="sig-paren">(</span><em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.File" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.PrefixedNode</span></code></p>
+<p>As function inputs, <a class="reference internal" href="#singular_pipe.types.File" title="singular_pipe.types.File"><code class="xref py py-class docutils literal notranslate"><span class="pre">File</span></code></a> will be 
+fingerprinted with its mtime and byte sizes.
+If this fingerprint changed, a downstream 
+recalculation will be triggered.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.Prefix">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Prefix</code><span class="sig-paren">(</span><em class="sig-param">*a</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">singular_pipe._types.PrefixedNode</span></code></p>
+<p>The definition of a Prefix is unclean.
+The expansion of <a class="reference internal" href="#singular_pipe.types.Prefix" title="singular_pipe.types.Prefix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Prefix</span></code></a> cannot
+takes place until the upstream job is done.</p>
+<p>For example, a tar archive job may wants to
+monitor all files under prefix <code class="file docutils literal notranslate"><span class="pre">./build</span></code></p>
+<p>This node is useful when specifying a loosely
+defined fileset into <a class="reference internal" href="#singular_pipe.types.LoggedSingularityCommand" title="singular_pipe.types.LoggedSingularityCommand"><code class="xref py py-func docutils literal notranslate"><span class="pre">LoggedSingularityCommand()</span></code></a></p>
+</dd></dl>
+
+<span class="target" id="module-singular_pipe.types"></span><p>Collections of internal types and fuunctions</p>
+<dl class="function">
+<dt id="singular_pipe.types.LoggedShellCommand">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">LoggedShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">file='/dev/null'</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em>, <em class="sig-param">shell=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.LoggedShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>CMD:</dt><dd><p>a list of commands to be joined with ‘ ‘ and executed in bash</p>
+</dd>
+<dt>file: None or a string-like filename or a file-handle</dt><dd><p>if None, use a StringIO</p>
+</dd>
+<dt>check:</dt><dd><p>whether to raise error if the shell execution fails.</p>
+</dd>
+<dt>shell:</dt><dd><p>whether to treat CMD as a joined string or a list of string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.types.LoggedSingularityCommand">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
+image: a singularity image url
+extra_files: to-be-deprecated
+debug: print dbg info</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="singular-pipe-shell">
+<h2><a class="reference internal" href="#module-singular_pipe.shell" title="singular_pipe.shell"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code></a><a class="headerlink" href="#singular-pipe-shell" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-singular_pipe.shell"></span></div>
+</div>
+<div class="section" id="singular-pipe-types-internal-types-to-record-system-status">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> — Internal types to record system status<a class="headerlink" href="#singular-pipe-types-internal-types-to-record-system-status" title="Permalink to this headline">¶</a></h1>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">singular_pipe</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Feng Geng.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
