@@ -11,6 +11,7 @@ Example Usage
 Creating a cached Node
 ==========================================
 
+.. literalinclude:: examples/01_cache_run_shallow.py
 
 .. _running-remote
 
