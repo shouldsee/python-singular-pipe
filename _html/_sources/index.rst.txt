@@ -37,6 +37,8 @@ Indices and tables
 .. automodule:: singular_pipe.types
     :show-inheritance:
     :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
+    :undoc-members:
+    :synopsis: see convex module
 
 
 :mod:`singular_pipe.shell`
