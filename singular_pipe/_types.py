@@ -550,7 +550,8 @@ class _PythonPackage(object):
 				CMD = [
 				[PIP_BIN,'uninstall','-y',self.package_name,';'],
 				# CMD = [ 
-				PIP_BIN,'install','-vvv', '--user',
+				PIP_BIN,'install','-vvv', 
+				# '--user',
 				self.package_name+'@'+self.url,
 				]
 				suc, stdout, stderr = _shellcmd(CMD, 1, 0, 'utf8', None, None, None, 1)
