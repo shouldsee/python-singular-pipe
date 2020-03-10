@@ -1,4 +1,5 @@
-.. _workflow-filesync
+.. _workflow-filesync:
+
 Workflow execution as file synchronisation
 -------------------------------------------
 
