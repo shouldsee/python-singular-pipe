@@ -32,7 +32,16 @@ to make runtime decisions as to whether to skip a function evaluation.
 Separation of code from data by executing remote code
 =========================================================
 
-[TBC]
+Local paths lose meaning once migrated to a difference machine,
+whereas remote references such as http:// and ftp:// is independent of 
+local machine states. 
+
+.. literalinclude:: ../examples/07_remote_short.py
+
+There are quite a number of ways to specify a remote object.
+
+.. literalinclude:: ../examples/06_remote_package.py
+
 
 .. _simple-cache:
 
