@@ -85,9 +85,10 @@
             
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="example_usage.html">2. Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lib/index.html">3. Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="indexes.html">4. Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/workflow-filesync.html">2. Workflow execution as file synchronisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_usage.html">3. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lib/index.html">4. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">5. Indices and tables</a></li>
 </ul>
 
             
@@ -161,19 +162,20 @@
 <li class="toctree-l2"><a class="reference internal" href="install/index.html#id1">1.2. Installation</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="example_usage.html">2. Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="example_usage.html#creating-a-cached-node">2.1. Creating a cached Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_usage.html#running-a-remote-package-function">2.2. Running a remote package/function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="example_usage.html#configure-directory-layout">2.3. Configure directory layout</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/workflow-filesync.html">2. Workflow execution as file synchronisation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example_usage.html">3. Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="example_usage.html#creating-a-cached-node">3.1. Creating a cached Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_usage.html#running-a-remote-package-function">3.2. Running a remote package/function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="example_usage.html#configure-directory-layout">3.3. Configure directory layout</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="lib/index.html">3. Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe.types">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe._types">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe.shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code> Shell utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lib/index.html">4. Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe.types">4.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe._types">4.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lib/index.html#module-singular_pipe.shell">4.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code> Shell utilities</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="indexes.html">4. Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">5. Indices and tables</a></li>
 </ul>
 </div>
 <div class="section" id="overview">
@@ -188,69 +190,6 @@ serveral aspects:</p>
 <li><p>Declaring function-level dependency.</p></li>
 </ul>
 </div></blockquote>
-<div class="section" id="workflow-execution-as-file-synchronisation">
-<h3>Workflow execution as file synchronisation<a class="headerlink" href="#workflow-execution-as-file-synchronisation" title="Permalink to this headline">¶</a></h3>
-<p>Any workflow can be divided into two parts: code and data. Given
-a data state, one can apply some code to check whether these data
-are outdated. Executing any workflow can be abstracted to a chain of
-sequential changes to local/remote files from upstream to downstream.
-If all files are up-to-date as checked by the code, then nothing needs
-to be updated.</p>
-<p>To write such codes, file states must be explicitly monitored and remembered.
-In <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe</span></code> this is achieved through a set of custom eval-like function
-called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> and functions with a specialised signature called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code>
-or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Flow</span></code>. <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> would
-extract file dependency graph from the function signatures and use this information
-to make runtime decisions as to whether to skip a function evaluation.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">File</span>
-
-<span class="nd">@Node</span>  <span class="c1"># Node is omittable, Flow() is not </span>
-<span class="k">def</span> <span class="nf">some_node</span><span class="p">(</span> 
-  <span class="bp">self</span><span class="p">,</span>              <span class="c1">#### Essn. A runtime object of type singular_pipe.runner.Caller</span>
-  <span class="n">prefix</span><span class="p">,</span>            <span class="c1">#### Essn. A local file where a realised node would live</span>
-  <span class="nb">input</span> <span class="o">=</span> <span class="n">File</span><span class="p">,</span>      <span class="c1">#### remembered argument,</span>
-  <span class="n">_some_const</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="c1">#### private constants, </span>
-  <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;txt&#39;</span><span class="p">]</span>    <span class="c1">#### Essn. private constants to specify output monitoring</span>
-  <span class="p">):</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;... running [some_node]&#39;</span><span class="p">)</span>
-  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="n">_some_const</span> <span class="p">)</span><span class="o">*</span><span class="mi">5</span> 
-  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
-  <span class="k">return</span> <span class="bp">self</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-  <span class="c1">##### import runner functions</span>
-  <span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
-  <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-  <span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
-  <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
-  <span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="n">some_node</span><span class="p">,</span> <span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">)</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;##### all files governed by this node #######&#39;</span><span class="p">)</span>
-  <span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
-
-  <span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">some_node</span><span class="p">,</span> <span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">)</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### files changed in the next execution of this node #######&#39;</span><span class="p">)</span>      
-  <span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
-
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### write some input file ###&#39;</span><span class="p">)</span>
-  <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;barbarfoo</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
-
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### actual execution #####&#39;</span><span class="p">)</span>
-  <span class="n">res</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">some_node</span><span class="p">,</span> <span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">)</span>
-
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### the second execution is skipped ###&#39;</span><span class="p">)</span>
-  <span class="n">res</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">some_node</span><span class="p">,</span> <span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">)</span>
-  <span class="nb">print</span><span class="p">()</span>
-
-  <span class="c1">#### the fact that the execution is skipped implies</span>
-  <span class="c1">#### that executing this node would not change any file</span>
-  <span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">some_node</span><span class="p">,</span> <span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">,</span> <span class="s1">&#39;/tmp/input_file.txt&#39;</span><span class="p">)</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;#### files changed in the next execution of this node #######&#39;</span><span class="p">)</span>      
-  <span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
-  <span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[]</span>
-</pre></div>
-</div>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Feng Geng</p>
@@ -259,7 +198,6 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 <dd class="field-even"><p><a class="reference external" href="mailto:shouldsee&#46;gem&#37;&#52;&#48;gmail&#46;com">shouldsee<span>&#46;</span>gem<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
 </dd>
 </dl>
-</div>
 </div>
 </div>
 
