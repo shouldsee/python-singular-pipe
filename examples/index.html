@@ -286,13 +286,14 @@ local machine states.</p>
 </div>
 <p>There are quite a number of ways to specify a remote object.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">PythonPackage</span><span class="p">,</span> <span class="n">RemotePythonObject</span><span class="p">,</span><span class="n">RPO</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span>
 
-<span class="c1"># Github &quot;tarball/master&quot; often take minutes to update,</span>
-<span class="c1"># use the commit hash to ensure integrity. </span>
-<span class="c1"># package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
-<span class="c1"># package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
-
+<span class="c1">### Github &quot;tarball/master&quot; often take minutes to update,</span>
+<span class="c1">### use the commit hash to ensure integrity. </span>
+<span class="c1">### package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
+<span class="c1">### package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
+<span class="c1">###</span>
 <span class="c1">### import the top-level module of the package</span>
 <span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">)</span>
 
