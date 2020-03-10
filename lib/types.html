@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>3.1. singular_pipe.types Entry point for all public callables &mdash; singular_pipe 0.0.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Indices and tables" href="../indexes.html" />
+    <link rel="prev" title="3. Modules" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> singular_pipe
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">2. Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">3. Modules</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-singular_pipe.types">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-singular_pipe._types">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-singular_pipe.shell">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code> Shell utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#module-singular_pipe.runner">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.runner</span></code> Runtime runner to deal with file dependencies</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../indexes.html">4. Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">singular_pipe</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html"><span class="section-number">3. </span>Modules</a> &raquo;</li>
+        
+      <li><span class="section-number">3.1. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code> Entry point for all public callables</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/lib/types.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-singular_pipe.types">
+<span id="singular-pipe-types-entry-point-for-all-public-callables"></span><h1><span class="section-number">3.1. </span><a class="reference internal" href="#module-singular_pipe.types" title="singular_pipe.types: Entry point for all public callables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.types</span></code></a> Entry point for all public callables<a class="headerlink" href="#module-singular_pipe.types" title="Permalink to this headline">¶</a></h1>
+<p>Collections of internal types and fuunctions</p>
+<dl class="function">
+<dt id="singular_pipe.types.LoggedShellCommand">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">LoggedShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">file='/dev/null'</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em>, <em class="sig-param">shell=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.LoggedShellCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>CMD:</dt><dd><p>a list of commands to be joined with ‘ ‘ and executed in bash</p>
+</dd>
+<dt>file: None or a string-like filename or a file-handle</dt><dd><p>if None, use a StringIO</p>
+</dd>
+<dt>check:</dt><dd><p>whether to raise error if the shell execution fails.</p>
+</dd>
+<dt>shell:</dt><dd><p>whether to treat CMD as a joined string or a list of string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.types.LoggedSingularityCommand">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
+image: a singularity image url
+extra_files: to-be-deprecated
+debug: print dbg info</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="singular_pipe.types.Caller">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">Caller</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">arg_dict</em>, <em class="sig-param">dir_layout</em>, <em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="singular_pipe.types.Caller.arg_values">
+<em class="property">property </em><code class="sig-name descname">arg_values</code><a class="headerlink" href="#singular_pipe.types.Caller.arg_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.cache">
+<code class="sig-name descname">cache</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">check=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.dotname">
+<em class="property">property </em><code class="sig-name descname">dotname</code><a class="headerlink" href="#singular_pipe.types.Caller.dotname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.f">
+<em class="property">property </em><code class="sig-name descname">f</code><a class="headerlink" href="#singular_pipe.types.Caller.f" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.from_input">
+<em class="property">classmethod </em><code class="sig-name descname">from_input</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">_input</em>, <em class="sig-param">dir_layout</em>, <em class="sig-param">tag</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.from_input" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.get_all_files">
+<code class="sig-name descname">get_all_files</code><span class="sig-paren">(</span><em class="sig-param">allow=[&lt;class 'singular_pipe._types.File'&gt;], flat=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_all_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.get_changed_files">
+<code class="sig-name descname">get_changed_files</code><span class="sig-paren">(</span><em class="sig-param">flat=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_changed_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.get_output">
+<code class="sig-name descname">get_output</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.get_output_files">
+<code class="sig-name descname">get_output_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_output_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.get_subflow">
+<code class="sig-name descname">get_subflow</code><span class="sig-paren">(</span><em class="sig-param">k</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.get_subflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.is_mock">
+<code class="sig-name descname">is_mock</code><span class="sig-paren">(</span><em class="sig-param">call=&lt;function Caller.&lt;lambda&gt;&gt;</em>, <em class="sig-param">fast=1</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.is_mock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.is_mock_file">
+<code class="sig-name descname">is_mock_file</code><span class="sig-paren">(</span><em class="sig-param">v</em>, <em class="sig-param">call</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.is_mock_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.job_type">
+<em class="property">property </em><code class="sig-name descname">job_type</code><a class="headerlink" href="#singular_pipe.types.Caller.job_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.load_cache">
+<code class="sig-name descname">load_cache</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.load_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.mock_do">
+<code class="sig-name descname">mock_do</code><span class="sig-paren">(</span><em class="sig-param">output_ident_changed</em>, <em class="sig-param">strict</em>, <em class="sig-param">verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.mock_do" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.mock_undo">
+<code class="sig-name descname">mock_undo</code><span class="sig-paren">(</span><em class="sig-param">strict</em>, <em class="sig-param">verbose</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.mock_undo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.output">
+<em class="property">property </em><code class="sig-name descname">output</code><a class="headerlink" href="#singular_pipe.types.Caller.output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.output_cache_file">
+<em class="property">property </em><code class="sig-name descname">output_cache_file</code><a class="headerlink" href="#singular_pipe.types.Caller.output_cache_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.prefix">
+<em class="property">property </em><code class="sig-name descname">prefix</code><a class="headerlink" href="#singular_pipe.types.Caller.prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.prefix_named">
+<em class="property">property </em><code class="sig-name descname">prefix_named</code><a class="headerlink" href="#singular_pipe.types.Caller.prefix_named" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.subflow">
+<em class="property">property </em><code class="sig-name descname">subflow</code><a class="headerlink" href="#singular_pipe.types.Caller.subflow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.to_dict">
+<code class="sig-name descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>For visualisation / json.dumps</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.to_ident">
+<code class="sig-name descname">to_ident</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_ident" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="singular_pipe.types.Caller.to_table_node_label">
+<code class="sig-name descname">to_table_node_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.Caller.to_table_node_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.types.FakeCode">
+<code class="sig-prename descclassname">singular_pipe.types.</code><code class="sig-name descname">FakeCode</code><span class="sig-paren">(</span><em class="sig-param">code</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.types.FakeCode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../indexes.html" class="btn btn-neutral float-right" title="4. Indices and tables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="3. Modules" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

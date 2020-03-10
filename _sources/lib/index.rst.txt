@@ -3,6 +3,13 @@
 Modules
 ******************************************
 
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+   
+   ./types.rst
+
+
 :mod:`singular_pipe.types` Entry point for all public callables 
 =================================================================================
 .. automodule:: singular_pipe.types
