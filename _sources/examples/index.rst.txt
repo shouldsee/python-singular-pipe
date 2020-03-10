@@ -27,19 +27,19 @@ to make runtime decisions as to whether to skip a function evaluation.
 .. literalinclude:: ../examples/001_workflow_exec_as_file_sync.py
 
 
-.. _example-remote-code
+.. _example-remote-code:
 
 Separation of code from data by executing remote code
 =========================================================
 
-.. _simple-cache
+.. _simple-cache:
 
 Creating a cached Node
 ==========================================
 
 .. literalinclude:: ../examples/01_cache_run_shallow.py
 
-.. _running-remote
+.. _running-remote:
 
 Running a remote package/function
 ======================================
