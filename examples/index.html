@@ -190,9 +190,9 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;... running [some_node]&#39;</span><span class="p">)</span>
 	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-	  <span class="n">buf</span> <span class="o">=</span> <span class="p">(</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="n">_some_const</span> <span class="p">)</span><span class="o">*</span><span class="mi">5</span> 
+		<span class="n">buf</span> <span class="o">=</span> <span class="p">(</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span> <span class="o">+</span> <span class="n">_some_const</span> <span class="p">)</span><span class="o">*</span><span class="mi">5</span> 
 	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">txt</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-	  <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
 
 	<span class="k">return</span> <span class="bp">self</span>
 
