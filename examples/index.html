@@ -379,6 +379,240 @@ local machine states.</p>
 </div>
 <div class="section" id="visualising-dependency-graph">
 <h2><span class="section-number">2.3. </span>Visualising Dependency graph<a class="headerlink" href="#visualising-dependency-graph" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Symbolic run construct .outward_edges, .input_json and .output_json as usual </span>
+<span class="sd">but skip the creation of actual output files.</span>
+<span class="sd">A symbolic node is a node with all output_files being empty</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">singular_pipe</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Prefix</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="k">def</span> <span class="nf">random_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;seq&#39;</span><span class="p">]):</span>
+	<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">seq</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&gt;random_sequence</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+		<span class="n">buf</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+		<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">L</span><span class="p">):</span>
+			<span class="n">buf</span> <span class="o">+=</span> <span class="s1">&#39;ATCG&#39;</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">*</span><span class="mi">4</span><span class="p">)]</span>
+		<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">buf</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="k">def</span> <span class="nf">transcribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">input</span> <span class="o">=</span> <span class="n">File</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fasta&#39;</span><span class="p">]):</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">fasta</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+			<span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">fi</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span><span class="s1">&#39;U&#39;</span><span class="p">))</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+<span class="k">def</span> <span class="nf">mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">File</span><span class="p">,</span>   <span class="n">_seed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fasta&#39;</span><span class="p">]):</span>
+	<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">_seed</span><span class="p">)</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fi</span><span class="p">:</span>
+		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">fasta</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+			<span class="n">buf</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">fi</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+			<span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">buf</span><span class="p">)</span>
+			<span class="n">fo</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">workflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span><span class="nb">int</span> <span class="p">,</span> <span class="n">L</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> 
+	<span class="n">_output</span> <span class="o">=</span> <span class="p">[</span>
+	<span class="n">File</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">),</span>
+	<span class="p">]):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">[Flow running] mock=</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">func</span><span class="p">,</span><span class="s1">&#39;__name__&#39;</span><span class="p">,</span><span class="s1">&#39;None&#39;</span><span class="p">))</span>
+	<span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">random_seq</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>  <span class="n">seed</span><span class="p">,</span>  <span class="n">L</span><span class="p">)</span>
+	<span class="n">curr1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_runner</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s1">&#39;const&#39;</span><span class="p">)(</span><span class="n">random_seq</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+	<span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">transcribe</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>  <span class="n">curr</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">seq</span><span class="p">,)</span>
+	<span class="n">curr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">mutate</span><span class="p">,</span>     <span class="n">prefix</span><span class="p">,</span>  <span class="n">curr</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">fasta</span><span class="p">)</span>
+	<span class="n">stdout</span> <span class="o">=</span> <span class="n">LoggedShellCommand</span><span class="p">([</span><span class="s1">&#39;ls -lhtr&#39;</span><span class="p">,</span><span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()],</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">log</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.source.py&#39;</span><span class="p">,</span> <span class="vm">__file__</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Caller</span><span class="p">,</span> <span class="n">rgetattr</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="k">def</span> <span class="nf">copy_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> 
+	<span class="n">_single_file</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">### A single file node only tracks the file at self.prefix</span>
+	<span class="n">_output</span><span class="o">=</span><span class="p">[],</span> 
+	<span class="p">):</span>
+	<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">	#### One can also use directly move the output file, but this would break the upstream integrity </span>
+<span class="sd">	#### and is hence not recommended</span>
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.temp&#39;</span><span class="p">)</span>
+	<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span><span class="s1">&#39;.temp&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">backup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">flow</span> <span class="o">=</span> <span class="n">Caller</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
+	<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;subflow.random_seq.output.seq&#39;</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="n">rgetattr</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span><span class="n">key</span><span class="p">))</span>
+	<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;subflow.random_seq_const.output.seq&#39;</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="n">rgetattr</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span><span class="n">key</span><span class="p">))</span>
+	<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;subflow.transcribe.output.fasta&#39;</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="n">rgetattr</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span><span class="n">key</span><span class="p">))</span>
+	<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;subflow.mutate.output.fasta&#39;</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="n">rgetattr</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span><span class="n">key</span><span class="p">))</span>
+	<span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;output.log&#39;</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="n">rgetattr</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span><span class="n">key</span><span class="p">))</span>
+
+	<span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">copy_file</span><span class="p">,</span> <span class="n">prefix</span><span class="o">+</span><span class="s1">&#39;.source.py&#39;</span><span class="p">,</span><span class="vm">__file__</span><span class="p">)</span>
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+<span class="kn">from</span> <span class="nn">singular_pipe.graph</span> <span class="kn">import</span> <span class="n">tree_call</span><span class="p">,</span> <span class="n">get_downstream_tree</span><span class="p">,</span> <span class="n">get_upstream_tree</span><span class="p">,</span> <span class="n">plot_simple_graph_lr</span>
+<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">backup_result</span><span class="o">=</span><span class="n">Caller</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;deptree_json&#39;</span><span class="p">,</span><span class="s1">&#39;deptree_dot_txt&#39;</span><span class="p">]):</span>
+	<span class="n">fs</span>   <span class="o">=</span> <span class="n">backup_result</span><span class="o">.</span><span class="n">get_all_files</span><span class="p">()</span>
+	<span class="n">tree</span> <span class="o">=</span> <span class="n">get_upstream_tree</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+		<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tree_call</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">tree</span><span class="p">),</span><span class="n">f</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+	<span class="n">g</span> <span class="o">=</span> <span class="n">plot_simple_graph_lr</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">fname</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">render</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_dot_txt</span> <span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span> <span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[fn]&#39;</span><span class="p">,</span><span class="n">fname</span><span class="p">)</span>
+
+<span class="nd">@Flow</span>
+<span class="k">def</span> <span class="nf">run_and_backup</span><span class="p">(</span>
+	<span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span>
+	<span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span> <span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span> 
+	<span class="n">backup_prefix</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> <span class="c1">### we don&#39;t want to track backup_prefix</span>
+	<span class="n">_output</span> <span class="o">=</span> <span class="p">[</span>
+	<span class="c1"># File(&#39;log&#39;),</span>
+	<span class="p">]):</span>
+	
+	<span class="c1">#### execute the flow</span>
+	<span class="n">flow</span>          <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">workflow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seed</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+	<span class="c1">#### perform backup</span>
+	<span class="n">backup_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">backup</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">flow</span><span class="p">)</span>
+
+	<span class="c1">#### plot a dependency graph into the backup directory</span>
+	<span class="n">graph_out</span>     <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">runner</span><span class="p">(</span><span class="n">plot_graph</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">backup_result</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="bp">self</span>
+
+
+
+<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">mock_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.shell</span> <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">CacheFile</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clean&#39;</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+	<span class="c1"># if prefix is None:</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root&#39;</span><span class="p">)</span>
+	<span class="c1"># backup_prefix = File(&#39;/home/user/.temp/backup_03_mock_flow/root&#39;)</span>
+	<span class="n">backup_prefix</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s1">&#39;~/.temp/backup_03_mock_flow/root&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
+	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+	<span class="n">backup_prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>	
+
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">...[start]</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">prefix</span><span class="p">)</span>
+
+
+	<span class="c1">#### once a workflow is defined, we can view the proposed file changes </span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">workflow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span><span class="p">[</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+
+ <span class="c1"># File(&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;)</span>
+ <span class="p">]</span>
+
+	<span class="c1">### backup is conveniently defined as a workflow taking an executed workflow as an input.</span>
+	<span class="c1">### To check the proposed backup, mock_run() the workflow first. </span>
+	<span class="n">workflow_out</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">workflow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>	
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">backup</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">workflow_out</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.output.log&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;)</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+
+
+	<span class="c1">### a convenient Flow may be defined to execute the two in chain</span>
+	<span class="c1">### If there is certain change to the workflow,</span>
+	<span class="c1">### the backup can also be runned</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span> <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span>
+	<span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.output.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;</span><span class="p">),</span>
+
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt&#39;</span><span class="p">),</span> 
+
+ <span class="p">]</span>
+
+	<span class="c1">###### constants that are preserved between runs should be detected unchanged</span>
+	<span class="n">_</span>  <span class="o">=</span> <span class="n">cache_run</span>         <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span> <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;),	</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.output.log&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt&#39;</span><span class="p">),</span> 
+	 <span class="p">]</span>
+	<span class="c1">##### get_all_files() return a leaf file regardless of whether is is changed</span>
+	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span>     <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.output.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_json&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.plot_graph.deptree_dot_txt&#39;</span><span class="p">),</span> 
+ <span class="p">]</span>
+	<span class="n">_</span>  <span class="o">=</span> <span class="n">cache_run</span>         <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+	<span class="n">main</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="creating-a-cached-node">
 <span id="simple-cache"></span><h2><span class="section-number">2.4. </span>Creating a cached Node<a class="headerlink" href="#creating-a-cached-node" title="Permalink to this headline">¶</a></h2>
