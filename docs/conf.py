@@ -58,5 +58,23 @@ html_theme = 'classic'
 html_static_path = ['_static']
 import os,sys
 sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
+
+
+html_theme_options = {
+    # 'canonical_url': '',
+    # 'analytics_id': 'UA-XXXXXXX-1',  #  Provided by Google in your dashboard
+    # 'logo_only': False,
+    # 'display_version': True,
+    # 'prev_next_buttons_location': 'bottom',
+    # 'style_external_links': False,
+    # 'vcs_pageview_mode': '',
+    # 'style_nav_header_background': 'white',
+    # # Toc options
+    'collapse_navigation': True,
+    'sticky_navigation': True,
+    'navigation_depth': 4,
+    'includehidden': True,
+    'titles_only': False
+}
 # sys.path.insert(0, os.path.join(os.path.realpath(os.path.dirname(__file__)),'singular_pipe'))
 # sys.path.insert(0, os.path.dirname(__file__),)
