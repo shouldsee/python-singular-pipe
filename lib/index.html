@@ -92,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#module-singular_pipe._types">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe._types</span></code> Internal types for detecting file and package changes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-singular_pipe.shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.shell</span></code> Shell utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-singular_pipe.runner">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.runner</span></code> Runtime runner to deal with file dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-singular_pipe.graph">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.graph</span></code> Utilities to manage dependency graph</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../indexes.html">4. Indices and tables</a></li>
@@ -760,6 +761,103 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dt id="singular_pipe.runner.mock_undo">
 <code class="sig-prename descclassname">singular_pipe.runner.</code><code class="sig-name descname">mock_undo</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">*args</em>, <em class="sig-param">mock=-1</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.runner.mock_undo" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+</div>
+<div class="section" id="module-singular_pipe.graph">
+<span id="singular-pipe-graph-utilities-to-manage-dependency-graph"></span><h2><span class="section-number">3.5. </span><a class="reference internal" href="#module-singular_pipe.graph" title="singular_pipe.graph: Utilities to manage dependency graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe.graph</span></code></a> Utilities to manage dependency graph<a class="headerlink" href="#module-singular_pipe.graph" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="singular_pipe.graph.SymbolicNode">
+<em class="property">class </em><code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">SymbolicNode</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.SymbolicNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">path.Path</span></code></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_downstream">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_downstream</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_downstream" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_downstream_files">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_downstream_files</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_downstream_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_downstream_nodes">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_downstream_nodes</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_downstream_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_downstream_tree">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_downstream_tree</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em>, <em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_downstream_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_upstream">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_upstream</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_upstream" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_upstream_files">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_upstream_files</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_upstream_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_upstream_nodes">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_upstream_nodes</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_upstream_nodes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.get_upstream_tree">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">get_upstream_tree</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">strict</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">flat=0</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.get_upstream_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.graph_from_tree">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">graph_from_tree</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">g=None</em>, <em class="sig-param">last=None</em>, <em class="sig-param">i=None</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.graph_from_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accept a list of shape [(node,[(file,[(node,[(file,)])]),]),]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.nodes_only">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">nodes_only</code><span class="sig-paren">(</span><em class="sig-param">lst</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.nodes_only" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.plot_node_graph">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">plot_node_graph</code><span class="sig-paren">(</span><em class="sig-param">lst</em>, <em class="sig-param">g</em>, <em class="sig-param">last=None</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.plot_node_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.plot_simple_graph">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">plot_simple_graph</code><span class="sig-paren">(</span><em class="sig-param">trees</em>, <em class="sig-param">g</em>, <em class="sig-param">is_upstream</em>, <em class="sig-param">last=None</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.plot_simple_graph" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.plot_simple_graph_label">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">plot_simple_graph_label</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.plot_simple_graph_label" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.plot_simple_graph_lr">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">plot_simple_graph_lr</code><span class="sig-paren">(</span><em class="sig-param">fs</em>, <em class="sig-param">g</em>, <em class="sig-param">strict</em>, <em class="sig-param">is_upstream</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.plot_simple_graph_lr" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.tree_call">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">tree_call</code><span class="sig-paren">(</span><em class="sig-param">call</em>, <em class="sig-param">tree</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.tree_call" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="singular_pipe.graph.tree_filter">
+<code class="sig-prename descclassname">singular_pipe.graph.</code><code class="sig-name descname">tree_filter</code><span class="sig-paren">(</span><em class="sig-param">tree</em>, <em class="sig-param">allowed</em><span class="sig-paren">)</span><a class="headerlink" href="#singular_pipe.graph.tree_filter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return a filtered tree with allowed classes only.</dt><dd><dl class="simple">
+<dt>params:</dt><dd><p>tree: a list of shape [(node,up_trees),(node,uptrees)]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </div>
 </div>

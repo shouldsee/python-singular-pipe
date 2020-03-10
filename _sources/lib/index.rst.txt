@@ -39,3 +39,12 @@ Modules
     :members:
     :undoc-members:
     :synopsis: Runtime runner to deal with file dependencies
+
+
+:mod:`singular_pipe.graph` Utilities to manage dependency graph
+===============================================================================
+.. automodule:: singular_pipe.graph
+    :show-inheritance:
+    :members:
+    :undoc-members:
+    :synopsis: Utilities to manage dependency graph
