@@ -201,12 +201,11 @@ In <code class="xref py py-mod docutils literal notranslate"><span class="pre">s
 called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> and functions with a specialised signature called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code>
 or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Flow</span></code>. <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> would
 extract file dependency graph from the function signatures and use this information
-to make runtime decisions as to whether to skip a function evaluation.</p>
-<dl class="simple">
-<dt>::</dt><dd><p>from singular_pipe.types import Node, Flow
-from singular_pipe.runner import cache_run, get_changed_files</p>
-</dd>
-</dl>
+to make runtime decisions as to whether to skip a function evaluation.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">get_changed_files</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Feng Geng</p>

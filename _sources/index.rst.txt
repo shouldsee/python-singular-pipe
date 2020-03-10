@@ -45,13 +45,11 @@ In :mod:`singular_pipe` this is achieved through a set of custom eval-like funct
 called :obj:`Runner` and functions with a specialised signature called :obj:`Node`
 or :obj:`Flow`. :obj:`Runner` would 
 extract file dependency graph from the function signatures and use this information
-to make runtime decisions as to whether to skip a function evaluation.
+to make runtime decisions as to whether to skip a function evaluation.::
+    from singular_pipe.types import Node, Flow
+    from singular_pipe.runner import cache_run, get_changed_files
 
-::
-  from singular_pipe.types import Node, Flow
-  from singular_pipe.runner import cache_run, get_changed_files
 
-  
 
 
 
