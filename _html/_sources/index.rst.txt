@@ -14,7 +14,9 @@ Welcome to :mod:`singular_pipe`'s documentation!
    
    install/index.rst
    license.rst
-
+   :ref:`modindex`
+   :ref:`genindex`
+   :ref:`search`
 
 
 Indices and tables
