@@ -7,7 +7,7 @@ Welcome to singular_pipe's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: Contents:
 
 
@@ -37,7 +37,7 @@ Indices and tables
 ---------------------------------------------------------------
 .. automodule:: singular_pipe.types
     :show-inheritance:
-    :members:
+    :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
     :undoc-members:
     :synopsis: Entry point for all public callables
 
