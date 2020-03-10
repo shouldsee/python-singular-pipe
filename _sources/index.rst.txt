@@ -15,7 +15,7 @@ Welcome to :mod:`singular_pipe`-|version| 's documentation!
    :numbered:
    
    install/index.rst
-   examples/workflow-filesync.rst
+   overview/workflow-filesync.rst
    example_usage.rst
    lib/index.rst
    indexes.rst
