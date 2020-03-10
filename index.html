@@ -197,7 +197,15 @@ sequential changes to local/remote files from upstream to downstream.
 If all files are up-to-date as checked by the code, then nothing needs
 to be updated.</p>
 <p>To write such codes, file states must be explicitly monitored and remembered.
-In <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe</span></code> this is achieved through a set of custom eval-like functions</p>
+In <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe</span></code> this is achieved through a set of custom eval-like function
+called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> and a specialised function signature: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> would
+extract file dependency graph from the function signatures and use this information
+to make runtime decisions as to whether to skip a function evaluation.</p>
+<dl class="simple">
+<dt>::</dt><dd><p>from singular_pipe.types import Node, Flow
+from singular_pipe</p>
+</dd>
+</dl>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Feng Geng</p>
