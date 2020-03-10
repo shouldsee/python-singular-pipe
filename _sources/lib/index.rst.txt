@@ -1,6 +1,6 @@
 .. _module-references:
 ******************************************
-Module References
+Manual
 ******************************************
 
 :mod:`singular_pipe.types` Entry point for all public callables 
