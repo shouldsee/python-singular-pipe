@@ -18,5 +18,5 @@ Essentail
 
 Optional
 ---------------------------
-  * singularity >= 3.5.3 to use :obj:`singular_pipe.shell.LoggedSingularityCommand`. 
+  * singularity >= 3.5.3 to use :ref:`singular_pipe.shell.LoggedSingularityCommand`. 
   * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :ref:`singular_pipe.graph.plot_simple_graph`
