@@ -2,6 +2,7 @@
    sphinx-quickstart on Mon Mar  9 23:15:33 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
+.. check https://docs.python.org/2/_sources/
 
 Welcome to :mod:`singular_pipe`'s documentation!
 =========================================
