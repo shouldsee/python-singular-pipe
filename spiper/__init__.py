@@ -1,23 +1,19 @@
 from orderedattrdict import AttrDict as _dict
 from jinja2 import Template, StrictUndefined
 # from spiper.version import get_version,VERSION
-def get_version():
-    VERSION = (  # SEMANTIC
+version_info = (  # SEMANTIC
         0,        # major
         0,        # minor
-        3,        # patch
-        None,      # pre-release
-        None        # build metadata
-    )
-
+        4,        # patch
+)
+def get_version(VERSION=version_info):
     version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
-    if VERSION[3]:
+    if VERSION[3:4]:
         version += "-%s" % VERSION[3]
-    if VERSION[4]:
+    if VERSION[4:5]:
         version += "+%s" % VERSION[4]
     return version
 VERSION = get_version()
-
 
 # rcParams = OrderedDict()
 # rcParams = AttrDict()
