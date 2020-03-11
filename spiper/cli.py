@@ -53,7 +53,6 @@ Parameters:
 	except Exception as e:
 		_help(e)
 
-		obj = RPO(package, workflow_entrypoint)
-		res = runner(obj.loaded(), *inputs)
-
+	obj = RPO(package, workflow_entrypoint)
+	res = runner(obj.loaded(), *inputs)
 	return 0

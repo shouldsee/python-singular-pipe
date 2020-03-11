@@ -555,16 +555,16 @@ class _PythonPackage(object):
 		mod = None
 		if not self.is_loaded():
 			# print(self.ident_file)
-			# print(self.is_compatible())
 			if not self.is_compatible():
 				'''
 				Overwrite the local installation by default
 				'''
 				print('[installing]',self.package_path,'\n',self.egg_info)
-				# print('')
-				for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*'):
-					if x.isfile(): x.unlink_p()
-					if x.isdir(): x.rmtree_p()
+				if self.egg_info:
+					# print('')
+					for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*'):
+						if x.isfile(): x.unlink_p()
+						if x.isdir(): x.rmtree_p()
 				# [x.rmtree_p() for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*')]
 				# self.egg_info.rmtree_p()
 
