@@ -249,19 +249,21 @@ local machine states.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>spiper run <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
-  --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
 
 <span class="c1">#### TOPLEVEL refers to the package_name </span>
 spiper run <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   TOPLEVEL:run_and_backup <span class="se">\</span>
-  --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
 
 <span class="c1">#### in case spiper is not in $PATH</span>
 python3 -m spiper run <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   TOPLEVEL:run_and_backup <span class="se">\</span>
-  --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+
+spiper --help &gt;/dev/null
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>
