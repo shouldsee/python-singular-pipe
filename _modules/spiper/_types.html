@@ -163,7 +163,7 @@
 <span class="kn">from</span> <span class="nn">orderedattrdict</span> <span class="kn">import</span> <span class="n">AttrDict</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">spiper._header</span> <span class="kn">import</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span><span class="p">,</span><span class="n">rgetattr</span>
+<span class="kn">from</span> <span class="nn">spiper._header</span> <span class="kn">import</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span><span class="p">,</span><span class="n">rgetattr</span><span class="p">,</span><span class="n">rstrip</span>
 
 
 
@@ -558,18 +558,29 @@
 <span class="sd">	&#39;&#39;&#39;</span>
 
 	<span class="c1"># assert version is None</span>
-	<span class="n">err</span> <span class="o">=</span> <span class="n">UndefinedRoutine</span><span class="p">(</span><span class="s1">&#39;PythonModule(</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="o">%</span><span class="p">((</span><span class="n">package_path</span><span class="p">)))</span>
-	<span class="k">if</span> <span class="s1">&#39;@&#39;</span> <span class="ow">in</span> <span class="n">package_path</span><span class="p">:</span>
-		<span class="n">package_name</span><span class="p">,</span> <span class="n">url</span> <span class="o">=</span> <span class="n">package_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;@&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+	<span class="n">err</span> <span class="o">=</span> <span class="n">UndefinedRoutine</span><span class="p">(</span><span class="s1">&#39;PythonPackage(</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="o">%</span><span class="p">((</span><span class="n">package_path</span><span class="p">)))</span>
+	<span class="c1"># print(package_path)</span>
+	<span class="c1"># package_path = str(package_path)</span>
+	<span class="n">x</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">Requirement</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">package_path</span><span class="p">)</span>
+	<span class="n">spec</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_flatten</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">specs</span><span class="p">))</span>
+	<span class="n">extras</span> <span class="o">=</span> <span class="p">()</span>
+	<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">url</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">url</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">url</span>
+		<span class="c1"># package_name, url = package_path.split(&#39;@&#39;,1)</span>
 		<span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">):</span>
 			<span class="n">extras</span> <span class="o">=</span> <span class="n">HttpResponseContentHeader</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 		<span class="k">elif</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;file://&#39;</span><span class="p">):</span>
 			<span class="n">extras</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="n">lstrip</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s1">&#39;file://&#39;</span><span class="p">))</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="k">raise</span> <span class="n">err</span>
-		<span class="n">mod</span> <span class="o">=</span> <span class="n">_PythonPackage</span><span class="p">(</span><span class="n">package_name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">extras</span><span class="p">)</span>
-	<span class="k">else</span><span class="p">:</span>
-		<span class="k">raise</span> <span class="n">err</span>
+	<span class="n">mod</span> <span class="o">=</span> <span class="n">_PythonPackage</span><span class="p">(</span> <span class="n">package_path</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span> <span class="n">extras</span><span class="p">)</span>
+
+	<span class="c1"># mod = _PythonPackage( x.name, imported_name, x.url, x.specs, extras)</span>
+	<span class="c1"># else:</span>
+		<span class="c1"># x = pkg_resources.Requirement.parse(package_path)</span>
+		<span class="c1"># package_name = x.key</span>
+		<span class="c1"># url = </span>
+		<span class="c1"># raise err</span>
 	<span class="k">return</span> <span class="n">mod</span></div>
 
 
@@ -597,12 +608,13 @@
 <span class="sd">		url (str): a PEP-508-compatible string without version spec.</span>
 <span class="sd">		extras (dynamic): Any object with a ``to_ident`` method to serve as package fingerprint. </span>
 <span class="sd">	&#39;&#39;&#39;</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span>  <span class="n">url</span><span class="p">,</span> <span class="n">extras</span><span class="p">):</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">package_path</span><span class="p">,</span> <span class="n">package_name</span><span class="p">,</span> <span class="n">imported_name</span><span class="p">,</span>  <span class="n">extras</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">package_path</span> <span class="o">=</span> <span class="n">package_path</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">package_name</span> <span class="o">=</span> <span class="n">package_name</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">imported_name</span> <span class="o">=</span> <span class="n">imported_name</span>
 		 <span class="c1"># or package_name</span>
-
-		<span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+		<span class="c1"># self.specs = specs</span>
+		<span class="c1"># self.url = url</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">extras</span> <span class="o">=</span> <span class="n">extras</span>
 		<span class="c1"># self._resp = HttpResponseContentHeader(url)</span>
 		<span class="c1"># self.version = version</span>
@@ -611,7 +623,6 @@
 	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span>
 		<span class="s2">&quot;(imported_name=</span><span class="si">{self.imported_name!r}</span><span class="s2">,&quot;</span>
-		<span class="s2">&quot;url=</span><span class="si">{self.url!r}</span><span class="s2">,&quot;</span>
 		<span class="s2">&quot;extras=</span><span class="si">{self.extras!r}</span><span class="s2">&quot;</span>
 		<span class="c1"># &quot;version={self.version!r}&quot;</span>
 		<span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
@@ -630,6 +641,8 @@
 		<span class="k">try</span><span class="p">:</span>
 			<span class="n">dist</span> <span class="o">=</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">)</span>
 			<span class="n">fn</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span> <span class="n">dist</span><span class="o">.</span><span class="n">egg_info</span> <span class="p">)</span>
+			<span class="c1"># if fn.endswith(&#39;.dist-info&#39;):</span>
+			<span class="c1"># 	fn = rstrip(fn,&#39;.dist-info&#39;)+&#39;.egg-info&#39;</span>
 		<span class="k">except</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">DistributionNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
 			<span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
 				<span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
@@ -699,18 +712,22 @@
 				<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">				Overwrite the local installation by default</span>
 <span class="sd">				&#39;&#39;&#39;</span>
-				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[installing]&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span><span class="s1">&#39;@&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[installing]&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="p">)</span>
+				<span class="c1"># print(&#39;&#39;)</span>
+				<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">basename</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">unlink_p</span><span class="p">()</span>
+					<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdir</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+				<span class="c1"># [x.rmtree_p() for x in self.egg_info.dirname().glob(self.egg_info.basename().split(&#39;-&#39;,1)[0]+&#39;*&#39;)]</span>
+				<span class="c1"># self.egg_info.rmtree_p()</span>
 
 				<span class="n">CMD</span> <span class="o">=</span> <span class="p">[</span>
-				<span class="p">[</span><span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;uninstall&#39;</span><span class="p">,</span><span class="s1">&#39;-y&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span><span class="s1">&#39;;&#39;</span><span class="p">],</span>
-				<span class="c1"># CMD = [ </span>
-				<span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;install&#39;</span><span class="p">,</span><span class="s1">&#39;-vvv&#39;</span><span class="p">,</span> 
-				<span class="c1"># &#39;--user&#39;,</span>
-				<span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="o">+</span><span class="s1">&#39;@&#39;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span>
+					<span class="p">[</span><span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;uninstall&#39;</span><span class="p">,</span><span class="s1">&#39;-y&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_name</span><span class="p">,</span><span class="s1">&#39;;&#39;</span><span class="p">],</span>
+					<span class="n">PIP_BIN</span><span class="p">,</span><span class="s1">&#39;install&#39;</span><span class="p">,</span><span class="s1">&#39;-vvv&#39;</span><span class="p">,</span> 
+					<span class="bp">self</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span>
+					<span class="c1"># self.package_name+&#39;@&#39;+self.url,</span>
 				<span class="p">]</span>
 				<span class="n">suc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">_shellcmd</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-				<span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">isdir</span><span class="p">(),</span><span class="s1">&#39;Installation of given url did not create a valid egg_info directory:</span><span class="se">\n</span><span class="s1">url=</span><span class="si">{self.url}</span><span class="se">\n</span><span class="s1">egg_info=</span><span class="si">{self.egg_info}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+				<span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">isdir</span><span class="p">(),</span><span class="s1">&#39;Installation of given url did not create a valid egg_info directory:</span><span class="se">\n</span><span class="s1">egg_info=</span><span class="si">{self.egg_info}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
 
 				<span class="nb">print</span><span class="p">(</span><span class="n">stdout</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span><span class="o">&gt;=</span><span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
 				<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ident_file</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -742,6 +759,8 @@
 		<span class="c1"># if len(args)==2:</span>
 		<span class="c1"># 	package_path, attribute_name = args</span>
 		<span class="c1"># 	module_name = None</span>
+		<span class="k">if</span> <span class="n">module_name</span> <span class="o">==</span> <span class="s1">&#39;TOPLEVEL&#39;</span><span class="p">:</span>
+			<span class="n">module_name</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">package</span> <span class="o">=</span> <span class="n">PythonPackage</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">module_name</span> <span class="o">=</span> <span class="n">module_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">package_name</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="n">attribute_name</span>
