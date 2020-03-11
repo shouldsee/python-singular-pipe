@@ -13,7 +13,7 @@ cache:
     - $HOME/.pip
     - $HOME/.singularity
     - /opt/singularity
-    - $HOME/virtualenv
+    # - $HOME/virtualenv ### too big
 
 before_install:
   # - gimme 1.13.5
