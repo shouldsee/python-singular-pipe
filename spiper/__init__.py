@@ -80,18 +80,6 @@ See https://shouldsee.github.io/spiper/
 ![](./tests/test_downstream.node_only.dot.svg)
 
 
-
-### Examples
-
-
-{% for fn in [ "examples/07_remote_short.py","examples/01_cache_run_shallow.py", "examples/03_mock_flow_backup.py"] %}
-`python3 {{fn}}`
-
-```python
-{{open(dir/fn,'r').read()}}
-```
-{% endfor %}
-
 {{todo}}
 '''
 
