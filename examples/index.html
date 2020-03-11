@@ -323,6 +323,22 @@ local machine states.</p>
 <span class="sd">but skip the creation of actual output files.</span>
 <span class="sd">A symbolic node is a node with all output_files being empty</span>
 <span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">from</span> <span class="nn">spiper.graph</span> <span class="kn">import</span> <span class="n">tree_call</span><span class="p">,</span> <span class="n">get_downstream_tree</span><span class="p">,</span> <span class="n">get_upstream_tree</span><span class="p">,</span> <span class="n">plot_simple_graph_lr</span>
+<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">backup_result</span><span class="o">=</span><span class="n">Caller</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;deptree_json&#39;</span><span class="p">,</span><span class="s1">&#39;deptree_dot_txt&#39;</span><span class="p">]):</span>
+	<span class="n">fs</span>   <span class="o">=</span> <span class="n">backup_result</span><span class="o">.</span><span class="n">get_all_files</span><span class="p">()</span>
+	<span class="n">tree</span> <span class="o">=</span> <span class="n">get_upstream_tree</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="c1">##### dump the tree as a json</span>
+	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+		<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tree_call</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">tree</span><span class="p">),</span><span class="n">f</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+	<span class="c1">#### plot the tree with graphviz</span>
+	<span class="n">g</span> <span class="o">=</span> <span class="n">plot_simple_graph_lr</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+	<span class="n">fname</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">render</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_dot_txt</span> <span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span> <span class="p">)</span>
+	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[fn]&#39;</span><span class="p">,</span><span class="n">fname</span><span class="p">)</span>
+
+
 <span class="kn">import</span> <span class="nn">spiper</span>
 <span class="kn">from</span> <span class="nn">spiper.types</span>  <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
 <span class="kn">from</span> <span class="nn">spiper.types</span>  <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Prefix</span>
@@ -401,17 +417,6 @@ local machine states.</p>
 	<span class="k">return</span> <span class="bp">self</span>
 
 
-<span class="kn">from</span> <span class="nn">spiper.graph</span> <span class="kn">import</span> <span class="n">tree_call</span><span class="p">,</span> <span class="n">get_downstream_tree</span><span class="p">,</span> <span class="n">get_upstream_tree</span><span class="p">,</span> <span class="n">plot_simple_graph_lr</span>
-<span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">backup_result</span><span class="o">=</span><span class="n">Caller</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;deptree_json&#39;</span><span class="p">,</span><span class="s1">&#39;deptree_dot_txt&#39;</span><span class="p">]):</span>
-	<span class="n">fs</span>   <span class="o">=</span> <span class="n">backup_result</span><span class="o">.</span><span class="n">get_all_files</span><span class="p">()</span>
-	<span class="n">tree</span> <span class="o">=</span> <span class="n">get_upstream_tree</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-	<span class="k">with</span> <span class="nb">open</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_json</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-		<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">tree_call</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">tree</span><span class="p">),</span><span class="n">f</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="nb">repr</span><span class="p">,</span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-	<span class="n">g</span> <span class="o">=</span> <span class="n">plot_simple_graph_lr</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-	<span class="n">fname</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">render</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">deptree_dot_txt</span> <span class="p">,</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;svg&#39;</span> <span class="p">)</span>
-	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[fn]&#39;</span><span class="p">,</span><span class="n">fname</span><span class="p">)</span>
 
 <span class="nd">@Flow</span>
 <span class="k">def</span> <span class="nf">run_and_backup</span><span class="p">(</span>

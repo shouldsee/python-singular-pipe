@@ -183,16 +183,20 @@
 </div>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Despite plenty of packages out there, writing reproducible python
-scripts is not yet a simple task. <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code> is written to address
-serveral aspects:</p>
-<blockquote>
-<div><ul class="simple">
+<p>Pipeline construction is a long-standing problem in bioinformatics. Writing pipelines
+quickly in a portable, reproducible and human-readable pipeline is always a
+challenging task. To address these issues, I wrote <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code> after reading
+about many other pipeline management packages. The major features making <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code>
+different are</p>
+<ul class="simple">
+<li><p>distributed file monitoring instead of a global file index (compared to gnu-make, snakemake)</p></li>
+<li><p>importable and documentable pipelines since they are python functions (compared to ruffus/luigi)</p></li>
+<li><p>hierarchical execution as inherited from python functions</p></li>
+<li><p>no support for job-scheduling at the moment (contribution welcome!)</p></li>
 <li><p><a class="reference internal" href="examples/index.html#example-workflow-filesync"><span class="std std-ref">Workflow execution as file synchronisation</span></a></p></li>
 <li><p><a class="reference internal" href="examples/index.html#example-remote-code"><span class="std std-ref">Separation of code from data by executing remote code</span></a></p></li>
-<li><p>Declaring function-level dependency.</p></li>
+<li><p>Declaring pipeline/function-level dependency.</p></li>
 </ul>
-</div></blockquote>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Feng Geng</p>
