@@ -58,7 +58,8 @@ Options:
 					for f in fs:
 						print(f)
 				else:
-					pprint(fs)
+					pprint(fs or '[No files governed by this workflow]')
+
 		elif args[0] == 'get_changed_files':
 			def runner(*a):
 				fs = get_changed_files(*a)
@@ -66,7 +67,7 @@ Options:
 					for f in fs:
 						print(f)
 				else:
-					pprint(fs)
+					pprint(fs or '[No files changed by this workflow]')
 		else:
 			_help()
 		package = args[1]
