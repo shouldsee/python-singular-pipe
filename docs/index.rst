@@ -38,6 +38,17 @@ different are
 * :ref:`example-remote-code`
 * **Declaring pipeline/function-level dependency.**
 
+Quickstart
+=================
+
+.. code-block:: bash
+    ## install 0.0.4
+    pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.4 --user
+
+.. literalinclude:: examples/003_remote_bash.sh
+  :language: bash
+
+
 
 
 :Author: Feng Geng
