@@ -8,3 +8,4 @@ requests
 asciitree
 graphviz
 jinja2
+pip>=18.1

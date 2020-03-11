@@ -558,8 +558,6 @@ class _PythonPackage(object):
 		if not self.is_loaded():
 			# print(self.ident_file)
 			if not self.is_compatible():
-				from spiper._pip_patch import virtualenv_no_global
-				##### see https://github.com/pypa/pip/blob/520e76ddb950e05c1b6e50b1108196c79c5e856f/src/pip/_internal/commands/install.py#L576
 				'''
 				Overwrite the local installation by default
 				'''
@@ -571,7 +569,10 @@ class _PythonPackage(object):
 						if x.isdir(): x.rmtree_p()
 				# [x.rmtree_p() for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*')]
 				# self.egg_info.rmtree_p()
-
+				
+				######## Monkey Patchhhhhhhhhhhhhhhhhh #####
+				from spiper._pip_patch import virtualenv_no_global
+				##### see https://github.com/pypa/pip/blob/520e76ddb950e05c1b6e50b1108196c79c5e856f/src/pip/_internal/commands/install.py#L576
 				CMD = [
 					[PIP_BIN,'uninstall','-y',self.package_name,';'],
 					PIP_BIN,'install','-vvv', 

@@ -8,6 +8,7 @@ except Exception as e:
 	print('installing spiper: setuptools not found'
 		'\nsee https://stackoverflow.com/questions/14426491/python-3-importerror-no-module-named-setuptools')
 	raise e
+import pip; assert pip.__version__ >='18.1',pip.__version__
 
 config = dict(
 	name='spiper',
