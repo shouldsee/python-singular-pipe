@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>singular_pipe._types &mdash; spiper 0.0.3 documentation</title>
+  <title>spiper._types &mdash; spiper 0.0.3 documentation</title>
   
 
   
@@ -134,7 +134,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>singular_pipe._types</li>
+      <li>spiper._types</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,7 +149,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for singular_pipe._types</h1><div class="highlight"><pre>
+  <h1>Source code for spiper._types</h1><div class="highlight"><pre>
 <span></span><span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">Interal exceptions, classes, functions to outline the </span>
 <span class="s2">identification system.</span>
@@ -163,13 +163,13 @@
 <span class="kn">from</span> <span class="nn">orderedattrdict</span> <span class="kn">import</span> <span class="n">AttrDict</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._header</span> <span class="kn">import</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span><span class="p">,</span><span class="n">rgetattr</span>
+<span class="kn">from</span> <span class="nn">spiper._header</span> <span class="kn">import</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span><span class="p">,</span><span class="n">rgetattr</span>
 
 
 
-<span class="kn">import</span> <span class="nn">singular_pipe</span>
+<span class="kn">import</span> <span class="nn">spiper</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
+<span class="n">spiper</span><span class="o">.</span><span class="n">_types</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">]</span>
 
 
 <span class="k">def</span> <span class="nf">DirtyKey</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -263,7 +263,7 @@
 
 
 
-<div class="viewcode-block" id="NodeFunction"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.NodeFunction">[docs]</a><span class="k">class</span> <span class="nc">NodeFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="NodeFunction"><a class="viewcode-back" href="../../lib/index.html#spiper._types.NodeFunction">[docs]</a><span class="k">class</span> <span class="nc">NodeFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	A :class:`NodeFunction` should not have any subnodes.</span>
 <span class="sd">	`self.runner` is prohibited in a `NodeFunction`. </span>
@@ -282,7 +282,7 @@
 <span class="c1"># 	return func</span>
 
 
-<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Node">[docs]</a><span class="k">def</span> <span class="nf">Node</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="Node"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Node">[docs]</a><span class="k">def</span> <span class="nf">Node</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Decorate that marks a function as :class:`NodeFunction`.</span>
 
@@ -293,7 +293,7 @@
 	<span class="n">func</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="n">NodeFunction</span>
 	<span class="k">return</span> <span class="n">func</span></div>
 
-<div class="viewcode-block" id="FlowFunction"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.FlowFunction">[docs]</a><span class="k">class</span> <span class="nc">FlowFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
+<div class="viewcode-block" id="FlowFunction"><a class="viewcode-back" href="../../lib/index.html#spiper._types.FlowFunction">[docs]</a><span class="k">class</span> <span class="nc">FlowFunction</span><span class="p">(</span><span class="n">_BaseFunction</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	:class:`FlowFunction`</span>
 <span class="sd">	will always be executed regardless of the :class:`_Runner`</span>
@@ -303,7 +303,7 @@
 	<span class="n">named</span> <span class="o">=</span> <span class="mi">1</span>
 	<span class="k">pass</span></div>
 
-<div class="viewcode-block" id="Flow"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Flow">[docs]</a><span class="k">def</span> <span class="nf">Flow</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<div class="viewcode-block" id="Flow"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Flow">[docs]</a><span class="k">def</span> <span class="nf">Flow</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
 	<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">	Mark a function as :class:`FlowFunction`.</span>
 
@@ -324,18 +324,18 @@
 	<span class="k">else</span><span class="p">:</span>
 		<span class="k">return</span> <span class="n">_os_stat_result_null</span>
 
-<div class="viewcode-block" id="Depend"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Depend">[docs]</a><span class="k">class</span> <span class="nc">Depend</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
+<div class="viewcode-block" id="Depend"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Depend">[docs]</a><span class="k">class</span> <span class="nc">Depend</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Abstract Dependency</span>
 <span class="sd">	&#39;&#39;&#39;</span>
 	<span class="k">pass</span></div>
 
-<div class="viewcode-block" id="PrefixedNode"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode">[docs]</a><span class="k">class</span> <span class="nc">PrefixedNode</span><span class="p">(</span><span class="n">Depend</span><span class="p">):</span>
+<div class="viewcode-block" id="PrefixedNode"><a class="viewcode-back" href="../../lib/index.html#spiper._types.PrefixedNode">[docs]</a><span class="k">class</span> <span class="nc">PrefixedNode</span><span class="p">(</span><span class="n">Depend</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	This class represents file(s) that </span>
 <span class="sd">	know(s) how to find its parent `Node`.</span>
 <span class="sd">	&#39;&#39;&#39;</span>
-<div class="viewcode-block" id="PrefixedNode.get_prefix_pointer"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.get_prefix_pointer">[docs]</a>	<span class="k">def</span> <span class="nf">get_prefix_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">):</span>
+<div class="viewcode-block" id="PrefixedNode.get_prefix_pointer"><a class="viewcode-back" href="../../lib/index.html#spiper._types.PrefixedNode.get_prefix_pointer">[docs]</a>	<span class="k">def</span> <span class="nf">get_prefix_pointer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">):</span>
 		<span class="n">idFile</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;_prefix_pointer&#39;</span><span class="p">)</span>		
 		<span class="n">suc</span> <span class="o">=</span> <span class="mi">0</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="kc">None</span>
@@ -348,14 +348,14 @@
 
 		<span class="k">return</span> <span class="n">suc</span><span class="p">,</span><span class="n">res</span></div>
 
-<div class="viewcode-block" id="PrefixedNode.callback_output"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="PrefixedNode.callback_output"><a class="viewcode-back" href="../../lib/index.html#spiper._types.PrefixedNode.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 		<span class="c1"># pass</span>
 		<span class="n">fn</span> <span class="o">=</span> <span class="bp">self</span>
 		<span class="n">idFile</span> <span class="o">=</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="n">caller</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;_prefix_pointer&#39;</span><span class="p">)</span>
 		<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">idFile</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 			<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="p">[</span> <span class="n">caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">idFile</span><span class="o">.</span><span class="n">dirname</span><span class="p">())],</span> <span class="n">f</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PrefixedNode.fileglob"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PrefixedNode.fileglob">[docs]</a>	<span class="k">def</span> <span class="nf">fileglob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="PrefixedNode.fileglob"><a class="viewcode-back" href="../../lib/index.html#spiper._types.PrefixedNode.fileglob">[docs]</a>	<span class="k">def</span> <span class="nf">fileglob</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="nb">filter</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">File</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">g</span><span class="p">))]</span>
 		<span class="k">if</span> <span class="nb">filter</span><span class="p">:</span>
 			<span class="n">res</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span>  <span class="k">for</span> <span class="n">x</span>  <span class="ow">in</span> <span class="n">res</span>
@@ -369,7 +369,7 @@
 
 
 
-<div class="viewcode-block" id="File"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File">[docs]</a><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
+<div class="viewcode-block" id="File"><a class="viewcode-back" href="../../lib/index.html#spiper._types.File">[docs]</a><span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	As function inputs, :class:`File` will be </span>
 <span class="sd">	fingerprinted with its mtime and byte sizes.</span>
@@ -378,11 +378,11 @@
 <span class="sd">	&#39;&#39;&#39;</span>
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-<div class="viewcode-block" id="File.to_ident"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File.to_ident">[docs]</a>	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+<div class="viewcode-block" id="File.to_ident"><a class="viewcode-back" href="../../lib/index.html#spiper._types.File.to_ident">[docs]</a>	<span class="k">def</span> <span class="nf">to_ident</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
 		<span class="n">stat</span> <span class="o">=</span> <span class="n">os_stat_safe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">,</span> <span class="n">stat</span><span class="o">.</span><span class="n">st_size</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">res</span></div>
-<div class="viewcode-block" id="File.expanded"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.File.expanded">[docs]</a>	<span class="k">def</span> <span class="nf">expanded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="File.expanded"><a class="viewcode-back" href="../../lib/index.html#spiper._types.File.expanded">[docs]</a>	<span class="k">def</span> <span class="nf">expanded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="p">]</span></div></div>
 
 
@@ -403,7 +403,7 @@
 	<span class="k">pass</span>
 
 <span class="c1"># import pickle</span>
-<div class="viewcode-block" id="Prefix"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix">[docs]</a><span class="k">class</span> <span class="nc">Prefix</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
+<div class="viewcode-block" id="Prefix"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Prefix">[docs]</a><span class="k">class</span> <span class="nc">Prefix</span><span class="p">(</span><span class="n">PrefixedNode</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	The definition of a Prefix is unclean.</span>
 <span class="sd">	The expansion of :class:`Prefix` cannot</span>
@@ -417,7 +417,7 @@
 <span class="sd">	&#39;&#39;&#39;</span>
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">(</span><span class="n">Prefix</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-<div class="viewcode-block" id="Prefix.callback_output"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+<div class="viewcode-block" id="Prefix.callback_output"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Prefix.callback_output">[docs]</a>	<span class="k">def</span> <span class="nf">callback_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
 		<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">callback_output</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
 		<span class="n">fs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="n">strict</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">fn</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
@@ -426,7 +426,7 @@
 				<span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span> <span class="p">[</span> <span class="bp">self</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">idFile</span><span class="o">.</span><span class="n">dirname</span><span class="p">())],</span> <span class="n">f</span><span class="p">)</span>
 				<span class="c1"># f.write(self.relpath(idFile.dirname()))</span>
 		<span class="k">return</span> </div>
-<div class="viewcode-block" id="Prefix.expaneded"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.Prefix.expaneded">[docs]</a>	<span class="k">def</span> <span class="nf">expaneded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Prefix.expaneded"><a class="viewcode-back" href="../../lib/index.html#spiper._types.Prefix.expaneded">[docs]</a>	<span class="k">def</span> <span class="nf">expaneded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileglob</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span></div></div>
 
 <span class="k">class</span> <span class="nc">InputPrefix</span><span class="p">(</span><span class="n">Prefix</span><span class="p">):</span>
@@ -455,9 +455,9 @@
 	<span class="k">if</span> <span class="n">dir_layout</span> <span class="o">==</span> <span class="s1">&#39;clean&#39;</span><span class="p">:</span>
 		<span class="n">pre_dir</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span>
 		<span class="n">pre_base</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">basename</span><span class="p">()</span>
-		<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{pre_dir}</span><span class="s1">/_singular_pipe/</span><span class="si">{pre_base}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()),</span>
+		<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;</span><span class="si">{pre_dir}</span><span class="s1">/_spiper/</span><span class="si">{pre_base}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()),</span>
 				<span class="n">job_name</span><span class="p">,</span><span class="n">suffix</span><span class="p">]</span>
-		<span class="c1"># input_ident_file = &#39;{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}&#39;.format(**locals())</span>
+		<span class="c1"># input_ident_file = &#39;{pre_dir}/_spiper/{pre_base}.{job_name}.{suffix}&#39;.format(**locals())</span>
 	<span class="k">elif</span> <span class="n">dir_layout</span> <span class="o">==</span> <span class="s1">&#39;flat&#39;</span><span class="p">:</span>
 		<span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefix</span><span class="p">,</span><span class="n">job_name</span><span class="p">,</span><span class="n">suffix</span><span class="p">]</span>
 	<span class="k">else</span><span class="p">:</span>
@@ -545,7 +545,7 @@
 	<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
 		<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">):]</span>
 	<span class="k">return</span> <span class="n">x</span>
-<div class="viewcode-block" id="PythonPackage"><a class="viewcode-back" href="../../lib/index.html#singular_pipe._types.PythonPackage">[docs]</a><span class="k">def</span> <span class="nf">PythonPackage</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">imported_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="PythonPackage"><a class="viewcode-back" href="../../lib/index.html#spiper._types.PythonPackage">[docs]</a><span class="k">def</span> <span class="nf">PythonPackage</span><span class="p">(</span><span class="n">package_path</span><span class="p">,</span> <span class="n">imported_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Tries to parse package_path according to pkg_resources.Requirement.parse()</span>
 
@@ -573,8 +573,8 @@
 	<span class="k">return</span> <span class="n">mod</span></div>
 
 
-<span class="kn">from</span> <span class="nn">singular_pipe._pickler</span> <span class="kn">import</span> <span class="n">get_version</span> <span class="k">as</span> <span class="n">get_package_version</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span>
+<span class="kn">from</span> <span class="nn">spiper._pickler</span> <span class="kn">import</span> <span class="n">get_version</span> <span class="k">as</span> <span class="n">get_package_version</span>
+<span class="kn">from</span> <span class="nn">spiper._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span>
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span><span class="nn">importlib</span>
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -802,7 +802,7 @@
 			<span class="n">res</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">res</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">strict</span><span class="p">)</span>
 			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">res</span><span class="p">)</span>
 
-		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span><span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">):</span>
+		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span><span class="n">spiper</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">):</span>
 			<span class="n">res</span> <span class="o">=</span> <span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">strict</span><span class="p">))</span>
 			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[identing]</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_code</span><span class="p">,</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="kc">None</span>
@@ -814,7 +814,7 @@
 				<span class="c1"># for x in ele.co_consts</span>
 				<span class="c1"># print(res[1])</span>
 				<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">,</span><span class="n">res</span><span class="p">[</span><span class="mi">1</span><span class="p">:])))</span>
-				<span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">singular_pipe</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">]):</span>
+				<span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">spiper</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">Code</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ele</span><span class="o">.</span><span class="n">co_consts</span><span class="p">]):</span>
 					<span class="k">assert</span> <span class="mi">0</span>
 		<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ele</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">int</span><span class="p">,)):</span>
 			<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span>

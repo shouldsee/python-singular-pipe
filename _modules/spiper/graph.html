@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>singular_pipe.graph &mdash; spiper 0.0.3 documentation</title>
+  <title>spiper.graph &mdash; spiper 0.0.3 documentation</title>
   
 
   
@@ -134,7 +134,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>singular_pipe.graph</li>
+      <li>spiper.graph</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,7 +149,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for singular_pipe.graph</h1><div class="highlight"><pre>
+  <h1>Source code for spiper.graph</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
 <span class="c1"># from graphviz import nohtml</span>
 <span class="kn">import</span> <span class="nn">graphviz</span>
@@ -160,12 +160,12 @@
 <span class="kn">from</span> <span class="nn">asciitree.drawing</span> <span class="kn">import</span> <span class="n">BOX_DOUBLE</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
 <span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="c1"># from singular_pipe import DEFAULT_DIR_LAYOUT</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">list_flatten</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">Prefix</span><span class="p">,</span><span class="n">File</span><span class="p">,</span><span class="n">HttpResponse</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">Caller</span><span class="p">,</span><span class="n">file_to_node</span>
+<span class="c1"># from spiper import DEFAULT_DIR_LAYOUT</span>
+<span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">list_flatten</span>
+<span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">Prefix</span><span class="p">,</span><span class="n">File</span><span class="p">,</span><span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">Caller</span><span class="p">,</span><span class="n">file_to_node</span>
 
-<div class="viewcode-block" id="SymbolicNode"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.SymbolicNode">[docs]</a><span class="k">class</span> <span class="nc">SymbolicNode</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
+<div class="viewcode-block" id="SymbolicNode"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.SymbolicNode">[docs]</a><span class="k">class</span> <span class="nc">SymbolicNode</span><span class="p">(</span><span class="n">Path</span><span class="p">):</span>
     <span class="k">pass</span></div>
 <span class="n">SourceNode</span> <span class="o">=</span> <span class="n">SymbolicNode</span><span class="p">(</span><span class="s1">&#39;SOURCE&#39;</span><span class="p">)</span>
 
@@ -176,7 +176,7 @@
     <span class="k">return</span> <span class="n">box_tr</span>
 
 
-<div class="viewcode-block" id="nodes_only"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.nodes_only">[docs]</a><span class="k">def</span> <span class="nf">nodes_only</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<div class="viewcode-block" id="nodes_only"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.nodes_only">[docs]</a><span class="k">def</span> <span class="nf">nodes_only</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
     <span class="n">this</span> <span class="o">=</span> <span class="n">nodes_only</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">node</span><span class="p">,</span><span class="n">node_files</span> <span class="ow">in</span> <span class="p">(</span><span class="n">lst</span><span class="p">):</span>
@@ -187,7 +187,7 @@
     <span class="k">return</span> <span class="n">out</span></div>
 
 
-<div class="viewcode-block" id="plot_node_graph"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.plot_node_graph">[docs]</a><span class="k">def</span> <span class="nf">plot_node_graph</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">last</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_node_graph"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.plot_node_graph">[docs]</a><span class="k">def</span> <span class="nf">plot_node_graph</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">last</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="n">this</span> <span class="o">=</span> <span class="n">plot_node_graph</span>
     <span class="k">if</span> <span class="n">g</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">g</span> <span class="o">=</span> <span class="n">Digraph</span><span class="p">(</span><span class="s1">&#39;G&#39;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -207,11 +207,11 @@
         <span class="n">g</span><span class="o">.</span><span class="n">node</span><span class="p">(</span> <span class="n">last</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">to_table_node_label</span><span class="p">(),</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;plaintext&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">g</span></div>
 
-<div class="viewcode-block" id="plot_simple_graph_label"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.plot_simple_graph_label">[docs]</a><span class="k">def</span> <span class="nf">plot_simple_graph_label</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_simple_graph_label"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.plot_simple_graph_label">[docs]</a><span class="k">def</span> <span class="nf">plot_simple_graph_label</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">x</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;\l&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">textwrap</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="n">width</span><span class="o">=</span><span class="mi">50</span><span class="p">))</span> 
     <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span> </div>
-<div class="viewcode-block" id="plot_simple_graph"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.plot_simple_graph">[docs]</a><span class="k">def</span> <span class="nf">plot_simple_graph</span><span class="p">(</span> <span class="n">trees</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">is_upstream</span><span class="p">,</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_simple_graph"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.plot_simple_graph">[docs]</a><span class="k">def</span> <span class="nf">plot_simple_graph</span><span class="p">(</span> <span class="n">trees</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">is_upstream</span><span class="p">,</span><span class="n">last</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="n">this</span> <span class="o">=</span> <span class="n">plot_simple_graph</span>
     <span class="n">_label</span> <span class="o">=</span> <span class="n">plot_simple_graph_label</span>
     <span class="c1"># revi = 2*int(is_upstream) - 1</span>
@@ -235,7 +235,7 @@
 
 
 
-<div class="viewcode-block" id="graph_from_tree"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.graph_from_tree">[docs]</a><span class="k">def</span> <span class="nf">graph_from_tree</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">g</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
+<div class="viewcode-block" id="graph_from_tree"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.graph_from_tree">[docs]</a><span class="k">def</span> <span class="nf">graph_from_tree</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">g</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">last</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Accept a list of shape [(node,[(file,[(node,[(file,)])]),]),]</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -274,7 +274,7 @@
 
 
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="o">*</span>
 
     <span class="k">def</span> <span class="nf">_get_upstream_tree</span><span class="p">(</span> <span class="n">lst</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">):</span>
         <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
@@ -286,27 +286,27 @@
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">up_trees</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">out</span>
 
-<div class="viewcode-block" id="get_upstream_tree"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_upstream_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_upstream_tree"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_upstream_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_upstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="k">if</span> <span class="n">flat</span> <span class="k">else</span> <span class="n">tree</span>
         <span class="k">return</span> <span class="n">tree</span></div>
         
-<div class="viewcode-block" id="get_upstream_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_upstream_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_files</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_upstream_files"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_upstream_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_files</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_upstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,(</span><span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">))</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="k">if</span> <span class="n">flat</span> <span class="k">else</span> <span class="n">tree</span>
         <span class="k">return</span> <span class="n">tree</span></div>
 
-<div class="viewcode-block" id="get_upstream_nodes"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_upstream_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_nodes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_upstream_nodes"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_upstream_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream_nodes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_upstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,(</span><span class="n">Caller</span><span class="p">,))</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="k">if</span> <span class="n">flat</span> <span class="k">else</span> <span class="n">tree</span>
         <span class="k">return</span> <span class="n">tree</span></div>
 
-<div class="viewcode-block" id="get_upstream"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_upstream">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_upstream"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_upstream">[docs]</a>    <span class="k">def</span> <span class="nf">get_upstream</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="k">return</span> <span class="n">_get_upstream</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">)</span></div>
     <span class="k">def</span> <span class="nf">_get_upstream</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">):</span>
@@ -326,7 +326,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">UndefinedTypeRoutine</span><span class="p">(</span><span class="s2">&quot;not defined for type:</span><span class="si">%s</span><span class="s2"> </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">out</span>    
-<div class="viewcode-block" id="tree_filter"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.tree_filter">[docs]</a>    <span class="k">def</span> <span class="nf">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">allowed</span><span class="p">):</span>
+<div class="viewcode-block" id="tree_filter"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.tree_filter">[docs]</a>    <span class="k">def</span> <span class="nf">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">allowed</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        return a filtered tree with allowed classes only.</span>
 <span class="sd">            params:</span>
@@ -344,24 +344,24 @@
 
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">json</span>
-    <span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">IdentFile</span><span class="p">,</span><span class="n">UndefinedTypeRoutine</span>
-    <span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">_get_outward_json_file</span><span class="p">,</span> <span class="n">_loads</span>
+    <span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">IdentFile</span><span class="p">,</span><span class="n">UndefinedTypeRoutine</span>
+    <span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">_get_outward_json_file</span><span class="p">,</span> <span class="n">_loads</span>
 
-<div class="viewcode-block" id="get_downstream_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_downstream_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_files</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_downstream_files"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_downstream_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_files</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_downstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,(</span><span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">))</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="k">if</span> <span class="n">flat</span> <span class="k">else</span> <span class="n">tree</span>
         <span class="k">return</span> <span class="n">tree</span></div>
 
-<div class="viewcode-block" id="get_downstream_nodes"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_downstream_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_nodes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_downstream_nodes"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_downstream_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_nodes</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_downstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">tree_filter</span><span class="p">(</span><span class="n">tree</span><span class="p">,(</span><span class="n">Caller</span><span class="p">,))</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="k">if</span> <span class="n">flat</span> <span class="k">else</span> <span class="n">tree</span>
         <span class="k">return</span> <span class="n">tree</span></div>
 
-<div class="viewcode-block" id="get_downstream_tree"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_downstream_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_downstream_tree"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_downstream_tree">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="n">tree</span> <span class="o">=</span> <span class="n">_get_downstream_tree</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">flat</span><span class="p">:</span>
@@ -377,7 +377,7 @@
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">up_trees</span><span class="p">])</span>
         <span class="k">return</span> <span class="n">out</span>
 
-<div class="viewcode-block" id="get_downstream"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.get_downstream">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_downstream"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.get_downstream">[docs]</a>    <span class="k">def</span> <span class="nf">get_downstream</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
         <span class="k">return</span> <span class="n">_get_downstream</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span></div>
 
@@ -422,13 +422,13 @@
             <span class="k">raise</span> <span class="n">UndefinedTypeRoutine</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="s2"> not defined for type:</span><span class="si">%s</span><span class="s2"> </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">this</span><span class="o">.</span><span class="vm">__code__</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">),</span><span class="n">obj</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">out</span>
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-<div class="viewcode-block" id="tree_call"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.tree_call">[docs]</a>    <span class="k">def</span> <span class="nf">tree_call</span><span class="p">(</span><span class="n">call</span><span class="p">,</span><span class="n">tree</span><span class="p">,):</span>
+<div class="viewcode-block" id="tree_call"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.tree_call">[docs]</a>    <span class="k">def</span> <span class="nf">tree_call</span><span class="p">(</span><span class="n">call</span><span class="p">,</span><span class="n">tree</span><span class="p">,):</span>
         <span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">node</span><span class="p">,</span><span class="n">edges</span> <span class="ow">in</span> <span class="n">tree</span><span class="p">:</span>
             <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">[</span><span class="n">call</span><span class="p">(</span><span class="n">node</span><span class="p">),</span><span class="n">tree_call</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">edges</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">lst</span></div>
 
-<div class="viewcode-block" id="plot_simple_graph_lr"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.graph.plot_simple_graph_lr">[docs]</a>    <span class="k">def</span> <span class="nf">plot_simple_graph_lr</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">is_upstream</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_simple_graph_lr"><a class="viewcode-back" href="../../lib/index.html#spiper.graph.plot_simple_graph_lr">[docs]</a>    <span class="k">def</span> <span class="nf">plot_simple_graph_lr</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span><span class="n">g</span><span class="p">,</span><span class="n">strict</span><span class="p">,</span><span class="n">is_upstream</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">is_upstream</span><span class="p">:</span>
             <span class="n">tree</span> <span class="o">=</span> <span class="n">get_upstream_tree</span><span class="p">(</span> <span class="n">fs</span><span class="p">,</span> <span class="n">strict</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>

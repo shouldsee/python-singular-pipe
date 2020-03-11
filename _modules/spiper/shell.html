@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>singular_pipe.shell &mdash; spiper 0.0.3 documentation</title>
+  <title>spiper.shell &mdash; spiper 0.0.3 documentation</title>
   
 
   
@@ -134,7 +134,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>singular_pipe.shell</li>
+      <li>spiper.shell</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -149,31 +149,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for singular_pipe.shell</h1><div class="highlight"><pre>
+  <h1>Source code for spiper.shell</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">pipe__getResult</span><span class="p">,</span><span class="n">pipe__getSafeResult</span><span class="p">,</span><span class="n">shellpopen</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span><span class="p">,</span> <span class="n">shellcmd</span>
+<span class="kn">from</span> <span class="nn">spiper._shell</span> <span class="kn">import</span> <span class="n">pipe__getResult</span><span class="p">,</span><span class="n">pipe__getSafeResult</span><span class="p">,</span><span class="n">shellpopen</span>
+<span class="kn">from</span> <span class="nn">spiper._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span><span class="p">,</span> <span class="n">shellcmd</span>
 <span class="kn">import</span> <span class="nn">io</span><span class="o">,</span><span class="nn">time</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.base</span> <span class="kn">import</span> <span class="n">list_flatten_strict</span><span class="p">,</span> <span class="n">list_flatten</span>
-<span class="kn">from</span> <span class="nn">singular_pipe._types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">,</span><span class="n">InputFile</span><span class="p">,</span><span class="n">InputPrefix</span>
+<span class="kn">from</span> <span class="nn">spiper.base</span> <span class="kn">import</span> <span class="n">list_flatten_strict</span><span class="p">,</span> <span class="n">list_flatten</span>
+<span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">,</span><span class="n">InputFile</span><span class="p">,</span><span class="n">InputPrefix</span>
 <span class="c1"># from ._types import File,Prefix,InputFile,InputPrefix</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
-<span class="kn">from</span> <span class="nn">singular_pipe</span> <span class="kn">import</span> <span class="n">VERSION</span>
+<span class="kn">from</span> <span class="nn">spiper</span> <span class="kn">import</span> <span class="n">VERSION</span>
 
 
 
 
-<div class="viewcode-block" id="SafeShellCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.SafeShellCommand">[docs]</a><span class="k">def</span> <span class="nf">SafeShellCommand</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span><span class="n">stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">stdout</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="SafeShellCommand"><a class="viewcode-back" href="../../lib/index.html#spiper.types.SafeShellCommand">[docs]</a><span class="k">def</span> <span class="nf">SafeShellCommand</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span><span class="n">stdin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">stdout</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 	<span class="n">suc</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">_shellcmd</span><span class="p">(</span><span class="n">CMD</span><span class="p">,</span><span class="n">check</span><span class="p">,</span><span class="n">shell</span><span class="p">,</span><span class="n">encoding</span><span class="p">,</span><span class="n">stdin</span><span class="p">,</span><span class="n">stdout</span><span class="p">,</span><span class="n">stderr</span><span class="p">,</span><span class="n">silent</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">stdout</span></div>
 
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-<div class="viewcode-block" id="LoggedShellCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.LoggedShellCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedShellCommand</span><span class="p">(</span>
+<div class="viewcode-block" id="LoggedShellCommand"><a class="viewcode-back" href="../../lib/index.html#spiper.types.LoggedShellCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedShellCommand</span><span class="p">(</span>
 		<span class="n">CMD</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="s1">&#39;/dev/null&#39;</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf8&#39;</span><span class="p">,</span>
 		<span class="n">stdin</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">stdout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
 		<span class="n">silent</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -225,7 +225,7 @@
 		<span class="k">return</span> <span class="n">suc</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span><span class="p">,</span> <span class="n">file</span></div>
 
 
-<div class="viewcode-block" id="size_humanReadable"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.size_humanReadable">[docs]</a>	<span class="k">def</span> <span class="nf">size_humanReadable</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{0:.2f}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;K&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">],):</span>
+<div class="viewcode-block" id="size_humanReadable"><a class="viewcode-back" href="../../lib/index.html#spiper.types.size_humanReadable">[docs]</a>	<span class="k">def</span> <span class="nf">size_humanReadable</span><span class="p">(</span><span class="n">num</span><span class="p">,</span><span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;B&#39;</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{0:.2f}</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">units</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;K&#39;</span><span class="p">,</span><span class="s1">&#39;M&#39;</span><span class="p">,</span><span class="s1">&#39;G&#39;</span><span class="p">,</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;P&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">],):</span>
 	    <span class="sd">&quot;&quot;&quot; Returns a human readable string reprentation of bytes,</span>
 <span class="sd">	    Source: https://stackoverflow.com/a/43750422/8083313&quot;&quot;&quot;</span>
 	    <span class="k">if</span> <span class="n">num</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">:</span>
@@ -238,7 +238,7 @@
 
 
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-<div class="viewcode-block" id="LoggedSingularityCommand"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.LoggedSingularityCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommand</span><span class="p">(</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">extra_files</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span><span class="mi">0</span><span class="p">):</span>	
+<div class="viewcode-block" id="LoggedSingularityCommand"><a class="viewcode-back" href="../../lib/index.html#spiper.types.LoggedSingularityCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommand</span><span class="p">(</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">extra_files</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span><span class="mi">0</span><span class="p">):</span>	
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		return a tuple (executed command, command_stdout)</span>
 <span class="sd">			cmd: a list of str-like objects that gets concatenated into a shell command</span>
@@ -294,7 +294,7 @@
 		<span class="c1"># suc , res = shellcmd(&#39; &#39;.join(cmd_curr),1,1)</span>
 		<span class="k">return</span> <span class="p">(</span><span class="n">cmd_curr</span><span class="p">,</span> <span class="n">stdout</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="make_files_for"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.make_files_for">[docs]</a>	<span class="k">def</span> <span class="nf">make_files_for</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
+<div class="viewcode-block" id="make_files_for"><a class="viewcode-back" href="../../lib/index.html#spiper.types.make_files_for">[docs]</a>	<span class="k">def</span> <span class="nf">make_files_for</span><span class="p">(</span><span class="n">cmd</span><span class="p">):</span>
 		<span class="n">FS</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="n">modes</span> <span class="o">=</span> <span class="p">[]</span>
 		<span class="k">for</span> <span class="n">F</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">:</span>
@@ -328,7 +328,7 @@
 		<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">FS</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">modes</span><span class="p">)</span>
 		<span class="k">return</span> <span class="n">FS</span><span class="p">,</span><span class="n">modes</span></div>
 
-<div class="viewcode-block" id="bind_files"><a class="viewcode-back" href="../../lib/index.html#singular_pipe.types.bind_files">[docs]</a>	<span class="k">def</span> <span class="nf">bind_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+<div class="viewcode-block" id="bind_files"><a class="viewcode-back" href="../../lib/index.html#spiper.types.bind_files">[docs]</a>	<span class="k">def</span> <span class="nf">bind_files</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
 		<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span><span class="s1">&#39;DEPRECATED&#39;</span>
 		<span class="n">files</span> <span class="o">=</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
 		<span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>

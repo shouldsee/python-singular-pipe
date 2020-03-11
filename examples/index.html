@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Examples &mdash; singular_pipe 0.0.3 documentation</title>
+  <title>2. Examples &mdash; spiper 0.0.3 documentation</title>
   
 
   
@@ -50,7 +50,7 @@
           
 
           
-            <a href="../index.html" class="icon icon-home"> singular_pipe
+            <a href="../index.html" class="icon icon-home"> spiper
           
 
           
@@ -111,7 +111,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">singular_pipe</a>
+          <a href="../index.html">spiper</a>
         
       </nav>
 
@@ -172,16 +172,16 @@ sequential changes to local/remote files from upstream to downstream.
 If all files are up-to-date as checked by the code, then nothing needs
 to be updated.</p>
 <p>To write such codes, file states must be explicitly monitored and remembered.
-In <code class="xref py py-mod docutils literal notranslate"><span class="pre">singular_pipe</span></code> this is achieved through a set of custom eval-like function
+In <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper</span></code> this is achieved through a set of custom eval-like function
 called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> and functions with a specialised signature called <code class="xref py py-obj docutils literal notranslate"><span class="pre">Node</span></code>
 or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Flow</span></code>. <code class="xref py py-obj docutils literal notranslate"><span class="pre">Runner</span></code> would
 extract file dependency graph from the function signatures and use this information
 to make runtime decisions as to whether to skip a function evaluation.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">File</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span> <span class="n">Flow</span><span class="p">,</span> <span class="n">File</span>
 
 <span class="nd">@Node</span>  <span class="c1"># Node is omittable, Flow() is not </span>
 <span class="k">def</span> <span class="nf">some_node</span><span class="p">(</span> 
-		<span class="bp">self</span><span class="p">,</span>              <span class="c1">#### Essn. A runtime object of type singular_pipe.runner.Caller</span>
+		<span class="bp">self</span><span class="p">,</span>              <span class="c1">#### Essn. A runtime object of type spiper.runner.Caller</span>
 		<span class="n">prefix</span><span class="p">,</span>            <span class="c1">#### Essn. A local file where a realised node would live</span>
 		<span class="nb">input</span> <span class="o">=</span> <span class="n">File</span><span class="p">,</span>      <span class="c1">#### remembered argument,</span>
 		<span class="n">_some_const</span><span class="o">=</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="c1">#### private constants, </span>
@@ -198,7 +198,7 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="c1">##### import runner functions</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
+	<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
 	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 	<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>	
 	<span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/some_node/root&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
@@ -251,10 +251,10 @@ local machine states.</p>
 <span class="sd">Since scripts are small, they can be uploaded to remote quickly</span>
 <span class="sd">without pain</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
 
-<span class="n">package_path</span> <span class="o">=</span> <span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
+<span class="n">package_path</span> <span class="o">=</span> <span class="s1">&#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b&#39;</span>
 <span class="nd">@Flow</span>
 <span class="k">def</span> <span class="nf">simple_flow</span><span class="p">(</span>
 	<span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
@@ -269,7 +269,7 @@ local machine states.</p>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">get_changed_files</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">cache_run</span>
+	<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">get_changed_files</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">cache_run</span>
 	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 	
 	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/test_import/root&#39;</span><span class="p">)</span>
@@ -285,21 +285,21 @@ local machine states.</p>
 </pre></div>
 </div>
 <p>There are quite a number of ways to specify a remote object.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span>
 
 <span class="c1">### Github &quot;tarball/master&quot; often take minutes to update,</span>
 <span class="c1">### use the commit hash to ensure integrity. </span>
-<span class="c1">### package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
-<span class="c1">### package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
+<span class="c1">### package_path_with_hash = &#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426&#39;</span>
+<span class="c1">### package_path           = &#39;spiper_mock_flow@http://github.com/shouldsee/spiper_mock_flow/tarball/master&#39;</span>
 <span class="c1">###</span>
 <span class="c1">### import the top-level module of the package</span>
-<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">)</span>
+<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426&#39;</span><span class="p">)</span>
 
 <span class="c1">### import a function from toplevel module</span>
 <span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
-<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+<span class="s1">&#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
 <span class="kc">None</span><span class="p">,</span>  
 <span class="s1">&#39;run_and_backup&#39;</span><span class="p">)</span>
 
@@ -323,10 +323,10 @@ local machine states.</p>
 <span class="sd">but skip the creation of actual output files.</span>
 <span class="sd">A symbolic node is a node with all output_files being empty</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="kn">import</span> <span class="nn">singular_pipe</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Prefix</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span>  <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
+<span class="kn">import</span> <span class="nn">spiper</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span>  <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span>  <span class="kn">import</span> <span class="n">Path</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Prefix</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span>  <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
 <span class="kn">import</span> <span class="nn">random</span>
 <span class="k">def</span> <span class="nf">random_seq</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="nb">int</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;seq&#39;</span><span class="p">]):</span>
 	<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
@@ -371,7 +371,7 @@ local machine states.</p>
 
 
 
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Caller</span><span class="p">,</span> <span class="n">rgetattr</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">Caller</span><span class="p">,</span> <span class="n">rgetattr</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="k">def</span> <span class="nf">copy_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">input</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> 
 	<span class="n">_single_file</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="c1">### A single file node only tracks the file at self.prefix</span>
@@ -401,7 +401,7 @@ local machine states.</p>
 	<span class="k">return</span> <span class="bp">self</span>
 
 
-<span class="kn">from</span> <span class="nn">singular_pipe.graph</span> <span class="kn">import</span> <span class="n">tree_call</span><span class="p">,</span> <span class="n">get_downstream_tree</span><span class="p">,</span> <span class="n">get_upstream_tree</span><span class="p">,</span> <span class="n">plot_simple_graph_lr</span>
+<span class="kn">from</span> <span class="nn">spiper.graph</span> <span class="kn">import</span> <span class="n">tree_call</span><span class="p">,</span> <span class="n">get_downstream_tree</span><span class="p">,</span> <span class="n">get_upstream_tree</span><span class="p">,</span> <span class="n">plot_simple_graph_lr</span>
 <span class="kn">from</span> <span class="nn">graphviz</span> <span class="kn">import</span> <span class="n">Digraph</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="k">def</span> <span class="nf">plot_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">backup_result</span><span class="o">=</span><span class="n">Caller</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;deptree_json&#39;</span><span class="p">,</span><span class="s1">&#39;deptree_dot_txt&#39;</span><span class="p">]):</span>
@@ -437,14 +437,14 @@ local machine states.</p>
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 	<span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">mock_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.shell</span> <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">CacheFile</span>
+	<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">mock_run</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">get_all_files</span>
+	<span class="kn">from</span> <span class="nn">spiper.shell</span> <span class="kn">import</span> <span class="n">LoggedShellCommand</span>
+	<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">CacheFile</span>
 	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-	<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clean&#39;</span>
+	<span class="n">spiper</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clean&#39;</span>
 
 	<span class="c1"># if prefix is None:</span>
-	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root&#39;</span><span class="p">)</span>
 	<span class="c1"># backup_prefix = File(&#39;/home/user/.temp/backup_03_mock_flow/root&#39;)</span>
 	<span class="n">backup_prefix</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="s1">&#39;~/.temp/backup_03_mock_flow/root&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span>
 	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
@@ -457,12 +457,12 @@ local machine states.</p>
 	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="n">workflow</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
 	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span><span class="p">[</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.source.py&#39;</span><span class="p">),</span>
 
  <span class="c1"># File(&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;)</span>
  <span class="p">]</span>
@@ -478,7 +478,7 @@ local machine states.</p>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.output.log&#39;</span><span class="p">),</span>
- <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;)</span>
+ <span class="c1"># File(&#39;/tmp/spiper.symbolic/root.source.py&#39;)</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.source.py&#39;</span><span class="p">)</span>
 <span class="p">]</span>
 
@@ -489,12 +489,12 @@ local machine states.</p>
 	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span> <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
 	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span>
-	<span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+	<span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.source.py&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
@@ -511,12 +511,12 @@ local machine states.</p>
 	<span class="n">_</span>  <span class="o">=</span> <span class="n">cache_run</span>         <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span> <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
-	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
- <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
- <span class="c1"># File(&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;),	</span>
+	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span><span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/tmp/spiper.symbolic/root.random_seq_const.seq&#39;),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="c1"># File(&#39;/tmp/spiper.symbolic/root.source.py&#39;),	</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
  <span class="c1"># File(&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
@@ -530,12 +530,12 @@ local machine states.</p>
 	<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span>     <span class="p">(</span><span class="n">run_and_backup</span><span class="p">,</span>  <span class="n">prefix</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="n">backup_prefix</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 	<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
 	<span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="p">[</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
- <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/singular_pipe.symbolic/root.source.py&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.workflow.log&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.random_seq_const.seq&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;</span><span class="p">),</span>
+ <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/tmp/spiper.symbolic/root.source.py&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq&#39;</span><span class="p">),</span>
  <span class="n">File</span><span class="p">(</span><span class="s1">&#39;/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta&#39;</span><span class="p">),</span>
@@ -564,14 +564,14 @@ local machine states.</p>
 <span class="sd">needs to be updated according to its immediate upstream nodes/inputs.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">force_run</span>
+<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span> <span class="n">force_run</span>
 <span class="k">def</span> <span class="nf">simplest_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[]):</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Running node:</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="bp">self</span><span class="p">)</span>
-	<span class="k">return</span> <span class="bp">self</span> <span class="c1">### This is the default behaviour for singular_pipe.runner.cache_run() </span>
+	<span class="k">return</span> <span class="bp">self</span> <span class="c1">### This is the default behaviour for spiper.runner.cache_run() </span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
-	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_spiper/root&#39;</span><span class="p">)</span>
 	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
 	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
 	<span class="n">cache_run</span><span class="p">(</span><span class="n">simplest_node</span><span class="p">,</span> <span class="n">prefix</span> <span class="p">)</span>
@@ -580,11 +580,11 @@ local machine states.</p>
 	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">	### comment</span>
 <span class="s1">	expect: </span>
-<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
-<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	Running node:spiper.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_spiper/root.simplest_node&#39;))</span>
+<span class="s1">	Running node:spiper.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_spiper/root.simplest_node&#39;))</span>
 <span class="s1">	</span>
 <span class="s1">	got:</span>
-<span class="s1">	Running node:singular_pipe.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_singular_pipe/root.simplest_node&#39;))</span>
+<span class="s1">	Running node:spiper.runner.Caller(dotname=&#39;__main__.simplest_node&#39;,prefix_named=File(&#39;/tmp/bulid_spiper/root.simplest_node&#39;))</span>
 
 <span class="s1">	The second run accessed cache</span>
 <span class="s1">	&#39;&#39;&#39;</span>
@@ -601,7 +601,7 @@ local machine states.</p>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">### running&#39;</span><span class="p">)</span>
 
-	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_spiper/root&#39;</span><span class="p">)</span>
 	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
 	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
 	<span class="n">cache_run</span><span class="p">(</span> <span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span> <span class="p">)</span>
@@ -610,14 +610,14 @@ local machine states.</p>
 	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">	### comment</span>
 <span class="s1">	expect:</span>
-<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
-<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
-<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
-<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
 
 <span class="s1">	got:</span>
-<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
-<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_singular_pipe.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
+<span class="s1">	writing GCTA to File(&#39;/tmp/bulid_spiper.less_simple_node.txt&#39;)</span>
 
 <span class="s1">	Becuase cache file is loaded for the two middle evaluations</span>
 
@@ -625,7 +625,7 @@ local machine states.</p>
 	<span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span>
 	<span class="k">pass</span>
 
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">LoggedShellCommand</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">LoggedShellCommand</span>
 
 <span class="k">def</span> <span class="nf">make_tar</span><span class="p">(</span> <span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">input_file</span><span class="o">=</span><span class="n">File</span><span class="p">,</span> <span class="n">_output</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;tar_gz&#39;</span><span class="p">]</span> <span class="p">):</span>
 	<span class="k">with</span> <span class="n">input_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
@@ -635,7 +635,7 @@ local machine states.</p>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_singular_pipe/root&#39;</span><span class="p">)</span>
+	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/bulid_spiper/root&#39;</span><span class="p">)</span>
 	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
 
 	<span class="n">caller</span> <span class="o">=</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">less_simple_node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="s1">&#39;ATCG&#39;</span><span class="p">)</span>
@@ -650,11 +650,11 @@ local machine states.</p>
 	<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[done]&#39;</span><span class="p">)</span>
 	<span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">	## got</span>
-<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
-<span class="s1">	[res0.output.txt]:File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
-<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
-<span class="s1">	writing GATC to File(&#39;/tmp/bulid_singular_pipe/root.less_simple_node.txt&#39;)</span>
-<span class="s1">	taring File(&#39;/tmp/bulid_singular_pipe&#39;)</span>
+<span class="s1">	writing ATCG to File(&#39;/tmp/bulid_spiper/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	[res0.output.txt]:File(&#39;/tmp/bulid_spiper/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_spiper&#39;)</span>
+<span class="s1">	writing GATC to File(&#39;/tmp/bulid_spiper/root.less_simple_node.txt&#39;)</span>
+<span class="s1">	taring File(&#39;/tmp/bulid_spiper&#39;)</span>
 <span class="s1">	[done]</span>
 
 <span class="s1">	## Note make_tar() is detecting the change of res0.output.txt and skipped the #marked# evaluation</span>
@@ -681,13 +681,13 @@ local machine states.</p>
 <span class="sd">would force the script creator to write the script in a local-independent way.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
-<span class="kn">from</span> <span class="nn">singular_pipe.types</span> <span class="kn">import</span> <span class="n">PythonPackage</span><span class="p">,</span> <span class="n">RemotePythonObject</span><span class="p">,</span><span class="n">RPO</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">Node</span><span class="p">,</span><span class="n">Flow</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">PythonPackage</span><span class="p">,</span> <span class="n">RemotePythonObject</span><span class="p">,</span><span class="n">RPO</span>
 
 <span class="c1"># Github &quot;tarball/master&quot; often take minutes to update,</span>
 <span class="c1"># use the commit hash to ensure integrity. </span>
-<span class="c1"># package_path_with_hash = &#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span>
-<span class="c1"># package_path           = &#39;singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master&#39;</span>
+<span class="c1"># package_path_with_hash = &#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b&#39;</span>
+<span class="c1"># package_path           = &#39;spiper_mock_flow@http://github.com/shouldsee/spiper_mock_flow/tarball/master&#39;</span>
 
 
 
@@ -696,10 +696,10 @@ local machine states.</p>
 <span class="c1">##### showing many different ways of</span>
 <span class="nd">@Flow</span>
 <span class="k">def</span> <span class="nf">test_import</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">prefix</span><span class="p">,</span>
-		<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">),</span>
+		<span class="n">_mod1</span> <span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span><span class="s1">&#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b&#39;</span><span class="p">),</span>
 			<span class="c1">### import the top-level module of the package</span>
 		<span class="n">_remote_function</span><span class="o">=</span> <span class="n">RemotePythonObject</span><span class="p">(</span>
-			<span class="s1">&#39;singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426&#39;</span><span class="p">,</span>
+			<span class="s1">&#39;spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b&#39;</span><span class="p">,</span>
 			<span class="kc">None</span><span class="p">,</span>  
 			<span class="s1">&#39;run_and_backup&#39;</span><span class="p">),</span>
 		 <span class="c1">### import a function from toplevel module</span>
@@ -722,11 +722,11 @@ local machine states.</p>
 
 
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-	<span class="kn">import</span> <span class="nn">singular_pipe</span>
+	<span class="kn">import</span> <span class="nn">spiper</span>
 	<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
-	<span class="kn">from</span> <span class="nn">singular_pipe.runner</span> <span class="kn">import</span> <span class="n">get_all_files</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">cache_run</span>
+	<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">get_all_files</span><span class="p">,</span> <span class="n">get_changed_files</span><span class="p">,</span> <span class="n">cache_run</span>
 	<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-	<span class="n">singular_pipe</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;flat&#39;</span> 
+	<span class="n">spiper</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;flat&#39;</span> 
 
 	<span class="n">prefix</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s1">&#39;/tmp/test_import/root&#39;</span><span class="p">)</span>
 	<span class="n">prefix</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>

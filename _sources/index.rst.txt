@@ -1,11 +1,11 @@
-.. singular_pipe documentation master file, created by
+.. spiper documentation master file, created by
    sphinx-quickstart on Mon Mar  9 23:15:33 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 .. check https://docs.python.org/2/_sources/
 
 ********************************************************************
-Welcome to :mod:`singular_pipe`-|version| 's documentation!
+Welcome to :mod:`spiper`-|version| 's documentation!
 ********************************************************************
 
 .. _Contents
@@ -24,7 +24,7 @@ Overview
 ===================
 
 Despite plenty of packages out there, writing reproducible python
-scripts is not yet a simple task. :obj:`singular_pipe` is written to address
+scripts is not yet a simple task. :obj:`spiper` is written to address
 serveral aspects:
     * :ref:`example-workflow-filesync`
     * :ref:`example-remote-code`
