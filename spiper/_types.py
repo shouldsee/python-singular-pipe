@@ -437,6 +437,8 @@ from spiper._shell import _shellcmd
 import sys,importlib
 import pkg_resources
 import json
+# from pip._internal.utils.virtualenv import virtualenv_no_global
+
 # PIP_BIN = 'pip3'
 class _PythonPackage(object):
 	'''
@@ -556,7 +558,7 @@ class _PythonPackage(object):
 		if not self.is_loaded():
 			# print(self.ident_file)
 			if not self.is_compatible():
-				from pip._internal.utils.virtualenv import virtualenv_no_global
+				from spiper._pip_patch import virtualenv_no_global
 				##### see https://github.com/pypa/pip/blob/520e76ddb950e05c1b6e50b1108196c79c5e856f/src/pip/_internal/commands/install.py#L576
 				'''
 				Overwrite the local installation by default
