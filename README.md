@@ -1,26 +1,26 @@
 
-[![Build Status](https://travis-ci.com/shouldsee/singular_pipe.svg?branch=master)](https://travis-ci.com/shouldsee/singular_pipe)
+[![Build Status](https://travis-ci.com/shouldsee/spiper.svg?branch=master)](https://travis-ci.com/shouldsee/spiper)
 
-## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
+## spiper: Utilities to make a pipeline, with singularity integration and caching ability.
 
 ### Dependencies:
 
 - A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
   - For python3, this means `python3 -m pip install --upgrade pip>=18.1` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
   - For python2, err python2 is not yet supported 
-- Optional: singularity >= 3.5.3 to use `singular_pipe.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
-- Optional: dot binary for plotting graphs with `singular_pipe.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
+- Optional: singularity >= 3.5.3 to use `spiper.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: dot binary for plotting graphs with `spiper.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
 
 ```bash
-pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/master --user
+pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 ```
 
 ### Documentation
 
-See https://shouldsee.github.io/singular_pipe/
+See https://shouldsee.github.io/spiper/
 
 ### Screenshots
 
@@ -39,10 +39,10 @@ See https://shouldsee.github.io/singular_pipe/
 Since scripts are small, they can be uploaded to remote quickly
 without pain
 '''
-from singular_pipe.types import Node,Flow
-from singular_pipe.types import RemotePythonObject as RPO
+from spiper.types import Node,Flow
+from spiper.types import RemotePythonObject as RPO
 
-package_path = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
+package_path = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b'
 @Flow
 def simple_flow(
 	self,prefix,
@@ -57,7 +57,7 @@ def simple_flow(
 
 if __name__ == '__main__':
 	from path import Path
-	from singular_pipe.runner import get_changed_files,get_all_files,cache_run
+	from spiper.runner import get_changed_files,get_all_files,cache_run
 	from pprint import pprint
 	
 	prefix = Path('/tmp/test_import/root')
@@ -84,14 +84,14 @@ cache_run(func,prefix,*args) checks whether a node
 needs to be updated according to its immediate upstream nodes/inputs.
 '''
 from path import Path
-from singular_pipe.runner import cache_run, force_run
+from spiper.runner import cache_run, force_run
 def simplest_node(self, prefix, _output=[]):
 	print('Running node:%r'%self)
-	return self ### This is the default behaviour for singular_pipe.runner.cache_run() 
+	return self ### This is the default behaviour for spiper.runner.cache_run() 
 
 if __name__ == '__main__':
 	print('\n### running')
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 	cache_run(simplest_node, prefix )
 	cache_run(simplest_node, prefix )
@@ -100,11 +100,11 @@ if __name__ == '__main__':
 	s = '''
 	### comment
 	expect: 
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
 	
 	got:
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
 
 	The second run accessed cache
 	'''
@@ -121,7 +121,7 @@ def less_simple_node( self, prefix, seq=str, _output=['txt']):
 if __name__ == '__main__':
 	print('\n### running')
 
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 	cache_run( less_simple_node, prefix, 'ATCG' )
 	cache_run( less_simple_node, prefix, 'ATCG' )
@@ -130,14 +130,14 @@ if __name__ == '__main__':
 	s = '''
 	### comment
 	expect:
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing GCTA to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing GCTA to File('/tmp/bulid_spiper.less_simple_node.txt')
 
 	got:
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing GCTA to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing GCTA to File('/tmp/bulid_spiper.less_simple_node.txt')
 
 	Becuase cache file is loaded for the two middle evaluations
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
 	print(s.strip('\n'))
 	pass
 
-from singular_pipe.types import File,LoggedShellCommand
+from spiper.types import File,LoggedShellCommand
 
 def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 	with input_file.dirname() as d:
@@ -155,7 +155,7 @@ def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 
 
 if __name__ == '__main__':
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 
 	caller = cache_run(less_simple_node, prefix, 'ATCG')
@@ -170,11 +170,11 @@ if __name__ == '__main__':
 	print('[done]')
 	s = '''
 	## got
-	writing ATCG to File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	[res0.output.txt]:File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	taring File('/tmp/bulid_singular_pipe')
-	writing GATC to File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	taring File('/tmp/bulid_singular_pipe')
+	writing ATCG to File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	[res0.output.txt]:File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	taring File('/tmp/bulid_spiper')
+	writing GATC to File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	taring File('/tmp/bulid_spiper')
 	[done]
 
 	## Note make_tar() is detecting the change of res0.output.txt and skipped the #marked# evaluation
@@ -189,10 +189,10 @@ Symbolic run construct .outward_edges, .input_json and .output_json as usual
 but skip the creation of actual output files.
 A symbolic node is a node with all output_files being empty
 '''
-import singular_pipe
-from singular_pipe.types  import Node,Flow
-from singular_pipe.types  import Path, File, Prefix
-from singular_pipe.types  import LoggedShellCommand
+import spiper
+from spiper.types  import Node,Flow
+from spiper.types  import Path, File, Prefix
+from spiper.types  import LoggedShellCommand
 import random
 def random_seq(self, prefix, seed = int, L = int, _output=['seq']):
 	random.seed(seed)
@@ -237,7 +237,7 @@ def workflow(self, prefix, seed =int , L=int,
 
 
 
-from singular_pipe.types import Caller, rgetattr
+from spiper.types import Caller, rgetattr
 import shutil
 def copy_file(self, prefix, input=File, 
 	_single_file = 1, ### A single file node only tracks the file at self.prefix
@@ -267,7 +267,7 @@ def backup(self, prefix, flow = Caller, _output=[]):
 	return self
 
 
-from singular_pipe.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
+from spiper.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
 from graphviz import Digraph
 import json
 def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','deptree_dot_txt']):
@@ -303,14 +303,14 @@ def run_and_backup(
 
 def main(self=None,
 	prefix = None):
-	from singular_pipe.runner import cache_run, mock_run, get_changed_files, get_all_files
-	from singular_pipe.shell import LoggedShellCommand
-	from singular_pipe.types import File,CacheFile
+	from spiper.runner import cache_run, mock_run, get_changed_files, get_all_files
+	from spiper.shell import LoggedShellCommand
+	from spiper.types import File,CacheFile
 	from pprint import pprint
-	singular_pipe.rcParams['dir_layout']='clean'
+	spiper.rcParams['dir_layout']='clean'
 
 	# if prefix is None:
-	prefix = Path('/tmp/singular_pipe.symbolic/root')
+	prefix = Path('/tmp/spiper.symbolic/root')
 	# backup_prefix = File('/home/user/.temp/backup_03_mock_flow/root')
 	backup_prefix = File('~/.temp/backup_03_mock_flow/root').expand()
 	prefix.dirname().rmtree_p()
@@ -323,12 +323,12 @@ def main(self=None,
 	fs = get_changed_files(workflow, prefix, 1, 100, verbose=0)
 	pprint(fs)
 	assert fs ==[
- File('/tmp/singular_pipe.symbolic/root.workflow.log'),
- File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
- File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
- File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
- File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- File('/tmp/singular_pipe.symbolic/root.source.py'),
+ File('/tmp/spiper.symbolic/root.workflow.log'),
+ File('/tmp/spiper.symbolic/root.random_seq.seq'),
+ File('/tmp/spiper.symbolic/root.random_seq_const.seq'),
+ File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+ File('/tmp/spiper.symbolic/root.mutate.fasta'),
+ File('/tmp/spiper.symbolic/root.source.py'),
 
  # File('/home/user/.temp/backup_03_mock_flow/root.source.py')
  ]
@@ -344,7 +344,7 @@ def main(self=None,
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.mutate.output.fasta'),
  File('/home/user/.temp/backup_03_mock_flow/root.output.log'),
- # File('/tmp/singular_pipe.symbolic/root.source.py')
+ # File('/tmp/spiper.symbolic/root.source.py')
  File('/home/user/.temp/backup_03_mock_flow/root.source.py')
 ]
 
@@ -355,12 +355,12 @@ def main(self=None,
 	fs = get_changed_files (run_and_backup, prefix, 1, 100, backup_prefix, verbose=0)
 	pprint(fs)
 	assert fs == [
-	File('/tmp/singular_pipe.symbolic/root.workflow.log'),
- File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
- File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
- File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
- File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- File('/tmp/singular_pipe.symbolic/root.source.py'),
+	File('/tmp/spiper.symbolic/root.workflow.log'),
+ File('/tmp/spiper.symbolic/root.random_seq.seq'),
+ File('/tmp/spiper.symbolic/root.random_seq_const.seq'),
+ File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+ File('/tmp/spiper.symbolic/root.mutate.fasta'),
+ File('/tmp/spiper.symbolic/root.source.py'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
@@ -377,12 +377,12 @@ def main(self=None,
 	_  = cache_run         (run_and_backup,  prefix, 1, 100, backup_prefix, verbose=0)
 	fs = get_changed_files (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 	pprint(fs)
-	assert fs == [File('/tmp/singular_pipe.symbolic/root.workflow.log'),
- File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
- # File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
- File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
- File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- # File('/tmp/singular_pipe.symbolic/root.source.py'),	
+	assert fs == [File('/tmp/spiper.symbolic/root.workflow.log'),
+ File('/tmp/spiper.symbolic/root.random_seq.seq'),
+ # File('/tmp/spiper.symbolic/root.random_seq_const.seq'),
+ File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+ File('/tmp/spiper.symbolic/root.mutate.fasta'),
+ # File('/tmp/spiper.symbolic/root.source.py'),	
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
  # File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
@@ -396,12 +396,12 @@ def main(self=None,
 	fs = get_all_files     (run_and_backup,  prefix, 2, 200, backup_prefix, verbose=0)
 	pprint(fs)
 	assert fs == [
- File('/tmp/singular_pipe.symbolic/root.workflow.log'),
- File('/tmp/singular_pipe.symbolic/root.random_seq.seq'),
- File('/tmp/singular_pipe.symbolic/root.random_seq_const.seq'),
- File('/tmp/singular_pipe.symbolic/root.transcribe.fasta'),
- File('/tmp/singular_pipe.symbolic/root.mutate.fasta'),
- File('/tmp/singular_pipe.symbolic/root.source.py'),
+ File('/tmp/spiper.symbolic/root.workflow.log'),
+ File('/tmp/spiper.symbolic/root.random_seq.seq'),
+ File('/tmp/spiper.symbolic/root.random_seq_const.seq'),
+ File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+ File('/tmp/spiper.symbolic/root.mutate.fasta'),
+ File('/tmp/spiper.symbolic/root.source.py'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq.output.seq'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.random_seq_const.output.seq'),
  File('/home/user/.temp/backup_03_mock_flow/root.subflow.transcribe.output.fasta'),
@@ -423,7 +423,7 @@ if __name__ == '__main__':
 
 ### ToDo
     - [x] Running a remote module
-    	- [ ] add some tests for singular_pipe._types.PythonModule()
+    	- [ ] add some tests for spiper._types.PythonModule()
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
     - [ ] Auto-backup all output files. job_backup_copy()
