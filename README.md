@@ -22,6 +22,28 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 
 See https://shouldsee.github.io/spiper/
 
+### Running a remote pipeline
+
+```bash
+spiper run \
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+  spiper_mock_flow:run_and_backup \
+  --args /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
+
+#### TOPLEVEL refers to the package_name 
+spiper run \
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+  TOPLEVEL:run_and_backup \
+  --args /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
+
+#### in case spiper is not in $PATH
+python3 -m spiper run \
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+  TOPLEVEL:run_and_backup \
+  --args /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
+
+```
+
 ### Screenshots
 
 ![](./tests/test_downstream.node_only.dot.svg)
@@ -189,6 +211,22 @@ Symbolic run construct .outward_edges, .input_json and .output_json as usual
 but skip the creation of actual output files.
 A symbolic node is a node with all output_files being empty
 '''
+from spiper.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
+from graphviz import Digraph
+import json
+def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','deptree_dot_txt']):
+	fs   = backup_result.get_all_files()
+	tree = get_upstream_tree(fs, 0)
+	##### dump the tree as a json
+	with open( self.output.deptree_json, 'w') as f:
+		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
+
+	#### plot the tree with graphviz
+	g = plot_simple_graph_lr(fs, None, 0, 1)
+	fname = g.render( self.output.deptree_dot_txt ,format='svg' )
+	print('[fn]',fname)
+
+
 import spiper
 from spiper.types  import Node,Flow
 from spiper.types  import Path, File, Prefix
@@ -267,17 +305,6 @@ def backup(self, prefix, flow = Caller, _output=[]):
 	return self
 
 
-from spiper.graph import tree_call, get_downstream_tree, get_upstream_tree, plot_simple_graph_lr
-from graphviz import Digraph
-import json
-def plot_graph(self, prefix, backup_result=Caller, _output=['deptree_json','deptree_dot_txt']):
-	fs   = backup_result.get_all_files()
-	tree = get_upstream_tree(fs, 0)
-	with open( self.output.deptree_json, 'w') as f:
-		json.dump(tree_call(repr,tree),f,default=repr,indent=2)
-	g = plot_simple_graph_lr(fs, None, 0, 1)
-	fname = g.render( self.output.deptree_dot_txt ,format='svg' )
-	print('[fn]',fname)
 
 @Flow
 def run_and_backup(
