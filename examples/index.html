@@ -246,27 +246,37 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 <p>Local paths lose meaning once migrated to a difference machine,
 whereas remote references such as <a class="reference external" href="http://">http://</a> and <a class="reference external" href="ftp://">ftp://</a> is independent of
 local machine states.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>spiper run <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#### get a list of changed_files</span>
+spiper get_changed_files --plain <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
+<span class="c1"># [Flow running] mock=None</span>
+<span class="c1"># [workflow]done</span>
+<span class="c1"># /tmp/test_remote/root.workflow.log</span>
+<span class="c1"># /tmp/test_remote/root.random_seq.seq</span>
+<span class="c1"># /tmp/test_remote/root.random_seq_const.seq</span>
+<span class="c1"># /tmp/test_remote/root.transcribe.fasta</span>
+<span class="c1"># /tmp/test_remote/root.mutate.fasta</span>
+<span class="c1"># /tmp/test_remote/root.source.py</span>
+<span class="c1"># /tmp/test_remote/root.backup.subflow.random_seq.output.seq</span>
+<span class="c1"># /tmp/test_remote/root.backup.subflow.random_seq_const.output.seq</span>
+<span class="c1"># /tmp/test_remote/root.backup.subflow.transcribe.output.fasta</span>
+<span class="c1"># /tmp/test_remote/root.backup.subflow.mutate.output.fasta</span>
+<span class="c1"># /tmp/test_remote/root.backup.output.log</span>
+<span class="c1"># /tmp/test_remote/root.backup.source.py</span>
+<span class="c1"># /tmp/test_remote/root.backup.plot_graph.deptree_json</span>
+<span class="c1"># /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt</span>
+
 spiper run <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
-  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
-<span class="c1">#### TOPLEVEL refers to the package_name </span>
-spiper run <span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
-  TOPLEVEL:run_and_backup <span class="se">\</span>
-  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
-
-<span class="c1">#### in case spiper is not in $PATH</span>
-python3 -m spiper run <span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
-  TOPLEVEL:run_and_backup <span class="se">\</span>
-  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+<span class="c1"># [Flow running] mock=None</span>
+<span class="c1"># [fn] /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt.svg</span>
+<span class="c1"># [workflow]done</span>
 
 spiper --help &gt;/dev/null
 </pre></div>
