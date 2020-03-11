@@ -43,12 +43,16 @@ to make runtime decisions as to whether to skip a function evaluation.
 
 .. _example-remote-code:
 
-Separation of code from data by executing remote code
-=========================================================
+Running a remote package/function
+======================================
 
 Local paths lose meaning once migrated to a difference machine,
 whereas remote references such as http:// and ftp:// is independent of 
 local machine states. 
+
+.. literalinclude:: ../examples/003_remote_bash.sh
+	:language: bash
+
 
 .. literalinclude:: ../examples/07_remote_short.py
 
@@ -71,11 +75,6 @@ Creating a cached Node
 .. literalinclude:: ../examples/01_cache_run_shallow.py
 
 .. _running-remote:
-
-Running a remote package/function
-======================================
-
-.. literalinclude:: ../examples/06_remote_package.py
 
 .. _config-layout
 

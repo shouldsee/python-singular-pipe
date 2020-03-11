@@ -67,6 +67,12 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 
 See https://shouldsee.github.io/spiper/
 
+### Running a remote pipeline
+
+```bash
+{{open(dir/"examples/003_remote_bash.sh",'r').read()}}
+```
+
 ### Screenshots
 
 ![](./tests/test_downstream.node_only.dot.svg)

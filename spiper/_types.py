@@ -11,7 +11,7 @@ import os
 from orderedattrdict import AttrDict
 import json
 import re
-from spiper._header import list_flatten,list_flatten_strict,rgetattr
+from spiper._header import list_flatten,list_flatten_strict,rgetattr,rstrip
 
 
 
@@ -407,7 +407,8 @@ def PythonPackage(package_path, imported_name=None):
 
 	# assert version is None
 	err = UndefinedRoutine('PythonPackage(%r)'%((package_path)))
-
+	# print(package_path)
+	# package_path = str(package_path)
 	x = pkg_resources.Requirement.parse(package_path)
 	spec = ''.join(list_flatten(x.specs))
 	extras = ()
@@ -488,6 +489,8 @@ class _PythonPackage(object):
 		try:
 			dist = pkg_resources.get_distribution(self.package_name)
 			fn = Path( dist.egg_info )
+			# if fn.endswith('.dist-info'):
+			# 	fn = rstrip(fn,'.dist-info')+'.egg-info'
 		except pkg_resources.DistributionNotFound as e:
 			if verbose:
 				print(e)
@@ -557,8 +560,13 @@ class _PythonPackage(object):
 				'''
 				Overwrite the local installation by default
 				'''
-				print('[installing]',self.package_path)
-				self.egg_info.rmtree_p()
+				print('[installing]',self.package_path,'\n',self.egg_info)
+				# print('')
+				for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*'):
+					if x.isfile(): x.unlink_p()
+					if x.isdir(): x.rmtree_p()
+				# [x.rmtree_p() for x in self.egg_info.dirname().glob(self.egg_info.basename().split('-',1)[0]+'*')]
+				# self.egg_info.rmtree_p()
 
 				CMD = [
 					[PIP_BIN,'uninstall','-y',self.package_name,';'],
@@ -600,6 +608,12 @@ class RemotePythonObject(object):
 		# 	package_path, attribute_name = args
 		# 	module_name = None
 		self.package = PythonPackage(package_path, None)
+		module_name = module_name or ''
+		if ':' in module_name:
+			assert attribute_name is None
+			module_name,attribute_name = module_name.split(':',1)
+		if module_name.startswith('TOPLEVEL'):
+			module_name = module_name.replace('TOPLEVEL',self.package.package_name)
 		self.module_name = module_name or self.package.package_name
 		self.attribute_name = attribute_name
 	def __repr__(self):

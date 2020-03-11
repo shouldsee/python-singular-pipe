@@ -5,7 +5,10 @@ from spiper.test.graph import tarball_main
 from spiper.types import LoggedShellCommand,File
 from spiper.runner import mock_run,cache_run
 from pprint import pprint
+import spiper.examples
 class Case(unittest2.TestCase):
+	def test_cli(self):
+		LoggedShellCommand(['bash','-ex',Path(list(spiper.examples.__path__)[0])/'003_remote_bash.sh'])
 	def test_rpo(self):
 		import importlib
 		mod = importlib.import_module('spiper.examples.06_remote_package')
