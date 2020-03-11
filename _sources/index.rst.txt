@@ -38,6 +38,15 @@ different are
 * :ref:`example-remote-code`
 * **Declaring pipeline/function-level dependency.**
 
+Quickstart
+=================
+
+install with pip3 first 
+
+.. literalinclude:: examples/003_remote_bash.sh
+  :language: bash
+
+
 
 
 :Author: Feng Geng

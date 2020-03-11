@@ -196,6 +196,35 @@ different are</p>
 <li><p><a class="reference internal" href="examples/index.html#example-remote-code"><span class="std std-ref">Running a remote package/function</span></a></p></li>
 <li><p><strong>Declaring pipeline/function-level dependency.</strong></p></li>
 </ul>
+</div>
+<div class="section" id="quickstart">
+<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<p>install with pip3 first</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  spiper_mock_flow:run_and_backup <span class="se">\</span>
+  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+
+spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  spiper_mock_flow:run_and_backup <span class="se">\</span>
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+
+<span class="c1">#### TOPLEVEL refers to the package_name </span>
+spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  TOPLEVEL:run_and_backup <span class="se">\</span>
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+
+<span class="c1">#### in case spiper is not in $PATH</span>
+python3 -m spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  TOPLEVEL:run_and_backup <span class="se">\</span>
+  <span class="s2">&quot;/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup&quot;</span>
+
+spiper --help &gt;/dev/null
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Author</dt>
 <dd class="field-odd"><p>Feng Geng</p>
