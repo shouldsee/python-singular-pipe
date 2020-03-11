@@ -29,7 +29,8 @@ See https://shouldsee.github.io/spiper/
 Usage:
 	spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>
 Example:
-	spiper get_changed_files 
+	spiper run   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master   spiper_mock_flow:run_and_backup   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+
 Arguments:
 	<subcommand>:
 		run                  execute the workflow
@@ -41,10 +42,8 @@ Arguments:
 		a string  "<module>:<object_name>" where object is like a `spipe.types.Node()`
 	<workflow_arguments>:
 		a comma-separated list of arguments for the workflow
-		
 
-
-Parameters:
+Options:
 
 	--help: show this help
 

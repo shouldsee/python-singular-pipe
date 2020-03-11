@@ -63,6 +63,12 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 
 See https://shouldsee.github.io/spiper/
 
+### Usage:
+
+```bash
+{{subprocess.check_output(['spiper','--help']).decode('utf8')}}
+```
+
 ### Running a remote pipeline
 
 ```bash
@@ -168,6 +174,7 @@ because _output is a list and there isn't a way of specifying their type.
 def make_readme(fn,todo=todo,template=template):
 	# with open(f,'w'):
 	dir = fn.dirname()
+	import subprocess
 	f = open(fn,'w+')
 	s = jinja2_format(template,**locals())
 	# s = template.format(**locals())
