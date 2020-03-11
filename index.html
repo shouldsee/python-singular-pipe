@@ -204,27 +204,28 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.4 --user
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#### get a list of changed_files</span>
-spiper get_changed_files --plain <span class="se">\</span>
+spiper get_changed_files <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
 <span class="c1"># [Flow running] mock=None</span>
 <span class="c1"># [workflow]done</span>
-<span class="c1"># /tmp/test_remote/root.workflow.log</span>
-<span class="c1"># /tmp/test_remote/root.random_seq.seq</span>
-<span class="c1"># /tmp/test_remote/root.random_seq_const.seq</span>
-<span class="c1"># /tmp/test_remote/root.transcribe.fasta</span>
-<span class="c1"># /tmp/test_remote/root.mutate.fasta</span>
-<span class="c1"># /tmp/test_remote/root.source.py</span>
-<span class="c1"># /tmp/test_remote/root.backup.subflow.random_seq.output.seq</span>
-<span class="c1"># /tmp/test_remote/root.backup.subflow.random_seq_const.output.seq</span>
-<span class="c1"># /tmp/test_remote/root.backup.subflow.transcribe.output.fasta</span>
-<span class="c1"># /tmp/test_remote/root.backup.subflow.mutate.output.fasta</span>
-<span class="c1"># /tmp/test_remote/root.backup.output.log</span>
-<span class="c1"># /tmp/test_remote/root.backup.source.py</span>
-<span class="c1"># /tmp/test_remote/root.backup.plot_graph.deptree_json</span>
-<span class="c1"># /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt</span>
+<span class="c1"># [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.random_seq.seq&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.random_seq_const.seq&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.transcribe.fasta&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.mutate.fasta&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.source.py&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.random_seq.output.seq&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.random_seq_const.output.seq&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.transcribe.output.fasta&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.mutate.output.fasta&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.output.log&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.source.py&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.plot_graph.deptree_json&#39;),</span>
+<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.plot_graph.deptree_dot_txt&#39;)]</span>
+
 
 spiper run <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
@@ -234,6 +235,12 @@ spiper run <span class="se">\</span>
 <span class="c1"># [Flow running] mock=None</span>
 <span class="c1"># [fn] /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt.svg</span>
 <span class="c1"># [workflow]done</span>
+
+spiper get_changed_files <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  spiper_mock_flow:run_and_backup <span class="se">\</span>
+  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+<span class="c1"># [No files changed by this workflow]&#39;</span>
 
 spiper --help &gt;/dev/null
 </pre></div>
