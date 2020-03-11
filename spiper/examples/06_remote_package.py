@@ -20,17 +20,17 @@ from spiper.types import PythonPackage, RemotePythonObject,RPO
 
 # Github "tarball/master" often take minutes to update,
 # use the commit hash to ensure integrity. 
-# package_path_with_hash = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'
+# package_path_with_hash = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b'
 # package_path           = 'spiper_mock_flow@http://github.com/shouldsee/spiper_mock_flow/tarball/master'
 
 @Flow
 def test_import(self,prefix,
  # _remote_mod = PythonModule(package_path),
  _mod1 = RemotePythonObject(
- 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'),
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b'),
  	### import the top-level module of the package
  _remote_function= RemotePythonObject(
- 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426',
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b',
  	None,  
  	'run_and_backup'),
 	 ### import a function from toplevel module
@@ -54,7 +54,7 @@ def test_import(self,prefix,
 @Flow
 def simple_flow(self,prefix,
  _main= RemotePythonObject(
- 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426', 
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b', 
  	None, 
  	'run_and_backup'),
  _output=[]):

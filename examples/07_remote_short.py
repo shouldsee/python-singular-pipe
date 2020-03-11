@@ -5,7 +5,7 @@ without pain
 from spiper.types import Node,Flow
 from spiper.types import RemotePythonObject as RPO
 
-package_path = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'
+package_path = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8cd0f6b'
 @Flow
 def simple_flow(
 	self,prefix,
