@@ -8,7 +8,14 @@ from pprint import pprint
 import spiper.examples
 class Case(unittest2.TestCase):
 	def test_cli(self):
-		LoggedShellCommand(['bash','-ex',Path(list(spiper.examples.__path__)[0])/'003_remote_bash.sh'])
+		Path('/tmp/test_remote/').rmtree_p()
+		stdout = LoggedShellCommand([
+			'python3','-m','spiper run',
+			'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/c004084',
+			'TOPLEVEL:run_and_backup',
+			'/tmp/test_remote/root,1,2,/tmp/test_remote/root.backup'])
+		assert '[workflow]done' in stdout.splitlines()[-1]
+		# LoggedShellCommand(['bash','-ex',Path(list(spiper.examples.__path__)[0])/'003_remote_bash.sh'])
 	def test_rpo(self):
 		import importlib
 		mod = importlib.import_module('spiper.examples.06_remote_package')
