@@ -30,7 +30,7 @@ challenging task. To address these issues, I wrote :obj:`spiper` after reading
 about many other pipeline management packages. The major features making :obj:`spiper`
 different are
 
-* distributed file monitoring instead of a global file index (compared to gnu-make, snakemake)
+* **Distributed file monitoring instead of a global file index**   (compared to gnu-make, snakemake)
 * importable and documentable pipelines since they are python functions (compared to ruffus/luigi)
 * hierarchical execution as inherited from python functions
 * no support for job-scheduling at the moment (contribution welcome!)
