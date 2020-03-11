@@ -1,6 +1,6 @@
-from singular_pipe._types import HttpResponse
+from spiper._types import HttpResponse
 import json
-from singular_pipe._types import InputFile
+from spiper._types import InputFile
 def cache_http(self,prefix,
 	_res = HttpResponse('GET','http://dummy.restapiexample.com/api/v1/employees'),
 	_output = ['cache',]
@@ -18,7 +18,7 @@ def parse_json(self,prefix,
 		f.write('Average_salary:%.2f\n'%(sum( [int(xx['employee_salary']) for xx in x])/float(len(x))))
 	return self
 
-from singular_pipe.runner import force_run
+from spiper.runner import force_run
 if __name__ == '__main__':
 	runner = force_run
 	root = '/tmp/pipeline_download'

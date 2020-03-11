@@ -1,17 +1,17 @@
 import importlib
-from singular_pipe._shell import pipe__getResult,pipe__getSafeResult,shellpopen
-from singular_pipe._shell import _shellcmd, shellcmd
+from spiper._shell import pipe__getResult,pipe__getSafeResult,shellpopen
+from spiper._shell import _shellcmd, shellcmd
 import io,time
 
 import json
 import warnings
-from singular_pipe.base import list_flatten_strict, list_flatten
-from singular_pipe._types import File,Prefix,InputFile,InputPrefix
+from spiper.base import list_flatten_strict, list_flatten
+from spiper._types import File,Prefix,InputFile,InputPrefix
 # from ._types import File,Prefix,InputFile,InputPrefix
 import json
 from path import Path
 import tempfile
-from singular_pipe import VERSION
+from spiper import VERSION
 
 
 

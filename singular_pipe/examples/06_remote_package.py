@@ -15,22 +15,22 @@ centralise the storage of pipelines to cloud rather than to a local machine, whi
 would force the script creator to write the script in a local-independent way.
 '''
 
-from singular_pipe.types import Node,Flow
-from singular_pipe.types import PythonPackage, RemotePythonObject,RPO
+from spiper.types import Node,Flow
+from spiper.types import PythonPackage, RemotePythonObject,RPO
 
 # Github "tarball/master" often take minutes to update,
 # use the commit hash to ensure integrity. 
-# package_path_with_hash = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
-# package_path           = 'singular_pipe_mock_flow@http://github.com/shouldsee/singular_pipe_mock_flow/tarball/master'
+# package_path_with_hash = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'
+# package_path           = 'spiper_mock_flow@http://github.com/shouldsee/spiper_mock_flow/tarball/master'
 
 @Flow
 def test_import(self,prefix,
  # _remote_mod = PythonModule(package_path),
  _mod1 = RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'),
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'),
  	### import the top-level module of the package
  _remote_function= RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426',
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426',
  	None,  
  	'run_and_backup'),
 	 ### import a function from toplevel module
@@ -54,7 +54,7 @@ def test_import(self,prefix,
 @Flow
 def simple_flow(self,prefix,
  _main= RemotePythonObject(
- 	'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426', 
+ 	'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426', 
  	None, 
  	'run_and_backup'),
  _output=[]):
@@ -64,11 +64,11 @@ def simple_flow(self,prefix,
 
 
 def main():
-	import singular_pipe
+	import spiper
 	from path import Path
-	from singular_pipe.runner import get_all_files, get_changed_files, cache_run
+	from spiper.runner import get_all_files, get_changed_files, cache_run
 	from pprint import pprint
-	singular_pipe.rcParams['dir_layout'] = 'flat' 
+	spiper.rcParams['dir_layout'] = 'flat' 
 
 	prefix = Path('/tmp/test_import/root')
 	prefix.dirname().rmtree_p()

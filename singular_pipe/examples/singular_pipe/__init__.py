@@ -1,6 +1,6 @@
 from orderedattrdict import AttrDict as _dict
 from jinja2 import Template, StrictUndefined
-# from singular_pipe.version import get_version,VERSION
+# from spiper.version import get_version,VERSION
 def get_version():
     VERSION = (  # SEMANTIC
         0,        # major
@@ -38,18 +38,18 @@ def jinja2_format(s,**context):
 template = '''
 [![Build Status](https://travis-ci.com/shouldsee/python-singular-pipe.svg?token=f6G1tkP8yesCfYdyDVrj&branch=master)](https://travis-ci.com/shouldsee/python-singular-pipe)
 
-## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
+## spiper: Utilities to make a pipeline, with singularity integration and caching ability.
 
 ### Dependencies:
 
-- Optional: singularity >= 3.5.3 to use singular_pipe.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: singularity >= 3.5.3 to use spiper.base.singularity_run(). (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
 - Optional: dot binary for plotting DAG.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
 
 ```bash
-pip3 install singular_pipe@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
+pip3 install spiper@https://github.com/shouldsee/python-singular-pipe/tarball/master --user
 ```
 
 ### Screenshots

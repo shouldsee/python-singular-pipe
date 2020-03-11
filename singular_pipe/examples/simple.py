@@ -1,13 +1,13 @@
 
 from path import Path
-from singular_pipe.runner import cache_run, force_run
+from spiper.runner import cache_run, force_run
 def simplest_node(self,prefix,_output=[]):
 	print('Running node:%r'%self)
 	return self ### return Runtime Caller as output is beneficial
 
 if __name__ == '__main__':
 	print('\n### running')
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 	cache_run(simplest_node, prefix )
 	cache_run(simplest_node, prefix )
@@ -16,11 +16,11 @@ if __name__ == '__main__':
 	s = '''
 	### comment
 	expect: 
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
 	
 	got:
-	Running node:singular_pipe.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_singular_pipe/root.simplest_node'))
+	Running node:spiper.runner.Caller(dotname='__main__.simplest_node',prefix_named=File('/tmp/bulid_spiper/root.simplest_node'))
 
 	The second run accessed cache
 	'''
@@ -37,7 +37,7 @@ def less_simple_node( self, prefix, seq=str, _output=['txt']):
 if __name__ == '__main__':
 	print('\n### running')
 
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 	cache_run( less_simple_node, prefix, 'ATCG' )
 	cache_run( less_simple_node, prefix, 'ATCG' )
@@ -46,14 +46,14 @@ if __name__ == '__main__':
 	s = '''
 	### comment
 	expect:
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing GCTA to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing GCTA to File('/tmp/bulid_spiper.less_simple_node.txt')
 
 	got:
-	writing ATCG to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
-	writing GCTA to File('/tmp/bulid_singular_pipe.less_simple_node.txt')
+	writing ATCG to File('/tmp/bulid_spiper.less_simple_node.txt')
+	writing GCTA to File('/tmp/bulid_spiper.less_simple_node.txt')
 
 	Becuase cache file is loaded for the two middle evaluations
 
@@ -61,8 +61,8 @@ if __name__ == '__main__':
 	print(s.strip('\n'))
 	pass
 
-from singular_pipe._types import File
-from singular_pipe.shell import LoggedShellCommand
+from spiper._types import File
+from spiper.shell import LoggedShellCommand
 def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 	with input_file.dirname() as d:
 		print('taring %r'%d)
@@ -73,7 +73,7 @@ def make_tar( self, prefix, input_file=File, _output=['tar_gz'] ):
 
 
 if __name__ == '__main__':
-	prefix = Path('/tmp/bulid_singular_pipe/root')
+	prefix = Path('/tmp/bulid_spiper/root')
 	prefix.dirname().rmtree_p()
 
 	caller = cache_run(less_simple_node, prefix, 'ATCG')
@@ -88,11 +88,11 @@ if __name__ == '__main__':
 	print('[done]')
 	s = '''
 	## got
-	writing ATCG to File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	[res0.output.txt]:File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	taring File('/tmp/bulid_singular_pipe')
-	writing GATC to File('/tmp/bulid_singular_pipe/root.less_simple_node.txt')
-	taring File('/tmp/bulid_singular_pipe')
+	writing ATCG to File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	[res0.output.txt]:File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	taring File('/tmp/bulid_spiper')
+	writing GATC to File('/tmp/bulid_spiper/root.less_simple_node.txt')
+	taring File('/tmp/bulid_spiper')
 	[done]
 
 	## Note make_tar() is detecting the change of res0.output.txt and skipped the #marked# evaluation

@@ -1,5 +1,5 @@
 '''
-singular_pipe.types.Flow is preferred over recursive cache_run() when specifying a workflow.
+spiper.types.Flow is preferred over recursive cache_run() when specifying a workflow.
 The cache_run_deep() is more about sanity check file status 
 given a boundary specified by the Flow. If no Flow is given then no tree is expanded until a
 leaf node.

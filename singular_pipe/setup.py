@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 #from setuptools import setup
 
-from singular_pipe import get_version,make_readme
+from spiper import get_version,make_readme
 
 config = dict(
-	name='singular_pipe',
+	name='spiper',
 	version = get_version(),
     packages=['.',],
 	include_package_data=True,

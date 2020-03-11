@@ -11,7 +11,7 @@
 .. to be updated. 
 
 .. To write such codes, file states must be explicitly monitored and remembered.
-.. In :mod:`singular_pipe` this is achieved through a set of custom eval-like function
+.. In :mod:`spiper` this is achieved through a set of custom eval-like function
 .. called :obj:`Runner` and functions with a specialised signature called :obj:`Node`
 .. or :obj:`Flow`. :obj:`Runner` would 
 .. extract file dependency graph from the function signatures and use this information

@@ -11,13 +11,13 @@ import os
 from orderedattrdict import AttrDict
 import json
 import re
-from singular_pipe._header import list_flatten,list_flatten_strict,rgetattr
+from spiper._header import list_flatten,list_flatten_strict,rgetattr
 
 
 
-import singular_pipe
+import spiper
 import sys
-singular_pipe._types = sys.modules[__name__]
+spiper._types = sys.modules[__name__]
 
 
 def DirtyKey(s):
@@ -303,9 +303,9 @@ def IdentFile(dir_layout, prefix, job_name, suffix):
 	if dir_layout == 'clean':
 		pre_dir = prefix.dirname()
 		pre_base = prefix.basename()
-		lst = ['{pre_dir}/_singular_pipe/{pre_base}'.format(**locals()),
+		lst = ['{pre_dir}/_spiper/{pre_base}'.format(**locals()),
 				job_name,suffix]
-		# input_ident_file = '{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}'.format(**locals())
+		# input_ident_file = '{pre_dir}/_spiper/{pre_base}.{job_name}.{suffix}'.format(**locals())
 	elif dir_layout == 'flat':
 		lst = [prefix,job_name,suffix]
 	else:
@@ -421,8 +421,8 @@ def PythonPackage(package_path, imported_name=None):
 	return mod
 
 
-from singular_pipe._pickler import get_version as get_package_version
-from singular_pipe._shell import _shellcmd
+from spiper._pickler import get_version as get_package_version
+from spiper._shell import _shellcmd
 import sys,importlib
 import pkg_resources
 import json
@@ -650,7 +650,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			res = get_identity( res, None, verbose, strict)
 			out.append( res)
 
-		elif isinstance(ele,singular_pipe._types.Code):
+		elif isinstance(ele,spiper._types.Code):
 			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
 			out.append(res)
 			print('[identing]%s,%s'%(ele.co_code,ele.co_consts)) if verbose else None
@@ -662,7 +662,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 				# for x in ele.co_consts
 				# print(res[1])
 				print(len(res[1]),list(zip(ele.co_consts,res[1:])))
-				if any([isinstance(x,singular_pipe._types.Code) for x in ele.co_consts]):
+				if any([isinstance(x,spiper._types.Code) for x in ele.co_consts]):
 					assert 0
 		elif isinstance(ele, (str,type(None),int,)):
 			out.append(ele)

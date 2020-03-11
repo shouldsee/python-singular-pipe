@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'singular_pipe'
+project = 'spiper'
 copyright = '2020, Feng Geng'
 author = 'Feng Geng'
 
@@ -32,9 +32,15 @@ version = release = '0.0.3'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+# 'sphinx.ext.autodoc',
 'sphinx.ext.autodoc',
+'sphinx.ext.viewcode',
+'sphinx.ext.autosummary',
+
 # 'sphinx.ext.napoleon'
 ]
+pygments_style = 'sphinx'
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -79,5 +85,5 @@ html_theme_options = {
     # 'includehidden': True,
     # 'titles_only': False
 }
-# sys.path.insert(0, os.path.join(os.path.realpath(os.path.dirname(__file__)),'singular_pipe'))
+# sys.path.insert(0, os.path.join(os.path.realpath(os.path.dirname(__file__)),'spiper'))
 # sys.path.insert(0, os.path.dirname(__file__),)

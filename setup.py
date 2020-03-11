@@ -4,9 +4,9 @@
 from distutils.core import setup
 
 config = dict(
-	name='singular_pipe',
+	name='spiper',
 	version = '0.0.3', ### change in __init__.py in sync
-    packages=['singular_pipe'],
+    packages=['spiper'],
 	include_package_data=True,
 	license='MIT',
 	author='Feng Geng',

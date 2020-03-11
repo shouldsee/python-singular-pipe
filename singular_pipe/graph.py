@@ -8,10 +8,10 @@ import asciitree
 from asciitree.drawing import BOX_DOUBLE
 import textwrap
 from path import Path
-# from singular_pipe import DEFAULT_DIR_LAYOUT
-from singular_pipe._types import list_flatten
-from singular_pipe._types import Prefix,File,HttpResponse
-from singular_pipe.runner import Caller,file_to_node
+# from spiper import DEFAULT_DIR_LAYOUT
+from spiper._types import list_flatten
+from spiper._types import Prefix,File,HttpResponse
+from spiper.runner import Caller,file_to_node
 
 class SymbolicNode(Path):
     pass
@@ -122,7 +122,7 @@ def graph_from_tree(lst,g = None, last=None, i=None,):
 
 
 if 1:
-    from singular_pipe.runner import *
+    from spiper.runner import *
 
     def _get_upstream_tree( lst,strict,dir_layout):
         verbose = 0
@@ -192,8 +192,8 @@ if 1:
 
 if 1:
     import json
-    from singular_pipe._types import IdentFile,UndefinedTypeRoutine
-    from singular_pipe.runner import _get_outward_json_file, _loads
+    from spiper._types import IdentFile,UndefinedTypeRoutine
+    from spiper.runner import _get_outward_json_file, _loads
 
     def get_downstream_files(x,strict,dir_layout=None,flat=0,verbose=0):
         dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout

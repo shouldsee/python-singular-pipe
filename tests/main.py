@@ -6,8 +6,8 @@ from pipeline_rnaseq import job_trimmomatic, job_hisat2_index, job_hisat2_align
 #from pipeline_rnaseq import *
 from path import Path
 import json
-from singular_pipe.runner import cache_run, cache_check, force_run, cache_run_verbose, cache_check_changed
-import singular_pipe.runner
+from spiper.runner import cache_run, cache_check, force_run, cache_run_verbose, cache_check_changed
+import spiper.runner
 
 class SharedObject(object):
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').makedirs_p()
@@ -17,13 +17,13 @@ class SharedObject(object):
 	# DIR = Path('$HOME/.temp/singular-pipe_test_build/').expand().makedirs_p()
 	DATA_DIR = Path(__file__).realpath().dirname()/'tests/data'
 
-from singular_pipe.base import job_from_func, get_output_files, list_flatten
-from singular_pipe.runner import cache_run_verbose,cache_check,force_run
-from singular_pipe._types import Default,Prefix, InputFile,File
-import singular_pipe._types
-from singular_pipe._types import HttpResponseContentHeader,HttpResponse
-from singular_pipe.shell import shellcmd,LoggedShellCommand,SafeShellCommand
-# from singular_pipe.shell import pipe__getResult,pipe__getSafeResult,shellpopen
+from spiper.base import job_from_func, get_output_files, list_flatten
+from spiper.runner import cache_run_verbose,cache_check,force_run
+from spiper._types import Default,Prefix, InputFile,File
+import spiper._types
+from spiper._types import HttpResponseContentHeader,HttpResponse
+from spiper.shell import shellcmd,LoggedShellCommand,SafeShellCommand
+# from spiper.shell import pipe__getResult,pipe__getSafeResult,shellpopen
 # def shellcmd(CMD, check, shell=0):
 # 	suc, res = pipe__getResult(shellpopen(CMD,shell=0
 # 	),CMD=CMD,check=check)
@@ -92,11 +92,11 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		return 
 	def test_tfa_error(self):
 		f = lambda: cache_run_verbose( simple_job, self.DIR/'root', 'ATG',)
-		self.assertRaises(singular_pipe._types.TooFewArgumentsError,f)
+		self.assertRaises(spiper._types.TooFewArgumentsError,f)
 
 	def test_tma_error(self):
 		f = lambda: cache_run_verbose( simple_job, self.DIR/'root', 'ATG','/tmp/digit.txt','2333333random')
-		self.assertRaises(singular_pipe._types.TooManyArgumentsError, f)
+		self.assertRaises(spiper._types.TooManyArgumentsError, f)
 
 	def test_tfd_error(self):
 		def right_job(self = Default, prefix=File, s=str, _output=['txt']):
@@ -106,7 +106,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		def right_job(self, prefix=File, s=str, _output=['txt']):
 			pass
 		job_from_func(right_job)
-		# self.assertRaises(singular_pipe._types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
+		# self.assertRaises(spiper._types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
 		
 		def right_job(self, prefix, s=str, _output=['txt']):
 			pass
@@ -114,7 +114,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 
 		def wrong_job(self, prefix, s, _output=['txt']):
 			pass
-		self.assertRaises(singular_pipe._types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
+		self.assertRaises(spiper._types.TooFewDefaultsError, lambda: job_from_func(wrong_job))
 
 	def test_cacherun_use_cache(self):
 		_ = '''
@@ -167,7 +167,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		assert output_changed == 0
 
 		ofname = self.DIR/'root.simple_job.out_txt'
-		# from singular_pipe.runner import os_stat_safe
+		# from spiper.runner import os_stat_safe
 		# print(os_stat_safe(ofname))
 		import time
 		time.sleep(0.1)
@@ -191,7 +191,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		output_changed = cache_check_changed(*tups,verbose=0,check_changed=1)[1]
 		assert output_changed == 0
 		ofname = node.output.out_prefix+'.%d'%0
-		# from singular_pipe.runner import os_stat_safe
+		# from spiper.runner import os_stat_safe
 		# print(os_stat_safe(ofname))
 		import time
 		time.sleep(0.1)
@@ -240,18 +240,18 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (simple_job, self.DIR/'job2', 'ATG', self.DIR/'root.simple_job.out_txt',)
 		force_run(*tups,config=dir_layout,verbose=0)
 
-		import singular_pipe.runner
+		import spiper.runner
 		# s = 
-		res = singular_pipe.runner.get_downstream_nodes(File('/tmp/digit.txt'),strict=0,flat=0,config=dir_layout)
+		res = spiper.runner.get_downstream_nodes(File('/tmp/digit.txt'),strict=0,flat=0,config=dir_layout)
 		print('''##### no test for nodes in get_downstream_nodes()''')
 		# print(res)
 
-		res = singular_pipe.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0,flat=1,config=dir_layout)
+		res = spiper.runner.get_downstream_files(File('/tmp/digit.txt'),strict=0,flat=1,config=dir_layout)
 		expect = [
 			File('~/.temp/singular-pipe_test_build/root.simple_job.out_txt'),
-			File('~/.temp/singular-pipe_test_build/_singular_pipe/root.simple_job.cache_pk'),
+			File('~/.temp/singular-pipe_test_build/_spiper/root.simple_job.cache_pk'),
 			File('~/.temp/singular-pipe_test_build/job2.simple_job.out_txt'),
-			File('~/.temp/singular-pipe_test_build/_singular_pipe/job2.simple_job.cache_pk'),
+			File('~/.temp/singular-pipe_test_build/_spiper/job2.simple_job.cache_pk'),
 			]
 		expect = [x.expand() for x in expect]
 		assert sorted(expect) == sorted(res), json.dumps((res,expect),indent=2)
@@ -273,12 +273,12 @@ class BaseCase(unittest2.TestCase,SharedObject):
 		tups = (simple_job, self.DIR/'job2', 'ATG',self.DIR/'root.simple_job.out_txt')
 		force_run(*tups,verbose=0)
 
-		res = singular_pipe.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
+		res = spiper.runner.get_upstream_nodes(File('/tmp/digit.txt'),strict=0)
 		print('''##### no test for get_upstream_nodes()''')
 		# print(res)
 
 		# res ==[]
-		res = singular_pipe.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0,flat=1)
+		res = spiper.runner.get_upstream_files(File(self.DIR/'job2.simple_job.out_txt'),strict=0,flat=1)
 		expect = [
 		 InputFile('~/.temp/singular-pipe_test_build/root.simple_job.out_txt').expand(),
 		 InputFile('/tmp/digit.txt')]
@@ -290,7 +290,7 @@ class BaseCase(unittest2.TestCase,SharedObject):
 	def test_http_job(self):
 		if self.LEVEL < 1:
 			return 
-			# from singular_pipe._types import HttpResponseCheckLength
+			# from spiper._types import HttpResponseCheckLength
 
 		tups = (http_job1, self.DIR/'test_http_job')
 		cache_run_verbose(*tups)
@@ -314,7 +314,7 @@ cd /tmp/
 python3 -<<EOF
 import json
 from path import Path
-from singular_pipe.runner import _loads,_dumps
+from spiper.runner import _loads,_dumps
 fn = Path("~/.temp/singular-pipe_test_build/root.simple_job.input_json").expand()
 d = json.load(open(fn,'r'))
 x = _loads(d['ident'])

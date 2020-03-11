@@ -1,15 +1,15 @@
-from singular_pipe._types import File,InputFile,OutputFile
-from singular_pipe._types import IdentFile,CacheFile
-# from singular_pipe._types import InputFile,OutputFile,File,TempFile,? ,Path,
-from singular_pipe._types import Prefix,InputPrefix,OutputPrefix
-from singular_pipe._types import HttpResponse
-from singular_pipe._types import IdentAttrDict
+from spiper._types import File,InputFile,OutputFile
+from spiper._types import IdentFile,CacheFile
+# from spiper._types import InputFile,OutputFile,File,TempFile,? ,Path,
+from spiper._types import Prefix,InputPrefix,OutputPrefix
+from spiper._types import HttpResponse
+from spiper._types import IdentAttrDict
 
-from singular_pipe._types import TooManyArgumentsError
-import singular_pipe._types
+from spiper._types import TooManyArgumentsError
+import spiper._types
 
-from singular_pipe.base import get_func_name, list_flatten,list_flatten_strict
-from singular_pipe.base import job_from_func
+from spiper.base import get_func_name, list_flatten,list_flatten_strict
+from spiper.base import job_from_func
 import pickle
 import os,sys
 import shutil
@@ -24,17 +24,17 @@ import inspect
 
 
 import io
-from singular_pipe.hash import hash_nr
+from spiper.hash import hash_nr
 import base64
-import singular_pipe
+import spiper
 # import pkg_resources
-from singular_pipe import VERSION,jinja2_format
+from spiper import VERSION,jinja2_format
 # ,DEFAULT_DIR_LAYOUT
-import singular_pipe
+import spiper
 import collections
-from singular_pipe._types import CantGuessCaller, UndefinedTypeRoutine
-from singular_pipe._types import NodeFunction,FlowFunction
-from singular_pipe import rcParams
+from spiper._types import CantGuessCaller, UndefinedTypeRoutine
+from spiper._types import NodeFunction,FlowFunction
+from spiper import rcParams
 
 
 
@@ -116,7 +116,7 @@ def FakeCode(code):
 	# out = (code.co_code, [])
 	consts = []
 	for const in code.co_consts:
-		if isinstance(const, singular_pipe._types.Code):
+		if isinstance(const, spiper._types.Code):
 			consts.append( FakeCode(const) )
 		else:
 			consts.append( const )
@@ -186,7 +186,7 @@ class Caller(object):
 
 	@classmethod
 	def from_input(Caller, job, _input, dir_layout):
-		if not getattr(job,'_singular_pipe',False):
+		if not getattr(job,'_spiper',False):
 			job = job_from_func(job)
 		_tmp  = []
 		_null = namedtuple('_null',[])()
@@ -201,7 +201,7 @@ class Caller(object):
 					## v is _null, t is default value
 					_tmp.append((n,t))
 			elif v is _null:
-				raise singular_pipe._types.TooFewArgumentsError(
+				raise spiper._types.TooFewArgumentsError(
 					'{dump}\nToo few arguments specified for {job._origin_code}\n normal argname are without "_" are necessary for evaluation \n'.format(
 				dump=_dump(),**locals()))
 			else:
@@ -223,10 +223,10 @@ class Caller(object):
 		self.__dict__ = d
 
 	def __init__(self, job, arg_tuples, dir_layout):
-		# if not getattr(job,'_singular_pipe',False):
+		# if not getattr(job,'_spiper',False):
 		# 	job = job_from_func(job)		
 		if not hasattr(job,'_type',):
-			job = singular_pipe._types.Node(job)
+			job = spiper._types.Node(job)
 		self.job = job
 		self.__name__ = job.__name__
 		self._output_type = job._output_type
@@ -494,18 +494,18 @@ def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose
 		with open(output_cache_file,'rb') as f: result = pickle.load(f)
 
 	else:
-		# if not issubclass(_caller.job_type, singular_pipe._types.NodeFunc):
+		# if not issubclass(_caller.job_type, spiper._types.NodeFunc):
 		# 	mock = 0
 		if mock:
 			for k,v in _caller.output.items():
 				for f in v.expanded():
 					if f.isfile():
-						raise singular_pipe._types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
+						raise spiper._types.OverwriteError('mock_run() must be done with file uninitialised: %r' % v)
 					# assert not f.isfile(),('mock_run() must be done with file uninitialised: %r' % v)
 				vs = (v+'.mock')
 				vs.touch()  if not vs.isfile() else None
 			# result = _caller
-			if issubclass(_caller.job_type, singular_pipe._types.NodeFunction):
+			if issubclass(_caller.job_type, spiper._types.NodeFunction):
 				result = _caller
 			else:
 				### recurse if not a Terminal Node
@@ -644,7 +644,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 			ele = ele.to_ident()
 			res = get_identity(ele, None, verbose, strict)
 			out.append( res)
-		elif isinstance(ele,singular_pipe._types.Code):
+		elif isinstance(ele,spiper._types.Code):
 			res = (ele.co_code, get_identity(ele.co_consts, None, verbose, strict))
 			out.append(res)
 			print('[identing]%s,%s'%(ele.co_code,ele.co_consts)) if verbose else None
@@ -656,7 +656,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 				# for x in ele.co_consts
 				# print(res[1])
 				print(len(res[1]),list(zip(ele.co_consts,res[1:])))
-				if any([isinstance(x,singular_pipe._types.Code) for x in ele.co_consts]):
+				if any([isinstance(x,spiper._types.Code) for x in ele.co_consts]):
 					assert 0
 		else:
 			if strict:
@@ -671,7 +671,7 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 #### aka upstream/downstream
 
 
-# from singular_pipe.graph import file_to_node
+# from spiper.graph import file_to_node
 def file_to_node(obj, strict, dir_layout,):
 	'''
 	One can only guess the prefix by removing the suffix

@@ -33,7 +33,7 @@ import stat
 
 
 ##### added 20200309 +++++++
-from singular_pipe._header import list_flatten_strict, list_flatten
+from spiper._header import list_flatten_strict, list_flatten
 
 def shellcmd(CMD, check, shell=0, encoding='utf8', stdin = None,stdout=None, stderr=None, silent=1):
 	return _shellcmd(CMD,check,shell,encoding,stdin,stdout,stderr,silent)

@@ -2,10 +2,10 @@
 Since scripts are small, they can be uploaded to remote quickly
 without pain
 '''
-from singular_pipe.types import Node,Flow
-from singular_pipe.types import RemotePythonObject as RPO
+from spiper.types import Node,Flow
+from spiper.types import RemotePythonObject as RPO
 
-package_path = 'singular_pipe_mock_flow@https://github.com/shouldsee/singular_pipe_mock_flow/tarball/d457426'
+package_path = 'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/d457426'
 @Flow
 def simple_flow(
 	self,prefix,
@@ -20,7 +20,7 @@ def simple_flow(
 
 if __name__ == '__main__':
 	from path import Path
-	from singular_pipe.runner import get_changed_files,get_all_files,cache_run
+	from spiper.runner import get_changed_files,get_all_files,cache_run
 	from pprint import pprint
 	
 	prefix = Path('/tmp/test_import/root')

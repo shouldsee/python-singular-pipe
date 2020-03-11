@@ -1,14 +1,14 @@
-from singular_pipe.test.base import debugTestRunner,SharedObject
-from singular_pipe.test.base import prefix_job,http_job2
+from spiper.test.base import debugTestRunner,SharedObject
+from spiper.test.base import prefix_job,http_job2
 import unittest2
 self = SharedObject
-from singular_pipe.runner import force_run,cache_run,cache_run_verbose, mock_run
-from singular_pipe._types import *
-import singular_pipe.runner
+from spiper.runner import force_run,cache_run,cache_run_verbose, mock_run
+from spiper._types import *
+import spiper.runner
 import json
-from singular_pipe.graph import graph_from_tree, nodes_only
-import singular_pipe.graph
-from singular_pipe.examples.input_validation_tarball import main as tarball_main
+from spiper.graph import graph_from_tree, nodes_only
+import spiper.graph
+from spiper.examples.input_validation_tarball import main as tarball_main
 
 def dimple_job(self,prefix,
 	s=str,  
@@ -40,15 +40,15 @@ class SharedObject(SharedObject):
 		fn = File('/tmp/digit.txt')
 		f2 = res3.output.out_txt
 		tree = None
-		# tree = singular_pipe.runner.get_downstream_tree(fn, flat=0,strict=0)	
+		# tree = spiper.runner.get_downstream_tree(fn, flat=0,strict=0)	
 		return fn, f2, tree
 class Case(unittest2.TestCase, SharedObject):
 	# DIR = SharedObject.DIR
 	# DATA_DIR = SharedObject.DATA_DIR
 
 	# def test_graph_nodes_only(self):
-	# 	from singular_pipe.graph import nodes_only
-	# 	from singular_pipe.graph import plot_node_graph
+	# 	from spiper.graph import nodes_only
+	# 	from spiper.graph import plot_node_graph
 	# 	fn,fo,tree = self.get_tree1()
 
 	# 	g = graph_from_tree(tree,last = fn)
@@ -85,7 +85,7 @@ class Case(unittest2.TestCase, SharedObject):
 		# fn = Prefix(fn[:-4])
 		print('###### [TBI]test_graph_2 fix this')		
 		return 
-		tree = singular_pipe.graph.get_downstream_tree([fn], flat=0,strict=0)
+		tree = spiper.graph.get_downstream_tree([fn], flat=0,strict=0)
 		g = graph_from_tree(tree,last = fn)
 		g.render(filename= self.DIR / 'graphs'/ fn,format='svg')
 		print(json.dumps(tree,indent=2,default=repr))
@@ -93,18 +93,18 @@ class Case(unittest2.TestCase, SharedObject):
 		# assert 0,(g,out)
 
 	def test_ascii_tree(self):
-		from singular_pipe.graph import _tree_as_string
+		from spiper.graph import _tree_as_string
 		pass
 	def test_upstream(self):
 		fn, fo, tree = self.get_tree1(http=1)
-		from singular_pipe.graph import plot_simple_graph,plot_node_graph,tree_filter
-		from singular_pipe.graph import get_upstream_tree
+		from spiper.graph import plot_simple_graph,plot_node_graph,tree_filter
+		from spiper.graph import get_upstream_tree
 
 		res = get_upstream_tree([fo],0,)
 		g = plot_simple_graph(res,None,1)
 		g.render(filename='tests/test_upstream.dot',format='svg')
 
-		from singular_pipe.runner import Caller
+		from spiper.runner import Caller
 
 		filtered = tree_filter( res, (Caller,))
 		g = plot_node_graph(filtered,None)
@@ -116,14 +116,14 @@ class Case(unittest2.TestCase, SharedObject):
 
 	def test_downstream(self):
 		fn, fo, tree = self.get_tree1(http=1)
-		from singular_pipe.graph import plot_simple_graph,plot_node_graph,tree_filter
-		from singular_pipe.graph import get_downstream_tree
+		from spiper.graph import plot_simple_graph,plot_node_graph,tree_filter
+		from spiper.graph import get_downstream_tree
 
 		res = get_downstream_tree([fn],0,)
 		g = plot_simple_graph(res,None,1)
 		g.render(filename='tests/test_downstream.dot',format='svg')
 
-		from singular_pipe.runner import Caller
+		from spiper.runner import Caller
 		filtered = tree_filter( res, (Caller,))
 		g = plot_node_graph(filtered,None)
 		g.render(filename='tests/test_downstream.node_only.dot',format='svg')
@@ -137,16 +137,16 @@ class Case(unittest2.TestCase, SharedObject):
 	def test_mock_overwrite(self):
 		prefix = None
 		if prefix is None:
-			prefix = Path('/tmp/singular_pipe.symbolic/root')
+			prefix = Path('/tmp/spiper.symbolic/root')
 			
 		prefix.dirname().rmtree_p()	
-		_d = singular_pipe.rcParams.copy()
-		singular_pipe.rcParams['dir_layout'] = 'clean'
+		_d = spiper.rcParams.copy()
+		spiper.rcParams['dir_layout'] = 'clean'
 		tarball_main( mock_run , prefix)
 		tarball_main( mock_run , prefix)
 		(prefix.dirname()/'root.tarball_dangerous_cache.tar_gz').touch()
-		self.assertRaises(singular_pipe._types.OverwriteError, tarball_main, mock_run, prefix)
-		singular_pipe.rcParams.update(_d)
+		self.assertRaises(spiper._types.OverwriteError, tarball_main, mock_run, prefix)
+		spiper.rcParams.update(_d)
 
 	# print
 

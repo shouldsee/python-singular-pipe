@@ -5,11 +5,11 @@ import subprocess
 from six import string_types
 
 import functools
-from singular_pipe._types import InputFile,OutputFile,File,TempFile, Path
-from singular_pipe._types import Prefix,InputPrefix,OutputPrefix
-from singular_pipe._types import job_result, PicklableNamedTuple, AttrDict
-from singular_pipe._types import list_flatten,list_flatten_strict
-import singular_pipe._types 
+from spiper._types import InputFile,OutputFile,File,TempFile, Path
+from spiper._types import Prefix,InputPrefix,OutputPrefix
+from spiper._types import job_result, PicklableNamedTuple, AttrDict
+from spiper._types import list_flatten,list_flatten_strict
+import spiper._types 
 
 
 
@@ -44,19 +44,19 @@ if 1:
 			# elif isinstance(v,Prefix):
 			# 	v = Out
 		if  len(args) - len(defaults) > 2:
-			 raise singular_pipe._types.TooFewDefaultsError(
+			 raise spiper._types.TooFewDefaultsError(
 			 	"Must specify a type for all of {args} for {func.__code__} (except first 2)".format(**locals()))
-		# defaults = ( singular_pipe._types.Default, OutputPrefix)[: len(args) -len(defaults)]+ defaults
-		defaults = ( singular_pipe._types.Default, File)[: len(args) -len(defaults)]+ defaults
+		# defaults = ( spiper._types.Default, OutputPrefix)[: len(args) -len(defaults)]+ defaults
+		defaults = ( spiper._types.Default, File)[: len(args) -len(defaults)]+ defaults
 		assert defaults[1]==File,'default for the second argument must be "File" !'
 		# if len(args)!=len(defaults):
-		# 	 raise singular_pipe._types.TooFewDefaultsError(
+		# 	 raise spiper._types.TooFewDefaultsError(
 		# 	 	"Must specify a type for all of {args} for {func.__code__}".format(**locals()))
 
 		gunc._input_names = args[1:] ### in case (self=None,) and not (self,)
 		gunc._input_types = defaults[1:]
 		gunc._origin_code = getattr(func, '_origin_code', func.__code__)
-		gunc._singular_pipe = True
+		gunc._spiper = True
 
 		if 1:
 			cls = gunc._output_type = func._output_type = PicklableNamedTuple('_output_type', _output)

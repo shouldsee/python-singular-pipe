@@ -1,10 +1,10 @@
-from singular_pipe.types import InputFile,OutputFile,File,TempFile, Prefix, Default
-from singular_pipe.types import job_result
-from singular_pipe.types import Depend
-from singular_pipe.runner import list_flatten_strict, job_from_func
-from singular_pipe.shell import SingularityShellCommand
+from spiper.types import InputFile,OutputFile,File,TempFile, Prefix, Default
+from spiper.types import job_result
+from spiper.types import Depend
+from spiper.runner import list_flatten_strict, job_from_func
+from spiper.shell import SingularityShellCommand
 from path import Path
-import singular_pipe
+import spiper
 
 
 def job_trimmomatic(
@@ -167,7 +167,7 @@ def job_stringtie_count(self, prefix,
 	res = SingularityShellCommand(CMD, _IMAGE, self.output.cmd)
 
 
-from singular_pipe.types import Flow
+from spiper.types import Flow
 @Flow
 def workflow(self, prefix, 
 	hisat2_cache_dir = File,
@@ -215,21 +215,21 @@ def workflow(self, prefix,
 
 def get_fasta(self, prefix,
 	_depends = [Depend('curl'),Depend('gzip')],
-	_resp = singular_pipe.types.HttpResponseContentHeader('https://hgdownload.soe.ucsc.edu/goldenPath/currentGenomes/Wuhan_seafood_market_pneumonia_virus/bigZips/chromFa.tar.gz'),
+	_resp = spiper.types.HttpResponseContentHeader('https://hgdownload.soe.ucsc.edu/goldenPath/currentGenomes/Wuhan_seafood_market_pneumonia_virus/bigZips/chromFa.tar.gz'),
 	_output = ['fasta','cmd']):
 	with (self.prefix_named/'_temp').makedirs_p() as d:
 		CMD = ['curl','-LC0',_resp.url,
 		'|','tar','-xvzf-',]
-		stdout = singular_pipe.types.LoggedShellCommand(CMD)
+		stdout = spiper.types.LoggedShellCommand(CMD)
 		res = d.glob('*.fa')
 		assert len(res)==1
 		res[0].move(self.output.fasta)
 	d.rmtree_p()
 
-from singular_pipe.types import LoggedShellCommand
+from spiper.types import LoggedShellCommand
 LoggedSingularityCommand = SingularityShellCommand
 def get_genepred(self,prefix,
-	_resp = singular_pipe.types.HttpResponseContentHeader('https://hgdownload.soe.ucsc.edu/goldenPath/currentGenomes/Wuhan_seafood_market_pneumonia_virus/database/ncbiGene.txt.gz'),
+	_resp = spiper.types.HttpResponseContentHeader('https://hgdownload.soe.ucsc.edu/goldenPath/currentGenomes/Wuhan_seafood_market_pneumonia_virus/database/ncbiGene.txt.gz'),
 	_IMAGE = Depend('docker://quay.io/biocontainers/ucsc-genepredtogtf:377--h35c10e6_2'),
 	_output = ['genepred','gtf','cmd'],
 	):
@@ -244,7 +244,7 @@ def get_genepred(self,prefix,
 	# return 
 
 if __name__ == '__main__':
-	from singular_pipe.runner import force_run,cache_run
+	from spiper.runner import force_run,cache_run
 	data = {}
 	data['fasta'] = cache_run(get_fasta,'~/.temp/0305',)
 	data['gtf']   = cache_run(get_genepred,'~/.temp/0305',)

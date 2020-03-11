@@ -1,4 +1,4 @@
-from singular_pipe import make_readme,get_version
+from spiper import make_readme,get_version
 from path import Path
 import sys
 if __name__ == '__main__':

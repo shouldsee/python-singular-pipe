@@ -1,12 +1,12 @@
 '''
 Showing how Prefix differs from File
 '''
-from singular_pipe.types import File,Prefix,Path
-from singular_pipe.runner import cache_run_verbose, cache_run
+from spiper.types import File,Prefix,Path
+from spiper.runner import cache_run_verbose, cache_run
 
-from singular_pipe.types import LoggedShellCommand
-from singular_pipe.runner import cache_check_changed,cache_run_verbose,force_run,cache_run
-import singular_pipe
+from spiper.types import LoggedShellCommand
+from spiper.runner import cache_check_changed,cache_run_verbose,force_run,cache_run
+import spiper
 
 def gen_files(self, prefix, 
 	_seq = 'AGCTTCGTC',
@@ -42,9 +42,9 @@ def tarball_prefix_cache(self,prefix,
 	return self
 
 def main(force_run=force_run,prefix=None):
-	# singular_pipe.rcParams['dir_layout'] = dir_layout
+	# spiper.rcParams['dir_layout'] = dir_layout
 	if prefix is None:
-		prefix = Path('/tmp/singular_pipe.test_run/root')
+		prefix = Path('/tmp/spiper.test_run/root')
 		prefix.dirname().rmtree_p()
 
 
@@ -81,7 +81,7 @@ def main(force_run=force_run,prefix=None):
 	* Note that the Prefix only expands into a shallow match and does not recurse into sub-directory during input validation
 	'''.strip()
 	print(s) if __name__ == '__main__' else None
-	print('------Output Directory. (dir_layout={singular_pipe.rcParams.dir_layout})--------\n'.format(singular_pipe=singular_pipe),
+	print('------Output Directory. (dir_layout={spiper.rcParams.dir_layout})--------\n'.format(spiper=spiper),
 		LoggedShellCommand(['echo [ls]',prefix,'&&','ls','-lhtr',prefix.dirname(),],'/dev/null'))
 	return res1,res2
 

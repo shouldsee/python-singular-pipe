@@ -221,9 +221,9 @@ def IdentFile(dir_layout, prefix, job_name, suffix):
 	if dir_layout == 'clean':
 		pre_dir = prefix.dirname()
 		pre_base = prefix.basename()
-		lst = ['{pre_dir}/_singular_pipe/{pre_base}'.format(**locals()),
+		lst = ['{pre_dir}/_spiper/{pre_base}'.format(**locals()),
 				job_name,suffix]
-		# input_ident_file = '{pre_dir}/_singular_pipe/{pre_base}.{job_name}.{suffix}'.format(**locals())
+		# input_ident_file = '{pre_dir}/_spiper/{pre_base}.{job_name}.{suffix}'.format(**locals())
 	elif dir_layout == 'flat':
 		lst = [prefix,job_name,suffix]
 		# input_ident_file = '{prefix}.{job_name}.{suffix}'.format(**locals())

@@ -1,6 +1,6 @@
 from orderedattrdict import AttrDict as _dict
 from jinja2 import Template, StrictUndefined
-# from singular_pipe.version import get_version,VERSION
+# from spiper.version import get_version,VERSION
 def get_version():
     VERSION = (  # SEMANTIC
         0,        # major
@@ -44,28 +44,28 @@ def jinja2_format(s,**context):
 
 
 template = '''
-[![Build Status](https://travis-ci.com/shouldsee/singular_pipe.svg?branch=master)](https://travis-ci.com/shouldsee/singular_pipe)
+[![Build Status](https://travis-ci.com/shouldsee/spiper.svg?branch=master)](https://travis-ci.com/shouldsee/spiper)
 
-## singular_pipe: Utilities to make a pipeline, with singularity integration and caching ability.
+## spiper: Utilities to make a pipeline, with singularity integration and caching ability.
 
 ### Dependencies:
 
 - A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
   - For python3, this means `python3 -m pip install --upgrade pip>=18.1` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
   - For python2, err python2 is not yet supported 
-- Optional: singularity >= 3.5.3 to use `singular_pipe.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
-- Optional: dot binary for plotting graphs with `singular_pipe.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
+- Optional: singularity >= 3.5.3 to use `spiper.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
+- Optional: dot binary for plotting graphs with `spiper.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
 - see requirements.txt
 
 ### Install
 
 ```bash
-pip3 install singular_pipe@https://github.com/shouldsee/singular_pipe/tarball/master --user
+pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 ```
 
 ### Documentation
 
-See https://shouldsee.github.io/singular_pipe/
+See https://shouldsee.github.io/spiper/
 
 ### Screenshots
 
@@ -90,7 +90,7 @@ See https://shouldsee.github.io/singular_pipe/
 todo = '''
 ### ToDo
     - [x] Running a remote module
-    	- [ ] add some tests for singular_pipe._types.PythonModule()
+    	- [ ] add some tests for spiper._types.PythonModule()
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
     - [ ] Auto-backup all output files. job_backup_copy()
