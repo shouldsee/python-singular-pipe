@@ -22,6 +22,36 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 
 See https://shouldsee.github.io/spiper/
 
+### Usage:
+
+```bash
+
+Usage:
+	spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>
+Example:
+	spiper get_changed_files 
+Arguments:
+	<subcommand>:
+		run                  execute the workflow
+		get_all_files        print all files governed by workflow
+		get_changed_files    print all files changed by workflow
+	<package>:
+		a string compatible with pep-508
+	<workflow_entrypoint>:
+		a string  "<module>:<object_name>" where object is like a `spipe.types.Node()`
+	<workflow_arguments>:
+		a comma-separated list of arguments for the workflow
+		
+
+
+Parameters:
+
+	--help: show this help
+
+	
+
+```
+
 ### Running a remote pipeline
 
 ```bash
