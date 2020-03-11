@@ -28,14 +28,20 @@ See https://shouldsee.github.io/spiper/
 
 Usage:
 	spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>
+
 Example:
-	spiper run   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master   spiper_mock_flow:run_and_backup   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+	spiper run \
+	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+	  spiper_mock_flow:run_and_backup \
+	  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
 Arguments:
 	<subcommand>:
 		run                  execute the workflow
 		get_all_files        print all files governed by workflow
+			--plain: print a newline-separated list instead of pprint
 		get_changed_files    print all files changed by workflow
+			--plain: print a newline-separated list instead of pprint
 	<package>:
 		a string compatible with pep-508
 	<workflow_entrypoint>:
@@ -44,7 +50,6 @@ Arguments:
 		a comma-separated list of arguments for the workflow
 
 Options:
-
 	--help: show this help
 
 	
@@ -54,27 +59,37 @@ Options:
 ### Running a remote pipeline
 
 ```bash
+#### get a list of changed_files
+spiper get_changed_files --plain \
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+  spiper_mock_flow:run_and_backup \
+  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+
+# [Flow running] mock=None
+# [workflow]done
+# /tmp/test_remote/root.workflow.log
+# /tmp/test_remote/root.random_seq.seq
+# /tmp/test_remote/root.random_seq_const.seq
+# /tmp/test_remote/root.transcribe.fasta
+# /tmp/test_remote/root.mutate.fasta
+# /tmp/test_remote/root.source.py
+# /tmp/test_remote/root.backup.subflow.random_seq.output.seq
+# /tmp/test_remote/root.backup.subflow.random_seq_const.output.seq
+# /tmp/test_remote/root.backup.subflow.transcribe.output.fasta
+# /tmp/test_remote/root.backup.subflow.mutate.output.fasta
+# /tmp/test_remote/root.backup.output.log
+# /tmp/test_remote/root.backup.source.py
+# /tmp/test_remote/root.backup.plot_graph.deptree_json
+# /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt
+
 spiper run \
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
   spiper_mock_flow:run_and_backup \
   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
-spiper run \
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
-  spiper_mock_flow:run_and_backup \
-  "/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup"
-
-#### TOPLEVEL refers to the package_name 
-spiper run \
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
-  TOPLEVEL:run_and_backup \
-  "/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup"
-
-#### in case spiper is not in $PATH
-python3 -m spiper run \
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
-  TOPLEVEL:run_and_backup \
-  "/tmp/test_remote/root, 1, 2,/tmp/test_remote/root.backup"
+# [Flow running] mock=None
+# [fn] /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt.svg
+# [workflow]done
 
 spiper --help >/dev/null
 

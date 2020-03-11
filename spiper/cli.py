@@ -8,6 +8,7 @@ def _help(e=None):
 		raise e 
 	sys.exit()
 
+from pprint import pprint
 def main(args=None):
 	r'''
 Usage:
@@ -23,7 +24,9 @@ Arguments:
 	<subcommand>:
 		run                  execute the workflow
 		get_all_files        print all files governed by workflow
+			--plain: print a newline-separated list instead of pprint
 		get_changed_files    print all files changed by workflow
+			--plain: print a newline-separated list instead of pprint
 	<package>:
 		a string compatible with pep-508
 	<workflow_entrypoint>:
@@ -38,14 +41,32 @@ Options:
 	try:
 		if args is None:
 			args = sys.argv[1:]
+
+		plain = 0
+		if '--plain' in args:
+			args.remove('--plain')
+			plain = 1
+
 		if '--help' in args:
 			_help()
 		if args[0]=='run':
 			runner = cache_run		
 		elif args[0] == 'get_all_files':
-			runner = get_all_files
+			def runner(*a):
+				fs = get_all_files(*a)
+				if plain:
+					for f in fs:
+						print(f)
+				else:
+					pprint(fs)
 		elif args[0] == 'get_changed_files':
-			runner = get_changed_files
+			def runner(*a):
+				fs = get_changed_files(*a)
+				if plain:
+					for f in fs:
+						print(f)
+				else:
+					pprint(fs)
 		else:
 			_help()
 		package = args[1]
