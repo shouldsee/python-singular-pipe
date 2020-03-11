@@ -1,13 +1,13 @@
 strict digraph G {
 	rankdir=TB
 	"File('/tmp/spiper.symbolic/root.mutate.fasta')" -> "'SINK'"
-	"spiper.runner.Caller(dotname='spiper.test.mock.mut\late',prefix_named=File('/tmp/spiper.symbolic/root.\lmutate'))" -> "File('/tmp/spiper.symbolic/root.mutate.fasta')"
+	"spiper.runner.Caller(dotname='mock.mutate',prefix_\lnamed=File('/tmp/spiper.symbolic/root.mutate'))" -> "File('/tmp/spiper.symbolic/root.mutate.fasta')"
 	"CacheFile('/tmp/spiper.symbolic/root.mutate.cache_\lpk')" -> "'SINK'"
-	"spiper.runner.Caller(dotname='spiper.test.mock.mut\late',prefix_named=File('/tmp/spiper.symbolic/root.\lmutate'))" -> "CacheFile('/tmp/spiper.symbolic/root.mutate.cache_\lpk')"
-	"File('/tmp/spiper.symbolic/root.transcribe.fasta')" -> "spiper.runner.Caller(dotname='spiper.test.mock.mut\late',prefix_named=File('/tmp/spiper.symbolic/root.\lmutate'))"
-	"spiper.runner.Caller(dotname='spiper.test.mock.tra\lnscribe',prefix_named=File('/tmp/spiper.symbolic/r\loot.transcribe'))" -> "File('/tmp/spiper.symbolic/root.transcribe.fasta')"
+	"spiper.runner.Caller(dotname='mock.mutate',prefix_\lnamed=File('/tmp/spiper.symbolic/root.mutate'))" -> "CacheFile('/tmp/spiper.symbolic/root.mutate.cache_\lpk')"
+	"File('/tmp/spiper.symbolic/root.transcribe.fasta')" -> "spiper.runner.Caller(dotname='mock.mutate',prefix_\lnamed=File('/tmp/spiper.symbolic/root.mutate'))"
+	"spiper.runner.Caller(dotname='mock.transcribe',pre\lfix_named=File('/tmp/spiper.symbolic/root.transcri\lbe'))" -> "File('/tmp/spiper.symbolic/root.transcribe.fasta')"
 	"CacheFile('/tmp/spiper.symbolic/root.transcribe.ca\lche_pk')" -> "'SINK'"
-	"spiper.runner.Caller(dotname='spiper.test.mock.tra\lnscribe',prefix_named=File('/tmp/spiper.symbolic/r\loot.transcribe'))" -> "CacheFile('/tmp/spiper.symbolic/root.transcribe.ca\lche_pk')"
-	"Prefix('/tmp/spiper.symbolic/root.random_seq.seq')" -> "spiper.runner.Caller(dotname='spiper.test.mock.tra\lnscribe',prefix_named=File('/tmp/spiper.symbolic/r\loot.transcribe'))"
+	"spiper.runner.Caller(dotname='mock.transcribe',pre\lfix_named=File('/tmp/spiper.symbolic/root.transcri\lbe'))" -> "CacheFile('/tmp/spiper.symbolic/root.transcribe.ca\lche_pk')"
+	"Prefix('/tmp/spiper.symbolic/root.random_seq.seq')" -> "spiper.runner.Caller(dotname='mock.transcribe',pre\lfix_named=File('/tmp/spiper.symbolic/root.transcri\lbe'))"
 	"'SOURCE'" -> "Prefix('/tmp/spiper.symbolic/root.random_seq.seq')"
 }

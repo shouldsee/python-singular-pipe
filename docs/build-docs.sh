@@ -1,17 +1,18 @@
 set -e
 ### install package first
 
+NAME=spiper
 #mkdir _build_docs; cp -rft _build_docs
 ODIR=`realpath $PWD`
 DIR=../singular_pipe_docs
 DIR=`realpath $DIR`
 mkdir -p $DIR
-cp -rfl singular_pipe examples scripts -t $DIR
+cp -rfl $NAME examples scripts -t $DIR
 cp -rfl docs/* -t $DIR
 sphinx-build -b html $DIR $DIR/_build
 
 rm -rf $DIR/_push
-git clone --branch gh-pages https://github.com/shouldsee/singular_pipe $DIR/_push
+git clone --branch gh-pages https://github.com/shouldsee/$NAME $DIR/_push
 cp -rfT $DIR/_build $DIR/_push
 cd $DIR/_push
 git add .; git commit . -m docs; git push origin gh-pages

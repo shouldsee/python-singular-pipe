@@ -406,18 +406,28 @@ def PythonPackage(package_path, imported_name=None):
 	'''
 
 	# assert version is None
-	err = UndefinedRoutine('PythonModule(%r)'%((package_path)))
-	if '@' in package_path:
-		package_name, url = package_path.split('@',1)
+	err = UndefinedRoutine('PythonPackage(%r)'%((package_path)))
+
+	x = pkg_resources.Requirement.parse(package_path)
+	spec = ''.join(list_flatten(x.specs))
+	extras = ()
+	if x.url is not None:
+		url = x.url
+		# package_name, url = package_path.split('@',1)
 		if url.startswith('http'):
 			extras = HttpResponseContentHeader(url)
 		elif url.startswith('file://'):
 			extras = File(lstrip(url, 'file://'))
 		else:
 			raise err
-		mod = _PythonPackage(package_name, imported_name, url, extras)
-	else:
-		raise err
+	mod = _PythonPackage( package_path, x.name, imported_name, extras)
+
+	# mod = _PythonPackage( x.name, imported_name, x.url, x.specs, extras)
+	# else:
+		# x = pkg_resources.Requirement.parse(package_path)
+		# package_name = x.key
+		# url = 
+		# raise err
 	return mod
 
 
@@ -445,12 +455,13 @@ class _PythonPackage(object):
 		url (str): a PEP-508-compatible string without version spec.
 		extras (dynamic): Any object with a ``to_ident`` method to serve as package fingerprint. 
 	'''
-	def __init__(self, package_name, imported_name,  url, extras):
+	def __init__(self, package_path, package_name, imported_name,  extras):
+		self.package_path = package_path
 		self.package_name = package_name
 		self.imported_name = imported_name
 		 # or package_name
-
-		self.url = url
+		# self.specs = specs
+		# self.url = url
 		self.extras = extras
 		# self._resp = HttpResponseContentHeader(url)
 		# self.version = version
@@ -459,7 +470,6 @@ class _PythonPackage(object):
 	def __repr__(self):
 		return ("{self.__class__.__name__}"
 		"(imported_name={self.imported_name!r},"
-		"url={self.url!r},"
 		"extras={self.extras!r}"
 		# "version={self.version!r}"
 		")").format(**locals())
@@ -547,18 +557,17 @@ class _PythonPackage(object):
 				'''
 				Overwrite the local installation by default
 				'''
-				print('[installing]',self.package_name,'@',self.url)
+				print('[installing]',self.package_path)
 				self.egg_info.rmtree_p()
 
 				CMD = [
-				[PIP_BIN,'uninstall','-y',self.package_name,';'],
-				# CMD = [ 
-				PIP_BIN,'install','-vvv', 
-				# '--user',
-				self.package_name+'@'+self.url,
+					[PIP_BIN,'uninstall','-y',self.package_name,';'],
+					PIP_BIN,'install','-vvv', 
+					self.package_path,
+					# self.package_name+'@'+self.url,
 				]
 				suc, stdout, stderr = _shellcmd(CMD, 1, 0, 'utf8', None, None, None, 1)
-				assert self.egg_info.isdir(),'Installation of given url did not create a valid egg_info directory:\nurl={self.url}\negg_info={self.egg_info}'.format(**locals())
+				assert self.egg_info.isdir(),'Installation of given url did not create a valid egg_info directory:\negg_info={self.egg_info}'.format(**locals())
 
 				print(stdout) if verbose>=2 else None
 				with open(self.ident_file,'w') as f:

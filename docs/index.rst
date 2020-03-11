@@ -4,9 +4,10 @@
    contain the root `toctree` directive.
 .. check https://docs.python.org/2/_sources/
 
-********************************************************************
-Welcome to :mod:`spiper`-|version| 's documentation!
-********************************************************************
+****************************************************************************************************************************
+:mod:`spiper`: Utilities to make a pipeline, with singularity integration and caching ability
+****************************************************************************************************************************
+
 
 .. _Contents
 
@@ -23,15 +24,19 @@ Welcome to :mod:`spiper`-|version| 's documentation!
 Overview
 ===================
 
-Despite plenty of packages out there, writing reproducible python
-scripts is not yet a simple task. :obj:`spiper` is written to address
-serveral aspects:
-    * :ref:`example-workflow-filesync`
-    * :ref:`example-remote-code`
-    * Declaring function-level dependency.
+Pipeline construction is a long-standing problem in bioinformatics. Writing pipelines
+quickly in a portable, reproducible and human-readable pipeline is always a 
+challenging task. To address these issues, I wrote :obj:`spiper` after reading
+about many other pipeline management packages. The major features making :obj:`spiper`
+different are
 
-
-
+* **Distributed file monitoring instead of a global file index**   (compared to gnu-make, snakemake)
+* **Importable and documentable pipelines since they are python functions** (similar to ruffus/luigi)
+* **Hierarchical execution as inherited from python functions**
+* **No support for job-scheduling at the moment** (contribution welcome!)
+* :ref:`example-workflow-filesync`
+* :ref:`example-remote-code`
+* **Declaring pipeline/function-level dependency.**
 
 
 
