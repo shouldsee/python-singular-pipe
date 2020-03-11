@@ -707,16 +707,16 @@
 		<span class="n">mod</span> <span class="o">=</span> <span class="kc">None</span>
 		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_loaded</span><span class="p">():</span>
 			<span class="c1"># print(self.ident_file)</span>
-			<span class="c1"># print(self.is_compatible())</span>
 			<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_compatible</span><span class="p">():</span>
 				<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">				Overwrite the local installation by default</span>
 <span class="sd">				&#39;&#39;&#39;</span>
 				<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[installing]&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package_path</span><span class="p">,</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="p">)</span>
-				<span class="c1"># print(&#39;&#39;)</span>
-				<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">basename</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
-					<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">unlink_p</span><span class="p">()</span>
-					<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdir</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
+				<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="p">:</span>
+					<span class="c1"># print(&#39;&#39;)</span>
+					<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">egg_info</span><span class="o">.</span><span class="n">basename</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+						<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isfile</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">unlink_p</span><span class="p">()</span>
+						<span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">isdir</span><span class="p">():</span> <span class="n">x</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">()</span>
 				<span class="c1"># [x.rmtree_p() for x in self.egg_info.dirname().glob(self.egg_info.basename().split(&#39;-&#39;,1)[0]+&#39;*&#39;)]</span>
 				<span class="c1"># self.egg_info.rmtree_p()</span>
 
