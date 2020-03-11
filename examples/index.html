@@ -246,8 +246,21 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 <p>Local paths lose meaning once migrated to a difference machine,
 whereas remote references such as <a class="reference external" href="http://">http://</a> and <a class="reference external" href="ftp://">ftp://</a> is independent of
 local machine states.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3 -m spiper run <span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master TOPLEVEL run_and_backup <span class="se">\</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  spiper_mock_flow:run_and_backup <span class="se">\</span>
+  --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+
+<span class="c1">#### TOPLEVEL refers to the package_name </span>
+spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  TOPLEVEL:run_and_backup <span class="se">\</span>
+  --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+
+<span class="c1">#### in case spiper is not in $PATH</span>
+python3 -m spiper run <span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+  TOPLEVEL:run_and_backup <span class="se">\</span>
   --args /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
 </pre></div>
 </div>
