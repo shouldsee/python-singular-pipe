@@ -58,6 +58,8 @@ Options:
 
 ### Running a remote pipeline
 
+Pipeline living at https://github.com/shouldsee/spiper_mock_flow
+
 ```bash
 #### get a list of changed_files
 spiper get_changed_files \

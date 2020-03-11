@@ -71,6 +71,8 @@ See https://shouldsee.github.io/spiper/
 
 ### Running a remote pipeline
 
+Pipeline living at https://github.com/shouldsee/spiper_mock_flow
+
 ```bash
 {{open(dir/"examples/003_remote_bash.sh",'r').read()}}
 ```
