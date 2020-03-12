@@ -93,6 +93,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#spiper-shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spiper-runner">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#spiper-graph">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiper-cli">3.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.cli</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../indexes.html">4. Indices and tables</a></li>
@@ -860,6 +861,45 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dt>params:</dt><dd><p>tree: a list of shape [(node,up_trees),(node,uptrees)]</p>
 </dd>
 </dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="spiper-cli">
+<h2><span class="section-number">3.6. </span><a class="reference internal" href="#module-spiper.cli" title="spiper.cli: Utilities to manage dependency graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.cli</span></code></a><a class="headerlink" href="#spiper-cli" title="Permalink to this headline">¶</a></h2>
+<p>Commandline interface</p>
+<span class="target" id="module-spiper.cli"></span><dl class="function">
+<dt id="spiper.cli.main">
+<code class="sig-prename descclassname">spiper.cli.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">args=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/cli.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.cli.main" title="Permalink to this definition">¶</a></dt>
+<dd><dl>
+<dt>Usage:</dt><dd><p>spiper &lt;subcommand&gt; &lt;package&gt; &lt;workflow_entrypoint&gt; &lt;workflow_arguments&gt;</p>
+</dd>
+<dt>Example:</dt><dd><dl class="simple">
+<dt>spiper run </dt><dd><p><a class="reference external" href="mailto:spiper_mock_flow&#37;&#52;&#48;https">spiper_mock_flow<span>&#64;</span>https</a>://github.com/shouldsee/spiper_mock_flow/tarball/master spiper_mock_flow:run_and_backup /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup</p>
+</dd>
+</dl>
+</dd>
+<dt>Arguments:</dt><dd><dl>
+<dt>&lt;subcommand&gt;:</dt><dd><p>run                  execute the workflow
+get_all_files        print all files governed by workflow</p>
+<blockquote>
+<div><p>–plain: print a newline-separated list instead of pprint</p>
+</div></blockquote>
+<dl class="simple">
+<dt>get_changed_files    print all files changed by workflow</dt><dd><p>–plain: print a newline-separated list instead of pprint</p>
+</dd>
+</dl>
+</dd>
+<dt>&lt;package&gt;:</dt><dd><p>a string compatible with pep-508</p>
+</dd>
+<dt>&lt;workflow_entrypoint&gt;:</dt><dd><p>a string  “&lt;module&gt;:&lt;object_name&gt;” where object is like a <cite>spipe.types.Node()</cite></p>
+</dd>
+<dt>&lt;workflow_arguments&gt;:</dt><dd><p>a comma-separated list of arguments for the workflow</p>
+</dd>
+</dl>
+</dd>
+<dt>Options:</dt><dd><p>–help: show this help</p>
 </dd>
 </dl>
 </dd></dl>

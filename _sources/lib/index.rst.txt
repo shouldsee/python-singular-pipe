@@ -57,3 +57,14 @@ Utilities to manage dependency graph
     :members:
     :undoc-members:
     :synopsis: Utilities to manage dependency graph
+
+
+:mod:`spiper.cli` 
+===============================================================================
+Commandline interface
+
+.. automodule:: spiper.cli
+    :show-inheritance:
+    :members:
+    :undoc-members:
+    :synopsis: Utilities to manage dependency graph

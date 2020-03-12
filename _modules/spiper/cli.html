@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>spiper.cli &mdash; spiper 0.0.5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> spiper
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.5
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">2. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../lib/index.html">3. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../indexes.html">4. Indices and tables</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">spiper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>spiper.cli</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for spiper.cli</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">get_changed_files</span>
+<span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
+<span class="k">def</span> <span class="nf">_help</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="nb">print</span><span class="p">(</span><span class="n">main</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="n">e</span> 
+	<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../lib/index.html#spiper.cli.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="sa">r</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Usage:</span>
+<span class="sd">	spiper &lt;subcommand&gt; &lt;package&gt; &lt;workflow_entrypoint&gt; &lt;workflow_arguments&gt;</span>
+
+<span class="sd">Example:</span>
+<span class="sd">	spiper run \</span>
+<span class="sd">	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \</span>
+<span class="sd">	  spiper_mock_flow:run_and_backup \</span>
+<span class="sd">	  /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup</span>
+
+<span class="sd">Arguments:</span>
+<span class="sd">	&lt;subcommand&gt;:</span>
+<span class="sd">		run                  execute the workflow</span>
+<span class="sd">		get_all_files        print all files governed by workflow</span>
+<span class="sd">			--plain: print a newline-separated list instead of pprint</span>
+<span class="sd">		get_changed_files    print all files changed by workflow</span>
+<span class="sd">			--plain: print a newline-separated list instead of pprint</span>
+<span class="sd">	&lt;package&gt;:</span>
+<span class="sd">		a string compatible with pep-508</span>
+<span class="sd">	&lt;workflow_entrypoint&gt;:</span>
+<span class="sd">		a string  &quot;&lt;module&gt;:&lt;object_name&gt;&quot; where object is like a `spipe.types.Node()`</span>
+<span class="sd">	&lt;workflow_arguments&gt;:</span>
+<span class="sd">		a comma-separated list of arguments for the workflow</span>
+
+<span class="sd">Options:</span>
+<span class="sd">	--help: show this help</span>
+
+<span class="sd">	&#39;&#39;&#39;</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+		<span class="n">plain</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">if</span> <span class="s1">&#39;--plain&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+			<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--plain&#39;</span><span class="p">)</span>
+			<span class="n">plain</span> <span class="o">=</span> <span class="mi">1</span>
+
+		<span class="k">if</span> <span class="s1">&#39;--help&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+			<span class="n">_help</span><span class="p">()</span>
+		<span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;run&#39;</span><span class="p">:</span>
+			<span class="n">runner</span> <span class="o">=</span> <span class="n">cache_run</span>		
+		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_all_files&#39;</span><span class="p">:</span>
+			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
+				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">plain</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span> <span class="ow">or</span> <span class="s1">&#39;[No files governed by this workflow]&#39;</span><span class="p">)</span>
+
+		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_changed_files&#39;</span><span class="p">:</span>
+			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
+				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">plain</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span> <span class="ow">or</span> <span class="s1">&#39;[No files changed by this workflow]&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">_help</span><span class="p">()</span>
+
+		<span class="k">if</span> <span class="s1">&#39;--comma&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+			<span class="n">comma</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--comma&#39;</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">comma</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="n">package</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+		<span class="n">workflow_entrypoint</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">comma</span><span class="p">:</span>
+			<span class="n">workflow_arguments</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">workflow_arguments</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="ow">or</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+	<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+		<span class="n">_help</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+	<span class="n">obj</span> <span class="o">=</span> <span class="n">RPO</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">workflow_entrypoint</span><span class="p">)</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">loaded</span><span class="p">(),</span> <span class="o">*</span><span class="n">workflow_arguments</span><span class="p">)</span>
+	<span class="k">return</span> <span class="mi">0</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
