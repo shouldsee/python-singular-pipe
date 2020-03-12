@@ -21,8 +21,16 @@ project = 'spiper'
 copyright = '2020, Feng Geng'
 author = 'Feng Geng'
 
+
 # The full version, including alpha/beta/rc tags
-version = release = '0.0.3'
+
+import os,sys
+sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
+from spiper import get_version
+version = release = get_version()
+
+# print(version)
+# version = release = '0.0.5'
 
 
 
@@ -64,9 +72,6 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
-import os,sys
-sys.path.insert(0, os.path.realpath(os.path.dirname(__file__)))
-
 
 html_theme_options = {
     # 'canonical_url': '',

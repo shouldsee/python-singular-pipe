@@ -27,8 +27,8 @@ Installation
 Install with pip
 ------------------------------
 
-Find the version you want to install. For example, to install version 0.0.3, use
+Find the version you want to install. For example, to install version |release|, use
 
 .. code-block:: bash
 
-	pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.3 --user
+	pip3 install spiper@https://github.com/shouldsee/spiper/tarball/|release| --user

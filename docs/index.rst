@@ -5,7 +5,7 @@
 .. check https://docs.python.org/2/_sources/
 
 ****************************************************************************************************************************
-:mod:`spiper`: Utilities to make a pipeline, with singularity integration and caching ability
+:mod:`spiper`: Utilities to make a pipeline, with singularity integration and caching ability 
 ****************************************************************************************************************************
 
 
@@ -43,8 +43,8 @@ Quickstart
 
 .. code-block:: bash
 
-    ## install 0.0.4
-    pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.4 --user
+    ## install |release|
+    pip3 install spiper@https://github.com/shouldsee/spiper/tarball/|release| --user
 
 .. literalinclude:: examples/003_remote_bash.sh
   :language: bash

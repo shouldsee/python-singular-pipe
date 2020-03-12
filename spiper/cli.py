@@ -2,23 +2,27 @@ import argparse
 import sys
 from spiper.runner import cache_run,get_all_files,get_changed_files
 from spiper.types import RemotePythonObject as RPO
+import spiper
 def _help(e=None):
 	print(main.__doc__)
 	if e is not None:
 		raise e 
-	sys.exit()
+	return 0
+	# sys.exit()
 
 from pprint import pprint
 def main(args=None):
 	r'''
-Usage:
-	spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>
+Usage
 
-Example:
+	``spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>``
+
+Example::
+
 	spiper run \
 	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
 	  spiper_mock_flow:run_and_backup \
-	  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+	  /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
 
 Arguments:
 	<subcommand>:
@@ -48,7 +52,11 @@ Options:
 			plain = 1
 
 		if '--help' in args:
-			_help()
+			return _help()
+		if '--version' in args or '-V' in args:
+			print('spiper-%s'%spiper.VERSION)
+			return 0
+
 		if args[0]=='run':
 			runner = cache_run		
 		elif args[0] == 'get_all_files':
@@ -69,7 +77,7 @@ Options:
 				else:
 					pprint(fs or '[No files changed by this workflow]')
 		else:
-			_help()
+			return _help(Exception('Unknown args[0] %s'%args[0]))
 
 		if '--comma' in args:
 			comma = 1
@@ -83,7 +91,7 @@ Options:
 		else:
 			workflow_arguments = (args[3:4] or [''])[0].split(',')
 	except Exception as e:
-		_help(e)
+		return _help(e)
 
 	obj = RPO(package, workflow_entrypoint)
 	res = runner(obj.loaded(), *workflow_arguments)
