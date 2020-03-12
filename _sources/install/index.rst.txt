@@ -22,7 +22,7 @@ Optional
 
   	sudo apt-get update; 
   	curl -sL https://raw.githubusercontent.com/shouldsee/spiper/be4246b/scripts/install_singular.sh \
-  	  | bash -s /opt/singularity    
+  	  | bash -s $HOME/.local    
    
   * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :obj:`spiper.graph.plot_simple_graph`
 
