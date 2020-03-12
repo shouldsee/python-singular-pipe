@@ -12,7 +12,7 @@ import pip; assert pip.__version__ >='18.1',pip.__version__
 
 config = dict(
 	name='spiper',
-	version = '0.0.4', ### change in __init__.py in sync
+	version = '0.0.5', ### change in __init__.py in sync
 	# package_dir={"": "."},
     packages=['spiper'],
 	include_package_data=True,
