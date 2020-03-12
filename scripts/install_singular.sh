@@ -1,7 +1,7 @@
 #### Assuming has write access to /opt/
 # prefix=${1:-/opt/singularity}
 set -e
-prefix=${1:$HOME/.local}
+prefix=${1:-$HOME/.local}
 EXE=$prefix/bin/singularity
 NCORE=$( nproc 2>/dev/null || echo 1 )
 
