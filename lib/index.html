@@ -867,8 +867,47 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 
 </div>
 <div class="section" id="spiper-cli">
-<h2><span class="section-number">3.6. </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.cli</span></code><a class="headerlink" href="#spiper-cli" title="Permalink to this headline">¶</a></h2>
+<h2><span class="section-number">3.6. </span><a class="reference internal" href="#module-spiper.cli" title="spiper.cli: Utilities to manage dependency graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.cli</span></code></a><a class="headerlink" href="#spiper-cli" title="Permalink to this headline">¶</a></h2>
 <p>Commandline interface</p>
+<span class="target" id="module-spiper.cli"></span><dl class="function">
+<dt id="spiper.cli.main">
+<code class="sig-prename descclassname">spiper.cli.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">args=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/cli.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.cli.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Usage</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">spiper</span> <span class="pre">&lt;subcommand&gt;</span> <span class="pre">&lt;package&gt;</span> <span class="pre">&lt;workflow_entrypoint&gt;</span> <span class="pre">&lt;workflow_arguments&gt;</span></code></p>
+</div></blockquote>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spiper</span> <span class="n">run</span> \
+  <span class="n">spiper_mock_flow</span><span class="nd">@https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">shouldsee</span><span class="o">/</span><span class="n">spiper_mock_flow</span><span class="o">/</span><span class="n">tarball</span><span class="o">/</span><span class="n">master</span> \
+  <span class="n">spiper_mock_flow</span><span class="p">:</span><span class="n">run_and_backup</span> \
+  <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test_remote</span><span class="o">/</span><span class="n">root</span> <span class="mi">1</span> <span class="mi">2</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">test_remote</span><span class="o">/</span><span class="n">root</span><span class="o">.</span><span class="n">backup</span>
+</pre></div>
+</div>
+<dl>
+<dt>Arguments:</dt><dd><dl>
+<dt>&lt;subcommand&gt;:</dt><dd><p>run                  execute the workflow
+get_all_files        print all files governed by workflow</p>
+<blockquote>
+<div><p>–plain: print a newline-separated list instead of pprint</p>
+</div></blockquote>
+<dl class="simple">
+<dt>get_changed_files    print all files changed by workflow</dt><dd><p>–plain: print a newline-separated list instead of pprint</p>
+</dd>
+</dl>
+</dd>
+<dt>&lt;package&gt;:</dt><dd><p>a string compatible with pep-508</p>
+</dd>
+<dt>&lt;workflow_entrypoint&gt;:</dt><dd><p>a string  “&lt;module&gt;:&lt;object_name&gt;” where object is like a <cite>spipe.types.Node()</cite></p>
+</dd>
+<dt>&lt;workflow_arguments&gt;:</dt><dd><p>a comma-separated list of arguments for the workflow</p>
+</dd>
+</dl>
+</dd>
+<dt>Options:</dt><dd><p>–help: show this help</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
