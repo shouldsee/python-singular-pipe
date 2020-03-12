@@ -46,7 +46,7 @@ tar -xf singularity-$VERSION.tar.gz
 
 {
   cd singularity
-  go run mlocal/checks/version.go
+  # go run mlocal/checks/version.go
   mkdir -p $prefix
   ./mconfig --prefix=$prefix --without-suid && \
     make -C ./builddir && \
