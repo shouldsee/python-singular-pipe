@@ -26,14 +26,16 @@ See https://shouldsee.github.io/spiper/
 
 ```bash
 
-Usage:
-	spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>
+Usage
 
-Example:
+	``spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>``
+
+Example::
+
 	spiper run \
 	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
 	  spiper_mock_flow:run_and_backup \
-	  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
+	  /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
 
 Arguments:
 	<subcommand>:
