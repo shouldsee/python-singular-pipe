@@ -65,5 +65,5 @@ cat $prefix/etc/singularity/singularity.conf
 $EXE version
 $EXE exec --bind `pwd`:/srv  --pwd /srv docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4 hisat2 --help 
 
-ln -sf $EXE $HOME/.local/bin
+ln -sf $EXE $HOME/.local/bin || echo linking failed
 ls -lhtr $prefix/libexec/singularity/bin/
