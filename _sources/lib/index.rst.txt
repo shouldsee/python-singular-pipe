@@ -4,8 +4,10 @@ Modules
 ******************************************
 
 
-:mod:`spiper.types` Entry point for all public callables 
+:mod:`spiper.types`
 =================================================================================
+Entry point for all public callables 
+
 .. automodule:: spiper.types
     :show-inheritance:
     :members: LoggedShellCommand, LoggedSingularityCommand, Caller,FakeCode
@@ -13,8 +15,9 @@ Modules
     :synopsis: Entry point for all public callables
 
 
-:mod:`spiper._types` Internal types for detecting file and package changes 
+:mod:`spiper._types` 
 =================================================================================
+Internal types for detecting file and package changes 
 
 .. automodule:: spiper._types
     :show-inheritance:
@@ -23,8 +26,10 @@ Modules
     :synopsis: Internal types for detecting file and package changes 
 
 
-:mod:`spiper.shell` Shell utilities
+:mod:`spiper.shell` 
 =================================================================================
+Shell utilities
+
 .. automodule:: spiper.shell
     :show-inheritance:
     :members:
@@ -32,8 +37,10 @@ Modules
     :synopsis: Shell utilities
 
 
-:mod:`spiper.runner` Runtime runner to deal with file dependencies
+:mod:`spiper.runner`
 ===============================================================================
+Runtime runner to deal with file dependencies
+
 .. automodule:: spiper.runner
     :show-inheritance:
     :members:
@@ -41,8 +48,10 @@ Modules
     :synopsis: Runtime runner to deal with file dependencies
 
 
-:mod:`spiper.graph` Utilities to manage dependency graph
+:mod:`spiper.graph` 
 ===============================================================================
+Utilities to manage dependency graph
+
 .. automodule:: spiper.graph
     :show-inheritance:
     :members:

@@ -88,11 +88,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../install/index.html">1. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../examples/index.html">2. Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">3. Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-spiper.types">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.types</span></code> Entry point for all public callables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-spiper._types">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper._types</span></code> Internal types for detecting file and package changes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-spiper.shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code> Shell utilities</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-spiper.runner">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code> Runtime runner to deal with file dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-spiper.graph">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code> Utilities to manage dependency graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiper-types">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.types</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper._types</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiper-shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiper-runner">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#spiper-graph">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../indexes.html">4. Indices and tables</a></li>
@@ -162,9 +162,10 @@
             
   <div class="section" id="modules">
 <h1><span class="section-number">3. </span>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-spiper.types">
-<span id="spiper-types-entry-point-for-all-public-callables"></span><h2><span class="section-number">3.1. </span><a class="reference internal" href="#module-spiper.types" title="spiper.types: Entry point for all public callables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.types</span></code></a> Entry point for all public callables<a class="headerlink" href="#module-spiper.types" title="Permalink to this headline">¶</a></h2>
-<p>Collections of internal types and fuunctions</p>
+<div class="section" id="spiper-types">
+<h2><span class="section-number">3.1. </span><a class="reference internal" href="#module-spiper.types" title="spiper.types: Entry point for all public callables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.types</span></code></a><a class="headerlink" href="#spiper-types" title="Permalink to this headline">¶</a></h2>
+<p>Entry point for all public callables</p>
+<span class="target" id="module-spiper.types"></span><p>Collections of internal types and fuunctions</p>
 <dl class="function">
 <dt id="spiper.types.LoggedShellCommand">
 <code class="sig-prename descclassname">spiper.types.</code><code class="sig-name descname">LoggedShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">file='/dev/null'</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em>, <em class="sig-param">shell=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedShellCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.LoggedShellCommand" title="Permalink to this definition">¶</a></dt>
@@ -325,9 +326,10 @@ debug: print dbg info</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-spiper._types">
-<span id="spiper-types-internal-types-for-detecting-file-and-package-changes"></span><h2><span class="section-number">3.2. </span><a class="reference internal" href="#module-spiper._types" title="spiper._types: Internal types for detecting file and package changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper._types</span></code></a> Internal types for detecting file and package changes<a class="headerlink" href="#module-spiper._types" title="Permalink to this headline">¶</a></h2>
-<p>Interal exceptions, classes, functions to outline the 
+<div class="section" id="id1">
+<h2><span class="section-number">3.2. </span><a class="reference internal" href="#module-spiper._types" title="spiper._types: Internal types for detecting file and package changes"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper._types</span></code></a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Internal types for detecting file and package changes</p>
+<span class="target" id="module-spiper._types"></span><p>Interal exceptions, classes, functions to outline the 
 identification system.</p>
 <dl class="function">
 <dt id="spiper._types.Flow">
@@ -463,9 +465,10 @@ defined fileset into <code class="xref py py-func docutils literal notranslate">
 </dd></dl>
 
 </div>
-<div class="section" id="module-spiper.shell">
-<span id="spiper-shell-shell-utilities"></span><h2><span class="section-number">3.3. </span><a class="reference internal" href="#module-spiper.shell" title="spiper.shell: Shell utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code></a> Shell utilities<a class="headerlink" href="#module-spiper.shell" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
+<div class="section" id="spiper-shell">
+<h2><span class="section-number">3.3. </span><a class="reference internal" href="#module-spiper.shell" title="spiper.shell: Shell utilities"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code></a><a class="headerlink" href="#spiper-shell" title="Permalink to this headline">¶</a></h2>
+<p>Shell utilities</p>
+<span class="target" id="module-spiper.shell"></span><dl class="function">
 <dt id="spiper.shell.LoggedShellCommand">
 <code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">LoggedShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">file='/dev/null'</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em>, <em class="sig-param">shell=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedShellCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.shell.LoggedShellCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
@@ -527,9 +530,10 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 </dd></dl>
 
 </div>
-<div class="section" id="module-spiper.runner">
-<span id="spiper-runner-runtime-runner-to-deal-with-file-dependencies"></span><h2><span class="section-number">3.4. </span><a class="reference internal" href="#module-spiper.runner" title="spiper.runner: Runtime runner to deal with file dependencies"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code></a> Runtime runner to deal with file dependencies<a class="headerlink" href="#module-spiper.runner" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="spiper-runner">
+<h2><span class="section-number">3.4. </span><a class="reference internal" href="#module-spiper.runner" title="spiper.runner: Runtime runner to deal with file dependencies"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code></a><a class="headerlink" href="#spiper-runner" title="Permalink to this headline">¶</a></h2>
+<p>Runtime runner to deal with file dependencies</p>
+<span class="target" id="module-spiper.runner"></span><dl class="class">
 <dt id="spiper.runner.Caller">
 <em class="property">class </em><code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">Caller</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">arg_dict</em>, <em class="sig-param">dir_layout</em>, <em class="sig-param">tag</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -763,9 +767,10 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-spiper.graph">
-<span id="spiper-graph-utilities-to-manage-dependency-graph"></span><h2><span class="section-number">3.5. </span><a class="reference internal" href="#module-spiper.graph" title="spiper.graph: Utilities to manage dependency graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code></a> Utilities to manage dependency graph<a class="headerlink" href="#module-spiper.graph" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
+<div class="section" id="spiper-graph">
+<h2><span class="section-number">3.5. </span><a class="reference internal" href="#module-spiper.graph" title="spiper.graph: Utilities to manage dependency graph"><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code></a><a class="headerlink" href="#spiper-graph" title="Permalink to this headline">¶</a></h2>
+<p>Utilities to manage dependency graph</p>
+<span class="target" id="module-spiper.graph"></span><dl class="class">
 <dt id="spiper.graph.SymbolicNode">
 <em class="property">class </em><code class="sig-prename descclassname">spiper.graph.</code><code class="sig-name descname">SymbolicNode</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/graph.html#SymbolicNode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.graph.SymbolicNode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">path.Path</span></code></p>
