@@ -5,7 +5,7 @@
 .. check https://docs.python.org/2/_sources/
 
 ****************************************************************************************************************************
-:mod:`spiper`: Utilities to make a pipeline, with singularity integration and caching ability
+:mod:`spiper`: Utilities to make a pipeline, with singularity integration and caching ability |release|
 ****************************************************************************************************************************
 
 
