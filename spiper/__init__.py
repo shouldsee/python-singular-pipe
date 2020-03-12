@@ -66,7 +66,7 @@ See https://shouldsee.github.io/spiper/
 ### Usage:
 
 ```bash
-{{subprocess.check_output(['spiper','--help']).decode('utf8')}}
+{{subprocess.check_output(['python3','-m','spiper','--help']).decode('utf8')}}
 ```
 
 ### Running a remote pipeline

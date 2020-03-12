@@ -18,7 +18,8 @@ Essential
 
 Optional
 ---------------------------
-  * singularity >= 3.5.3 to use :obj:`spiper.shell.LoggedSingularityCommand`.  Convenience script ``curl -sL https://raw.githubusercontent.com/shouldsee/spiper/7ef9673/scripts/install_singular.sh | bash -s /opt/singularity``    
+  * singularity >= 3.5.3 to use :obj:`spiper.shell.LoggedSingularityCommand`.  Convenience script::
+   ``sudo apt-get update; curl -sL https://raw.githubusercontent.com/shouldsee/spiper/7ef9673/scripts/install_singular.sh | bash -s /opt/singularity``    
   * `graphviz dot executable <https://www.graphviz.org/download/>`_  to use :obj:`spiper.graph.plot_simple_graph`
 
 Installation
