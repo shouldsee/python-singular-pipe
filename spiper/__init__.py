@@ -88,7 +88,7 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 todo = '''
 ### ToDo
     - [x] Running a remote module
-    	- [ ] add some tests for spiper._types.PythonModule()
+    	- [x] `spiper.mock.test_remote()` add some tests for spiper._types.PythonModule()
     - [ ] Polish graph to have input-output node
     - [ ] Ability to relocate nodes.
     - [ ] Auto-backup all output files. job_backup_copy()

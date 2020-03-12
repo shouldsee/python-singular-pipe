@@ -70,13 +70,21 @@ Options:
 					pprint(fs or '[No files changed by this workflow]')
 		else:
 			_help()
+
+		if '--comma' in args:
+			comma = 1
+			args.remove('--comma')
+		else:
+			comma = 0
 		package = args[1]
 		workflow_entrypoint = args[2]
-		workflow_arguments = (args[3:4] or [''])[0]
-		inputs = [] if not workflow_arguments else workflow_arguments.split(',')
+		if not comma:
+			workflow_arguments = args[3:]
+		else:
+			workflow_arguments = (args[3:4] or [''])[0].split(',')
 	except Exception as e:
 		_help(e)
 
 	obj = RPO(package, workflow_entrypoint)
-	res = runner(obj.loaded(), *inputs)
+	res = runner(obj.loaded(), *workflow_arguments)
 	return 0
