@@ -7,3 +7,4 @@ _header.list_to_string
 - [add] spiper._header.resolve_spiper to intepret '..subflow..xxx..output..bam'
 [need: test]
 - [fix] RPO to better intepret pep508 [need: test] [need: use pep508-parser]
+- [fix] use pip>=19.0. [need: test expected RPO() func]
