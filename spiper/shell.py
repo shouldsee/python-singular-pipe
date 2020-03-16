@@ -87,7 +87,12 @@ if 1:
 
 
 if 1:
-	def LoggedSingularityCommand( cmd, image, log_file,check=1,  mode='w',extra_files = None, debug =0):	
+	def LoggedSingularityCommandList(cmd, image, extra_files=None):
+		return LoggedSingularityCommand(cmd,image, extra_files, is_exec=0)
+
+	def LoggedSingularityCommand( cmd, image, log_file,check=1,  mode='w',
+		is_exec=1,
+		extra_files = None, debug =0):	
 		'''
 		return a tuple (executed command, command_stdout)
 			cmd: a list of str-like objects that gets concatenated into a shell command
@@ -99,7 +104,6 @@ if 1:
 			extra_files  = []
 		cmd = ['set','-e;',cmd]
 		# cmd = list_flatten_strict(cmd)
-
 
 		# #### potential redundant
 		# #### all output path derives from Prefix hence only Prefix needs to be realpath
@@ -140,6 +144,8 @@ if 1:
 		# '\n',
 		]
 		cmd_curr = list_flatten_strict(cmd_curr)
+		if not is_exec:
+			return cmd_curr
 		stdout = LoggedShellCommand(cmd_curr,log_file, check,mode=mode)
 		# suc,stdout
 		# suc,stdout,stderr = shellcmd(cmd_curr,1,0)
