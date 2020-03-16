@@ -2,6 +2,7 @@ import importlib
 from spiper._shell import pipe__getResult,pipe__getSafeResult,shellpopen
 from spiper._shell import _shellcmd, shellcmd
 import io,time
+# from spiper._types import Path
 
 import json
 import warnings
@@ -9,7 +10,7 @@ from spiper._header import list_flatten_strict, list_flatten, list_to_string
 from spiper._types import File,Prefix,InputFile,InputPrefix
 # from ._types import File,Prefix,InputFile,InputPrefix
 import json
-from path import Path
+import os
 import tempfile
 from spiper import VERSION
 
@@ -158,7 +159,7 @@ if 1:
 					modes += ['ro']*len(res)
 				elif isinstance(F, Prefix):
 					#### if is not inputPrefix, mount the directory
-					F.dirname().makedirs_p().access(os.W_OK)
+					F.dirname().makedirs_p().check_writable()
 					FS.append( File( F.dirname() ) )
 					mode = 'rw'
 					modes+=[mode]

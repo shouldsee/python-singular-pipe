@@ -4,7 +4,7 @@ identification system.
 
 """
 # from file_tracer import InputFile,OutputFile,File,TempFile,FileTracer
-from path import Path
+from path import Path as _Path
 import glob
 from collections import namedtuple
 import os
@@ -22,6 +22,13 @@ spiper._types = sys.modules[__name__]
 
 def DirtyKey(s):
 	return re.sub('[^0-9a-zA-Z_]','_',s)	
+
+class Path(_Path):
+	pass
+	def check_writable(self):
+		self.access(os.W_OK)
+		return self
+
 
 
 Code = type((lambda:None).__code__)
@@ -232,7 +239,6 @@ class File(PrefixedNode):
 		return res
 	def expanded(self):
 		return [self]
-
 
 
 class TempFile(File):
