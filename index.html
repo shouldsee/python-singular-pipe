@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability &mdash; spiper 0.0.5 documentation</title>
+  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability &mdash; spiper 0.0.7 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.0.7
               </div>
             
           
@@ -196,12 +196,14 @@ different are</p>
 <li><p><a class="reference internal" href="examples/index.html#example-workflow-filesync"><span class="std std-ref">Workflow execution as file synchronisation</span></a></p></li>
 <li><p><a class="reference internal" href="examples/index.html#example-remote-code"><span class="std std-ref">Running a remote package/function</span></a></p></li>
 <li><p><strong>Declaring pipeline/function-level dependency.</strong></p></li>
+<li><p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code> syntax is very close to WDL syntax. It should be possible to auto-generate</p></li>
 </ul>
+<p>WDL code and submit to a cromwell server.</p>
 </div>
 <div class="section" id="quickstart">
 <h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">## install |release|</span>
-pip3 install spiper@https://github.com/shouldsee/spiper/tarball/<span class="p">|</span>release<span class="p">|</span> --user
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">## install 0.0.5</span>
+pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#### get a list of changed_files</span>

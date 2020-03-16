@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.cli &mdash; spiper 0.0.5 documentation</title>
+  <title>spiper.cli &mdash; spiper 0.0.7 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.0.7
               </div>
             
           
@@ -152,7 +152,7 @@
   <h1>Source code for spiper.cli</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">get_changed_files</span>
+<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">get_changed_files</span><span class="p">,</span> <span class="n">force_run</span>
 <span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
 <span class="kn">import</span> <span class="nn">spiper</span>
 <span class="k">def</span> <span class="nf">_help</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -211,6 +211,10 @@
 
 		<span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;run&#39;</span><span class="p">:</span>
 			<span class="n">runner</span> <span class="o">=</span> <span class="n">cache_run</span>		
+			<span class="k">if</span> <span class="s1">&#39;--force&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+				<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--force&#39;</span><span class="p">)</span>
+				<span class="n">runner</span> <span class="o">=</span> <span class="n">force_run</span>
+
 		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_all_files&#39;</span><span class="p">:</span>
 			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
 				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>

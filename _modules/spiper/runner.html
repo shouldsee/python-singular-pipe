@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.runner &mdash; spiper 0.0.5 documentation</title>
+  <title>spiper.runner &mdash; spiper 0.0.7 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.5
+                0.0.7
               </div>
             
           
@@ -479,6 +479,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">job</span>          <span class="o">=</span> <span class="n">job</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">_output_type</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_job_type</span>    <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="o">.</span><span class="n">_type</span>
+		<span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_job_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span>   <span class="o">=</span> <span class="n">arg_tuples</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span>   <span class="o">=</span> <span class="n">dir_layout</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>     <span class="o">=</span> <span class="n">_dict</span><span class="p">()</span>
@@ -604,10 +605,10 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span> <span class="o">=</span> <span class="mi">1</span>
 			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">job</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">])</span>
 			<span class="k">assert</span> <span class="n">returned</span> <span class="ow">in</span> <span class="p">[</span><span class="bp">self</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span><span class="s2">&quot;Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow&quot;</span>			
+			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span>
 			<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cached</span><span class="p">:</span>
 				<span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="n">returned</span><span class="p">,)</span>
-			<span class="n">returned</span> <span class="o">=</span> <span class="bp">self</span>
-			<span class="k">return</span> <span class="bp">self</span>
+			<span class="c1"># return self</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_cached</span> <span class="o">=</span> <span class="kc">False</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_allow_cache</span> <span class="o">=</span> <span class="mi">0</span>
@@ -655,6 +656,11 @@
 			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[CREATING.mock]</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">f</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span>
 		<span class="k">if</span> <span class="n">output_ident_changed</span><span class="p">:</span>
 			<span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.output_changed.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span>	
+
+		<span class="c1">### [need:test] test permission for writing</span>
+		<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">)</span>
+		<span class="p">[</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span> <span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">]</span>
+
 		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
 			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">(</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">5</span>  <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>		</div>
 				
@@ -811,8 +817,8 @@
 		<span class="n">input_ident_file</span> <span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;input_json&#39;</span> <span class="p">)</span>
 		<span class="n">output_ident_file</span><span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;output_json&#39;</span> <span class="p">)</span>
 		<span class="n">output_cache_file</span><span class="o">=</span>  <span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span>
-		<span class="n">File</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span>
-		<span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span>
+		<span class="n">File</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
+		<span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
 
 
 
@@ -927,17 +933,21 @@
 				<span class="c1">### add input and output ident to outward_pk</span>
 				<span class="c1"># outward_dir_list = get_outward_json_list( _input, config)</span>
 				
-				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">)</span>
 				<span class="n">_input_ident_hash</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hash_bytes</span><span class="p">(</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)</span> <span class="p">)</span>
+
+				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">)</span>
 				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
-					<span class="n">outward_edge_file</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> <span class="o">/</span>  <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="n">_input_ident_hash</span><span class="p">)</span>
+					<span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
+
+				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+					<span class="n">outward_edge_file</span> <span class="o">=</span> <span class="n">outward_dir</span> <span class="o">/</span>  <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="n">_input_ident_hash</span><span class="p">)</span>
 					<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">outward_edge_file</span><span class="p">)</span>			
 
 				<span class="c1">#### remove edge_file of outputs</span>
 				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">_output_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">dir_layout</span><span class="p">)</span>
 				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
-					<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> <span class="p">,</span> <span class="p">(</span><span class="n">outward_dir</span><span class="o">+</span><span class="s1">&#39;_old&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">())</span>
-					<span class="n">outward_dir</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span> 
+					<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="n">outward_dir</span><span class="o">+</span><span class="s1">&#39;_old&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">())</span>
+					<span class="n">outward_dir</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Mock value not understood mock=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mock</span>
 		<span class="k">return</span> <span class="n">result</span>

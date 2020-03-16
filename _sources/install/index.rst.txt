@@ -14,7 +14,7 @@ want another version to be added. Python2 is not supported.
 Essential
 --------------------------
   * Python 3.5 / Python 3.7
-  * pip >= 18.1
+  * pip >= 19.0
 
 Optional
 ---------------------------

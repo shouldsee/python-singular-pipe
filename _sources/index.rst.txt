@@ -37,14 +37,16 @@ different are
 * :ref:`example-workflow-filesync`
 * :ref:`example-remote-code`
 * **Declaring pipeline/function-level dependency.**
+* The :obj:`spiper` syntax is very close to WDL syntax. It should be possible to auto-generate 
+WDL code and submit to a cromwell server.
 
 Quickstart
 =================
 
 .. code-block:: bash
 
-    ## install |release|
-    pip3 install spiper@https://github.com/shouldsee/spiper/tarball/|release| --user
+    ## install 0.0.5
+    pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 
 .. literalinclude:: examples/003_remote_bash.sh
   :language: bash
