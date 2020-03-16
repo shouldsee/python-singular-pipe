@@ -507,7 +507,7 @@ class Caller(object):
 
 		### [need:test] test permission for writing
 		outward_dir_list = get_outward_json_list( self.arg_tuples, self.dir_layout)
-		[ outward_dir.makedirs_p().touch() for outward_dir in outward_dir_list]
+		[ outward_dir.makedirs_p().access(os.W_OK) for outward_dir in outward_dir_list]
 
 		if strict:
 			assert _caller.is_mock(lambda *x:print(x) if verbose >=5  else None)		
@@ -665,8 +665,8 @@ class _Runner(object):
 		input_ident_file =  IdentFile( dir_layout, _caller.prefix_named, [] , 'input_json' )
 		output_ident_file=  IdentFile( dir_layout, _caller.prefix_named, [] , 'output_json' )
 		output_cache_file=  _caller.output_cache_file
-		File(input_ident_file).dirname().makedirs_p().touch()
-		_caller.output_cache_file.dirname().makedirs_p().touch()
+		File(input_ident_file).dirname().makedirs_p().access(os.W_OK)
+		_caller.output_cache_file.dirname().makedirs_p().access(os.W_OK)
 
 
 
@@ -785,7 +785,7 @@ class _Runner(object):
 
 				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
 				for outward_dir in outward_dir_list:
-					outward_dir.makedirs_p().touch()
+					outward_dir.makedirs_p().access(os.W_OK)
 
 				for outward_dir in outward_dir_list:
 					outward_edge_file = outward_dir /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
@@ -794,8 +794,8 @@ class _Runner(object):
 				#### remove edge_file of outputs
 				outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)
 				for outward_dir in outward_dir_list:
-					shutil.move(outward_dir.makedirs_p().touch() , (outward_dir+'_old').rmtree_p())
-					outward_dir = outward_dir.makedirs_p().touch()
+					shutil.move(outward_dir.makedirs_p().access(os.W_OK) , (outward_dir+'_old').rmtree_p())
+					outward_dir = outward_dir.makedirs_p().access(os.W_OK)
 			else:
 				assert 0, 'Mock value not understood mock=%r'%mock
 		return result
