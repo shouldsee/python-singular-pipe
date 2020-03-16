@@ -1,3 +1,7 @@
+# 0.0.8
+- [changed] funcsig for spiper.shell.LoggedSinuglarityCommand(prefix, cmd, image, log_file). add '--workdir'
+
+
 # 0.0.7
 - [fix] [need:test] check for write access during get_changed_files() and in mock_do(
 - [added] spiper._types.Path() wrapper  with check_writable() method

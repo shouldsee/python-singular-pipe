@@ -87,13 +87,14 @@ if 1:
 
 
 if 1:
-	def LoggedSingularityCommandList(cmd, image, extra_files=None,**kw):
-		return LoggedSingularityCommand(cmd,image, extra_files, is_exec=0,**kw)
+	def LoggedSingularityCommandList(prefix, cmd, image,  extra_files=None,**kw):
+		return LoggedSingularityCommand(prefix, cmd, image, extra_files, is_exec=0,**kw)
 
-	def LoggedSingularityCommand( cmd, image, log_file,check=1,  mode='w',
+	def LoggedSingularityCommand(prefix, cmd, image, log_file, check=1,  mode='w',
 		is_exec=1,
 		multiline=0,
-		extra_files = None, debug =0):	
+		extra_files = None,  
+		debug =0):	
 		'''
 		return a tuple (executed command, command_stdout)
 			cmd: a list of str-like objects that gets concatenated into a shell command
@@ -103,6 +104,7 @@ if 1:
 		'''
 		if extra_files is None:
 			extra_files  = []
+
 
 		# cmd = ['set','-e;',cmd]		
 		# cmd = list_flatten_strict(cmd)
@@ -143,6 +145,9 @@ if 1:
 		# '\n',
 		'singularity','exec',
 		'--contain',
+		'--writable',
+		['--workdir', File(prefix +'.singularity_temp').makedirs_p().check_writable()] if prefix else [],
+		# extra_params,
 		['--bind',','.join(bfs)] if len(bfs) else [],
 		# [-1],'--bind','/tmp:/tmp',
 			image,

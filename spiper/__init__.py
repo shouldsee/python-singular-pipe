@@ -4,7 +4,7 @@ from jinja2 import Template, StrictUndefined
 version_info = (  # SEMANTIC
         0,        # major
         0,        # minor
-        7,        # patch
+        8,        # patch
 )
 def get_version(VERSION=version_info):
     version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
