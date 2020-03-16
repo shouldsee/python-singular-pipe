@@ -158,7 +158,7 @@ if 1:
 					modes += ['ro']*len(res)
 				elif isinstance(F, Prefix):
 					#### if is not inputPrefix, mount the directory
-					F.dirname().makedirs_p()
+					F.dirname().makedirs_p().touch()
 					FS.append( File( F.dirname() ) )
 					mode = 'rw'
 					modes+=[mode]

@@ -504,6 +504,11 @@ class Caller(object):
 			print('[CREATING.mock]%s'%f) if verbose >=4 else None
 		if output_ident_changed:
 			(_caller.output_cache_file+'.output_changed.mock').touch()	
+
+		### [need:test] test permission for writing
+		outward_dir_list = get_outward_json_list( self.arg_tuples, self.dir_layout)
+		[ outward_dir.makedirs_p().touch() for outward_dir in outward_dir_list]
+
 		if strict:
 			assert _caller.is_mock(lambda *x:print(x) if verbose >=5  else None)		
 				
@@ -660,8 +665,8 @@ class _Runner(object):
 		input_ident_file =  IdentFile( dir_layout, _caller.prefix_named, [] , 'input_json' )
 		output_ident_file=  IdentFile( dir_layout, _caller.prefix_named, [] , 'output_json' )
 		output_cache_file=  _caller.output_cache_file
-		File(input_ident_file).dirname().makedirs_p()
-		_caller.output_cache_file.dirname().makedirs_p()
+		File(input_ident_file).dirname().makedirs_p().touch()
+		_caller.output_cache_file.dirname().makedirs_p().touch()
 
 
 
@@ -776,17 +781,21 @@ class _Runner(object):
 				### add input and output ident to outward_pk
 				# outward_dir_list = get_outward_json_list( _input, config)
 				
-				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
 				_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
+
+				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
 				for outward_dir in outward_dir_list:
-					outward_edge_file = outward_dir.makedirs_p() /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
+					outward_dir.makedirs_p().touch()
+
+				for outward_dir in outward_dir_list:
+					outward_edge_file = outward_dir /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
 					ident_dump( input_image, outward_edge_file)			
 
 				#### remove edge_file of outputs
 				outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)
 				for outward_dir in outward_dir_list:
-					shutil.move(outward_dir.makedirs_p() , (outward_dir+'_old').rmtree_p())
-					outward_dir = outward_dir.makedirs_p() 
+					shutil.move(outward_dir.makedirs_p().touch() , (outward_dir+'_old').rmtree_p())
+					outward_dir = outward_dir.makedirs_p().touch()
 			else:
 				assert 0, 'Mock value not understood mock=%r'%mock
 		return result
