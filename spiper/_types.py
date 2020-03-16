@@ -428,6 +428,8 @@ def PythonPackage(package_path, imported_name=None):
 			extras = HttpResponseContentHeader(_url)
 		elif _url.startswith('file://'):
 			extras = Prefix(lstrip( _url, 'file://'))
+		elif _url.startswith('/'):
+			raise Exception('Use file://<path> to specify a local package')
 		else:
 			raise err
 	mod = _PythonPackage( package_path, _name, imported_name, extras)

@@ -1,6 +1,6 @@
 import argparse
 import sys
-from spiper.runner import cache_run,get_all_files,get_changed_files
+from spiper.runner import cache_run,get_all_files,get_changed_files, force_run
 from spiper.types import RemotePythonObject as RPO
 import spiper
 def _help(e=None):
@@ -59,6 +59,10 @@ Options:
 
 		if args[0]=='run':
 			runner = cache_run		
+			if '--force' in args:
+				args.remove('--force')
+				runner = force_run
+
 		elif args[0] == 'get_all_files':
 			def runner(*a):
 				fs = get_all_files(*a)
