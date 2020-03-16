@@ -28,7 +28,7 @@ go version
 #### do not use sudo if making a local install
 apt-get download squashfs-tools
 dpkg -x squashfs-tools*.deb _temp
-cp -l _temp/usr/bin/* $prefix/bin
+cp -lf _temp/usr/bin/* $prefix/bin
 
 
 # sudo -E echo ask for sudo access for apt
