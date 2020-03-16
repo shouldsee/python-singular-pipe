@@ -1,5 +1,7 @@
 # 0.0.8
 - [changed] funcsig for spiper.shell.LoggedSinuglarityCommand(prefix, cmd, image, log_file). add '--workdir'
+- [added] spiper.shell.LoggedSinuglarityCommandList(prefix,cmd,image). returns a cmd_list for singularity exec
+- [note] --workdir for singularity is important for providing storage for created temporary files.
 
 
 # 0.0.7
