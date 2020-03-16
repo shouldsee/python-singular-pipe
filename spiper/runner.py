@@ -327,6 +327,7 @@ class Caller(object):
 		self.job          = job
 		self._output_type = job._output_type
 		self._job_type    = self.job._type
+		assert self._job_type is not None
 		self.arg_tuples   = arg_tuples
 		self.dir_layout   = dir_layout
 		self._subflow     = _dict()
@@ -452,10 +453,10 @@ class Caller(object):
 			self._allow_cache = 1
 			returned = self.job(self, *[x[1] for x in self.arg_tuples])
 			assert returned in [self,None],"Return statement is disallowed in NodeFunction. Use self.cache(obj) instead or decorate as @Flow"			
+			returned = self
 			if not self._cached:
 				self.cache(returned,)
-			returned = self
-			return self
+			# return self
 		else:
 			self._cached = False
 			self._allow_cache = 0
