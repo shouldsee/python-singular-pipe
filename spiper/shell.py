@@ -184,12 +184,14 @@ if 1:
 					modes+=[mode]
 				elif isinstance(F, InputFile):
 					#### if is inputFile, dont touch
-					assert F.isfile(),(F,cmd)
+					# assert F.isfile(),(F,cmd)
+					assert F.exists(),(F,cmd)
 					FS.append( F )
 					modes += ['ro']					
 				elif isinstance(F,File):
 					#### if not inputfile, touch to makesure					
-					F.touch() if not F.isfile() else None
+					# F.touch() if not F.isfile() else None
+					F.touch() if not F.exists() else None
 					FS.append( F )
 					modes += ['rw']
 					# mode = 'rw'
