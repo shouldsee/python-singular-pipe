@@ -1,0 +1,9 @@
+# 0.0.6
+- [fix] force Caller.__call__ to cache self if is Node
+- [add] spiper._header.Concat
+- [add] spiper._header.list_to_string
+- [fix] spiper.shell.LoggedSingularityCommand to sniff Files with 
+_header.list_to_string
+- [add] spiper._header.resolve_spiper to intepret '..subflow..xxx..output..bam'
+[need: test]
+- [fix] RPO to better intepret pep508 [need: test] [need: use pep508-parser]

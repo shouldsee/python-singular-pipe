@@ -241,8 +241,10 @@ def get_genepred(self,prefix,
 	CMD = ['genePredToGtf','file',self.output.genepred, self.output.gtf]
 	LoggedSingularityCommand(CMD, _IMAGE, self.output.cmd,mode='a')
 
-	# return 
+	# return piper
 
+
+from s
 if __name__ == '__main__':
 	from spiper.runner import force_run,cache_run
 	data = {}

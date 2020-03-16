@@ -402,26 +402,35 @@ def PythonPackage(package_path, imported_name=None):
 
 	package_path: (str)
 		A :pep:`508`-compatible string without version specification
-
+	
+	Note:
+	----------------------
+	pip uses PackageFinder to mimic easy_install
+	see https://github.com/pypa/pip/blob/e5375afffded829dc6a8373e0d07149ab3c74bed/src/pip/_internal/index/package_finder.py#L597
 	'''
 
 	# assert version is None
 	err = UndefinedRoutine('PythonPackage(%r)'%((package_path)))
 	# print(package_path)
 	# package_path = str(package_path)
-	x = pkg_resources.Requirement.parse(package_path)
-	spec = ''.join(list_flatten(x.specs))
+	# x = pkg_resources.Requirement.parse(package_path)
+	if '@' in package_path:
+		_name, _url = package_path.split('@',1)
+	else:
+		_name = None
+		_url  = package_path
+
 	extras = ()
-	if x.url is not None:
-		url = x.url
+	if _url is not None:
+		# url = _url
 		# package_name, url = package_path.split('@',1)
-		if url.startswith('http'):
-			extras = HttpResponseContentHeader(url)
-		elif url.startswith('file://'):
-			extras = File(lstrip(url, 'file://'))
+		if _url.startswith('http'):
+			extras = HttpResponseContentHeader(_url)
+		elif _url.startswith('file://'):
+			extras = Prefix(lstrip( _url, 'file://'))
 		else:
 			raise err
-	mod = _PythonPackage( package_path, x.name, imported_name, extras)
+	mod = _PythonPackage( package_path, _name, imported_name, extras)
 
 	# mod = _PythonPackage( x.name, imported_name, x.url, x.specs, extras)
 	# else:

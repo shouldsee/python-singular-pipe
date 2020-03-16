@@ -419,6 +419,27 @@ cd $OLDPWD
 				curr.output.fastq2,
 				THREADS)
 
+	def test_flatten(self):
+		from spiper.types import list_flatten,list_flatten_strict, list_to_string, Concat
+
+
+		x = [Concat([['k'],'3'],'a','b'), 'x','y']
+		s = list_to_string(x)
+		exp = 'k 3ab x y'
+		assert s==exp,(s,)
+
+		x = [Concat([['k'],'3'],'a','b'), 'x','y']
+		s = list_flatten(x)
+		exp = ['k', '3', 'a', 'b', 'x', 'y']
+		assert s==exp,(s,)
+
+		x = Concat(Concat([['k'],'3'],'a','b'), 'x','y')
+		s = list_to_string([x])
+		exp = 'k 3abxy'
+		assert s==exp,(s,)
+
+
+from pprint import pprint
 	# test_basic()
 import pdb
 import traceback

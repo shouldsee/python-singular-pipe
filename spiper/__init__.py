@@ -4,7 +4,7 @@ from jinja2 import Template, StrictUndefined
 version_info = (  # SEMANTIC
         0,        # major
         0,        # minor
-        5,        # patch
+        6,        # patch
 )
 def get_version(VERSION=version_info):
     version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
@@ -87,6 +87,7 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 
 todo = '''
 ### ToDo
+	- [ ] Adding wrapper for WDL.
     - [x] Running a remote module
     	- [x] `spiper.mock.test_remote()` add some tests for spiper._types.PythonModule()
     - [ ] Polish graph to have input-output node

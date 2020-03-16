@@ -5,280 +5,280 @@
  -->
 <!-- Title: G Pages: 1 -->
 <svg width="4496pt" height="751pt"
- viewBox="0.00 0.00 4496.16 751.13" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ viewBox="0.00 0.00 4495.99 751.13" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 747.127)">
 <title>G</title>
-<polygon fill="white" stroke="none" points="-4,4 -4,-747.127 4492.16,-747.127 4492.16,4 -4,4"/>
-<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;) -->
-<g id="node1" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-747.127 4491.99,-747.127 4491.99,4 -4,4"/>
+<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;) -->
+<g id="node1" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)</title>
 <ellipse fill="none" stroke="black" cx="263.751" cy="-98.8701" rx="263.502" ry="26.7407"/>
 <text text-anchor="start" x="85.2508" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_</text>
-<text text-anchor="middle" x="263.751" y="-87.6701" font-family="Times,serif" font-size="14.00">mutate_output_fasta.backup&#39;)</text>
+<text text-anchor="middle" x="263.751" y="-87.6701" font-family="Times,serif" font-size="14.00">random_seq_output_seq.backup&#39;)</text>
 </g>
 <!-- &#39;SINK&#39; -->
 <g id="node2" class="node"><title>&#39;SINK&#39;</title>
-<ellipse fill="none" stroke="black" cx="2102.75" cy="-18" rx="40.0939" ry="18"/>
-<text text-anchor="middle" x="2102.75" y="-14.3" font-family="Times,serif" font-size="14.00">&#39;SINK&#39;</text>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge1" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M443.884,-79.2406C474.834,-76.4863 506.701,-73.9305 536.751,-72 1132.19,-33.7465 1856.89,-22.1366 2052.24,-19.5959"/>
-<polygon fill="black" stroke="black" points="2052.52,-23.0927 2062.48,-19.4648 2052.43,-16.0932 2052.52,-23.0927"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;)) -->
-<g id="node3" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))</title>
-<ellipse fill="none" stroke="black" cx="703.751" cy="-199.217" rx="273.801" ry="37.4533"/>
-<text text-anchor="start" x="518.251" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
-<text text-anchor="start" x="518.251" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
-<text text-anchor="middle" x="703.751" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_mutate_output_fasta&#39;))</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;) -->
-<g id="edge2" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)</title>
-<path fill="none" stroke="black" d="M563.928,-166.964C504.581,-153.699 436.218,-138.419 379.736,-125.794"/>
-<polygon fill="black" stroke="black" points="380.218,-122.316 369.695,-123.55 378.691,-129.147 380.218,-122.316"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;) -->
-<g id="node4" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="814.751" cy="-98.8701" rx="269.315" ry="26.7407"/>
-<text text-anchor="start" x="632.251" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
-<text text-anchor="middle" x="814.751" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_mutate_output_fasta.cache_pk&#39;)</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;) -->
-<g id="edge4" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M744.453,-162.155C755.406,-152.45 767.19,-142.01 777.919,-132.503"/>
-<polygon fill="black" stroke="black" points="780.355,-135.021 785.519,-125.77 775.713,-129.782 780.355,-135.021"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge3" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M1003.05,-79.6376C1034.65,-76.8704 1067.12,-74.207 1097.75,-72 1463.65,-45.6377 1905.38,-26.8669 2052.43,-20.968"/>
-<polygon fill="black" stroke="black" points="2052.65,-24.4621 2062.5,-20.5656 2052.37,-17.4677 2052.65,-24.4621"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;) -->
-<g id="node5" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</title>
-<ellipse fill="none" stroke="black" cx="703.751" cy="-299.563" rx="220.961" ry="18"/>
-<text text-anchor="middle" x="703.751" y="-295.863" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</text>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;)) -->
-<g id="edge5" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))</title>
-<path fill="none" stroke="black" d="M703.751,-281.433C703.751,-271.802 703.751,-259.267 703.751,-246.937"/>
-<polygon fill="black" stroke="black" points="707.251,-246.698 703.751,-236.698 700.251,-246.698 707.251,-246.698"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;)) -->
-<g id="node6" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</title>
-<ellipse fill="none" stroke="black" cx="1218.75" cy="-389.304" rx="279.114" ry="26.7407"/>
-<text text-anchor="start" x="1029.25" y="-393.104" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_</text>
-<text text-anchor="middle" x="1218.75" y="-378.104" font-family="Times,serif" font-size="14.00">named=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;) -->
-<g id="edge6" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</title>
-<path fill="none" stroke="black" d="M1085.79,-365.651C998.048,-350.703 884.893,-331.425 804.563,-317.739"/>
-<polygon fill="black" stroke="black" points="804.886,-314.243 794.44,-316.014 803.71,-321.144 804.886,-314.243"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;) -->
-<g id="node7" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1218.75" cy="-299.563" rx="275.543" ry="26.7407"/>
-<text text-anchor="start" x="1031.75" y="-303.363" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_</text>
-<text text-anchor="middle" x="1218.75" y="-288.363" font-family="Times,serif" font-size="14.00">pk&#39;)</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;) -->
-<g id="edge8" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)</title>
-<path fill="none" stroke="black" d="M1218.75,-361.979C1218.75,-354.012 1218.75,-345.121 1218.75,-336.633"/>
-<polygon fill="black" stroke="black" points="1222.25,-336.567 1218.75,-326.567 1215.25,-336.568 1222.25,-336.567"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge7" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M1193.23,-272.759C1150.8,-226.818 1075.62,-130.214 1130.75,-72 1162.7,-38.2615 1857.29,-23.3735 2052.26,-19.8498"/>
-<polygon fill="black" stroke="black" points="2052.57,-23.3449 2062.51,-19.6668 2052.45,-16.346 2052.57,-23.3449"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;) -->
-<g id="node8" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1790.75" cy="-470.174" rx="235.858" ry="18"/>
-<text text-anchor="middle" x="1790.75" y="-466.474" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</text>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;)) -->
-<g id="edge9" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</title>
-<path fill="none" stroke="black" d="M1681.82,-454.153C1597.6,-442.541 1479.62,-426.273 1383.82,-413.065"/>
-<polygon fill="black" stroke="black" points="1384.12,-409.573 1373.74,-411.674 1383.17,-416.507 1384.12,-409.573"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;)) -->
-<g id="node10" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))</title>
-<ellipse fill="none" stroke="black" cx="1790.75" cy="-199.217" rx="273.801" ry="37.4533"/>
-<text text-anchor="start" x="1605.25" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
-<text text-anchor="start" x="1605.25" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
-<text text-anchor="middle" x="1790.75" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_transcribe_output_fasta&#39;))</text>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;)) -->
-<g id="edge14" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))</title>
-<path fill="none" stroke="black" d="M1790.75,-451.94C1790.75,-411.169 1790.75,-307.657 1790.75,-246.822"/>
-<polygon fill="black" stroke="black" points="1794.25,-246.712 1790.75,-236.712 1787.25,-246.713 1794.25,-246.712"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;) -->
-<g id="node9" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1403.75" cy="-98.8701" rx="263.502" ry="26.7407"/>
-<text text-anchor="start" x="1225.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_</text>
-<text text-anchor="middle" x="1403.75" y="-87.6701" font-family="Times,serif" font-size="14.00">transcribe_output_fasta.backup&#39;)</text>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge10" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M1575.64,-78.4753C1733.21,-60.6963 1956.38,-35.5159 2053.93,-24.5086"/>
-<polygon fill="black" stroke="black" points="2054.54,-27.9621 2064.08,-23.3629 2053.75,-21.0063 2054.54,-27.9621"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;) -->
-<g id="edge11" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)</title>
-<path fill="none" stroke="black" d="M1663.76,-165.946C1613.46,-153.162 1556.33,-138.643 1508.45,-126.477"/>
-<polygon fill="black" stroke="black" points="1509.25,-123.069 1498.69,-123.998 1507.52,-129.853 1509.25,-123.069"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;) -->
-<g id="node11" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="1954.75" cy="-98.8701" rx="269.315" ry="26.7407"/>
-<text text-anchor="start" x="1772.25" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
-<text text-anchor="middle" x="1954.75" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_transcribe_output_fasta.cache_pk&#39;)</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;) -->
-<g id="edge13" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M1850.42,-162.433C1867.81,-152.004 1886.66,-140.704 1903.48,-130.615"/>
-<polygon fill="black" stroke="black" points="1905.3,-133.605 1912.08,-125.46 1901.7,-127.602 1905.3,-133.605"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge12" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M2002.8,-72.2632C2024.37,-60.7695 2049.31,-47.4814 2068.87,-37.0529"/>
-<polygon fill="black" stroke="black" points="2070.55,-40.1236 2077.73,-32.3318 2067.26,-33.946 2070.55,-40.1236"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;)) -->
-<g id="node12" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))</title>
-<ellipse fill="none" stroke="black" cx="2251.75" cy="-561.65" rx="277.786" ry="37.4533"/>
-<text text-anchor="start" x="2063.25" y="-572.95" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre</text>
-<text text-anchor="start" x="2063.25" y="-557.95" font-family="Times,serif" font-size="14.00">fix_named=File(&#39;/tmp/spiper.symbolic/root.transcri</text>
-<text text-anchor="middle" x="2251.75" y="-542.95" font-family="Times,serif" font-size="14.00">be&#39;))</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;) -->
-<g id="edge15" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</title>
-<path fill="none" stroke="black" d="M2096.64,-530.545C2025.68,-516.771 1944,-500.918 1882.9,-489.06"/>
-<polygon fill="black" stroke="black" points="1883.38,-485.587 1872.9,-487.118 1882.05,-492.459 1883.38,-485.587"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;) -->
-<g id="node13" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="2251.75" cy="-389.304" rx="268.901" ry="26.7407"/>
-<text text-anchor="start" x="2069.75" y="-393.104" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca</text>
-<text text-anchor="middle" x="2251.75" y="-378.104" font-family="Times,serif" font-size="14.00">che_pk&#39;)</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;) -->
-<g id="edge17" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)</title>
-<path fill="none" stroke="black" d="M2251.75,-524.107C2251.75,-495.2 2251.75,-455.055 2251.75,-426.293"/>
-<polygon fill="black" stroke="black" points="2255.25,-426.254 2251.75,-416.254 2248.25,-426.254 2255.25,-426.254"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge16" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M2258.62,-362.357C2272.39,-304.182 2296.84,-161.43 2232.75,-72 2213.89,-45.6839 2179.6,-32.4081 2150.97,-25.725"/>
-<polygon fill="black" stroke="black" points="2151.63,-22.2859 2141.12,-23.6256 2150.17,-29.1323 2151.63,-22.2859"/>
-</g>
-<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;) -->
-<g id="node14" class="node"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)</title>
-<ellipse fill="none" stroke="black" cx="2828.75" cy="-653.127" rx="246.956" ry="18"/>
-<text text-anchor="middle" x="2828.75" y="-649.427" font-family="Times,serif" font-size="14.00">Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)</text>
-</g>
-<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;)) -->
-<g id="edge18" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))</title>
-<path fill="none" stroke="black" d="M2728.9,-636.643C2649.7,-624.361 2536.71,-606.84 2440.57,-591.93"/>
-<polygon fill="black" stroke="black" points="2440.84,-588.431 2430.42,-590.358 2439.77,-595.349 2440.84,-588.431"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;)) -->
-<g id="node16" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))</title>
-<ellipse fill="none" stroke="black" cx="2828.75" cy="-199.217" rx="277.372" ry="37.4533"/>
-<text text-anchor="start" x="2640.75" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file_singl</text>
-<text text-anchor="start" x="2640.75" y="-195.517" font-family="Times,serif" font-size="14.00">e_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro</text>
-<text text-anchor="middle" x="2828.75" y="-180.517" font-family="Times,serif" font-size="14.00">ot.subflow.random_seq.output.seq&#39;))</text>
-</g>
-<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;)) -->
-<g id="edge23" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))</title>
-<path fill="none" stroke="black" d="M2828.75,-634.911C2828.75,-602.746 2828.75,-531.334 2828.75,-471.174 2828.75,-471.174 2828.75,-471.174 2828.75,-388.304 2828.75,-340.249 2828.75,-285.288 2828.75,-247.241"/>
-<polygon fill="black" stroke="black" points="2832.25,-246.978 2828.75,-236.978 2825.25,-246.978 2832.25,-246.978"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;)) -->
-<g id="node19" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))</title>
-<ellipse fill="none" stroke="black" cx="3667.75" cy="-199.217" rx="273.801" ry="37.4533"/>
-<text text-anchor="start" x="3482.25" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
-<text text-anchor="start" x="3482.25" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
-<text text-anchor="middle" x="3667.75" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_random_seq_output_seq&#39;))</text>
-</g>
-<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;)) -->
-<g id="edge28" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))</title>
-<path fill="none" stroke="black" d="M2923.79,-636.425C3012.65,-615.672 3131.75,-569.514 3131.75,-471.174 3131.75,-471.174 3131.75,-471.174 3131.75,-388.304 3131.75,-312.31 3326.01,-259.648 3480.63,-229.768"/>
-<polygon fill="black" stroke="black" points="3481.59,-233.148 3490.76,-227.832 3480.28,-226.272 3481.59,-233.148"/>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;) -->
-<g id="node15" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="2551.75" cy="-98.8701" rx="271.558" ry="26.7407"/>
-<text text-anchor="start" x="2367.75" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando</text>
-<text text-anchor="middle" x="2551.75" y="-87.6701" font-family="Times,serif" font-size="14.00">m_seq.output.seq.cache_pk&#39;)</text>
-</g>
-<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge19" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M2422.78,-75.2162C2331.48,-59.1781 2214.26,-38.5876 2150.05,-27.3081"/>
-<polygon fill="black" stroke="black" points="2150.28,-23.7962 2139.83,-25.5132 2149.07,-30.6906 2150.28,-23.7962"/>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;) -->
-<g id="edge20" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M2732.26,-163.958C2699.43,-152.303 2663.13,-139.413 2631.73,-128.267"/>
-<polygon fill="black" stroke="black" points="2632.75,-124.915 2622.16,-124.868 2630.41,-131.512 2632.75,-124.915"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;) -->
-<g id="node17" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)</title>
-<ellipse fill="none" stroke="black" cx="3113.75" cy="-98.8701" rx="272.472" ry="26.7407"/>
-<text text-anchor="start" x="2929.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq</text>
-<text text-anchor="middle" x="3113.75" y="-87.6701" font-family="Times,serif" font-size="14.00">.output.seq&#39;)</text>
-</g>
-<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;) -->
-<g id="edge22" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)</title>
-<path fill="none" stroke="black" d="M2927.63,-164.096C2961.72,-152.331 2999.51,-139.293 3032.07,-128.056"/>
-<polygon fill="black" stroke="black" points="3033.24,-131.355 3041.55,-124.784 3030.96,-124.737 3033.24,-131.355"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge21" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M2922.2,-79.7362C2892.27,-77.0466 2861.68,-74.3816 2832.75,-72 2577.05,-50.9496 2270.6,-30.1357 2152.51,-22.2795"/>
-<polygon fill="black" stroke="black" points="2152.55,-18.7745 2142.34,-21.6039 2152.08,-25.7591 2152.55,-18.7745"/>
-</g>
-<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;) -->
-<g id="node18" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)</title>
-<ellipse fill="none" stroke="black" cx="3667.75" cy="-98.8701" rx="263.502" ry="26.7407"/>
-<text text-anchor="start" x="3489.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_</text>
-<text text-anchor="middle" x="3667.75" y="-87.6701" font-family="Times,serif" font-size="14.00">random_seq_output_seq.backup&#39;)</text>
+<ellipse fill="none" stroke="black" cx="2742.75" cy="-18" rx="40.0939" ry="18"/>
+<text text-anchor="middle" x="2742.75" y="-14.3" font-family="Times,serif" font-size="14.00">&#39;SINK&#39;</text>
 </g>
 <!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge24" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M3486.5,-79.325C3455.9,-76.5867 3424.44,-74.014 3394.75,-72 2911.86,-39.2392 2325.97,-24.0685 2153.06,-20.0957"/>
-<polygon fill="black" stroke="black" points="2153.06,-16.595 2142.98,-19.8662 2152.9,-23.5931 2153.06,-16.595"/>
+<g id="edge1" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M442.768,-79.0869C474.065,-76.3233 506.335,-73.8043 536.751,-72 1398.26,-20.8954 2451.81,-18.6916 2692.28,-18.8987"/>
+<polygon fill="black" stroke="black" points="2692.46,-22.3988 2702.46,-18.9093 2692.47,-15.3988 2692.46,-22.3988"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;)) -->
+<g id="node3" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))</title>
+<ellipse fill="none" stroke="black" cx="814.751" cy="-199.217" rx="273.801" ry="37.4533"/>
+<text text-anchor="start" x="629.251" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
+<text text-anchor="start" x="629.251" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
+<text text-anchor="middle" x="814.751" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_random_seq_output_seq&#39;))</text>
 </g>
 <!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;) -->
-<g id="edge25" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)</title>
-<path fill="none" stroke="black" d="M3667.75,-161.596C3667.75,-153.225 3667.75,-144.334 3667.75,-135.984"/>
-<polygon fill="black" stroke="black" points="3671.25,-135.778 3667.75,-125.778 3664.25,-135.778 3671.25,-135.778"/>
+<g id="edge2" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lrandom_seq_output_seq.backup&#39;)</title>
+<path fill="none" stroke="black" d="M651.669,-169.109C571.796,-154.852 476.705,-137.88 400.662,-124.307"/>
+<polygon fill="black" stroke="black" points="400.998,-120.812 390.538,-122.5 399.768,-127.703 400.998,-120.812"/>
 </g>
 <!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;) -->
-<g id="node20" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)</title>
-<ellipse fill="none" stroke="black" cx="4218.75" cy="-98.8701" rx="269.315" ry="26.7407"/>
-<text text-anchor="start" x="4036.25" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
-<text text-anchor="middle" x="4218.75" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_random_seq_output_seq.cache_pk&#39;)</text>
+<g id="node4" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="814.751" cy="-98.8701" rx="269.315" ry="26.7407"/>
+<text text-anchor="start" x="632.251" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
+<text text-anchor="middle" x="814.751" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_random_seq_output_seq.cache_pk&#39;)</text>
 </g>
 <!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;) -->
-<g id="edge27" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)</title>
-<path fill="none" stroke="black" d="M3830.83,-169.109C3910.55,-154.879 4005.43,-137.944 4081.41,-124.385"/>
-<polygon fill="black" stroke="black" points="4082.29,-127.782 4091.52,-122.579 4081.06,-120.891 4082.29,-127.782"/>
+<g id="edge4" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M814.751,-161.596C814.751,-153.225 814.751,-144.334 814.751,-135.984"/>
+<polygon fill="black" stroke="black" points="818.251,-135.778 814.751,-125.778 811.251,-135.778 818.251,-135.778"/>
 </g>
 <!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
-<g id="edge26" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
-<path fill="none" stroke="black" d="M4035.32,-79.126C4003.8,-76.3849 3971.35,-73.8632 3940.75,-72 3232.62,-28.8861 2368.82,-20.6858 2153.28,-19.2727"/>
-<polygon fill="black" stroke="black" points="2153.24,-15.7725 2143.22,-19.2086 2153.19,-22.7723 2153.24,-15.7725"/>
+<g id="edge3" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_random_seq_output_seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M998.56,-79.1788C1029.96,-76.4404 1062.27,-73.9058 1092.75,-72 1722.94,-32.5934 2490.46,-21.7602 2692.22,-19.5054"/>
+<polygon fill="black" stroke="black" points="2692.55,-23.0022 2702.51,-19.3925 2692.47,-16.0026 2692.55,-23.0022"/>
+</g>
+<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;) -->
+<g id="node5" class="node"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)</title>
+<ellipse fill="none" stroke="black" cx="2775.75" cy="-653.127" rx="246.956" ry="18"/>
+<text text-anchor="middle" x="2775.75" y="-649.427" font-family="Times,serif" font-size="14.00">Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)</text>
+</g>
+<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;)) -->
+<g id="edge5" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_random_seq_output_seq&#39;))</title>
+<path fill="none" stroke="black" d="M2558.45,-644.511C2180.45,-628.334 1441.75,-582.482 1441.75,-471.174 1441.75,-471.174 1441.75,-471.174 1441.75,-388.304 1441.75,-301.052 1216.18,-250.801 1035.63,-224.554"/>
+<polygon fill="black" stroke="black" points="1036.11,-221.087 1025.71,-223.13 1035.11,-228.016 1036.11,-221.087"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;)) -->
+<g id="node16" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))</title>
+<ellipse fill="none" stroke="black" cx="2775.75" cy="-561.65" rx="277.786" ry="37.4533"/>
+<text text-anchor="start" x="2587.25" y="-572.95" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre</text>
+<text text-anchor="start" x="2587.25" y="-557.95" font-family="Times,serif" font-size="14.00">fix_named=File(&#39;/tmp/spiper.symbolic/root.transcri</text>
+<text text-anchor="middle" x="2775.75" y="-542.95" font-family="Times,serif" font-size="14.00">be&#39;))</text>
+</g>
+<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;)) -->
+<g id="edge23" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))</title>
+<path fill="none" stroke="black" d="M2775.75,-634.875C2775.75,-627.569 2775.75,-618.667 2775.75,-609.642"/>
+<polygon fill="black" stroke="black" points="2779.25,-609.48 2775.75,-599.48 2772.25,-609.48 2779.25,-609.48"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;)) -->
+<g id="node19" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))</title>
+<ellipse fill="none" stroke="black" cx="3658.75" cy="-199.217" rx="277.372" ry="37.4533"/>
+<text text-anchor="start" x="3470.75" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file_singl</text>
+<text text-anchor="start" x="3470.75" y="-195.517" font-family="Times,serif" font-size="14.00">e_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro</text>
+<text text-anchor="middle" x="3658.75" y="-180.517" font-family="Times,serif" font-size="14.00">ot.subflow.random_seq.output.seq&#39;))</text>
+</g>
+<!-- Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;)) -->
+<g id="edge28" class="edge"><title>Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))</title>
+<path fill="none" stroke="black" d="M3010.27,-647.441C3261.56,-635.879 3624.75,-597.343 3624.75,-471.174 3624.75,-471.174 3624.75,-471.174 3624.75,-388.304 3624.75,-339.413 3636.01,-284.499 3645.57,-246.688"/>
+<polygon fill="black" stroke="black" points="3648.97,-247.535 3648.09,-236.977 3642.19,-245.781 3648.97,-247.535"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;) -->
+<g id="node6" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)</title>
+<ellipse fill="none" stroke="black" cx="1365.75" cy="-98.8701" rx="263.502" ry="26.7407"/>
+<text text-anchor="start" x="1187.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_</text>
+<text text-anchor="middle" x="1365.75" y="-87.6701" font-family="Times,serif" font-size="14.00">transcribe_output_fasta.backup&#39;)</text>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge6" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M1548.11,-79.4031C1578.37,-76.6801 1609.43,-74.0921 1638.75,-72 2044.76,-43.0328 2535.93,-25.6809 2692.36,-20.5841"/>
+<polygon fill="black" stroke="black" points="2692.73,-24.0742 2702.61,-20.2522 2692.5,-17.0778 2692.73,-24.0742"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;)) -->
+<g id="node7" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))</title>
+<ellipse fill="none" stroke="black" cx="1916.75" cy="-199.217" rx="273.801" ry="37.4533"/>
+<text text-anchor="start" x="1731.25" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
+<text text-anchor="start" x="1731.25" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
+<text text-anchor="middle" x="1916.75" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_transcribe_output_fasta&#39;))</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;) -->
+<g id="edge7" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\ltranscribe_output_fasta.backup&#39;)</title>
+<path fill="none" stroke="black" d="M1753.67,-169.109C1673.8,-154.852 1578.71,-137.88 1502.66,-124.307"/>
+<polygon fill="black" stroke="black" points="1503,-120.812 1492.54,-122.5 1501.77,-127.703 1503,-120.812"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;) -->
+<g id="node8" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="1916.75" cy="-98.8701" rx="269.315" ry="26.7407"/>
+<text text-anchor="start" x="1734.25" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
+<text text-anchor="middle" x="1916.75" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_transcribe_output_fasta.cache_pk&#39;)</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;) -->
+<g id="edge9" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M1916.75,-161.596C1916.75,-153.225 1916.75,-144.334 1916.75,-135.984"/>
+<polygon fill="black" stroke="black" points="1920.25,-135.778 1916.75,-125.778 1913.25,-135.778 1920.25,-135.778"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge8" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_transcribe_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M2106.51,-79.7509C2297.97,-61.4692 2580.94,-34.4499 2693.74,-23.6795"/>
+<polygon fill="black" stroke="black" points="2694.18,-27.1539 2703.8,-22.7191 2693.51,-20.1856 2694.18,-27.1539"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;) -->
+<g id="node9" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</title>
+<ellipse fill="none" stroke="black" cx="2568.75" cy="-470.174" rx="235.858" ry="18"/>
+<text text-anchor="middle" x="2568.75" y="-466.474" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</text>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;)) -->
+<g id="edge10" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_transcribe_output_fasta&#39;))</title>
+<path fill="none" stroke="black" d="M2438.17,-455.112C2387.89,-447.14 2330.62,-434.871 2280.75,-416.174 2163.73,-372.296 2041.53,-291.394 1972.68,-242.034"/>
+<polygon fill="black" stroke="black" points="1974.72,-239.184 1964.56,-236.176 1970.62,-244.863 1974.72,-239.184"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;)) -->
+<g id="node14" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</title>
+<ellipse fill="none" stroke="black" cx="2568.75" cy="-389.304" rx="279.114" ry="26.7407"/>
+<text text-anchor="start" x="2379.25" y="-393.104" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_</text>
+<text text-anchor="middle" x="2568.75" y="-378.104" font-family="Times,serif" font-size="14.00">named=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</text>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;)) -->
+<g id="edge19" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))</title>
+<path fill="none" stroke="black" d="M2568.75,-452.06C2568.75,-444.571 2568.75,-435.479 2568.75,-426.602"/>
+<polygon fill="black" stroke="black" points="2572.25,-426.386 2568.75,-416.387 2565.25,-426.387 2572.25,-426.386"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;) -->
+<g id="node10" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)</title>
+<ellipse fill="none" stroke="black" cx="2467.75" cy="-98.8701" rx="263.502" ry="26.7407"/>
+<text text-anchor="start" x="2289.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_</text>
+<text text-anchor="middle" x="2467.75" y="-87.6701" font-family="Times,serif" font-size="14.00">mutate_output_fasta.backup&#39;)</text>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge11" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M2553.26,-73.3474C2601.89,-59.4 2660.69,-42.5339 2699.77,-31.3272"/>
+<polygon fill="black" stroke="black" points="2701.1,-34.5859 2709.75,-28.4646 2699.17,-27.8571 2701.1,-34.5859"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;)) -->
+<g id="node11" class="node"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))</title>
+<ellipse fill="none" stroke="black" cx="2534.75" cy="-199.217" rx="273.801" ry="37.4533"/>
+<text text-anchor="start" x="2349.25" y="-210.517" font-family="Times,serif" font-size="14.00">spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref</text>
+<text text-anchor="start" x="2349.25" y="-195.517" font-family="Times,serif" font-size="14.00">ix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file</text>
+<text text-anchor="middle" x="2534.75" y="-180.517" font-family="Times,serif" font-size="14.00">_subflow_mutate_output_fasta&#39;))</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;) -->
+<g id="edge12" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.copy_file_subflow_\lmutate_output_fasta.backup&#39;)</title>
+<path fill="none" stroke="black" d="M2509.99,-161.876C2503.83,-152.836 2497.25,-143.174 2491.16,-134.233"/>
+<polygon fill="black" stroke="black" points="2494.02,-132.22 2485.5,-125.926 2488.24,-136.161 2494.02,-132.22"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;) -->
+<g id="node12" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="3018.75" cy="-98.8701" rx="269.315" ry="26.7407"/>
+<text text-anchor="start" x="2836.25" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub</text>
+<text text-anchor="middle" x="3018.75" y="-87.6701" font-family="Times,serif" font-size="14.00">flow_mutate_output_fasta.cache_pk&#39;)</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;) -->
+<g id="edge14" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M2684.58,-167.773C2751.65,-154.145 2829.82,-138.26 2893.69,-125.283"/>
+<polygon fill="black" stroke="black" points="2894.71,-128.647 2903.81,-123.225 2893.31,-121.787 2894.71,-128.647"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge13" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.copy_file_sub\lflow_mutate_output_fasta.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M2932.94,-73.3474C2884.02,-59.3703 2824.85,-42.4621 2785.64,-31.2558"/>
+<polygon fill="black" stroke="black" points="2786.45,-27.847 2775.87,-28.4646 2784.52,-34.5776 2786.45,-27.847"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;) -->
+<g id="node13" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</title>
+<ellipse fill="none" stroke="black" cx="2534.75" cy="-299.563" rx="220.961" ry="18"/>
+<text text-anchor="middle" x="2534.75" y="-295.863" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</text>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;)) -->
+<g id="edge15" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)&#45;&gt;spiper.runner.Caller(dotname=&#39;mock.copy_file&#39;,pref\lix_named=File(&#39;/tmp/spiper.symbolic/root.copy_file\l_subflow_mutate_output_fasta&#39;))</title>
+<path fill="none" stroke="black" d="M2534.75,-281.433C2534.75,-271.802 2534.75,-259.267 2534.75,-246.937"/>
+<polygon fill="black" stroke="black" points="2538.25,-246.698 2534.75,-236.698 2531.25,-246.698 2538.25,-246.698"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;) -->
+<g id="edge16" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.mutate.fasta&#39;)</title>
+<path fill="none" stroke="black" d="M2558.55,-361.979C2554.3,-351.003 2549.36,-338.273 2545.1,-327.259"/>
+<polygon fill="black" stroke="black" points="2548.28,-325.785 2541.4,-317.725 2541.75,-328.314 2548.28,-325.785"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;) -->
+<g id="node15" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="3049.75" cy="-299.563" rx="275.543" ry="26.7407"/>
+<text text-anchor="start" x="2862.75" y="-303.363" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_</text>
+<text text-anchor="middle" x="3049.75" y="-288.363" font-family="Times,serif" font-size="14.00">pk&#39;)</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;) -->
+<g id="edge18" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.mutate&#39;,prefix_\lnamed=File(&#39;/tmp/spiper.symbolic/root.mutate&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)</title>
+<path fill="none" stroke="black" d="M2694.81,-365.308C2762.2,-353.016 2845.22,-337.873 2914.02,-325.323"/>
+<polygon fill="black" stroke="black" points="2914.85,-328.729 2924.06,-323.491 2913.59,-321.842 2914.85,-328.729"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge17" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.mutate.cache_\lpk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M3115.24,-273.354C3210.52,-233.163 3368.57,-151.017 3296.75,-72 3263.22,-35.1044 2923.6,-23.2504 2793.29,-20.0424"/>
+<polygon fill="black" stroke="black" points="2793.25,-16.5406 2783.17,-19.8005 2793.08,-23.5386 2793.25,-16.5406"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;) -->
+<g id="edge20" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.transcribe.fasta&#39;)</title>
+<path fill="none" stroke="black" d="M2694.83,-525.672C2668.52,-514.299 2640.16,-502.041 2617.02,-492.037"/>
+<polygon fill="black" stroke="black" points="2618.33,-488.793 2607.77,-488.038 2615.56,-495.219 2618.33,-488.793"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;) -->
+<g id="node17" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="3260.75" cy="-389.304" rx="268.901" ry="26.7407"/>
+<text text-anchor="start" x="3078.75" y="-393.104" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca</text>
+<text text-anchor="middle" x="3260.75" y="-378.104" font-family="Times,serif" font-size="14.00">che_pk&#39;)</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;) -->
+<g id="edge22" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.transcribe&#39;,pre\lfix_named=File(&#39;/tmp/spiper.symbolic/root.transcri\lbe&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)</title>
+<path fill="none" stroke="black" d="M2873.02,-526.485C2963.15,-494.829 3095.66,-448.288 3180.06,-418.644"/>
+<polygon fill="black" stroke="black" points="3181.33,-421.909 3189.6,-415.293 3179.01,-415.305 3181.33,-421.909"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge21" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.transcribe.ca\lche_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M3303.75,-362.772C3316.09,-353.082 3328.01,-340.846 3334.75,-326.434 3362.83,-266.358 3405.54,-158.654 3320.75,-72 3284.21,-34.6574 2927.56,-23.0355 2793.42,-19.968"/>
+<polygon fill="black" stroke="black" points="2793.09,-16.4601 2783.02,-19.7373 2792.94,-23.4584 2793.09,-16.4601"/>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;) -->
+<g id="node18" class="node"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)</title>
+<ellipse fill="none" stroke="black" cx="3653.75" cy="-98.8701" rx="271.558" ry="26.7407"/>
+<text text-anchor="start" x="3469.75" y="-102.67" font-family="Times,serif" font-size="14.00">CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando</text>
+<text text-anchor="middle" x="3653.75" y="-87.6701" font-family="Times,serif" font-size="14.00">m_seq.output.seq.cache_pk&#39;)</text>
+</g>
+<!-- CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge24" class="edge"><title>CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M3459.15,-80.1198C3428.57,-77.3727 3397.3,-74.5894 3367.75,-72 3153.58,-53.2331 2898.03,-31.8908 2792.3,-23.1068"/>
+<polygon fill="black" stroke="black" points="2792.5,-19.6113 2782.24,-22.2716 2791.92,-26.5873 2792.5,-19.6113"/>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;) -->
+<g id="edge25" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;CacheFile(&#39;/tmp/spiper.symbolic/root.subflow.rando\lm_seq.output.seq.cache_pk&#39;)</title>
+<path fill="none" stroke="black" d="M3656.89,-161.596C3656.46,-153.225 3656.01,-144.334 3655.59,-135.984"/>
+<polygon fill="black" stroke="black" points="3659.07,-135.587 3655.07,-125.778 3652.08,-135.943 3659.07,-135.587"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;) -->
+<g id="node20" class="node"><title>File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)</title>
+<ellipse fill="none" stroke="black" cx="4215.75" cy="-98.8701" rx="272.472" ry="26.7407"/>
+<text text-anchor="start" x="4031.25" y="-102.67" font-family="Times,serif" font-size="14.00">File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq</text>
+<text text-anchor="middle" x="4215.75" y="-87.6701" font-family="Times,serif" font-size="14.00">.output.seq&#39;)</text>
+</g>
+<!-- spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;) -->
+<g id="edge27" class="edge"><title>spiper.runner.Caller(dotname=&#39;mock.copy_file_singl\le_node&#39;,prefix_named=File(&#39;/tmp/spiper.symbolic/ro\lot.subflow.random_seq.output.seq&#39;))&#45;&gt;File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)</title>
+<path fill="none" stroke="black" d="M3823.98,-169.042C3904.41,-154.842 4000.02,-137.961 4076.65,-124.43"/>
+<polygon fill="black" stroke="black" points="4077.62,-127.814 4086.86,-122.628 4076.4,-120.92 4077.62,-127.814"/>
+</g>
+<!-- File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)&#45;&gt;&#39;SINK&#39; -->
+<g id="edge26" class="edge"><title>File(&#39;/tmp/spiper.symbolic/root.subflow.random_seq\l.output.seq&#39;)&#45;&gt;&#39;SINK&#39;</title>
+<path fill="none" stroke="black" d="M4028.04,-79.3462C3996.9,-76.6301 3964.93,-74.0592 3934.75,-72 3492.88,-41.8534 2957.64,-25.0937 2793.21,-20.3879"/>
+<polygon fill="black" stroke="black" points="2793.02,-16.8811 2782.92,-20.0954 2792.82,-23.8782 2793.02,-16.8811"/>
 </g>
 <!-- &#39;SOURCE&#39; -->
 <g id="node21" class="node"><title>&#39;SOURCE&#39;</title>
-<ellipse fill="none" stroke="black" cx="2828.75" cy="-725.127" rx="57.3905" ry="18"/>
-<text text-anchor="middle" x="2828.75" y="-721.427" font-family="Times,serif" font-size="14.00">&#39;SOURCE&#39;</text>
+<ellipse fill="none" stroke="black" cx="2775.75" cy="-725.127" rx="57.3905" ry="18"/>
+<text text-anchor="middle" x="2775.75" y="-721.427" font-family="Times,serif" font-size="14.00">&#39;SOURCE&#39;</text>
 </g>
 <!-- &#39;SOURCE&#39;&#45;&gt;Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;) -->
 <g id="edge29" class="edge"><title>&#39;SOURCE&#39;&#45;&gt;Prefix(&#39;/tmp/spiper.symbolic/root.random_seq.seq&#39;)</title>
-<path fill="none" stroke="black" d="M2828.75,-706.824C2828.75,-699.11 2828.75,-689.839 2828.75,-681.239"/>
-<polygon fill="black" stroke="black" points="2832.25,-681.231 2828.75,-671.231 2825.25,-681.231 2832.25,-681.231"/>
+<path fill="none" stroke="black" d="M2775.75,-706.824C2775.75,-699.11 2775.75,-689.839 2775.75,-681.239"/>
+<polygon fill="black" stroke="black" points="2779.25,-681.231 2775.75,-671.231 2772.25,-681.231 2779.25,-681.231"/>
 </g>
 </g>
 </svg>

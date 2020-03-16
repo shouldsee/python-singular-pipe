@@ -5,7 +5,7 @@ import io,time
 
 import json
 import warnings
-from spiper.base import list_flatten_strict, list_flatten
+from spiper._header import list_flatten_strict, list_flatten, list_to_string
 from spiper._types import File,Prefix,InputFile,InputPrefix
 # from ._types import File,Prefix,InputFile,InputPrefix
 import json
@@ -97,25 +97,27 @@ if 1:
 		if extra_files is None:
 			extra_files  = []
 		cmd = ['set','-e;',cmd]
-		cmd = list_flatten_strict(cmd)
+		# cmd = list_flatten_strict(cmd)
 
 
-		#### potential redundant
-		#### all output path derives from Prefix hence only Prefix needs to be realpath
-		#### for input path, realisation better be done at job calling
-		out = []
-		for x in cmd:
-			if isinstance(x,Path):
-				x = x.realpath()
-			if x.startswith('/tmp'):
-				warnings.warn('[singularity_run] with /tmp is unstable')
-			out.append(x)
-		cmd = out
+		# #### potential redundant
+		# #### all output path derives from Prefix hence only Prefix needs to be realpath
+		# #### for input path, realisation better be done at job calling
+		# out = []
+		# for x in cmd:
+		# 	if isinstance(x,Path):
+		# 		x = x.realpath()
+		# 	if x.startswith('/tmp'):
+		# 		warnings.warn('[singularity_run] with /tmp is unstable')
+		# 	out.append(x)
+		# cmd = out
 
 		# debug = 1
-		if debug: print(json.dumps(list(map(repr,cmd)),indent=4,))
 
-		FS,modes = make_files_for(cmd)
+		leafs = list_flatten_strict(cmd)
+		if debug: print(json.dumps(list(map(repr,leafs)),indent=4,))
+
+		FS,modes = make_files_for( leafs + extra_files)
 		if debug: print(json.dumps(list(map(repr,FS)),indent=4,))
 
 		bfs = [':'.join([f,f,m]) for f,m in zip(FS,modes)]
@@ -131,7 +133,8 @@ if 1:
 			image,
 			'bash',
 			'<<EOF\n',
-			cmd,
+			[ list_to_string([x],strict=1) for x in cmd],
+			# list_to_string(cmd),
 			'\nEOF',
 		# '\n',
 		]
