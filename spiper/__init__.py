@@ -47,7 +47,7 @@ template = '''
 ### Dependencies:
 
 - A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
-  - For python3, this means `python3 -m pip install --upgrade pip>=18.1` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
+  - For python3, this means `python3 -m pip install --upgrade pip>=19.0` (see pip3 [changelog](https://pip.pypa.io/en/stable/news/#id245))
   - For python2, err python2 is not yet supported 
 - Optional: singularity >= 3.5.3 to use `spiper.types.LoggedSingularityExecCommand()`. (try to install with `bash install_singular.sh /opt/singularity`, assuming ubuntu and use sudo for apt packages)
 - Optional: dot binary for plotting graphs with `spiper.graph.plot_simple_graph()`.(try install with `sudo apt install -y graphviz`)
@@ -77,25 +77,31 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 {{open(dir/"examples/003_remote_bash.sh",'r').read()}}
 ```
 
+{{todo}}
+
+
 ### Screenshots
 
 ![](./tests/test_downstream.node_only.dot.svg)
 
 
-{{todo}}
 '''
 
 todo = '''
 ### ToDo
+	- [ ] print more logs during runtime.
+	- [ ] extensive tests for RPO(). 
+		- [ ] Figure out how to avoid pip install
+		- [ ] construct setup.py for single-file script
 	- [ ] Adding wrapper for WDL.
     - [x] Running a remote module
     	- [x] `spiper.mock.test_remote()` add some tests for spiper._types.PythonModule()
-    - [ ] Polish graph to have input-output node
-    - [ ] Ability to relocate nodes.
-    - [ ] Auto-backup all output files. job_backup_copy()
-    - [ ] (not essential) Adding Glob() and RecursiveGlob() to allow for easy file matching
-	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
+    - [ ] use _header.resolve_piper(). Auto-backup all output files. job_backup_copy()
+    - [ ] [need:test] Adding Glob() and RecursiveGlob() to allow for easy file matching
     - [ ] Add timed_run() to print out execution times for each job.
+    - [ ] Polish graph to have input-output node
+    - Ability to relocate nodes.
+	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
     - [ ] adds error tests for Caller.cache and Caller.__call__
     - [ ] cache_run_deep() to compute a dynamic graph and recursively 

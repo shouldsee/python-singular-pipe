@@ -112,21 +112,21 @@ spiper --help >/dev/null
 
 ```
 
-### Screenshots
-
-![](./tests/test_downstream.node_only.dot.svg)
-
-
 
 ### ToDo
+	- [ ] print more logs during runtime.
+	- [ ] extensive tests for RPO(). 
+		- [ ] Figure out how to avoid pip install
+		- [ ] construct setup.py for single-file script
+	- [ ] Adding wrapper for WDL.
     - [x] Running a remote module
     	- [x] `spiper.mock.test_remote()` add some tests for spiper._types.PythonModule()
-    - [ ] Polish graph to have input-output node
-    - [ ] Ability to relocate nodes.
-    - [ ] Auto-backup all output files. job_backup_copy()
-    - [ ] (not essential) Adding Glob() and RecursiveGlob() to allow for easy file matching
-	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
+    - [ ] use _header.resolve_piper(). Auto-backup all output files. job_backup_copy()
+    - [ ] [need:test] Adding Glob() and RecursiveGlob() to allow for easy file matching
     - [ ] Add timed_run() to print out execution times for each job.
+    - [ ] Polish graph to have input-output node
+    - Ability to relocate nodes.
+	- [x] (see config_runner(tag=DirtyKey('Some tag')))(func, prefix) must be unique within each workflow
     - [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
     - [ ] adds error tests for Caller.cache and Caller.__call__
     - [ ] cache_run_deep() to compute a dynamic graph and recursively 
@@ -156,3 +156,10 @@ spiper --help >/dev/null
 	- [ ] (abandoned)import module from online.
 	- [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
 	- [ ] implementing checks for output nodes to make sure Files.to_ident() are changed
+
+
+
+### Screenshots
+
+![](./tests/test_downstream.node_only.dot.svg)
+
