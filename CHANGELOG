@@ -1,3 +1,6 @@
+# 0.0.7
+- [fix] check for write access during get_changed_files() and in mock_do()
+
 # 0.0.6
 - [fix] force Caller.__call__ to cache self if is Node
 - [add] spiper._header.Concat
