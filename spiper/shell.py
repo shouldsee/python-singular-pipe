@@ -87,11 +87,12 @@ if 1:
 
 
 if 1:
-	def LoggedSingularityCommandList(cmd, image, extra_files=None):
-		return LoggedSingularityCommand(cmd,image, extra_files, is_exec=0)
+	def LoggedSingularityCommandList(cmd, image, extra_files=None,**kw):
+		return LoggedSingularityCommand(cmd,image, extra_files, is_exec=0,**kw)
 
 	def LoggedSingularityCommand( cmd, image, log_file,check=1,  mode='w',
 		is_exec=1,
+		multiline=0,
 		extra_files = None, debug =0):	
 		'''
 		return a tuple (executed command, command_stdout)
@@ -102,7 +103,8 @@ if 1:
 		'''
 		if extra_files is None:
 			extra_files  = []
-		cmd = ['set','-e;',cmd]
+
+		# cmd = ['set','-e;',cmd]		
 		# cmd = list_flatten_strict(cmd)
 
 		# #### potential redundant
@@ -129,6 +131,14 @@ if 1:
 		# bfs = bind_files( FS + extra_files) 
 		if debug: print(json.dumps(list(map(repr,bfs)),indent=4,))
 
+		'''
+		FILE=/tmp/_spiper.$$.script.sh; touch $FILE; chmod +x $FILE
+		cat <<EOF >$FILE
+		cat - | python3 -c "import sys; print('hi');[print('[line]',line) for line in sys.stdin]"
+		EOF
+		cat $FILE | singularity exec --bind $FILE:$FILE:ro docker://python:3.5-alpine $FILE
+		'''
+
 		cmd_curr = [
 		# '\n',
 		'singularity','exec',
@@ -136,11 +146,14 @@ if 1:
 		['--bind',','.join(bfs)] if len(bfs) else [],
 		# [-1],'--bind','/tmp:/tmp',
 			image,
-			'bash',
-			'<<EOF\n',
+			[
+				'bash',
+				'<<EOF\n',
+				'set','-e;',
+				[ list_to_string([x],strict=1) for x in cmd],
+				'\nEOF\n',
+			] if multiline else
 			[ list_to_string([x],strict=1) for x in cmd],
-			# list_to_string(cmd),
-			'\nEOF',
 		# '\n',
 		]
 		cmd_curr = list_flatten_strict(cmd_curr)
