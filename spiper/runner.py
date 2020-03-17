@@ -146,7 +146,7 @@ def is_mock_file(v, call=None,):
 
 			
 
-def _get_changed_files(caller):
+def _get_changed_files(caller,):
 	return _get_all_files(caller, 1)
 def _get_all_files(caller, changed):
 	lst = []
@@ -644,16 +644,9 @@ class _Runner(object):
 		# runner          = partial(self.run, last_caller=_caller)
 		runner          = partial(self, last_caller=_caller)
 		config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
-		if last_caller is not None:
-			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%( _caller.__name__, last_caller)
-			last_caller._subflow[ _caller.__name__ ] = _caller
-
-		print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
 		func_name       = get_func_name()
 		prefix          = args[0]
-		_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
-		as argument to self.run
-		'''
+
 		# def runner(job,*args,last_caller=_caller):
 		# 	print("%r\n%r"%(job,last_caller))
 		# 	return self.run(job,*args, last_caller=last_caller)
@@ -669,8 +662,6 @@ class _Runner(object):
 		_caller.output_cache_file.dirname().makedirs_p().check_writable()
 
 
-
-
 		_output = _caller.get_output_files()
 
 		# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
@@ -681,7 +672,9 @@ class _Runner(object):
 			output_ident_changed = (_caller.output_cache_file+'.output_changed.mock').isfile()
 		else:
 			output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file,'ident')
-		use_cache = not input_ident_changed and not output_ident_changed
+		is_node   = issubclass(_caller.job_type, spiper._types.NodeFunction)
+		use_cache = not input_ident_changed and not output_ident_changed 
+		# and is_node
 		if check_only:
 			return use_cache
 		if check_changed:
@@ -706,8 +699,23 @@ class _Runner(object):
 			if verbose >= 2:
 				import pdb; pdb.set_trace()
 
+		if last_caller is not None:
+			_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
+			as argument to self.run
+			'''
+			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%( _caller.__name__, last_caller)
+			last_caller._subflow[ _caller.__name__ ] = _caller
+
+		# print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
+
+		if is_node:
+			use_cache = use_cache
+		else:
+			pass
+		_caller.use_cache = use_cache
 		if check_only:
-			return bool(use_cache)		
+			return _caller
+			# return bool(use_cache)		
 
 		if force:
 			use_cache = False
@@ -716,9 +724,48 @@ class _Runner(object):
 
 		#### if any of the output file is mock, then do not use cache
 		#### if input and output are not changed, then mocking is skipped.
+
 		# if (_caller.output_cache_file+'.mock').isfile():
 		# 	use_cache = False
 		# print((job.__name__,use_cache))
+		# if use_cache and is_node:
+		# 	result = _caller.load_cache()
+		# elif not use_cache and is_node:
+		# 	'''
+		# 	A node that needs update
+		# 	'''
+		# 	if mock == 1:
+		# 		_caller.mock_do(output_ident_changed, 1, verbose)
+		# 		result = _caller
+		# 	elif mock == -1
+		# 		_caller.mock_undo(1, verbose)
+		# 		result = _caller
+		# 	elif mock == 0:
+		# 		_caller.mock_undo(1, verbose)
+		# 		result = _caller(runner, config_runner )
+
+		# 		_caller.process_output()
+		# 		_caller.process_input_meta()
+		# 		_caller.process_output_meta()
+		# elif not is_node:
+		# 	if use_cache:
+		# 		result = _caller.load_cache()
+		# 	else:
+		# 		if mock == 1:
+		# 			_caller.mock_do(output_ident_changed, 1, verbose)
+		# 			result = _caller(runner, config_runner)
+		# 		elif mock == -1
+		# 			_caller.mock_undo(1, verbose)
+		# 			result = _caller
+		# 		elif mock == 0:
+		# 			_caller.mock_undo(1, verbose)
+		# 			result = _caller(runner, config_runner )
+
+		# 			_caller.process_output()
+		# 			_caller.process_input_meta()  #### adding input_images to local and upstream nodes
+		# 			_caller.process_output_meta() #### adding output images to local and downwards nodes
+
+			# _caller.get_subflows()
 		if use_cache:
 			result = _caller.load_cache()
 
