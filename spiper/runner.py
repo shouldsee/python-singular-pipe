@@ -27,6 +27,7 @@ import os,sys,shutil
 import io
 import inspect
 import json
+import warnings
 
 from itertools import zip_longest
 from collections import namedtuple
@@ -228,6 +229,9 @@ class Caller(object):
 	@property
 	def subflow(self):
 		return self._subflow
+	@property
+	def is_node(self):
+		return issubclass( self.job_type, spiper._types.NodeFunction)
 	
 	def get_subflow(self,k):
 		return self.subflow[k]
@@ -298,7 +302,6 @@ class Caller(object):
 
 	def __setstate__(self,d):
 		self.__dict__ = d
-
 	def __init__(self, job, arg_dict, dir_layout, tag):
 		# if not getattr(job,'_spiper',False):
 		# 	job = job_from_func(job)		
@@ -331,7 +334,7 @@ class Caller(object):
 		self.arg_tuples   = arg_tuples
 		self.dir_layout   = dir_layout
 		self._subflow     = _dict()
-
+		self.use_cache    = True
 
 		### create output directory
 		self.prefix_named.dirname().makedirs() if not self.prefix_named.dirname().isdir() else None
@@ -343,6 +346,11 @@ class Caller(object):
 			self._output_dict['prefix_file'] = File(self.prefix_named)
 		for k in self._output_dict:
 			self._output_dict[k] = self._output_dict[k].expand().realpath() 
+
+		if not self.is_node:
+			if len(self._output_type._typed_fields):	
+				warnings.warn('Output files %r will not be cached for: %r' % (list(self.output.keys()),self))
+
 		self.runner = None
 
 
@@ -538,9 +546,72 @@ class Caller(object):
 	</TABLE>
 	>
 	'''.strip()
-		return jinja2_format(s, node=self)
-		# return s.format(self=self)
-# DEFAULT_DIR_LAYOUT = 'clean'
+		return jinja2_format(s, node=self)	
+	@property
+	def input_ident_file(self):
+		return IdentFile( self.dir_layout, self.prefix_named, [] , 'input_json' )		
+	@property
+	def output_ident_file(self):
+		return IdentFile( self.dir_layout, self.prefix_named, [] , 'output_json' )		
+
+	def update_meta(self, _input, _output):
+		'''
+		Manage meta files for a Caller after updating its output
+		'''
+		_caller = self
+		# dir_layout = self.dir_layout
+
+		for k,v in _caller.output.items():
+			func = getattr( v,'callback_output',lambda *x:None)
+			func(_caller,k)
+			# method(_caller)
+			# if hasattr(x,'callback_output'):
+			# 	x.output_callback(_caller)				
+		# ident_dump( result, output_cache_file, )
+		_input_ident  = get_identity( _input)
+		_output_ident = get_identity(_output)
+
+		p = MyPickleSession()
+		output_image = [
+			('comment',[ [repr(x) for x in _output],_output_ident]),
+			('modules',     p.pop_modules_list(   lambda:  p.dumps_sniff_b64(_output))),
+			('output_dump', p.pop_buffer()),
+			('ident',       p.dumps_b64(_output_ident)),
+			]
+		ident_dump( output_image, 
+			_caller.output_ident_file,
+			)
+
+		p = MyPickleSession()
+			 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
+		input_image = [
+				('comment',      _caller.to_dict()),
+				('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
+				('caller_dump',  p.pop_buffer()),
+				('ident',        p.dumps_b64(_input_ident)),
+
+			]
+		ident_dump( input_image, _caller.input_ident_file)
+
+		#### add edge_file to inputs 
+		### add input and output ident to outward_pk
+		# outward_dir_list = get_outward_json_list( _input, config)
+		_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
+
+		outward_dir_list = get_outward_json_list( _caller.arg_tuples, _caller.dir_layout)
+		for outward_dir in outward_dir_list:
+			outward_dir.makedirs_p().check_writable()
+
+		for outward_dir in outward_dir_list:
+			outward_edge_file = outward_dir /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
+			ident_dump( input_image, outward_edge_file)			
+
+		#### remove edge_file of outputs
+		outward_dir_list = get_outward_json_list( _caller._output_dict.items(), _caller.dir_layout)
+		for outward_dir in outward_dir_list:
+			shutil.move(outward_dir.makedirs_p().check_writable() , (outward_dir+'_old').rmtree_p())
+			outward_dir = outward_dir.makedirs_p().check_writable()
+
 def force_run(job, *args,**kw):
 	'''
 	Run a jobs regardless of whether it has a valid cache
@@ -554,6 +625,7 @@ def cache_check(job, *args,**kw):
 	Check whether there is a valid cache for this job
 	'''
 	return cache_run(job,*args, check_only=True,**kw)
+
 def cache_check_changed(job, *args,  check_changed=1,**kw):
 	return cache_run(   job,  *args, check_changed=check_changed,**kw)
 
@@ -590,14 +662,14 @@ def cache_run(job, *args,
 	dir_layout = None,
 	mock = False,
 	check_only=False, check_changed=False, force=False,verbose=0,
-	last_caller = None):
+	last_caller = None,tag= None):
 	dir_layout = rcParams['dir_layout'] if dir_layout is None else dir_layout
 	# print('[dir_layout]',dir_layout)
 	# print('[id2]',id(rcParams),rcParams)
-	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose,last_caller)
+	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose,last_caller,tag)
 
-def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller):
-	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args,last_caller=last_caller)
+def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller, tag):
+	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args,last_caller=last_caller,tag=tag)
 
 class _Runner(object):
 	def __init__(self, dir_layout,  mock, check_only,check_changed,force,verbose ):
@@ -640,7 +712,7 @@ class _Runner(object):
 		###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed
 		###### the prefix is ignored in to_ident() because it would point to a different ident_file
 		#####  Caller.from_input() would also cast types for inputs
-		_input          = args		
+		# _input          = args		
 		# runner          = partial(self.run, last_caller=_caller)
 		runner          = partial(self, last_caller=_caller)
 		config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
@@ -655,33 +727,45 @@ class _Runner(object):
 		print(repr(_caller)) if verbose >= 3 else None
 
 
-		input_ident_file =  IdentFile( dir_layout, _caller.prefix_named, [] , 'input_json' )
-		output_ident_file=  IdentFile( dir_layout, _caller.prefix_named, [] , 'output_json' )
-		output_cache_file=  _caller.output_cache_file
-		File(input_ident_file).dirname().makedirs_p().check_writable()
-		_caller.output_cache_file.dirname().makedirs_p().check_writable()
-
-
+		File( _caller.input_ident_file).dirname().makedirs_p().check_writable()
+		File( _caller.output_cache_file).dirname().makedirs_p().check_writable()
 		_output = _caller.get_output_files()
 
 		# _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)
 		# print('[out1]',_output)
 
-		input_ident_changed  = ident_changed( get_identity( _input, ), input_ident_file, 'ident')
+		input_ident_changed  = ident_changed( get_identity( _input, ), _caller.input_ident_file, 'ident')
 		if _caller.is_mock():
 			output_ident_changed = (_caller.output_cache_file+'.output_changed.mock').isfile()
 		else:
-			output_ident_changed = ident_changed( get_identity( _output, ), output_ident_file,'ident')
+			output_ident_changed = ident_changed( get_identity( _output, ), _caller.output_ident_file,'ident')
 		is_node   = issubclass(_caller.job_type, spiper._types.NodeFunction)
-		use_cache = not input_ident_changed and not output_ident_changed 
-		# and is_node
-		if check_only:
+
+		use_cache = not input_ident_changed and not output_ident_changed  and is_node
+
+		if force:
+			use_cache = False
+		# _caller.use_cache &= use_cache
+		# if last_caller is not None:
+		# 	last_caller.use_cache &= _caller.use_cache
+
+		if last_caller is not None:
+			# last_caller.use_cache &= use_cache 
+			_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
+			as argument to self.run
+			'''
+			assert _caller.__name__ not in last_caller.subflow, 'Duplicated subflows \nlast:%r \ngot:%r \nexp:%r '%(last_caller, got,_caller)
+			last_caller._subflow[ _caller.__name__ ] = _caller				
+
+
+		if check_only:	
 			return use_cache
+
 		if check_changed:
 			if check_changed >=2:
 				input_ident = get_identity(_input)
-				# input_ident_old = _loads(json.load(open(input_ident_file,'r'))['ident'])
 				output_ident = get_identity(_output)
+				# input_ident_old = _loads(json.load(open(input_ident_file,'r'))['ident'])
 				# output_ident_old = _loads(json.load(open(output_ident_file,'r'))['ident'])
 				import pdb; pdb.set_trace();
 			return (input_ident_changed, output_ident_changed)
@@ -690,7 +774,7 @@ class _Runner(object):
 			print('[{func_name}]'.format(**locals()),
 				json.dumps(_dict([
 				('job_name',_caller.__name__),
-				('use_cache',use_cache),
+				('use_cache', use_cache),
 				('input_ident_changed', int(input_ident_changed)),
 				('output_ident_chanegd',int(output_ident_changed))])
 					,separators='_=')
@@ -699,154 +783,72 @@ class _Runner(object):
 			if verbose >= 2:
 				import pdb; pdb.set_trace()
 
-		if last_caller is not None:
-			_ = '''self.subflow needs to be appended using the runner by supplyig calling frame 
-			as argument to self.run
-			'''
-			assert _caller.__name__ not in last_caller._subflow,'Duplicated subflows %s in %r '%( _caller.__name__, last_caller)
-			last_caller._subflow[ _caller.__name__ ] = _caller
-
+		# if last_caller is not None:
 		# print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
-
-		if is_node:
-			use_cache = use_cache
-		else:
-			pass
-		_caller.use_cache = use_cache
-		if check_only:
-			return _caller
-			# return bool(use_cache)		
-
-		if force:
-			use_cache = False
-		# if mock:
-		# 	use_cache = False
 
 		#### if any of the output file is mock, then do not use cache
 		#### if input and output are not changed, then mocking is skipped.
+		if use_cache:
+			result = _caller.load_cache()
+		else:
+			if mock == 1:
+				_ = '''
+				The current file will be replaced with a mock file to propagate the signal downwards
+				'''
+				_caller.mock_do(output_ident_changed, 1, verbose)
+				result = _caller(runner,config_runner) if not is_node else _caller
 
-		# if (_caller.output_cache_file+'.mock').isfile():
-		# 	use_cache = False
-		# print((job.__name__,use_cache))
-		# if use_cache and is_node:
-		# 	result = _caller.load_cache()
-		# elif not use_cache and is_node:
-		# 	'''
-		# 	A node that needs update
-		# 	'''
-		# 	if mock == 1:
-		# 		_caller.mock_do(output_ident_changed, 1, verbose)
-		# 		result = _caller
-		# 	elif mock == -1
-		# 		_caller.mock_undo(1, verbose)
-		# 		result = _caller
-		# 	elif mock == 0:
-		# 		_caller.mock_undo(1, verbose)
-		# 		result = _caller(runner, config_runner )
+			elif mock == -1:
+				#### unmock
+				#### restore mocked file if available
+				_caller.mock_undo(1, verbose)
+				result = _caller(runner,config_runner) if not is_node else _caller
 
-		# 		_caller.process_output()
-		# 		_caller.process_input_meta()
-		# 		_caller.process_output_meta()
-		# elif not is_node:
+			elif mock == 0:
+				_caller.mock_undo(1, verbose)
+				result = _caller(runner, config_runner )
+				_caller.update_meta(_input, _output)
+			else:
+				assert 0, 'Mock value not understood mock=%r'%mock
+		return result
+
+		# return _caller, result
+		# if is_node:
 		# 	if use_cache:
 		# 		result = _caller.load_cache()
-		# 	else:
+		# 	elif not use_cache :
+		# 		'''
+		# 		A node that needs update
+		# 		'''
 		# 		if mock == 1:
+		# 			_ = '''
+		# 			The current file will be replaced with a mock file to propagate the signal downwards
+		# 			'''
 		# 			_caller.mock_do(output_ident_changed, 1, verbose)
-		# 			result = _caller(runner, config_runner)
-		# 		elif mock == -1
+		# 			result = _caller
+		# 		elif mock == -1:
 		# 			_caller.mock_undo(1, verbose)
 		# 			result = _caller
 		# 		elif mock == 0:
 		# 			_caller.mock_undo(1, verbose)
 		# 			result = _caller(runner, config_runner )
-
-		# 			_caller.process_output()
-		# 			_caller.process_input_meta()  #### adding input_images to local and upstream nodes
-		# 			_caller.process_output_meta() #### adding output images to local and downwards nodes
-
-			# _caller.get_subflows()
-		if use_cache:
-			result = _caller.load_cache()
-
-		else:
-			# if not issubclass(_caller.job_type, spiper._types.NodeFunc):
-			# 	mock = 0
-			if mock == 1:
-				_ = '''
-				The current file will be replaced with a mock file to propagate the signal downwards
-
-				'''
-
-				_caller.mock_do(output_ident_changed, 1, verbose)
-				if issubclass(_caller.job_type, spiper._types.NodeFunction):
-					result = _caller
-				else:
-					### recurse if not a Terminal Node
-					result = _caller(runner, config_runner)
-			elif mock == -1:
-				#### unmock
-				#### restore mocked file if available
-				_caller.mock_undo(1, verbose)
-				result = _caller
-
-			elif mock == 0:
-				_caller.mock_undo(1, verbose)
-				result = _caller(runner, config_runner )
-
-				for k,v in _caller.output.items():
-					func = getattr( v,'callback_output',lambda *x:None)
-					func(_caller,k)
-					# method(_caller)
-					# if hasattr(x,'callback_output'):
-					# 	x.output_callback(_caller)				
-				# ident_dump( result, output_cache_file, )
-				_input_ident  = get_identity( _input)
-				_output_ident = get_identity(_output)
-
-				p = MyPickleSession()
-				ident_dump( [
-					('comment',[[repr(x) for x in _output],_output_ident]),
-					('modules',     p.pop_modules_list(   lambda:  p.dumps_sniff_b64(_output))),
-					('output_dump', p.pop_buffer()),
-					('ident',       p.dumps_b64(_output_ident)),
-					], 
-					output_ident_file,
-					)
-					 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
-				input_image = [
-						('comment',      _caller.to_dict()),
-						('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
-						('caller_dump',  p.pop_buffer()),
-						('ident',        p.dumps_b64(_input_ident)),
-
-					]
-				ident_dump( input_image, input_ident_file)
-				# ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))
-
-				#### add edge_file to inputs 
-				### add input and output ident to outward_pk
-				# outward_dir_list = get_outward_json_list( _input, config)
-				
-				_input_ident_hash = p.hash_bytes( p.dumps(_input_ident) )
-
-				outward_dir_list = get_outward_json_list( _caller.arg_tuples, dir_layout)
-				for outward_dir in outward_dir_list:
-					outward_dir.makedirs_p().check_writable()
-
-				for outward_dir in outward_dir_list:
-					outward_edge_file = outward_dir /  '%s.%s.json'%( DirtyKey(_caller.__name__), _input_ident_hash)
-					ident_dump( input_image, outward_edge_file)			
-
-				#### remove edge_file of outputs
-				outward_dir_list = get_outward_json_list( _caller._output_dict.items(), dir_layout)
-				for outward_dir in outward_dir_list:
-					shutil.move(outward_dir.makedirs_p().check_writable() , (outward_dir+'_old').rmtree_p())
-					outward_dir = outward_dir.makedirs_p().check_writable()
-			else:
-				assert 0, 'Mock value not understood mock=%r'%mock
-		return result
-		# return _caller, result
+		# 			_caller.update_meta(_input, _output)
+		# 		else:
+		# 			assert 0, 'Mock value not understood mock=%r'%mock
+		# else:
+		# 	result = _caller(runner, config_runner)
+		# 	if mock == 1:
+		# 		if not _caller.use_cache:
+		# 			_caller.mock_do(output_ident_changed, 1, verbose)
+		# 	elif mock == -1:
+		# 		_caller.mock_undo(1, verbose)
+		# 	elif mock == 0:
+		# 		_caller.mock_undo(1, verbose)
+		# 		if not _caller.use_cache:
+		# 			_caller.update_meta(_input, _output)
+		# 	else:
+		# 		assert 0, 'Mock value not understood mock=%r'%mock
+		# return result
 
 
 

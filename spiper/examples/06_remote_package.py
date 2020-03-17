@@ -15,7 +15,7 @@ centralise the storage of pipelines to cloud rather than to a local machine, whi
 would force the script creator to write the script in a local-independent way.
 '''
 
-from spiper.types import Node,Flow
+from spiper.types import Node,Flow,File
 from spiper.types import PythonPackage, RemotePythonObject,RPO
 
 # Github "tarball/master" often take minutes to update,
@@ -91,7 +91,11 @@ def main():
 
 	fs = get_changed_files(simple_flow, prefix)
 	pprint(fs)
-	assert fs == []
+	#### The Flow() execution will never be skipped
+	#### hence The self.output.log will always be changed	
+	assert fs == [
+	File('/tmp/test_import/root.workflow.log'),
+	 File('/tmp/test_import/root_backup.output.log')]
 
 if __name__ == '__main__':
 	main()

@@ -1,6 +1,6 @@
 import argparse
 import sys
-from spiper.runner import cache_run,get_all_files,get_changed_files, force_run
+from spiper.runner import cache_run,get_all_files,get_changed_files, force_run, mock_run
 from spiper.types import RemotePythonObject as RPO
 import spiper
 def _help(e=None):
@@ -56,16 +56,23 @@ Options:
 		if '--version' in args or '-V' in args:
 			print('spiper-%s'%spiper.VERSION)
 			return 0
+		verbose = 0
+		if '-v' in args:
+			args.remove('-v')
+			verbose = 1
 
 		if args[0]=='run':
 			runner = cache_run		
 			if '--force' in args:
 				args.remove('--force')
 				runner = force_run
+			if '--mock' in args:
+				args.remove('--mock')
+				runner = mock_run
 
 		elif args[0] == 'get_all_files':
-			def runner(*a):
-				fs = get_all_files(*a)
+			def runner(*a,**kw):
+				fs = get_all_files(*a,**kw)
 				if plain:
 					for f in fs:
 						print(f)
@@ -73,8 +80,8 @@ Options:
 					pprint(fs or '[No files governed by this workflow]')
 
 		elif args[0] == 'get_changed_files':
-			def runner(*a):
-				fs = get_changed_files(*a)
+			def runner(*a,**kw):
+				fs = get_changed_files(*a,**kw)
 				if plain:
 					for f in fs:
 						print(f)
@@ -98,5 +105,5 @@ Options:
 		return _help(e)
 
 	obj = RPO(package, workflow_entrypoint)
-	res = runner(obj.loaded(), *workflow_arguments)
+	res = runner(obj.loaded(), *workflow_arguments,verbose=verbose)
 	return 0

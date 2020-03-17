@@ -1,3 +1,8 @@
+# 0.0.9
+- [changed] get_changed_files behaviour for FlowFunction().  FlowFunction will always 
+be executed with use_cache = False.
+- [warn] if _output != [] for FlowFunction()
+
 # 0.0.8
 - [changed] funcsig for spiper.shell.LoggedSinuglarityCommand(prefix, cmd, image, log_file). add '--workdir'
 - [added] spiper.shell.LoggedSinuglarityCommandList(prefix,cmd,image). returns a cmd_list for singularity exec
