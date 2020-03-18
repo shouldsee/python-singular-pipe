@@ -77,7 +77,7 @@
 <polygon fill="none" stroke="black" points="261,-372 261,-393 334,-393 334,-372 261,-372"/>
 <text text-anchor="start" x="264" y="-378.8" font-family="Times,serif" font-size="14.00">str</text>
 <polygon fill="none" stroke="black" points="334,-372 334,-393 796,-393 796,-372 334,-372"/>
-<text text-anchor="start" x="337" y="-378.8" font-family="Times,serif" font-size="14.00">graph.dimple_job</text>
+<text text-anchor="start" x="337" y="-378.8" font-family="Times,serif" font-size="14.00">spiper.test.graph.dimple_job</text>
 <polygon fill="none" stroke="black" points="158,-351 158,-372 261,-372 261,-351 158,-351"/>
 <text text-anchor="start" x="161" y="-357.8" font-family="Times,serif" font-size="14.00">prefix_named</text>
 <polygon fill="none" stroke="black" points="261,-351 261,-372 334,-372 334,-351 261,-351"/>
@@ -136,7 +136,7 @@
 <polygon fill="none" stroke="black" points="251,-796 251,-817 324,-817 324,-796 251,-796"/>
 <text text-anchor="start" x="254" y="-802.8" font-family="Times,serif" font-size="14.00">str</text>
 <polygon fill="none" stroke="black" points="324,-796 324,-817 806,-817 806,-796 324,-796"/>
-<text text-anchor="start" x="327" y="-802.8" font-family="Times,serif" font-size="14.00">graph.dimple_job</text>
+<text text-anchor="start" x="327" y="-802.8" font-family="Times,serif" font-size="14.00">spiper.test.graph.dimple_job</text>
 <polygon fill="none" stroke="black" points="148,-775 148,-796 251,-796 251,-775 148,-775"/>
 <text text-anchor="start" x="151" y="-781.8" font-family="Times,serif" font-size="14.00">prefix_named</text>
 <polygon fill="none" stroke="black" points="251,-775 251,-796 324,-796 324,-775 251,-775"/>
@@ -195,7 +195,7 @@
 <polygon fill="none" stroke="black" points="435,-584 435,-605 508,-605 508,-584 435,-584"/>
 <text text-anchor="start" x="438" y="-590.8" font-family="Times,serif" font-size="14.00">str</text>
 <polygon fill="none" stroke="black" points="508,-584 508,-605 989,-605 989,-584 508,-584"/>
-<text text-anchor="start" x="511" y="-590.8" font-family="Times,serif" font-size="14.00">graph.dimple_job</text>
+<text text-anchor="start" x="511" y="-590.8" font-family="Times,serif" font-size="14.00">spiper.test.graph.dimple_job</text>
 <polygon fill="none" stroke="black" points="332,-563 332,-584 435,-584 435,-563 332,-563"/>
 <text text-anchor="start" x="335" y="-569.8" font-family="Times,serif" font-size="14.00">prefix_named</text>
 <polygon fill="none" stroke="black" points="435,-563 435,-584 508,-584 508,-563 435,-563"/>

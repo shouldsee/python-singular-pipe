@@ -321,7 +321,7 @@ class Caller(object):
 			if tag: assert DirtyKey(tag) == tag,(tag,DirtyKey(tag))
 			assert isinstance(tag,(type(None),str)),(type(tag),tag)
 			tag  = tag or []
-			_tag = '_'.join(list_flatten([ job.__name__, tag]))
+			_tag = '-'.join(list_flatten([ job.__name__, tag]))
 		else:
 			# _tag = self.prefix
 			_tag = arg_tuples[0][1]

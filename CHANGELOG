@@ -1,3 +1,8 @@
+# 0.1.0
+- [changed] `prefix_named = '{prefix}.{job_name}-{tag}` instead of
+`prefix_named = '{prefix}.{job_name}_{tag}` 
+- [changed] indentation for shell.LoggedSingularityCommand()
+
 # 0.0.9
 - [changed] get_changed_files behaviour for FlowFunction().  FlowFunction will always 
 be executed with use_cache = False.

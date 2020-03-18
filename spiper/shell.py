@@ -147,10 +147,11 @@ if 1:
 		'--contain',
 		'--writable',
 		['--workdir', File(prefix +'.singularity_temp').makedirs_p().check_writable()] if prefix else [],
+		'\\\n',
 		# extra_params,
-		['--bind',','.join(bfs)] if len(bfs) else [],
+		['--bind',','.join(bfs), '\\\n'] if len(bfs) else [],
 		# [-1],'--bind','/tmp:/tmp',
-			image,
+			image, '\\\n',
 			[
 				'bash',
 				'<<EOF\n',
