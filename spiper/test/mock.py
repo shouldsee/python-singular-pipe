@@ -11,7 +11,7 @@ class Case(unittest2.TestCase):
 		Path('/tmp/test_remote/').rmtree_p()
 		stdout = LoggedShellCommand([
 			'python3','-m','spiper run',
-			'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/c004084',
+			'spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/8b01372',
 			'TOPLEVEL:run_and_backup',
 			'/tmp/test_remote/root','1','2','/tmp/test_remote/root.backup'
 			])
@@ -186,6 +186,7 @@ def copy_file_single_node(self, prefix, input=File, _single_file=1, _output=[]):
 
 @Flow
 def backup(self, prefix, flow = Caller, _output=[]):
+
 	key = 'subflow.random_seq.output.seq'
 	self.config_runner()(copy_file_single_node, prefix+'.' + key, rgetattr(flow,key))
 	self.config_runner(tag=DirtyKey(key))(copy_file, prefix, rgetattr(flow,key))
@@ -200,106 +201,105 @@ def backup(self, prefix, flow = Caller, _output=[]):
 # def backup(self,prefix, input_prefix=Preifx, 
 # 	random_seq ):
 
-import json
-from spiper.runner import cache_run,force_run,is_mock_file,get_changed_files
-from spiper.shell import LoggedShellCommand
-from spiper.types import File,CacheFile
+# import json
+# from spiper.runner import cache_run,force_run,is_mock_file,get_changed_files
+# from spiper.shell import LoggedShellCommand
+# from spiper.types import File,CacheFile
 
-def main(self,
-	prefix = None):
-	if prefix is None:
-		prefix = Path('/tmp/spiper.symbolic/root')
-		prefix.dirname().rmtree_p()
-	print('\n...[start]%r'%prefix)
-	from pprint import pprint
-	fs = get_changed_files(workflow, prefix, 1, 100, verbose=0)
-	exp = [
-	  File('/tmp/spiper.symbolic/root.workflow.log'),
-	  File('/tmp/spiper.symbolic/root.random_seq.seq'),
-	  File('/tmp/spiper.symbolic/root.random_seq_temp.seq'),
-	  File('/tmp/spiper.symbolic/root.transcribe.fasta'),
-	  File('/tmp/spiper.symbolic/root.mutate.fasta'),
-	  ]
-	assert sorted(fs) == sorted(exp),pprint(list(zip(sorted(fs),sorted(exp))))
-
-
-
-
-	res  = cache_run( workflow, prefix, 1, 100,verbose=0)
-
-	File('/tmp/spiper.symbolic/root.workflow.log').touch()
-	fs = get_changed_files(workflow,prefix, 1 ,100 ,verbose=1)
-	assert fs == [
-	  File('/tmp/spiper.symbolic/root.workflow.log'),
- 	],fs
-
-	fs = get_changed_files(backup, prefix, res, verbose = 0, )
-	pprint(fs)
-	assert fs == [
- File('/tmp/spiper.symbolic/root.subflow.random_seq.output.seq'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_temp_output_seq.backup'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')]
+# def main(self,
+# 	prefix = None):
+# 	if prefix is None:
+# 		prefix = Path('/tmp/spiper.symbolic/root')
+# 		prefix.dirname().rmtree_p()
+# 	print('\n...[start]%r'%prefix)
+# 	from pprint import pprint
+# 	fs = get_changed_files(workflow, prefix, 1, 100, verbose=0)
+# 	exp = [
+# 	  File('/tmp/spiper.symbolic/root.workflow.log'),
+# 	  File('/tmp/spiper.symbolic/root.random_seq.seq'),
+# 	  File('/tmp/spiper.symbolic/root.random_seq-temp.seq'),
+# 	  File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+# 	  File('/tmp/spiper.symbolic/root.mutate.fasta'),
+# 	  ]
+# 	assert sorted(fs) == sorted(exp),pprint(list(zip(sorted(fs),sorted(exp))))
 
 
 
-	# print('[fs1]')
-	# pprint(fs)
 
-	res2 = cache_run(backup, prefix, res, verbose = 0)
-	fs = get_changed_files(backup, prefix, res, verbose = 0)
-	print('[fs2]')
-	assert fs==[],pprint(fs)
-	# res  = mock_run( workflow, prefix, 2, 100,verbose=1)
-	# File('/tmp/spiper.symbolic/root.transcribe.fasta').touch()
+# 	res  = cache_run( workflow, prefix, 1, 100,verbose=0)
 
-	res  = mock_run( workflow, prefix, 2, 100,verbose=0)
-	fs = get_changed_files(backup, prefix, res, verbose = 0)
-	print('[fs3]')
-	assert fs==[
- File('/tmp/spiper.symbolic/root.subflow.random_seq.output.seq'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
- File('/tmp/spiper.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')],pprint(fs)
-	# assert 0
+# 	File('/tmp/spiper.symbolic/root.workflow.log').touch()
+# 	fs = get_changed_files(workflow,prefix, 1 ,100 ,verbose=1)
+# 	assert fs == [
+# 	  File('/tmp/spiper.symbolic/root.workflow.log'),
+#  	],fs
+
+# 	fs = get_changed_files(backup, prefix, res, verbose = 0, )
+# 	pprint(fs)
+# 	assert fs == [
+#  File('/tmp/spiper.symbolic/root.subflow.random_seq.output.seq'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_temp_output_seq.backup'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')]
 
 
-	exp = [
 
-	  File('/tmp/spiper.symbolic/root.workflow.log'),
-	  File('/tmp/spiper.symbolic/root.random_seq.seq'),
-	  # File('/tmp/spiper.symbolic/root.random_seq_temp.seq'),
-	  File('/tmp/spiper.symbolic/root.transcribe.fasta'),
-	  File('/tmp/spiper.symbolic/root.mutate.fasta'),
-	  ]
-	fs = get_changed_files(workflow,prefix, 2 ,100 ,verbose=1)
-	assert fs == exp,pprint((fs,exp))
+# 	# print('[fs1]')
+# 	# pprint(fs)
 
-	print('\n...[Done]')
-	stdout = LoggedShellCommand(['ls -lhtr',prefix.dirname()],).rstrip()
-	print(stdout)	
-	of1 = res.subflow.mutate.output.fasta
-	of2 = res['subflow']['mutate']['output']['fasta'] 
-	of3 = res.get_subflow('mutate').get_output('fasta')
-	assert of1 is of2 is of3	
-	print(of3)
+# 	res2 = cache_run(backup, prefix, res, verbose = 0)
+# 	fs = get_changed_files(backup, prefix, res, verbose = 0)
+# 	print('[fs2]')
+# 	assert fs==[],pprint(fs)
+# 	# res  = mock_run( workflow, prefix, 2, 100,verbose=1)
+# 	# File('/tmp/spiper.symbolic/root.transcribe.fasta').touch()
 
-	#### this is more visually pleasant 
-	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
-	### render with graphviz
-	fn = Path('assets/%s.mock.dot'%Path(__file__).basename()); fn =fn.realpath()
-	g = plot_simple_graph(tree,None,0)
-	g.render( fn,format='svg'); print('[see output]%s'%fn)
-
-	res = force_run( workflow, prefix, 1, 100 )
-	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
-	fn = Path('assets/%s.real.dot'%Path(__file__).basename()); fn =fn.realpath()
-	g = plot_simple_graph(tree,None,0)
-	g.render( fn,format='svg'); print('[see output]%s'%fn)
+# 	res  = mock_run( workflow, prefix, 2, 100,verbose=0)
+# 	fs = get_changed_files(backup, prefix, res, verbose = 0)
+# 	print('[fs3]')
+# 	assert fs==[
+#  File('/tmp/spiper.symbolic/root.subflow.random_seq.output.seq'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_random_seq_output_seq.backup'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_transcribe_output_fasta.backup'),
+#  File('/tmp/spiper.symbolic/root.copy_file_subflow_mutate_output_fasta.backup')],pprint(fs)
+# 	# assert 0
 
 
-Case.test_tag = main
+# 	exp = [
+
+# 	  File('/tmp/spiper.symbolic/root.workflow.log'),
+# 	  File('/tmp/spiper.symbolic/root.random_seq.seq'),
+# 	  # File('/tmp/spiper.symbolic/root.random_seq_temp.seq'),
+# 	  File('/tmp/spiper.symbolic/root.transcribe.fasta'),
+# 	  File('/tmp/spiper.symbolic/root.mutate.fasta'),
+# 	  ]
+# 	fs = get_changed_files(workflow,prefix, 2 ,100 ,verbose=1)
+# 	assert fs == exp,pprint((fs,exp))
+
+# 	print('\n...[Done]')
+# 	stdout = LoggedShellCommand(['ls -lhtr',prefix.dirname()],).rstrip()
+# 	print(stdout)	
+# 	of1 = res.subflow.mutate.output.fasta
+# 	of2 = res['subflow']['mutate']['output']['fasta'] 
+# 	of3 = res.get_subflow('mutate').get_output('fasta')
+# 	assert of1 is of2 is of3	
+# 	print(of3)
+
+# 	#### this is more visually pleasant 
+# 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
+# 	### render with graphviz
+# 	fn = Path('assets/%s.mock.dot'%Path(__file__).basename()); fn =fn.realpath()
+# 	g = plot_simple_graph(tree,None,0)
+# 	g.render( fn,format='svg'); print('[see output]%s'%fn)
+
+# 	res = force_run( workflow, prefix, 1, 100 )
+# 	tree = get_downstream_tree( [Prefix(prefix+'.random_seq.seq')], strict=0)	
+# 	fn = Path('assets/%s.real.dot'%Path(__file__).basename()); fn =fn.realpath()
+# 	g = plot_simple_graph(tree,None,0)
+# 	g.render( fn,format='svg'); print('[see output]%s'%fn)
+
+# Case.test_tag = main
 
 if __name__ == '__main__':
 	main()
