@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. API &mdash; spiper 0.0.7 documentation</title>
+  <title>3. API &mdash; spiper 0.1.1 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.7
+                0.1.1
               </div>
             
           
@@ -184,7 +184,7 @@
 
 <dl class="function">
 <dt id="spiper.types.LoggedSingularityCommand">
-<code class="sig-prename descclassname">spiper.types.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedSingularityCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spiper.types.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">prefix</em>, <em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">is_exec=1</em>, <em class="sig-param">multiline=0</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedSingularityCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
 image: a singularity image url
@@ -224,6 +224,13 @@ debug: print dbg info</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.types.Caller.get_all_deps">
+<code class="sig-name descname">get_all_deps</code><span class="sig-paren">(</span><em class="sig-param">which_flow=0</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.get_all_deps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.get_all_deps" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of external dependencies by intercepting inputs to subflows,
+excluding internal outputs and scalars.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="spiper.types.Caller.get_all_files">
 <code class="sig-name descname">get_all_files</code><span class="sig-paren">(</span><em class="sig-param">allow=[&lt;class 'spiper._types.File'&gt;], flat=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.get_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.get_all_files" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -249,6 +256,16 @@ debug: print dbg info</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.types.Caller.input_arg_values">
+<em class="property">property </em><code class="sig-name descname">input_arg_values</code><a class="headerlink" href="#spiper.types.Caller.input_arg_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.types.Caller.input_ident_file">
+<em class="property">property </em><code class="sig-name descname">input_ident_file</code><a class="headerlink" href="#spiper.types.Caller.input_ident_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="spiper.types.Caller.is_mock">
 <code class="sig-name descname">is_mock</code><span class="sig-paren">(</span><em class="sig-param">call=&lt;function Caller.&lt;lambda&gt;&gt;</em>, <em class="sig-param">fast=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.is_mock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.is_mock" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -256,6 +273,11 @@ debug: print dbg info</p>
 <dl class="method">
 <dt id="spiper.types.Caller.is_mock_file">
 <code class="sig-name descname">is_mock_file</code><span class="sig-paren">(</span><em class="sig-param">v</em>, <em class="sig-param">call</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.is_mock_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.is_mock_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.types.Caller.is_node">
+<em class="property">property </em><code class="sig-name descname">is_node</code><a class="headerlink" href="#spiper.types.Caller.is_node" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -289,6 +311,11 @@ debug: print dbg info</p>
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.types.Caller.output_ident_file">
+<em class="property">property </em><code class="sig-name descname">output_ident_file</code><a class="headerlink" href="#spiper.types.Caller.output_ident_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="spiper.types.Caller.prefix">
 <em class="property">property </em><code class="sig-name descname">prefix</code><a class="headerlink" href="#spiper.types.Caller.prefix" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -318,6 +345,12 @@ debug: print dbg info</p>
 <dt id="spiper.types.Caller.to_table_node_label">
 <code class="sig-name descname">to_table_node_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.to_table_node_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.to_table_node_label" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.types.Caller.update_meta">
+<code class="sig-name descname">update_meta</code><span class="sig-paren">(</span><em class="sig-param">_input</em>, <em class="sig-param">_output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.update_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.types.Caller.update_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage meta files for a Caller after updating its output</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -385,7 +418,7 @@ any children nodes.</p>
 <dl class="class">
 <dt id="spiper._types.Depend">
 <em class="property">class </em><code class="sig-prename descclassname">spiper._types.</code><code class="sig-name descname">Depend</code><span class="sig-paren">(</span><em class="sig-param">other=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/_types.html#Depend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper._types.Depend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">path.Path</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">spiper._types.Path</span></code></p>
 <p>Abstract Dependency</p>
 </dd></dl>
 
@@ -488,7 +521,7 @@ see <a class="reference external" href="https://github.com/pypa/pip/blob/e5375af
 
 <dl class="function">
 <dt id="spiper.shell.LoggedSingularityCommand">
-<code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedSingularityCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.shell.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">LoggedSingularityCommand</code><span class="sig-paren">(</span><em class="sig-param">prefix</em>, <em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">is_exec=1</em>, <em class="sig-param">multiline=0</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedSingularityCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.shell.LoggedSingularityCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
 image: a singularity image url
@@ -499,13 +532,18 @@ debug: print dbg info</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="spiper.shell.LoggedSingularityCommandList">
+<code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">LoggedSingularityCommandList</code><span class="sig-paren">(</span><em class="sig-param">prefix</em>, <em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#LoggedSingularityCommandList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.shell.LoggedSingularityCommandList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="spiper.shell.SafeShellCommand">
 <code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">SafeShellCommand</code><span class="sig-paren">(</span><em class="sig-param">CMD</em>, <em class="sig-param">check=1</em>, <em class="sig-param">shell=0</em>, <em class="sig-param">encoding='utf8'</em>, <em class="sig-param">stdin=None</em>, <em class="sig-param">stdout=None</em>, <em class="sig-param">stderr=None</em>, <em class="sig-param">silent=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/shell.html#SafeShellCommand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.shell.SafeShellCommand" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="spiper.shell.SingularityShellCommand">
-<code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">SingularityShellCommand</code><span class="sig-paren">(</span><em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#spiper.shell.SingularityShellCommand" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spiper.shell.</code><code class="sig-name descname">SingularityShellCommand</code><span class="sig-paren">(</span><em class="sig-param">prefix</em>, <em class="sig-param">cmd</em>, <em class="sig-param">image</em>, <em class="sig-param">log_file</em>, <em class="sig-param">check=1</em>, <em class="sig-param">mode='w'</em>, <em class="sig-param">is_exec=1</em>, <em class="sig-param">multiline=0</em>, <em class="sig-param">extra_files=None</em>, <em class="sig-param">debug=0</em><span class="sig-paren">)</span><a class="headerlink" href="#spiper.shell.SingularityShellCommand" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>return a tuple (executed command, command_stdout)</dt><dd><p>cmd: a list of str-like objects that gets concatenated into a shell command
 image: a singularity image url
@@ -566,6 +604,13 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.runner.Caller.get_all_deps">
+<code class="sig-name descname">get_all_deps</code><span class="sig-paren">(</span><em class="sig-param">which_flow=0</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.get_all_deps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.get_all_deps" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of external dependencies by intercepting inputs to subflows,
+excluding internal outputs and scalars.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="spiper.runner.Caller.get_all_files">
 <code class="sig-name descname">get_all_files</code><span class="sig-paren">(</span><em class="sig-param">allow=[&lt;class 'spiper._types.File'&gt;], flat=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.get_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.get_all_files" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -591,6 +636,16 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.runner.Caller.input_arg_values">
+<em class="property">property </em><code class="sig-name descname">input_arg_values</code><a class="headerlink" href="#spiper.runner.Caller.input_arg_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.runner.Caller.input_ident_file">
+<em class="property">property </em><code class="sig-name descname">input_ident_file</code><a class="headerlink" href="#spiper.runner.Caller.input_ident_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="spiper.runner.Caller.is_mock">
 <code class="sig-name descname">is_mock</code><span class="sig-paren">(</span><em class="sig-param">call=&lt;function Caller.&lt;lambda&gt;&gt;</em>, <em class="sig-param">fast=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.is_mock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.is_mock" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -598,6 +653,11 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dl class="method">
 <dt id="spiper.runner.Caller.is_mock_file">
 <code class="sig-name descname">is_mock_file</code><span class="sig-paren">(</span><em class="sig-param">v</em>, <em class="sig-param">call</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.is_mock_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.is_mock_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.runner.Caller.is_node">
+<em class="property">property </em><code class="sig-name descname">is_node</code><a class="headerlink" href="#spiper.runner.Caller.is_node" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -631,6 +691,11 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dd></dd></dl>
 
 <dl class="method">
+<dt id="spiper.runner.Caller.output_ident_file">
+<em class="property">property </em><code class="sig-name descname">output_ident_file</code><a class="headerlink" href="#spiper.runner.Caller.output_ident_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="spiper.runner.Caller.prefix">
 <em class="property">property </em><code class="sig-name descname">prefix</code><a class="headerlink" href="#spiper.runner.Caller.prefix" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -660,6 +725,12 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dt id="spiper.runner.Caller.to_table_node_label">
 <code class="sig-name descname">to_table_node_label</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.to_table_node_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.to_table_node_label" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="spiper.runner.Caller.update_meta">
+<code class="sig-name descname">update_meta</code><span class="sig-paren">(</span><em class="sig-param">_input</em>, <em class="sig-param">_output</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#Caller.update_meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.Caller.update_meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage meta files for a Caller after updating its output</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -693,7 +764,7 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 
 <dl class="function">
 <dt id="spiper.runner.cache_run">
-<code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">cache_run</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">*args</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">mock=False</em>, <em class="sig-param">check_only=False</em>, <em class="sig-param">check_changed=False</em>, <em class="sig-param">force=False</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">last_caller=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#cache_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.cache_run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">cache_run</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">*args</em>, <em class="sig-param">dir_layout=None</em>, <em class="sig-param">mock=False</em>, <em class="sig-param">check_only=False</em>, <em class="sig-param">check_changed=False</em>, <em class="sig-param">force=False</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">last_caller=None</em>, <em class="sig-param">tag=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#cache_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.cache_run" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
@@ -725,6 +796,11 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 <dd></dd></dl>
 
 <dl class="function">
+<dt id="spiper.runner.get_all_deps">
+<code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">get_all_deps</code><span class="sig-paren">(</span><em class="sig-param">job</em>, <em class="sig-param">*args</em>, <em class="sig-param">which_flow=0</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#get_all_deps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.get_all_deps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="spiper.runner.get_all_files">
 <code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">get_all_files</code><span class="sig-paren">(</span><em class="sig-param">job, *args, allow=[&lt;class 'spiper._types.File'&gt;], flat=1, **kw</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#get_all_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.get_all_files" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -746,7 +822,7 @@ Source: <a class="reference external" href="https://stackoverflow.com/a/43750422
 
 <dl class="function">
 <dt id="spiper.runner.ident_dump">
-<code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">ident_dump</code><span class="sig-paren">(</span><em class="sig-param">d</em>, <em class="sig-param">ident_file</em>, <em class="sig-param">comment=[]</em>, <em class="sig-param">version='0.0.7'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#ident_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.ident_dump" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">spiper.runner.</code><code class="sig-name descname">ident_dump</code><span class="sig-paren">(</span><em class="sig-param">d</em>, <em class="sig-param">ident_file</em>, <em class="sig-param">comment=[]</em>, <em class="sig-param">version='0.1.1'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/spiper/runner.html#ident_dump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#spiper.runner.ident_dump" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">

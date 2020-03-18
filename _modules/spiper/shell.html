@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.shell &mdash; spiper 0.0.7 documentation</title>
+  <title>spiper.shell &mdash; spiper 0.1.1 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.7
+                0.1.1
               </div>
             
           
@@ -154,6 +154,7 @@
 <span class="kn">from</span> <span class="nn">spiper._shell</span> <span class="kn">import</span> <span class="n">pipe__getResult</span><span class="p">,</span><span class="n">pipe__getSafeResult</span><span class="p">,</span><span class="n">shellpopen</span>
 <span class="kn">from</span> <span class="nn">spiper._shell</span> <span class="kn">import</span> <span class="n">_shellcmd</span><span class="p">,</span> <span class="n">shellcmd</span>
 <span class="kn">import</span> <span class="nn">io</span><span class="o">,</span><span class="nn">time</span>
+<span class="c1"># from spiper._types import Path</span>
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -161,7 +162,7 @@
 <span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span><span class="n">Prefix</span><span class="p">,</span><span class="n">InputFile</span><span class="p">,</span><span class="n">InputPrefix</span>
 <span class="c1"># from ._types import File,Prefix,InputFile,InputPrefix</span>
 <span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">path</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">spiper</span> <span class="kn">import</span> <span class="n">VERSION</span>
 
@@ -238,7 +239,14 @@
 
 
 <span class="k">if</span> <span class="mi">1</span><span class="p">:</span>
-<div class="viewcode-block" id="LoggedSingularityCommand"><a class="viewcode-back" href="../../lib/index.html#spiper.types.LoggedSingularityCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommand</span><span class="p">(</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span><span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="n">extra_files</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">debug</span> <span class="o">=</span><span class="mi">0</span><span class="p">):</span>	
+<div class="viewcode-block" id="LoggedSingularityCommandList"><a class="viewcode-back" href="../../lib/index.html#spiper.types.LoggedSingularityCommandList">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommandList</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span>  <span class="n">extra_files</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">LoggedSingularityCommand</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">extra_files</span><span class="p">,</span> <span class="n">is_exec</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LoggedSingularityCommand"><a class="viewcode-back" href="../../lib/index.html#spiper.types.LoggedSingularityCommand">[docs]</a>	<span class="k">def</span> <span class="nf">LoggedSingularityCommand</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">log_file</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>  <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+		<span class="n">is_exec</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+		<span class="n">multiline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+		<span class="n">extra_files</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  
+		<span class="n">debug</span> <span class="o">=</span><span class="mi">0</span><span class="p">):</span>	
 		<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">		return a tuple (executed command, command_stdout)</span>
 <span class="sd">			cmd: a list of str-like objects that gets concatenated into a shell command</span>
@@ -248,9 +256,10 @@
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="k">if</span> <span class="n">extra_files</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 			<span class="n">extra_files</span>  <span class="o">=</span> <span class="p">[]</span>
-		<span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">,</span><span class="s1">&#39;-e;&#39;</span><span class="p">,</span><span class="n">cmd</span><span class="p">]</span>
-		<span class="c1"># cmd = list_flatten_strict(cmd)</span>
 
+
+		<span class="c1"># cmd = [&#39;set&#39;,&#39;-e;&#39;,cmd]		</span>
+		<span class="c1"># cmd = list_flatten_strict(cmd)</span>
 
 		<span class="c1"># #### potential redundant</span>
 		<span class="c1"># #### all output path derives from Prefix hence only Prefix needs to be realpath</span>
@@ -276,21 +285,38 @@
 		<span class="c1"># bfs = bind_files( FS + extra_files) </span>
 		<span class="k">if</span> <span class="n">debug</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">repr</span><span class="p">,</span><span class="n">bfs</span><span class="p">)),</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,))</span>
 
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		FILE=/tmp/_spiper.$$.script.sh; touch $FILE; chmod +x $FILE</span>
+<span class="sd">		cat &lt;&lt;EOF &gt;$FILE</span>
+<span class="sd">		cat - | python3 -c &quot;import sys; print(&#39;hi&#39;);[print(&#39;[line]&#39;,line) for line in sys.stdin]&quot;</span>
+<span class="sd">		EOF</span>
+<span class="sd">		cat $FILE | singularity exec --bind $FILE:$FILE:ro docker://python:3.5-alpine $FILE</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+
 		<span class="n">cmd_curr</span> <span class="o">=</span> <span class="p">[</span>
 		<span class="c1"># &#39;\n&#39;,</span>
 		<span class="s1">&#39;singularity&#39;</span><span class="p">,</span><span class="s1">&#39;exec&#39;</span><span class="p">,</span>
 		<span class="s1">&#39;--contain&#39;</span><span class="p">,</span>
-		<span class="p">[</span><span class="s1">&#39;--bind&#39;</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bfs</span><span class="p">)]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bfs</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
+		<span class="s1">&#39;--writable&#39;</span><span class="p">,</span>
+		<span class="p">[</span><span class="s1">&#39;--workdir&#39;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">prefix</span> <span class="o">+</span><span class="s1">&#39;.singularity_temp&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()]</span> <span class="k">if</span> <span class="n">prefix</span> <span class="k">else</span> <span class="p">[],</span>
+		<span class="s1">&#39;</span><span class="se">\\\n</span><span class="s1">&#39;</span><span class="p">,</span>
+		<span class="c1"># extra_params,</span>
+		<span class="p">[</span><span class="s1">&#39;--bind&#39;</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bfs</span><span class="p">),</span> <span class="s1">&#39;</span><span class="se">\\\n</span><span class="s1">&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bfs</span><span class="p">)</span> <span class="k">else</span> <span class="p">[],</span>
 		<span class="c1"># [-1],&#39;--bind&#39;,&#39;/tmp:/tmp&#39;,</span>
-			<span class="n">image</span><span class="p">,</span>
-			<span class="s1">&#39;bash&#39;</span><span class="p">,</span>
-			<span class="s1">&#39;&lt;&lt;EOF</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+			<span class="n">image</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\\\n</span><span class="s1">&#39;</span><span class="p">,</span>
+			<span class="p">[</span>
+				<span class="s1">&#39;bash&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;&lt;&lt;EOF</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+				<span class="s1">&#39;set&#39;</span><span class="p">,</span><span class="s1">&#39;-e;&#39;</span><span class="p">,</span>
+				<span class="p">[</span> <span class="n">list_to_string</span><span class="p">([</span><span class="n">x</span><span class="p">],</span><span class="n">strict</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">],</span>
+				<span class="s1">&#39;</span><span class="se">\n</span><span class="s1">EOF</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+			<span class="p">]</span> <span class="k">if</span> <span class="n">multiline</span> <span class="k">else</span>
 			<span class="p">[</span> <span class="n">list_to_string</span><span class="p">([</span><span class="n">x</span><span class="p">],</span><span class="n">strict</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">cmd</span><span class="p">],</span>
-			<span class="c1"># list_to_string(cmd),</span>
-			<span class="s1">&#39;</span><span class="se">\n</span><span class="s1">EOF&#39;</span><span class="p">,</span>
 		<span class="c1"># &#39;\n&#39;,</span>
 		<span class="p">]</span>
 		<span class="n">cmd_curr</span> <span class="o">=</span> <span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">cmd_curr</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">is_exec</span><span class="p">:</span>
+			<span class="k">return</span> <span class="n">cmd_curr</span>
 		<span class="n">stdout</span> <span class="o">=</span> <span class="n">LoggedShellCommand</span><span class="p">(</span><span class="n">cmd_curr</span><span class="p">,</span><span class="n">log_file</span><span class="p">,</span> <span class="n">check</span><span class="p">,</span><span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
 		<span class="c1"># suc,stdout</span>
 		<span class="c1"># suc,stdout,stderr = shellcmd(cmd_curr,1,0)</span>
@@ -310,18 +336,20 @@
 					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;ro&#39;</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
 				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">Prefix</span><span class="p">):</span>
 					<span class="c1">#### if is not inputPrefix, mount the directory</span>
-					<span class="n">F</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
+					<span class="n">F</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span>
 					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">File</span><span class="p">(</span> <span class="n">F</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span> <span class="p">)</span> <span class="p">)</span>
 					<span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;rw&#39;</span>
 					<span class="n">modes</span><span class="o">+=</span><span class="p">[</span><span class="n">mode</span><span class="p">]</span>
 				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">InputFile</span><span class="p">):</span>
 					<span class="c1">#### if is inputFile, dont touch</span>
-					<span class="k">assert</span> <span class="n">F</span><span class="o">.</span><span class="n">isfile</span><span class="p">(),(</span><span class="n">F</span><span class="p">,</span><span class="n">cmd</span><span class="p">)</span>
+					<span class="c1"># assert F.isfile(),(F,cmd)</span>
+					<span class="k">assert</span> <span class="n">F</span><span class="o">.</span><span class="n">exists</span><span class="p">(),(</span><span class="n">F</span><span class="p">,</span><span class="n">cmd</span><span class="p">)</span>
 					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">F</span> <span class="p">)</span>
 					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;ro&#39;</span><span class="p">]</span>					
 				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="n">File</span><span class="p">):</span>
 					<span class="c1">#### if not inputfile, touch to makesure					</span>
-					<span class="n">F</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">F</span><span class="o">.</span><span class="n">isfile</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+					<span class="c1"># F.touch() if not F.isfile() else None</span>
+					<span class="n">F</span><span class="o">.</span><span class="n">touch</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">F</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
 					<span class="n">FS</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">F</span> <span class="p">)</span>
 					<span class="n">modes</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;rw&#39;</span><span class="p">]</span>
 					<span class="c1"># mode = &#39;rw&#39;</span>

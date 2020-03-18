@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.cli &mdash; spiper 0.0.7 documentation</title>
+  <title>spiper.cli &mdash; spiper 0.1.1 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.7
+                0.1.1
               </div>
             
           
@@ -152,7 +152,7 @@
   <h1>Source code for spiper.cli</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">get_changed_files</span><span class="p">,</span> <span class="n">force_run</span>
+<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">cache_run</span><span class="p">,</span><span class="n">get_all_files</span><span class="p">,</span><span class="n">get_changed_files</span><span class="p">,</span> <span class="n">force_run</span><span class="p">,</span> <span class="n">mock_run</span>
 <span class="kn">from</span> <span class="nn">spiper.types</span> <span class="kn">import</span> <span class="n">RemotePythonObject</span> <span class="k">as</span> <span class="n">RPO</span>
 <span class="kn">import</span> <span class="nn">spiper</span>
 <span class="k">def</span> <span class="nf">_help</span><span class="p">(</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -208,25 +208,53 @@
 		<span class="k">if</span> <span class="s1">&#39;--version&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">or</span> <span class="s1">&#39;-V&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
 			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;spiper-</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">spiper</span><span class="o">.</span><span class="n">VERSION</span><span class="p">)</span>
 			<span class="k">return</span> <span class="mi">0</span>
+		<span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
+		<span class="k">if</span> <span class="s1">&#39;-v&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+			<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">)</span>
+			<span class="n">verbose</span> <span class="o">=</span> <span class="mi">1</span>
 
 		<span class="k">if</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;run&#39;</span><span class="p">:</span>
 			<span class="n">runner</span> <span class="o">=</span> <span class="n">cache_run</span>		
 			<span class="k">if</span> <span class="s1">&#39;--force&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
 				<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--force&#39;</span><span class="p">)</span>
 				<span class="n">runner</span> <span class="o">=</span> <span class="n">force_run</span>
+			<span class="k">if</span> <span class="s1">&#39;--mock&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+				<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--mock&#39;</span><span class="p">)</span>
+				<span class="n">runner</span> <span class="o">=</span> <span class="n">mock_run</span>
 
 		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_all_files&#39;</span><span class="p">:</span>
-			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
-				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">plain</span><span class="p">:</span>
 					<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
 						<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 				<span class="k">else</span><span class="p">:</span>
 					<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span> <span class="ow">or</span> <span class="s1">&#39;[No files governed by this workflow]&#39;</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_all_deps&#39;</span><span class="p">:</span>
+			<span class="kn">from</span> <span class="nn">spiper.runner</span> <span class="kn">import</span> <span class="n">get_all_deps</span>
+			<span class="n">which_flow</span> <span class="o">=</span> <span class="mi">0</span>
+			<span class="k">if</span> <span class="s1">&#39;--which_flow&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
+				<span class="n">args</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;--which_flow&#39;</span><span class="p">)</span>
+				<span class="n">which_flow</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_all_deps</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="n">which_flow</span><span class="o">=</span><span class="n">which_flow</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+				<span class="k">if</span> <span class="n">plain</span><span class="p">:</span>
+					<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
+						<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="c1"># pp</span>
+					<span class="c1"># [print(f) for f in fs or [&#39;[No dependcies detected]&#39;]]</span>
+					<span class="c1"># pprint(fs or &#39;[No dependcies detected]&#39;,indent=2)</span>
+					<span class="kn">import</span> <span class="nn">json</span>
+					<span class="c1"># import collections</span>
+					<span class="c1"># if isinstance(fs,dict):</span>
+					<span class="c1"># 	fs = collections.OrderedDict([(repr(k),v) for k,v in fs.items()])</span>
+					<span class="c1"># json.dump( fs, sys.stdout,default=repr,indent=2) if fs else print(&#39;[No files governed by this workflow]&#39;)</span>
+					<span class="n">pprint</span><span class="p">(</span><span class="n">fs</span> <span class="ow">or</span> <span class="s1">&#39;[No files governed by this workflow]&#39;</span><span class="p">)</span>
 
 		<span class="k">elif</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;get_changed_files&#39;</span><span class="p">:</span>
-			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">):</span>
-				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">)</span>
+			<span class="k">def</span> <span class="nf">runner</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+				<span class="n">fs</span> <span class="o">=</span> <span class="n">get_changed_files</span><span class="p">(</span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 				<span class="k">if</span> <span class="n">plain</span><span class="p">:</span>
 					<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fs</span><span class="p">:</span>
 						<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
@@ -250,7 +278,7 @@
 		<span class="k">return</span> <span class="n">_help</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
 	<span class="n">obj</span> <span class="o">=</span> <span class="n">RPO</span><span class="p">(</span><span class="n">package</span><span class="p">,</span> <span class="n">workflow_entrypoint</span><span class="p">)</span>
-	<span class="n">res</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">loaded</span><span class="p">(),</span> <span class="o">*</span><span class="n">workflow_arguments</span><span class="p">)</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">loaded</span><span class="p">(),</span> <span class="o">*</span><span class="n">workflow_arguments</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 	<span class="k">return</span> <span class="mi">0</span></div>
 </pre></div>
 

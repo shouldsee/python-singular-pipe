@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.runner &mdash; spiper 0.0.7 documentation</title>
+  <title>spiper.runner &mdash; spiper 0.1.1 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.0.7
+                0.1.1
               </div>
             
           
@@ -167,6 +167,8 @@
 <span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">NodeFunction</span><span class="p">,</span><span class="n">FlowFunction</span>
 <span class="kn">from</span> <span class="nn">spiper._types</span> <span class="kn">import</span> <span class="n">DirtyKey</span>
 
+<span class="kn">from</span> <span class="nn">spiper._header</span> <span class="kn">import</span> <span class="n">list_remove_scalar</span>
+
 <span class="c1"># from spiper._types import FakeCode,FakeJob</span>
 
 <span class="kn">from</span> <span class="nn">spiper.base</span> <span class="kn">import</span> <span class="n">get_func_name</span><span class="p">,</span> <span class="n">list_flatten</span><span class="p">,</span><span class="n">list_flatten_strict</span>
@@ -179,6 +181,7 @@
 <span class="kn">import</span> <span class="nn">io</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">zip_longest</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
@@ -296,10 +299,9 @@
 	<span class="k">return</span> <span class="mi">0</span></div>
 
 
-			
-
-<span class="k">def</span> <span class="nf">_get_changed_files</span><span class="p">(</span><span class="n">caller</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_changed_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,):</span>
 	<span class="k">return</span> <span class="n">_get_all_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
 <span class="k">def</span> <span class="nf">_get_all_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">changed</span><span class="p">):</span>
 	<span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
 	<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
@@ -308,10 +310,72 @@
 	<span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">caller</span><span class="o">.</span><span class="n">subflow</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_all_files</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">changed</span><span class="p">)</span>
 		<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">res</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">lst</span>				
+	<span class="k">return</span> <span class="n">lst</span>
 
-		
+<span class="k">def</span> <span class="nf">_get_all_inputs</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+	<span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">list_flatten</span><span class="p">(</span><span class="n">caller</span><span class="o">.</span><span class="n">input_arg_values</span><span class="p">):</span>
+		<span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="n">caller</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">caller</span><span class="o">.</span><span class="n">subflow</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_all_inputs</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+		<span class="c1"># out.extend(res)</span>
+	<span class="c1"># pprint()</span>
+	<span class="k">return</span> <span class="n">out</span>
+
+<div class="viewcode-block" id="get_all_deps"><a class="viewcode-back" href="../../lib/index.html#spiper.types.get_all_deps">[docs]</a><span class="k">def</span> <span class="nf">get_all_deps</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">which_flow</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="n">res</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">get_all_deps</span><span class="p">(</span><span class="n">which_flow</span><span class="o">=</span><span class="n">which_flow</span><span class="p">)</span>
+	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">res</span>	</div>
+
+<span class="kn">from</span> <span class="nn">spiper._header</span> <span class="kn">import</span> <span class="n">is_scalar</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <div class="viewcode-block" id="Caller"><a class="viewcode-back" href="../../lib/index.html#spiper.types.Caller">[docs]</a><span class="k">class</span> <span class="nc">Caller</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="c1"># def get_deps_by_flow(caller,  **kw):</span>
+	<span class="c1"># 	&#39;&#39;&#39;</span>
+	<span class="c1"># 	Note</span>
+	<span class="c1"># 	-------------------</span>
+	<span class="c1"># 	returns a list of external dependencies by intercepting inputs to subflows,</span>
+	<span class="c1"># 	excluding internal outputs and scalars.</span>
+
+	<span class="c1"># 	Params</span>
+	<span class="c1"># 	--------------------</span>
+	<span class="c1"># 	&#39;&#39;&#39;</span>
+	<span class="c1"># 	lst = []</span>
+	<span class="c1"># 	inputs  = set(list_flatten(_get_all_inputs(caller)))</span>
+	<span class="c1"># 	outputs = set(list_flatten(_get_all_files(caller,changed=0)))</span>
+	<span class="c1"># 	return list_remove_scalar(sorted(inputs-outputs,key=repr))</span>
+
+<div class="viewcode-block" id="Caller.get_all_deps"><a class="viewcode-back" href="../../lib/index.html#spiper.types.Caller.get_all_deps">[docs]</a>	<span class="k">def</span> <span class="nf">get_all_deps</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">which_flow</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Note</span>
+<span class="sd">		-------------------</span>
+<span class="sd">		returns a list of external dependencies by intercepting inputs to subflows,</span>
+<span class="sd">		excluding internal outputs and scalars.</span>
+
+<span class="sd">		Params</span>
+<span class="sd">		--------------------</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">inputs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_get_all_inputs</span><span class="p">(</span><span class="n">caller</span><span class="p">)]</span>
+		<span class="n">outputs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">list_flatten</span><span class="p">(</span><span class="n">_get_all_files</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span><span class="n">changed</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:[])</span>
+		<span class="c1"># which_flow = 1</span>
+		<span class="k">for</span> <span class="n">v</span><span class="p">,</span><span class="n">flow</span> <span class="ow">in</span> <span class="n">inputs</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">outputs</span><span class="p">:</span>
+				<span class="k">continue</span>
+			<span class="k">if</span> <span class="n">is_scalar</span><span class="p">(</span><span class="n">v</span><span class="p">):</span>
+				<span class="k">continue</span>
+			<span class="k">if</span> <span class="n">which_flow</span><span class="p">:</span>
+				<span class="n">out</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;spiper://&#39;</span><span class="o">+</span><span class="n">flow</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">out</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+		<span class="n">out</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">out</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">which_flow</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">out</span><span class="p">]</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="c1"># return collections.OrderedDict(out)</span>
+			<span class="k">return</span> <span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Caller.get_changed_files"><a class="viewcode-back" href="../../lib/index.html#spiper.types.Caller.get_changed_files">[docs]</a>	<span class="k">def</span> <span class="nf">get_changed_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="n">_get_changed_files</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">flat</span><span class="p">:</span>
@@ -375,11 +439,25 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">_arg_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">[:]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)]</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arg_values</span>
 	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">input_arg_values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span><span class="o">!=</span><span class="s1">&#39;_output&#39;</span><span class="p">]</span>
+		<span class="k">return</span> <span class="n">vals</span>
+
+	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">dotname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">object</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">)</span>
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">subflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">is_node</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">issubclass</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">job_type</span><span class="p">,</span> <span class="n">spiper</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">NodeFunction</span><span class="p">)</span>
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">input_ident_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;input_json&#39;</span> <span class="p">)</span>		
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">output_ident_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="n">IdentFile</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;output_json&#39;</span> <span class="p">)</span>				
 	
 <div class="viewcode-block" id="Caller.get_subflow"><a class="viewcode-back" href="../../lib/index.html#spiper.types.Caller.get_subflow">[docs]</a>	<span class="k">def</span> <span class="nf">get_subflow</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">k</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subflow</span><span class="p">[</span><span class="n">k</span><span class="p">]</span></div>
@@ -425,7 +503,7 @@
 					<span class="s1">&#39;</span><span class="si">{dump}</span><span class="se">\n</span><span class="s1">Too few arguments specified for </span><span class="si">{job._origin_code}</span><span class="se">\n</span><span class="s1"> normal argname are without &quot;_&quot; are necessary for evaluation </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
 				<span class="n">dump</span><span class="o">=</span><span class="n">_dump</span><span class="p">(),</span><span class="o">**</span><span class="nb">locals</span><span class="p">()))</span>
 			<span class="k">else</span><span class="p">:</span>
-				<span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">t</span><span class="p">):</span>
+				<span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">==</span> <span class="n">t</span><span class="p">:</span> <span class="c1">### require exact type, not a subclass</span>
 					<span class="n">v</span> <span class="o">=</span> <span class="n">t</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 				<span class="n">_tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
 		<span class="c1"># _tmp.setdefault(&#39;_single_file&#39;,0)</span>
@@ -450,7 +528,6 @@
 
 	<span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">d</span><span class="p">):</span>
 		<span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">d</span>
-
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">,</span> <span class="n">arg_dict</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
 		<span class="c1"># if not getattr(job,&#39;_spiper&#39;,False):</span>
 		<span class="c1"># 	job = job_from_func(job)		</span>
@@ -470,7 +547,7 @@
 			<span class="k">if</span> <span class="n">tag</span><span class="p">:</span> <span class="k">assert</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span> <span class="o">==</span> <span class="n">tag</span><span class="p">,(</span><span class="n">tag</span><span class="p">,</span><span class="n">DirtyKey</span><span class="p">(</span><span class="n">tag</span><span class="p">))</span>
 			<span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tag</span><span class="p">,(</span><span class="nb">type</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span><span class="nb">str</span><span class="p">)),(</span><span class="nb">type</span><span class="p">(</span><span class="n">tag</span><span class="p">),</span><span class="n">tag</span><span class="p">)</span>
 			<span class="n">tag</span>  <span class="o">=</span> <span class="n">tag</span> <span class="ow">or</span> <span class="p">[]</span>
-			<span class="n">_tag</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_flatten</span><span class="p">([</span> <span class="n">job</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tag</span><span class="p">]))</span>
+			<span class="n">_tag</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_flatten</span><span class="p">([</span> <span class="n">job</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">tag</span><span class="p">]))</span>
 		<span class="k">else</span><span class="p">:</span>
 			<span class="c1"># _tag = self.prefix</span>
 			<span class="n">_tag</span> <span class="o">=</span> <span class="n">arg_tuples</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
@@ -483,7 +560,7 @@
 		<span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span>   <span class="o">=</span> <span class="n">arg_tuples</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span>   <span class="o">=</span> <span class="n">dir_layout</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>     <span class="o">=</span> <span class="n">_dict</span><span class="p">()</span>
-
+		<span class="bp">self</span><span class="o">.</span><span class="n">use_cache</span>    <span class="o">=</span> <span class="kc">True</span>
 
 		<span class="c1">### create output directory</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">isdir</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
@@ -495,6 +572,10 @@
 			<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="s1">&#39;prefix_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">)</span>
 		<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">:</span>
 			<span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">expand</span><span class="p">()</span><span class="o">.</span><span class="n">realpath</span><span class="p">()</span> 
+		<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_node</span><span class="p">:</span>
+			<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_type</span><span class="o">.</span><span class="n">_typed_fields</span><span class="p">):</span>	
+				<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Output files </span><span class="si">%r</span><span class="s1"> will not be cached for: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span><span class="bp">self</span><span class="p">))</span>
+
 		<span class="bp">self</span><span class="o">.</span><span class="n">runner</span> <span class="o">=</span> <span class="kc">None</span>
 
 
@@ -659,7 +740,7 @@
 
 		<span class="c1">### [need:test] test permission for writing</span>
 		<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">)</span>
-		<span class="p">[</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span> <span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">]</span>
+		<span class="p">[</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span> <span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">]</span>
 
 		<span class="k">if</span> <span class="n">strict</span><span class="p">:</span>
 			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">(</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">5</span>  <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>		</div>
@@ -690,22 +771,81 @@
 <span class="s1">	&lt;/TABLE&gt;</span>
 <span class="s1">	&gt;</span>
 <span class="s1">	&#39;&#39;&#39;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-		<span class="k">return</span> <span class="n">jinja2_format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span></div></div>
-		<span class="c1"># return s.format(self=self)</span>
-<span class="c1"># DEFAULT_DIR_LAYOUT = &#39;clean&#39;</span>
+		<span class="k">return</span> <span class="n">jinja2_format</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">node</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>	</div>
+
+<div class="viewcode-block" id="Caller.update_meta"><a class="viewcode-back" href="../../lib/index.html#spiper.types.Caller.update_meta">[docs]</a>	<span class="k">def</span> <span class="nf">update_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_input</span><span class="p">,</span> <span class="n">_output</span><span class="p">):</span>
+		<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">		Manage meta files for a Caller after updating its output</span>
+<span class="sd">		&#39;&#39;&#39;</span>
+		<span class="n">_caller</span> <span class="o">=</span> <span class="bp">self</span>
+		<span class="c1"># dir_layout = self.dir_layout</span>
+
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">v</span><span class="p">,</span><span class="s1">&#39;callback_output&#39;</span><span class="p">,</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="kc">None</span><span class="p">)</span>
+			<span class="n">func</span><span class="p">(</span><span class="n">_caller</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
+			<span class="c1"># method(_caller)</span>
+			<span class="c1"># if hasattr(x,&#39;callback_output&#39;):</span>
+			<span class="c1"># 	x.output_callback(_caller)				</span>
+		<span class="c1"># ident_dump( result, output_cache_file, )</span>
+		<span class="n">_input_ident</span>  <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">)</span>
+		<span class="n">_output_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_output</span><span class="p">)</span>
+
+		<span class="n">p</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span>
+		<span class="n">output_image</span> <span class="o">=</span> <span class="p">[</span>
+			<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,[</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_output</span><span class="p">],</span><span class="n">_output_ident</span><span class="p">]),</span>
+			<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>     <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>   <span class="k">lambda</span><span class="p">:</span>  <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span><span class="n">_output</span><span class="p">))),</span>
+			<span class="p">(</span><span class="s1">&#39;output_dump&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
+			<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>       <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_output_ident</span><span class="p">)),</span>
+			<span class="p">]</span>
+		<span class="n">ident_dump</span><span class="p">(</span> <span class="n">output_image</span><span class="p">,</span> 
+			<span class="n">_caller</span><span class="o">.</span><span class="n">output_ident_file</span><span class="p">,</span>
+			<span class="p">)</span>
+
+		<span class="n">p</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span>
+			 <span class="c1"># comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all</span>
+		<span class="n">input_image</span> <span class="o">=</span> <span class="p">[</span>
+				<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,</span>      <span class="n">_caller</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()),</span>
+				<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>      <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>  <span class="k">lambda</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span> <span class="n">_caller</span><span class="p">))),</span>
+				<span class="p">(</span><span class="s1">&#39;caller_dump&#39;</span><span class="p">,</span>  <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
+				<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>        <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)),</span>
+
+			<span class="p">]</span>
+		<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">input_ident_file</span><span class="p">)</span>
+
+		<span class="c1">#### add edge_file to inputs </span>
+		<span class="c1">### add input and output ident to outward_pk</span>
+		<span class="c1"># outward_dir_list = get_outward_json_list( _input, config)</span>
+		<span class="n">_input_ident_hash</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hash_bytes</span><span class="p">(</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)</span> <span class="p">)</span>
+
+		<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+			<span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span>
+
+		<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+			<span class="n">outward_edge_file</span> <span class="o">=</span> <span class="n">outward_dir</span> <span class="o">/</span>  <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="n">_input_ident_hash</span><span class="p">)</span>
+			<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">outward_edge_file</span><span class="p">)</span>			
+
+		<span class="c1">#### remove edge_file of outputs</span>
+		<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">_output_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">_caller</span><span class="o">.</span><span class="n">dir_layout</span><span class="p">)</span>
+		<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
+			<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span> <span class="p">,</span> <span class="p">(</span><span class="n">outward_dir</span><span class="o">+</span><span class="s1">&#39;_old&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">())</span>
+			<span class="n">outward_dir</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span></div></div>
+
 <div class="viewcode-block" id="force_run"><a class="viewcode-back" href="../../lib/index.html#spiper.types.force_run">[docs]</a><span class="k">def</span> <span class="nf">force_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Run a jobs regardless of whether it has a valid cache</span>
 <span class="sd">	&#39;&#39;&#39;</span>
-	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-	<span class="n">_input</span> <span class="o">=</span> <span class="n">args</span>
-	<span class="n">res</span> <span class="o">=</span> <span class="n">job</span><span class="p">(</span><span class="o">*</span><span class="n">_input</span><span class="p">)</span>
-	<span class="k">return</span> <span class="n">res</span></div>
+	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
+	<span class="c1"># _input = args</span>
+	<span class="c1"># res = job(*_input)</span>
+	<span class="c1"># return res</span>
 <div class="viewcode-block" id="cache_check"><a class="viewcode-back" href="../../lib/index.html#spiper.types.cache_check">[docs]</a><span class="k">def</span> <span class="nf">cache_check</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 	<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">	Check whether there is a valid cache for this job</span>
 <span class="sd">	&#39;&#39;&#39;</span>
 	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">check_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="cache_check_changed"><a class="viewcode-back" href="../../lib/index.html#spiper.types.cache_check_changed">[docs]</a><span class="k">def</span> <span class="nf">cache_check_changed</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>  <span class="n">check_changed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">):</span>
 	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span>   <span class="n">job</span><span class="p">,</span>  <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">check_changed</span><span class="o">=</span><span class="n">check_changed</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
@@ -730,6 +870,7 @@
 	<span class="n">res</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">get_all_files</span><span class="p">(</span><span class="n">allow</span><span class="o">=</span><span class="n">allow</span><span class="p">,</span><span class="n">flat</span><span class="o">=</span><span class="n">flat</span><span class="p">)</span>
 	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 	<span class="k">return</span> <span class="n">res</span></div>
+
 	<span class="c1"># if allow:</span>
 	<span class="c1"># 	#### [FRAGILE]</span>
 	<span class="c1"># 	res = [x for x in res if type(x) in allow]</span>
@@ -742,14 +883,14 @@
 	<span class="n">dir_layout</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 	<span class="n">mock</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 	<span class="n">check_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">check_changed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-	<span class="n">last_caller</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+	<span class="n">last_caller</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span><span class="n">tag</span><span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 	<span class="n">dir_layout</span> <span class="o">=</span> <span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;dir_layout&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">dir_layout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dir_layout</span>
 	<span class="c1"># print(&#39;[dir_layout]&#39;,dir_layout)</span>
 	<span class="c1"># print(&#39;[id2]&#39;,id(rcParams),rcParams)</span>
-	<span class="k">return</span> <span class="n">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="n">args</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span><span class="n">last_caller</span><span class="p">)</span></div>
+	<span class="k">return</span> <span class="n">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="n">args</span><span class="p">,</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span><span class="n">last_caller</span><span class="p">,</span><span class="n">tag</span><span class="p">)</span></div>
 
-<span class="k">def</span> <span class="nf">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">):</span>
-	<span class="k">return</span> <span class="n">_Runner</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">last_caller</span><span class="o">=</span><span class="n">last_caller</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">_cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">,</span> <span class="n">tag</span><span class="p">):</span>
+	<span class="k">return</span> <span class="n">_Runner</span><span class="p">(</span><span class="n">dir_layout</span><span class="p">,</span><span class="n">mock</span><span class="p">,</span><span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="n">last_caller</span><span class="o">=</span><span class="n">last_caller</span><span class="p">,</span><span class="n">tag</span><span class="o">=</span><span class="n">tag</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">_Runner</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">,</span>  <span class="n">mock</span><span class="p">,</span> <span class="n">check_only</span><span class="p">,</span><span class="n">check_changed</span><span class="p">,</span><span class="n">force</span><span class="p">,</span><span class="n">verbose</span> <span class="p">):</span>
@@ -792,20 +933,13 @@
 		<span class="c1">###### the _input is changed if one of the func.co_code/func.co_consts/input_args changed</span>
 		<span class="c1">###### the prefix is ignored in to_ident() because it would point to a different ident_file</span>
 		<span class="c1">#####  Caller.from_input() would also cast types for inputs</span>
-		<span class="n">_input</span>          <span class="o">=</span> <span class="n">args</span>		
+		<span class="c1"># _input          = args		</span>
 		<span class="c1"># runner          = partial(self.run, last_caller=_caller)</span>
 		<span class="n">runner</span>          <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">)</span>
 		<span class="n">config_runner</span>   <span class="o">=</span> <span class="k">lambda</span> <span class="n">_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">:</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">last_caller</span><span class="o">=</span><span class="n">_caller</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
-		<span class="k">if</span> <span class="n">last_caller</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">last_caller</span><span class="o">.</span><span class="n">_subflow</span><span class="p">,</span><span class="s1">&#39;Duplicated subflows </span><span class="si">%s</span><span class="s1"> in </span><span class="si">%r</span><span class="s1"> &#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">last_caller</span><span class="p">)</span>
-			<span class="n">last_caller</span><span class="o">.</span><span class="n">_subflow</span><span class="p">[</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="p">]</span> <span class="o">=</span> <span class="n">_caller</span>
-
-		<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%r</span><span class="se">\n</span><span class="s2">  </span><span class="si">%r</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">last_caller</span><span class="p">,</span><span class="n">_caller</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span><span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
 		<span class="n">func_name</span>       <span class="o">=</span> <span class="n">get_func_name</span><span class="p">()</span>
 		<span class="n">prefix</span>          <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-		<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;self.subflow needs to be appended using the runner by supplyig calling frame </span>
-<span class="s1">		as argument to self.run</span>
-<span class="s1">		&#39;&#39;&#39;</span>
+
 		<span class="c1"># def runner(job,*args,last_caller=_caller):</span>
 		<span class="c1"># 	print(&quot;%r\n%r&quot;%(job,last_caller))</span>
 		<span class="c1"># 	return self.run(job,*args, last_caller=last_caller)</span>
@@ -814,33 +948,45 @@
 		<span class="nb">print</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">_caller</span><span class="p">))</span> <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="kc">None</span>
 
 
-		<span class="n">input_ident_file</span> <span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;input_json&#39;</span> <span class="p">)</span>
-		<span class="n">output_ident_file</span><span class="o">=</span>  <span class="n">IdentFile</span><span class="p">(</span> <span class="n">dir_layout</span><span class="p">,</span> <span class="n">_caller</span><span class="o">.</span><span class="n">prefix_named</span><span class="p">,</span> <span class="p">[]</span> <span class="p">,</span> <span class="s1">&#39;output_json&#39;</span> <span class="p">)</span>
-		<span class="n">output_cache_file</span><span class="o">=</span>  <span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span>
-		<span class="n">File</span><span class="p">(</span><span class="n">input_ident_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
-		<span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
-
-
-
-
+		<span class="n">File</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">input_ident_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span>
+		<span class="n">File</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="p">)</span><span class="o">.</span><span class="n">dirname</span><span class="p">()</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">check_writable</span><span class="p">()</span>
 		<span class="n">_output</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">get_output_files</span><span class="p">()</span>
 
 		<span class="c1"># _output = get_output_files( job, prefix, job._output_type._typed_fields) + (CacheFile(output_cache_file),)</span>
 		<span class="c1"># print(&#39;[out1]&#39;,_output)</span>
 
-		<span class="n">input_ident_changed</span>  <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">,</span> <span class="p">),</span> <span class="n">input_ident_file</span><span class="p">,</span> <span class="s1">&#39;ident&#39;</span><span class="p">)</span>
+		<span class="n">input_ident_changed</span>  <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">,</span> <span class="p">),</span> <span class="n">_caller</span><span class="o">.</span><span class="n">input_ident_file</span><span class="p">,</span> <span class="s1">&#39;ident&#39;</span><span class="p">)</span>
 		<span class="k">if</span> <span class="n">_caller</span><span class="o">.</span><span class="n">is_mock</span><span class="p">():</span>
 			<span class="n">output_ident_changed</span> <span class="o">=</span> <span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">output_cache_file</span><span class="o">+</span><span class="s1">&#39;.output_changed.mock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isfile</span><span class="p">()</span>
 		<span class="k">else</span><span class="p">:</span>
-			<span class="n">output_ident_changed</span> <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_output</span><span class="p">,</span> <span class="p">),</span> <span class="n">output_ident_file</span><span class="p">,</span><span class="s1">&#39;ident&#39;</span><span class="p">)</span>
-		<span class="n">use_cache</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">input_ident_changed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">output_ident_changed</span>
-		<span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
+			<span class="n">output_ident_changed</span> <span class="o">=</span> <span class="n">ident_changed</span><span class="p">(</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_output</span><span class="p">,</span> <span class="p">),</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output_ident_file</span><span class="p">,</span><span class="s1">&#39;ident&#39;</span><span class="p">)</span>
+		<span class="n">is_node</span>   <span class="o">=</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">job_type</span><span class="p">,</span> <span class="n">spiper</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">NodeFunction</span><span class="p">)</span>
+
+		<span class="n">use_cache</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">input_ident_changed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">output_ident_changed</span>  <span class="ow">and</span> <span class="n">is_node</span>
+
+		<span class="k">if</span> <span class="n">force</span><span class="p">:</span>
+			<span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
+		<span class="c1"># _caller.use_cache &amp;= use_cache</span>
+		<span class="c1"># if last_caller is not None:</span>
+		<span class="c1"># 	last_caller.use_cache &amp;= _caller.use_cache</span>
+
+		<span class="k">if</span> <span class="n">last_caller</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+			<span class="c1"># last_caller.use_cache &amp;= use_cache </span>
+			<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;self.subflow needs to be appended using the runner by supplyig calling frame </span>
+<span class="s1">			as argument to self.run</span>
+<span class="s1">			&#39;&#39;&#39;</span>
+			<span class="k">assert</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">last_caller</span><span class="o">.</span><span class="n">subflow</span><span class="p">,</span> <span class="s1">&#39;Duplicated subflows </span><span class="se">\n</span><span class="s1">last:</span><span class="si">%r</span><span class="s1"> </span><span class="se">\n</span><span class="s1">got:</span><span class="si">%r</span><span class="s1"> </span><span class="se">\n</span><span class="s1">exp:</span><span class="si">%r</span><span class="s1"> &#39;</span><span class="o">%</span><span class="p">(</span><span class="n">last_caller</span><span class="p">,</span> <span class="n">got</span><span class="p">,</span><span class="n">_caller</span><span class="p">)</span>
+			<span class="n">last_caller</span><span class="o">.</span><span class="n">_subflow</span><span class="p">[</span> <span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span> <span class="p">]</span> <span class="o">=</span> <span class="n">_caller</span>				
+
+
+		<span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>	
 			<span class="k">return</span> <span class="n">use_cache</span>
+
 		<span class="k">if</span> <span class="n">check_changed</span><span class="p">:</span>
 			<span class="k">if</span> <span class="n">check_changed</span> <span class="o">&gt;=</span><span class="mi">2</span><span class="p">:</span>
 				<span class="n">input_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
-				<span class="c1"># input_ident_old = _loads(json.load(open(input_ident_file,&#39;r&#39;))[&#39;ident&#39;])</span>
 				<span class="n">output_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_output</span><span class="p">)</span>
+				<span class="c1"># input_ident_old = _loads(json.load(open(input_ident_file,&#39;r&#39;))[&#39;ident&#39;])</span>
 				<span class="c1"># output_ident_old = _loads(json.load(open(output_ident_file,&#39;r&#39;))[&#39;ident&#39;])</span>
 				<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">();</span>
 			<span class="k">return</span> <span class="p">(</span><span class="n">input_ident_changed</span><span class="p">,</span> <span class="n">output_ident_changed</span><span class="p">)</span>
@@ -849,7 +995,7 @@
 			<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">{func_name}</span><span class="s1">]&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()),</span>
 				<span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_dict</span><span class="p">([</span>
 				<span class="p">(</span><span class="s1">&#39;job_name&#39;</span><span class="p">,</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span>
-				<span class="p">(</span><span class="s1">&#39;use_cache&#39;</span><span class="p">,</span><span class="n">use_cache</span><span class="p">),</span>
+				<span class="p">(</span><span class="s1">&#39;use_cache&#39;</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">),</span>
 				<span class="p">(</span><span class="s1">&#39;input_ident_changed&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">input_ident_changed</span><span class="p">)),</span>
 				<span class="p">(</span><span class="s1">&#39;output_ident_chanegd&#39;</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">output_ident_changed</span><span class="p">))])</span>
 					<span class="p">,</span><span class="n">separators</span><span class="o">=</span><span class="s1">&#39;_=&#39;</span><span class="p">)</span>
@@ -858,100 +1004,72 @@
 			<span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
 				<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
-		<span class="k">if</span> <span class="n">check_only</span><span class="p">:</span>
-			<span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">use_cache</span><span class="p">)</span>		
-
-		<span class="k">if</span> <span class="n">force</span><span class="p">:</span>
-			<span class="n">use_cache</span> <span class="o">=</span> <span class="kc">False</span>
-		<span class="c1"># if mock:</span>
-		<span class="c1"># 	use_cache = False</span>
+		<span class="c1"># if last_caller is not None:</span>
+		<span class="c1"># print(&quot;%r\n  %r&quot;%(last_caller,_caller)) if verbose &gt;=2 else None</span>
 
 		<span class="c1">#### if any of the output file is mock, then do not use cache</span>
 		<span class="c1">#### if input and output are not changed, then mocking is skipped.</span>
-		<span class="c1"># if (_caller.output_cache_file+&#39;.mock&#39;).isfile():</span>
-		<span class="c1"># 	use_cache = False</span>
-		<span class="c1"># print((job.__name__,use_cache))</span>
 		<span class="k">if</span> <span class="n">use_cache</span><span class="p">:</span>
 			<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">load_cache</span><span class="p">()</span>
-
 		<span class="k">else</span><span class="p">:</span>
-			<span class="c1"># if not issubclass(_caller.job_type, spiper._types.NodeFunc):</span>
-			<span class="c1"># 	mock = 0</span>
 			<span class="k">if</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 				<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">				The current file will be replaced with a mock file to propagate the signal downwards</span>
-
 <span class="s1">				&#39;&#39;&#39;</span>
-
 				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_do</span><span class="p">(</span><span class="n">output_ident_changed</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-				<span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="n">job_type</span><span class="p">,</span> <span class="n">spiper</span><span class="o">.</span><span class="n">_types</span><span class="o">.</span><span class="n">NodeFunction</span><span class="p">):</span>
-					<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span>
-				<span class="k">else</span><span class="p">:</span>
-					<span class="c1">### recurse if not a Terminal Node</span>
-					<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span><span class="p">)</span>
+				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
+
 			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
 				<span class="c1">#### unmock</span>
 				<span class="c1">#### restore mocked file if available</span>
 				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span>
+				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
 
 			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
 				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span> <span class="p">)</span>
-
-				<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">_caller</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-					<span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span> <span class="n">v</span><span class="p">,</span><span class="s1">&#39;callback_output&#39;</span><span class="p">,</span><span class="k">lambda</span> <span class="o">*</span><span class="n">x</span><span class="p">:</span><span class="kc">None</span><span class="p">)</span>
-					<span class="n">func</span><span class="p">(</span><span class="n">_caller</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
-					<span class="c1"># method(_caller)</span>
-					<span class="c1"># if hasattr(x,&#39;callback_output&#39;):</span>
-					<span class="c1"># 	x.output_callback(_caller)				</span>
-				<span class="c1"># ident_dump( result, output_cache_file, )</span>
-				<span class="n">_input_ident</span>  <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span> <span class="n">_input</span><span class="p">)</span>
-				<span class="n">_output_ident</span> <span class="o">=</span> <span class="n">get_identity</span><span class="p">(</span><span class="n">_output</span><span class="p">)</span>
-
-				<span class="n">p</span> <span class="o">=</span> <span class="n">MyPickleSession</span><span class="p">()</span>
-				<span class="n">ident_dump</span><span class="p">(</span> <span class="p">[</span>
-					<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,[[</span><span class="nb">repr</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">_output</span><span class="p">],</span><span class="n">_output_ident</span><span class="p">]),</span>
-					<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>     <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>   <span class="k">lambda</span><span class="p">:</span>  <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span><span class="n">_output</span><span class="p">))),</span>
-					<span class="p">(</span><span class="s1">&#39;output_dump&#39;</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
-					<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>       <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_output_ident</span><span class="p">)),</span>
-					<span class="p">],</span> 
-					<span class="n">output_ident_file</span><span class="p">,</span>
-					<span class="p">)</span>
-					 <span class="c1"># comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all</span>
-				<span class="n">input_image</span> <span class="o">=</span> <span class="p">[</span>
-						<span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,</span>      <span class="n">_caller</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()),</span>
-						<span class="p">(</span><span class="s1">&#39;modules&#39;</span><span class="p">,</span>      <span class="n">p</span><span class="o">.</span><span class="n">pop_modules_list</span><span class="p">(</span>  <span class="k">lambda</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps_sniff_b64</span><span class="p">(</span> <span class="n">_caller</span><span class="p">))),</span>
-						<span class="p">(</span><span class="s1">&#39;caller_dump&#39;</span><span class="p">,</span>  <span class="n">p</span><span class="o">.</span><span class="n">pop_buffer</span><span class="p">()),</span>
-						<span class="p">(</span><span class="s1">&#39;ident&#39;</span><span class="p">,</span>        <span class="n">p</span><span class="o">.</span><span class="n">dumps_b64</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)),</span>
-
-					<span class="p">]</span>
-				<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">input_ident_file</span><span class="p">)</span>
-				<span class="c1"># ident_dump( _input_ident  , input_ident_file,  comment = (_caller.to_dict(),  _dumps( _caller)))</span>
-
-				<span class="c1">#### add edge_file to inputs </span>
-				<span class="c1">### add input and output ident to outward_pk</span>
-				<span class="c1"># outward_dir_list = get_outward_json_list( _input, config)</span>
-				
-				<span class="n">_input_ident_hash</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">hash_bytes</span><span class="p">(</span> <span class="n">p</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">_input_ident</span><span class="p">)</span> <span class="p">)</span>
-
-				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">,</span> <span class="n">dir_layout</span><span class="p">)</span>
-				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
-					<span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
-
-				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
-					<span class="n">outward_edge_file</span> <span class="o">=</span> <span class="n">outward_dir</span> <span class="o">/</span>  <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="p">(</span> <span class="n">DirtyKey</span><span class="p">(</span><span class="n">_caller</span><span class="o">.</span><span class="vm">__name__</span><span class="p">),</span> <span class="n">_input_ident_hash</span><span class="p">)</span>
-					<span class="n">ident_dump</span><span class="p">(</span> <span class="n">input_image</span><span class="p">,</span> <span class="n">outward_edge_file</span><span class="p">)</span>			
-
-				<span class="c1">#### remove edge_file of outputs</span>
-				<span class="n">outward_dir_list</span> <span class="o">=</span> <span class="n">get_outward_json_list</span><span class="p">(</span> <span class="n">_caller</span><span class="o">.</span><span class="n">_output_dict</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">dir_layout</span><span class="p">)</span>
-				<span class="k">for</span> <span class="n">outward_dir</span> <span class="ow">in</span> <span class="n">outward_dir_list</span><span class="p">:</span>
-					<span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="n">outward_dir</span><span class="o">+</span><span class="s1">&#39;_old&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rmtree_p</span><span class="p">())</span>
-					<span class="n">outward_dir</span> <span class="o">=</span> <span class="n">outward_dir</span><span class="o">.</span><span class="n">makedirs_p</span><span class="p">()</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">)</span>
+				<span class="n">_caller</span><span class="o">.</span><span class="n">update_meta</span><span class="p">(</span><span class="n">_input</span><span class="p">,</span> <span class="n">_output</span><span class="p">)</span>
 			<span class="k">else</span><span class="p">:</span>
 				<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Mock value not understood mock=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mock</span>
 		<span class="k">return</span> <span class="n">result</span>
+
 		<span class="c1"># return _caller, result</span>
+		<span class="c1"># if is_node:</span>
+		<span class="c1"># 	if use_cache:</span>
+		<span class="c1"># 		result = _caller.load_cache()</span>
+		<span class="c1"># 	elif not use_cache :</span>
+		<span class="c1"># 		&#39;&#39;&#39;</span>
+		<span class="c1"># 		A node that needs update</span>
+		<span class="c1"># 		&#39;&#39;&#39;</span>
+		<span class="c1"># 		if mock == 1:</span>
+		<span class="c1"># 			_ = &#39;&#39;&#39;</span>
+		<span class="c1"># 			The current file will be replaced with a mock file to propagate the signal downwards</span>
+		<span class="c1"># 			&#39;&#39;&#39;</span>
+		<span class="c1"># 			_caller.mock_do(output_ident_changed, 1, verbose)</span>
+		<span class="c1"># 			result = _caller</span>
+		<span class="c1"># 		elif mock == -1:</span>
+		<span class="c1"># 			_caller.mock_undo(1, verbose)</span>
+		<span class="c1"># 			result = _caller</span>
+		<span class="c1"># 		elif mock == 0:</span>
+		<span class="c1"># 			_caller.mock_undo(1, verbose)</span>
+		<span class="c1"># 			result = _caller(runner, config_runner )</span>
+		<span class="c1"># 			_caller.update_meta(_input, _output)</span>
+		<span class="c1"># 		else:</span>
+		<span class="c1"># 			assert 0, &#39;Mock value not understood mock=%r&#39;%mock</span>
+		<span class="c1"># else:</span>
+		<span class="c1"># 	result = _caller(runner, config_runner)</span>
+		<span class="c1"># 	if mock == 1:</span>
+		<span class="c1"># 		if not _caller.use_cache:</span>
+		<span class="c1"># 			_caller.mock_do(output_ident_changed, 1, verbose)</span>
+		<span class="c1"># 	elif mock == -1:</span>
+		<span class="c1"># 		_caller.mock_undo(1, verbose)</span>
+		<span class="c1"># 	elif mock == 0:</span>
+		<span class="c1"># 		_caller.mock_undo(1, verbose)</span>
+		<span class="c1"># 		if not _caller.use_cache:</span>
+		<span class="c1"># 			_caller.update_meta(_input, _output)</span>
+		<span class="c1"># 	else:</span>
+		<span class="c1"># 		assert 0, &#39;Mock value not understood mock=%r&#39;%mock</span>
+		<span class="c1"># return result</span>
 
 
 
