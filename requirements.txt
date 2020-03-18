@@ -9,3 +9,4 @@ asciitree
 graphviz
 jinja2
 pip>=19.0
+pybash@https://github.com/shouldsee/pybash/tarball/0.0.1
