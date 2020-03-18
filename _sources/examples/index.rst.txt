@@ -50,7 +50,7 @@ Local paths lose meaning once migrated to a difference machine,
 whereas remote references such as http:// and ftp:// is independent of 
 local machine states. 
 
-.. literalinclude:: ../examples/003_remote_bash.sh
+.. literalinclude:: ../examples/003_remote_bash.sh.log
 	:language: bash
 
 
