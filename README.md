@@ -41,9 +41,12 @@ Arguments:
 	<subcommand>:
 		run                  execute the workflow
 		get_all_files        print all files governed by workflow
-			--plain: print a newline-separated list instead of pprint
+			--plain          print a newline-separated list instead of pprint
 		get_changed_files    print all files changed by workflow
-			--plain: print a newline-separated list instead of pprint
+			--plain          print a newline-separated list instead of pprint
+		get_all_deps         print all dependencies governed by workflow
+			--plain          print a newline-separated list instead of pprint
+			--which_flow     printing which subflow/node requries this dependency
 	<package>:
 		a string compatible with pep-508
 	<workflow_entrypoint>:

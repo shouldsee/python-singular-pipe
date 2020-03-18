@@ -99,7 +99,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -154,7 +154,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -294,7 +294,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -349,7 +349,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -403,7 +403,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -458,7 +458,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -512,7 +512,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">spiper.test.graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph.dimple_job</TD>
 		  </TR>
 	    
 		  <TR>

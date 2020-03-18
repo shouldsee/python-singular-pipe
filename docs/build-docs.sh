@@ -2,6 +2,8 @@ set -e
 ### install package first
 
 NAME=spiper
+VERSION=`python3 -c "import setup; print(setup.config['version'])"`
+echo [docing]$VERSION
 #mkdir _build_docs; cp -rft _build_docs
 ODIR=`realpath $PWD`
 DIR=../singular_pipe_docs
@@ -15,7 +17,7 @@ rm -rf $DIR/_push
 git clone --branch gh-pages https://github.com/shouldsee/$NAME $DIR/_push
 cp -rfT $DIR/_build $DIR/_push
 cd $DIR/_push
-git add .; git commit . -m docs; git push origin gh-pages
+git add .; git commit . -m docs-$VERSION; git push origin gh-pages
 
 cd $ODIR
 exit 0
