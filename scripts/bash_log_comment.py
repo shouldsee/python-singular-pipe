@@ -1,19 +1,27 @@
 # import spiper
 import sys
 if __name__ == '__main__':
+	debug = 0
 	jump = 0
 	for line in sys.stdin:
 		# print(repr(line))
 		if line.startswith('+'):
 			if jump:
 				sys.stdout.write('\n')
-			sys.stdout.write(line[2:])
+			sp = line[2:].split()
+
+			for i,token in enumerate(sp):
+				if debug:
+					sys.stderr.write(repr(token)+'\n')
+					sys.stderr.flush()
+				if i+1 != len(sp):
+					sys.stdout.write(token+'\\\n  ')
+				else:
+					sys.stdout.write(token+'\n')
 		else:
 			# line = line+'\n' if not line.endswith('\n') else line
 			sys.stdout.write('### '+line)
 			jump = 1
-
-# from spiper.types import LoggedShellCommand
 
 
 # class flags:
