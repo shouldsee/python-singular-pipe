@@ -29,7 +29,6 @@ rcParams['dir_layout'] = 'clean'
 # rcParams['dir_layout'] = 'flat'
 
 
-
 def jinja2_format(s,**context):
 	# d = context.copy()
 	d = __builtins__.copy()
@@ -74,7 +73,7 @@ See https://shouldsee.github.io/spiper/
 Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 
 ```bash
-{{open(dir/"examples/003_remote_bash.sh",'r').read()}}
+{{open(dir/"examples/003_remote_bash.log.sh",'r').read()}}
 ```
 
 {{todo}}
