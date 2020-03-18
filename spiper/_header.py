@@ -13,6 +13,11 @@ class Concat(StringUtil):
 		elif target =='str':			
 			out = ''.join(out)
 		return out
+	
+def is_scalar(x):
+	return type(x) in [float,int,str,bytes]
+def list_remove_scalar(lst):
+	return [x for x in lst if not is_scalar(x)]
 
 # def list_leaf(lst, strict=0, target='leaf'):
 # 	return list_flatten(lst,strict, None, target)

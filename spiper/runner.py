@@ -15,6 +15,8 @@ from spiper._types import TooManyArgumentsError
 from spiper._types import NodeFunction,FlowFunction
 from spiper._types import DirtyKey
 
+from spiper._header import list_remove_scalar
+
 # from spiper._types import FakeCode,FakeJob
 
 from spiper.base import get_func_name, list_flatten,list_flatten_strict
@@ -145,10 +147,9 @@ def is_mock_file(v, call=None,):
 	return 0
 
 
-			
-
 def _get_changed_files(caller,):
 	return _get_all_files(caller, 1)
+
 def _get_all_files(caller, changed):
 	lst = []
 	for f in caller.output.values():
@@ -157,10 +158,72 @@ def _get_all_files(caller, changed):
 	for flow in caller.subflow.values():
 		res = _get_all_files(flow, changed)
 		lst.append( res)
-	return lst				
+	return lst
 
-		
+def _get_all_inputs(caller, out=None):
+	if out is None:
+		out = []
+	for f in list_flatten(caller.input_arg_values):
+		out.append( (f,caller) )
+	for flow in caller.subflow.values():
+		res = _get_all_inputs(flow, out)
+		# out.extend(res)
+	# pprint()
+	return out
+
+def get_all_deps(job, *args, which_flow=0, **kw):
+	res = mock_run(job,*args,**kw).get_all_deps(which_flow=which_flow)
+	mock_undo(job,*args,**kw)
+	return res	
+
+from spiper._header import is_scalar
+from pprint import pprint
 class Caller(object):
+	# def get_deps_by_flow(caller,  **kw):
+	# 	'''
+	# 	Note
+	# 	-------------------
+	# 	returns a list of external dependencies by intercepting inputs to subflows,
+	# 	excluding internal outputs and scalars.
+
+	# 	Params
+	# 	--------------------
+	# 	'''
+	# 	lst = []
+	# 	inputs  = set(list_flatten(_get_all_inputs(caller)))
+	# 	outputs = set(list_flatten(_get_all_files(caller,changed=0)))
+	# 	return list_remove_scalar(sorted(inputs-outputs,key=repr))
+
+	def get_all_deps(caller, which_flow=0,  **kw):
+		'''
+		Note
+		-------------------
+		returns a list of external dependencies by intercepting inputs to subflows,
+		excluding internal outputs and scalars.
+
+		Params
+		--------------------
+		'''
+		inputs = [x for x in _get_all_inputs(caller)]
+		outputs = set(list_flatten(_get_all_files(caller,changed=0)))
+		out = collections.defaultdict(lambda:[])
+		# which_flow = 1
+		for v,flow in inputs:
+			if v in outputs:
+				continue
+			if is_scalar(v):
+				continue
+			if which_flow:
+				out[v].append('spiper://'+flow.__name__)
+			else:
+				out[v]
+		out = sorted(out.items(),key=lambda x:repr(x[0]))
+		if not which_flow:
+			return [x[0] for x in out]
+		else:
+			# return collections.OrderedDict(out)
+			return (out)
+
 	def get_changed_files(self,flat=1):
 		res = _get_changed_files(self)
 		if flat:
@@ -224,6 +287,11 @@ class Caller(object):
 		self._arg_values = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
 		return self._arg_values
 	@property
+	def input_arg_values(self):
+		vals = [v for k,v in self.arg_tuples[1:] if not k.endswith('_') and k!='_output']
+		return vals
+
+	@property
 	def dotname(self):
 		return "%s.%s"%( (inspect.getmodule(self.f) or object()).__name__, self.f.__qualname__)
 	@property
@@ -232,6 +300,12 @@ class Caller(object):
 	@property
 	def is_node(self):
 		return issubclass( self.job_type, spiper._types.NodeFunction)
+	@property
+	def input_ident_file(self):
+		return IdentFile( self.dir_layout, self.prefix_named, [] , 'input_json' )		
+	@property
+	def output_ident_file(self):
+		return IdentFile( self.dir_layout, self.prefix_named, [] , 'output_json' )				
 	
 	def get_subflow(self,k):
 		return self.subflow[k]
@@ -277,7 +351,7 @@ class Caller(object):
 					'{dump}\nToo few arguments specified for {job._origin_code}\n normal argname are without "_" are necessary for evaluation \n'.format(
 				dump=_dump(),**locals()))
 			else:
-				if not isinstance(v,t):
+				if not type(v) == t: ### require exact type, not a subclass
 					v = t(v)
 				_tmp[n] = v
 		# _tmp.setdefault('_single_file',0)
@@ -346,7 +420,6 @@ class Caller(object):
 			self._output_dict['prefix_file'] = File(self.prefix_named)
 		for k in self._output_dict:
 			self._output_dict[k] = self._output_dict[k].expand().realpath() 
-
 		if not self.is_node:
 			if len(self._output_type._typed_fields):	
 				warnings.warn('Output files %r will not be cached for: %r' % (list(self.output.keys()),self))
@@ -547,12 +620,6 @@ class Caller(object):
 	>
 	'''.strip()
 		return jinja2_format(s, node=self)	
-	@property
-	def input_ident_file(self):
-		return IdentFile( self.dir_layout, self.prefix_named, [] , 'input_json' )		
-	@property
-	def output_ident_file(self):
-		return IdentFile( self.dir_layout, self.prefix_named, [] , 'output_json' )		
 
 	def update_meta(self, _input, _output):
 		'''
@@ -617,9 +684,10 @@ def force_run(job, *args,**kw):
 	Run a jobs regardless of whether it has a valid cache
 	'''
 	return cache_run(job,*args,force=True,**kw)
-	_input = args
-	res = job(*_input)
-	return res
+
+	# _input = args
+	# res = job(*_input)
+	# return res
 def cache_check(job, *args,**kw):
 	'''
 	Check whether there is a valid cache for this job
@@ -650,6 +718,7 @@ def get_all_files(job, *args, allow=[File],flat=1, **kw):
 	res = mock_run(job,*args,**kw).get_all_files(allow=allow,flat=flat)
 	mock_undo(job,*args,**kw)
 	return res
+
 	# if allow:
 	# 	#### [FRAGILE]
 	# 	res = [x for x in res if type(x) in allow]

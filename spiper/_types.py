@@ -329,6 +329,22 @@ from collections import OrderedDict as _dict
 import requests
 import json
 # class HttpCheckLengthResult(object):
+def _hash(tree):
+	if isinstance(tree,(dict,list,tuple)):
+		if isinstance(tree,dict):
+			tree = sorted(tree.items())
+		# assert isinstance(tree,(dict,list,tuple)),(type(tree))
+		out = []
+		for node in tree:
+			h = _hash(node)
+			out.append(h)
+		return hash(tuple(out))
+	else:
+		return hash(tree)
+
+
+
+
 class HttpResponse(object):
 	'''
 	Github tarball/master often take minutes to update itself
@@ -336,6 +352,17 @@ class HttpResponse(object):
 	headers = {
 	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36'
 	}
+	# def __eq__(self, other):
+	# 	return repr(self) == repr(other)
+	# 	# return self.__dict__ == other.__dict__
+
+	# def __lt__(self, other):
+	# 	return repr(self) < repr(other)
+
+	def __hash__(self):
+		return _hash(self.__dict__)
+		# return hash(tuple(sorted(self.__dict__.items())))
+
 	def __init__(self, method,url,**kwargs):
 		self.method = method
 		self.url = url
@@ -719,6 +746,41 @@ def get_identity(lst, out = None, verbose=0, strict=0):
 	return out
 
 
-# class Static(object):
-# 	def __init__(self,a):
-# 		pass
+import shutil
+@Node
+def CopyFile(self, prefix, 
+	input=File, 
+	_single_file = 1, ### A single file node only tracks the file at self.prefix
+	_output=[], 
+	):
+	'''
+	#### One can also use directly move the output file, but this would break the upstream integrity 
+	#### and is hence not recommended
+	'''
+	ofile = prefix
+	shutil.copy2(input, self.prefix+'.temp')
+	shutil.move(self.prefix +'.temp', self.prefix)
+
+@Node
+def LinkFile(self, prefix, 
+	input=File,
+	_single_file = 1, ### A single file node only tracks the file at self.prefix
+	_output=[], 
+	):
+	'''
+	
+	'''
+	ofile = prefix
+	if ofile.isfile():
+		ofile.unlink()
+	os.link(input,ofile)
+
+@Node
+def MoveFile(self, prefix, 
+	input=File,
+	force_ = 0, 
+	# _force = 0,
+	_single_file = 1, ### A single file node only tracks the file at self.prefix
+	_output=[], 
+	):
+	raise NotImplemented

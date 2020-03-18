@@ -1,7 +1,11 @@
+# 0.1.1
+- [added] `get_all_deps` in runner.py and cli.py
+- [added] `_types.CopyFile`, `_types.LinkFile` as `_single_file` Node.
+
 # 0.1.0
 - [changed] `prefix_named = '{prefix}.{job_name}-{tag}` instead of
 `prefix_named = '{prefix}.{job_name}_{tag}` 
-- [changed] indentation for shell.LoggedSingularityCommand()
+- [changed] indentation for shell.LoggedSingularityCommand()	
 
 # 0.0.9
 - [changed] get_changed_files behaviour for FlowFunction().  FlowFunction will always 

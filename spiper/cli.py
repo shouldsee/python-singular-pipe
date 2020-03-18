@@ -78,6 +78,27 @@ Options:
 						print(f)
 				else:
 					pprint(fs or '[No files governed by this workflow]')
+		elif args[0] == 'get_all_deps':
+			from spiper.runner import get_all_deps
+			which_flow = 0
+			if '--which_flow' in args:
+				args.remove('--which_flow')
+				which_flow = 1
+			def runner(*a,**kw):
+				fs = get_all_deps(*a,which_flow=which_flow,**kw)
+				if plain:
+					for f in fs:
+						print(f)
+				else:
+					# pp
+					# [print(f) for f in fs or ['[No dependcies detected]']]
+					# pprint(fs or '[No dependcies detected]',indent=2)
+					import json
+					# import collections
+					# if isinstance(fs,dict):
+					# 	fs = collections.OrderedDict([(repr(k),v) for k,v in fs.items()])
+					# json.dump( fs, sys.stdout,default=repr,indent=2) if fs else print('[No files governed by this workflow]')
+					pprint(fs or '[No files governed by this workflow]')
 
 		elif args[0] == 'get_changed_files':
 			def runner(*a,**kw):
