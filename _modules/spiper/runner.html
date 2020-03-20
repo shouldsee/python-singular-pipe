@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.runner &mdash; spiper 0.1.1 documentation</title>
+  <title>spiper.runner &mdash; spiper 0.1.2 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -182,12 +182,14 @@
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">autopep8</span>
 
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">zip_longest</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span>
 <span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
 <span class="kn">from</span> <span class="nn">orderedattrdict</span> <span class="kn">import</span> <span class="n">AttrDict</span> <span class="k">as</span> <span class="n">_dict</span>
+
 <span class="c1"># _dict = collections.OrderedDict</span>
 
 <span class="k">def</span> <span class="nf">_dumps</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
@@ -454,7 +456,7 @@
 
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">dotname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">object</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">)</span>
+		<span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">:</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span> <span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">object</span><span class="p">())</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">)</span>
 	<span class="nd">@property</span>
 	<span class="k">def</span> <span class="nf">subflow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subflow</span>
@@ -621,7 +623,7 @@
 		<span class="c1">### argument to jobs without prefix</span>
 		<span class="c1">### argument with name ending with &#39;_&#39; will be discarded in idenitty</span>
 		<span class="c1"># _job_args = [v for k,v in self.arg_tuples[1:] if not k.endswith(&#39;_&#39;)]</span>
-		<span class="c1"># _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith(&#39;_&#39;)]</span>
+		<span class="c1"># _job_args = [v for k,v in self.arg_tuples[:]</span>
 		<span class="c1"># _job_args = list(zip(*self.arg_tuples[1:])) </span>
 		<span class="n">_input</span> <span class="o">=</span> <span class="p">[</span>
 			<span class="n">FakeCode</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">),</span>
@@ -634,18 +636,26 @@
 <span class="sd">		&#39;&#39;&#39;</span>
 		<span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">f</span>
 		<span class="n">res</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">([</span>
-				<span class="p">(</span><span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)),</span>
 				<span class="p">(</span><span class="s1">&#39;dotname&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dotname</span><span class="p">),</span>
 				<span class="c1"># (&#39;dotname&#39;,&quot;%s.%s&quot;%(inspect.getmodule(f).__name__, f.__qualname__)),</span>
-				<span class="p">(</span><span class="s1">&#39;arg_tuples&#39;</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">([</span>
-					<span class="p">(</span>
-						<span class="n">k</span><span class="p">,</span>
-						<span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">::</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="s2">&quot;&#39;&quot;</span><span class="p">)</span> <span class="p">),</span>
-						<span class="c1"># str(type(v))+&#39;:&#39;+repr(v).strip(&#39;&quot;&#39;&quot;&#39;&quot;) ,</span>
-						<span class="c1"># _raise(Exception())</span>
-					<span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span>
-					<span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
-					<span class="p">])</span> <span class="p">),</span>
+				<span class="p">(</span><span class="s1">&#39;args_tuples&#39;</span><span class="p">,[</span><span class="s2">&quot;[</span><span class="si">{!r:&lt;15}</span><span class="s2">,</span><span class="si">{!s:&lt;30}</span><span class="s2">,</span><span class="si">{!r}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span>
+					<span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span><span class="o">%</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="vm">__qualname__</span><span class="p">),</span>
+					<span class="n">v</span><span class="p">,</span>
+					<span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arg_tuples</span><span class="p">]),</span>
+				<span class="p">(</span><span class="s1">&#39;code&#39;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)),</span>
+				<span class="p">(</span><span class="s1">&#39;sourcefile&#39;</span><span class="p">,</span><span class="n">inspect</span><span class="o">.</span><span class="n">getabsfile</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="vm">__code__</span><span class="p">)),</span>
+				<span class="p">(</span><span class="s1">&#39;sourcelines&#39;</span><span class="p">,</span><span class="n">autopep8</span><span class="o">.</span><span class="n">fix_code</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">f</span><span class="p">))</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span> <span class="p">),</span>
+				<span class="c1"># (&#39;arg_tuples&#39;, collections.OrderedDict([</span>
+				<span class="c1"># 	(</span>
+				<span class="c1"># 		k,</span>
+				<span class="c1"># 		&quot;%s.%s::%s&quot;%(type(v).__module__,type(v).__qualname__, repr(v).strip(&#39;&quot;&#39;&quot;&#39;&quot;) ),</span>
+				<span class="c1"># 		# str(type(v))+&#39;:&#39;+repr(v).strip(&#39;&quot;&#39;&quot;&#39;&quot;) ,</span>
+				<span class="c1"># 		# _raise(Exception())</span>
+				<span class="c1"># 	) for k,v in self.arg_tuples</span>
+				<span class="c1"># 	if not k.endswith(&#39;_&#39;)</span>
+				<span class="c1"># 	]) ),</span>
+
+					<span class="c1"># if self.is_node else []),</span>
 				<span class="c1"># (&#39;co_code&#39;,f.__code__.co_code),</span>
 				<span class="c1"># (&#39;co_consts&#39;,f.__code__.co_consts),</span>
 				<span class="p">])</span>

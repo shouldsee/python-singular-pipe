@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Examples &mdash; spiper 0.1.1 documentation</title>
+  <title>2. Examples &mdash; spiper 0.1.2 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -246,16 +246,29 @@ to make runtime decisions as to whether to skip a function evaluation.</p>
 <p>Local paths lose meaning once migrated to a difference machine,
 whereas remote references such as <a class="reference external" href="http://">http://</a> and <a class="reference external" href="ftp://">ftp://</a> is independent of
 local machine states.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">commit</span><span class="o">=</span>7c317b
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### [pybash-0.0.5]</span>
+<span class="c1">### [sys.argv] /home/user/.local/lib/python3.5/site-packages/pybash.py --log-stdout</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
+<span class="nv">commit</span><span class="o">=</span>7c317b
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### ---------------</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span><span class="se">\</span>
   spiper_mock_flow:run_and_backup<span class="se">\</span>
   /tmp/test_remote/root<span class="se">\</span>
   <span class="m">1</span><span class="se">\</span>
   <span class="m">2</span><span class="se">\</span>
   /tmp/test_remote/root.backup
 <span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### </span>
@@ -263,14 +276,19 @@ spiper<span class="se">\</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
 <span class="c1">###  File(&#39;/tmp/test_remote/root.backup.output..log&#39;)]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
+  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span><span class="se">\</span>
   spiper_mock_flow:run_and_backup<span class="se">\</span>
   --comma<span class="se">\</span>
   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 <span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### </span>
@@ -278,22 +296,28 @@ spiper<span class="se">\</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
 <span class="c1">###  File(&#39;/tmp/test_remote/root.backup.output..log&#39;)]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 <span class="nv">ARR</span><span class="o">=(</span>spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span><span class="se">\</span>
   spiper_mock_flow:run_and_backup<span class="se">\</span>
   /tmp/test_remote/root<span class="se">\</span>
   <span class="m">1</span><span class="se">\</span>
   <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup<span class="o">)</span>
+  /tmp/test_remote/root.backup<span class="se">\</span>
+  <span class="o">)</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
-  spiper_mock_flow:run_and_backup<span class="se">\</span>
-  /tmp/test_remote/root<span class="se">\</span>
-  <span class="m">1</span><span class="se">\</span>
-  <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
 <span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
@@ -302,27 +326,27 @@ spiper<span class="se">\</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
 <span class="c1">###  File(&#39;/tmp/test_remote/root.backup.output..log&#39;)]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   run<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
-  spiper_mock_flow:run_and_backup<span class="se">\</span>
-  /tmp/test_remote/root<span class="se">\</span>
-  <span class="m">1</span><span class="se">\</span>
-  <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
 <span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
-  spiper_mock_flow:run_and_backup<span class="se">\</span>
-  /tmp/test_remote/root<span class="se">\</span>
-  <span class="m">1</span><span class="se">\</span>
-  <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
 <span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
@@ -331,15 +355,15 @@ spiper<span class="se">\</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
 <span class="c1">###  File(&#39;/tmp/test_remote/root.backup.output..log&#39;)]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_all_deps<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
-  spiper_mock_flow:run_and_backup<span class="se">\</span>
-  /tmp/test_remote/root<span class="se">\</span>
-  <span class="m">1</span><span class="se">\</span>
-  <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
 <span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
@@ -347,16 +371,16 @@ spiper<span class="se">\</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;)]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
   get_all_deps<span class="se">\</span>
   --which_flow<span class="se">\</span>
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/7c317b<span class="se">\</span>
-  spiper_mock_flow:run_and_backup<span class="se">\</span>
-  /tmp/test_remote/root<span class="se">\</span>
-  <span class="m">1</span><span class="se">\</span>
-  <span class="m">2</span><span class="se">\</span>
-  /tmp/test_remote/root.backup
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
 <span class="c1">### </span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
@@ -366,9 +390,16 @@ spiper<span class="se">\</span>
 <span class="c1">### [(File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;),</span>
 <span class="c1">###   [File(&#39;spiper:///tmp/test_remote/root.source.py&#39;),</span>
 <span class="c1">###    File(&#39;spiper:///tmp/test_remote/root.backup.source.py&#39;)])]</span>
+<span class="c1">### ---------------</span>
 
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
-  --help
+  --help<span class="se">\</span>
+  &gt;/dev/null
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### ---------------</span>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&#39;&#39;&#39;</span>

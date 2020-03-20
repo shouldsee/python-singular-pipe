@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper._types &mdash; spiper 0.1.1 documentation</title>
+  <title>spiper._types &mdash; spiper 0.1.2 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -818,11 +818,13 @@
 			<span class="n">module_name</span> <span class="o">=</span> <span class="n">module_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;TOPLEVEL&#39;</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">package_name</span><span class="p">)</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">module_name</span> <span class="o">=</span> <span class="n">module_name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">package_name</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="n">attribute_name</span>
+		
 	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&quot;</span>
 		<span class="s2">&quot;(&quot;</span>
 			<span class="s2">&quot;attribute_name=</span><span class="si">{self.attribute_name!r}</span><span class="s2">,&quot;</span>
-			<span class="s2">&quot;module_name=</span><span class="si">{self.module_name!r}</span><span class="s2">&quot;</span>
+			<span class="s2">&quot;module_name=</span><span class="si">{self.module_name!r}</span><span class="s2">,&quot;</span>
+			<span class="s2">&quot;package=</span><span class="si">{self.package!r}</span><span class="s2">,&quot;</span>
 		<span class="s2">&quot;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
 	<span class="k">def</span> <span class="nf">loaded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 		<span class="bp">self</span><span class="o">.</span><span class="n">package</span><span class="o">.</span><span class="n">loaded</span><span class="p">()</span>

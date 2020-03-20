@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.shell &mdash; spiper 0.1.1 documentation</title>
+  <title>spiper.shell &mdash; spiper 0.1.2 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.1
+                0.1.2
               </div>
             
           
@@ -198,6 +198,7 @@
 		<span class="c1"># if not shell:</span>
 		<span class="k">assert</span> <span class="ow">not</span> <span class="n">shell</span>
 		<span class="n">CMD</span> <span class="o">=</span> <span class="n">list_flatten_strict</span><span class="p">(</span><span class="n">CMD</span><span class="p">)</span>
+		<span class="n">CMD</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;set&#39;</span><span class="p">,</span><span class="s1">&#39;-euxo&#39;</span><span class="p">,</span><span class="s1">&#39;pipefail;&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">CMD</span>
 		<span class="c1"># shell = 1</span>
 		<span class="c1"># with file:</span>
 		<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
