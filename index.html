@@ -209,6 +209,7 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#### get a list of changed_files</span>
 <span class="c1"># rm -rfv /tmp/test_remote/*</span>
 <span class="nb">set</span> -euo pipefail<span class="p">;</span>
+
 <span class="nv">commit</span><span class="o">=</span>7c317b
 spiper get_changed_files <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span> <span class="se">\</span>
