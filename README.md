@@ -25,6 +25,7 @@ See https://shouldsee.github.io/spiper/
 ### Usage:
 
 ```bash
+Version:spiper-0.1.2
 
 Usage
 

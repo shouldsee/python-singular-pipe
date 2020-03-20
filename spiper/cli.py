@@ -4,6 +4,7 @@ from spiper.runner import cache_run,get_all_files,get_changed_files, force_run, 
 from spiper.types import RemotePythonObject as RPO
 import spiper
 def _help(e=None):
+	print('Version:spiper-%s'%spiper.VERSION)
 	print(main.__doc__)
 	if e is not None:
 		raise e 
