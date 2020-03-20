@@ -52,8 +52,8 @@ tar -xf singularity-$VERSION.tar.gz
     make -C ./builddir && \
     make -C ./builddir install
     cd ..
-
 }
+fi
 
 {
   echo mksquashfs path = `which mksquashfs`
@@ -65,8 +65,6 @@ cat $prefix/etc/singularity/singularity.conf
 $EXE version
 # $EXE exec --bind `pwd`:/srv  --pwd /srv docker://quay.io/biocontainers/hisat2:2.1.0--py36hc9558a2_4 hisat2 --help 
 $EXE --verbose --debug exec docker://python:2.7.17-alpine python -V
-fi
-
 
 ln -sf $EXE -t $HOME/.local/bin || echo linking failed #### [Fragile]
 ls -lhtr $prefix/libexec/singularity/bin/
