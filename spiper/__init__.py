@@ -11,7 +11,7 @@ def jinja2_format(s,**context):
 version_info = (  # SEMANTIC
         0,        # major
         1,        # minor
-        1,        # patch
+        2,        # patch
 )
 def get_version(VERSION=version_info):
     version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
