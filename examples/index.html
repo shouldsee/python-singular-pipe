@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>2. Examples &mdash; spiper 0.1.2 documentation</title>
+  <title>2. Examples &mdash; spiper 0.1.3 documentation</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -251,6 +251,15 @@ local machine states.</p>
 
 <span class="c1">### ---------------</span>
 <span class="c1">### [ command]</span>
+set<span class="se">\</span>
+  -euo<span class="se">\</span>
+  pipefail<span class="p">;</span>
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### ---------------</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
 <span class="nv">commit</span><span class="o">=</span>7c317b
 <span class="c1">### </span>
 <span class="c1">### [  stdout]</span>
@@ -360,7 +369,7 @@ spiper<span class="se">\</span>
 <span class="c1">### ---------------</span>
 <span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
-  get_all_deps<span class="se">\</span>
+  caller_show_deps<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
 <span class="c1">### </span>
 <span class="c1">### [  stdout]</span>
@@ -376,7 +385,7 @@ spiper<span class="se">\</span>
 <span class="c1">### ---------------</span>
 <span class="c1">### [ command]</span>
 spiper<span class="se">\</span>
-  get_all_deps<span class="se">\</span>
+  caller_show_deps<span class="se">\</span>
   --which_flow<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
 <span class="c1">### </span>
@@ -390,6 +399,110 @@ spiper<span class="se">\</span>
 <span class="c1">### [(File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;),</span>
 <span class="c1">###   [File(&#39;spiper:///tmp/test_remote/root.source.py&#39;),</span>
 <span class="c1">###    File(&#39;spiper:///tmp/test_remote/root.backup.source.py&#39;)])]</span>
+<span class="c1">### ---------------</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
+spiper<span class="se">\</span>
+  file_show_deps<span class="se">\</span>
+  /tmp/test_remote/root.transcribe.fasta
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### /tmp/test_remote/root.transcribe.fasta</span>
+<span class="c1">### [File(&#39;/tmp/test_remote/root.random_seq.seq&#39;)]</span>
+<span class="c1">### ---------------</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
+spiper<span class="se">\</span>
+  caller_show_log<span class="se">\</span>
+  <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span><span class="se">\</span>
+  --plain
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### node:</span>
+<span class="c1">###     prefix_named:</span>
+<span class="c1">###         /tmp/test_remote/root.run_and_backup</span>
+<span class="c1">###     job_type:</span>
+<span class="c1">###         FlowFunction</span>
+<span class="c1">###     will_change:</span>
+<span class="c1">###         True, FlowFunction will always be executed</span>
+<span class="c1">###     dotname:</span>
+<span class="c1">###         spiper_mock_flow:run_and_backup</span>
+<span class="c1">###     sourcefile:</span>
+<span class="c1">###         /home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py</span>
+<span class="c1">###     info_dict:</span>
+<span class="c1">###         OrderedDict([(&#39;args_tuples&#39;,</span>
+<span class="c1">###                       [&quot;[&#39;prefix&#39;       ,spiper._types.File            &quot;</span>
+<span class="c1">###                        &quot;,File(&#39;/tmp/test_remote/root&#39;)]&quot;,</span>
+<span class="c1">###                        &quot;[&#39;seed&#39;         ,builtins.int                  ,1]&quot;,</span>
+<span class="c1">###                        &quot;[&#39;L&#39;            ,builtins.int                  ,2]&quot;,</span>
+<span class="c1">###                        &quot;[&#39;backup_prefix&#39;,builtins.str                  &quot;</span>
+<span class="c1">###                        &quot;,&#39;/tmp/test_remote/root.backup&#39;]&quot;,</span>
+<span class="c1">###                        &quot;[&#39;_output&#39;      ,builtins.list                 ,[]]&quot;]),</span>
+<span class="c1">###                      (&#39;code&#39;,</span>
+<span class="c1">###                       &#39;&lt;code object run_and_backup at 0x7ffb20c64ae0, file &#39;</span>
+<span class="c1">###                       &#39;&quot;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&quot;, &#39;</span>
+<span class="c1">###                       &#39;line 133&gt;&#39;)])</span>
+<span class="c1">###     sourcecode:</span>
+<span class="c1">###         @Flow</span>
+<span class="c1">###         def run_and_backup(</span>
+<span class="c1">###                 self, prefix,</span>
+<span class="c1">###                 seed=int, L=int,</span>
+<span class="c1">###                 backup_prefix=str,  # we don&#39;t want to track backup_prefix</span>
+<span class="c1">###                 _output=[</span>
+<span class="c1">###                 # File(&#39;log&#39;),</span>
+<span class="c1">###                 ]):</span>
+<span class="c1">### </span>
+<span class="c1">###             # execute the flow</span>
+<span class="c1">###             flow = self.runner(workflow, prefix, seed, L)</span>
+<span class="c1">### </span>
+<span class="c1">###             # perform backup</span>
+<span class="c1">###             backup_result = self.runner(backup, backup_prefix, flow)</span>
+<span class="c1">### </span>
+<span class="c1">###             # plot a dependency graph into the backup directory</span>
+<span class="c1">###             graph_out = self.runner(plot_graph, backup_prefix, backup_result)</span>
+<span class="c1">###             print(&#39;[workflow]done&#39;)</span>
+<span class="c1">###             return self</span>
+<span class="c1">### ---------------</span>
+
+<span class="c1">### ---------------</span>
+<span class="c1">### [ command]</span>
+spiper<span class="se">\</span>
+  file_show_log<span class="se">\</span>
+  /tmp/test_remote/root.transcribe.fasta<span class="se">\</span>
+  --plain
+<span class="c1">### </span>
+<span class="c1">### [  stdout]</span>
+<span class="c1">### file:</span>
+<span class="c1">###     name:</span>
+<span class="c1">###         /tmp/test_remote/root.transcribe.fasta</span>
+<span class="c1">###     node:</span>
+<span class="c1">###         prefix_named:</span>
+<span class="c1">###             /tmp/test_remote/root.transcribe</span>
+<span class="c1">###         job_type:</span>
+<span class="c1">###             NodeFunction</span>
+<span class="c1">###         will_change:</span>
+<span class="c1">###             NA when viewing a node image</span>
+<span class="c1">###         dotname:</span>
+<span class="c1">###             spiper_mock_flow:transcribe</span>
+<span class="c1">###         sourcefile:</span>
+<span class="c1">###             /home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py</span>
+<span class="c1">###         info_dict:</span>
+<span class="c1">###             {&#39;args_tuples&#39;: [&quot;[&#39;prefix&#39;       ,spiper._types.File            &quot;</span>
+<span class="c1">###                              &quot;,File(&#39;/tmp/test_remote/root&#39;)]&quot;,</span>
+<span class="c1">###                              &quot;[&#39;input&#39;        ,spiper._types.File            &quot;</span>
+<span class="c1">###                              &quot;,File(&#39;/tmp/test_remote/root.random_seq.seq&#39;)]&quot;,</span>
+<span class="c1">###                              &quot;[&#39;_output&#39;      ,builtins.list                 ,[&#39;fasta&#39;]]&quot;],</span>
+<span class="c1">###              &#39;code&#39;: &#39;&lt;code object transcribe at 0x7f7520f10390, file &#39;</span>
+<span class="c1">###                      &#39;&quot;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&quot;, &#39;</span>
+<span class="c1">###                      &#39;line 23&gt;&#39;}</span>
+<span class="c1">###         sourcecode:</span>
+<span class="c1">###             def transcribe(self, prefix, input=File, _output=[&#39;fasta&#39;]):</span>
+<span class="c1">###                 with open(input, &#39;r&#39;) as fi:</span>
+<span class="c1">###                     with open(self.output.fasta, &#39;w&#39;) as fo:</span>
+<span class="c1">###                         fo.write(fi.read().replace(&#39;T&#39;, &#39;U&#39;))</span>
+<span class="c1">###                 return self</span>
 <span class="c1">### ---------------</span>
 
 <span class="c1">### ---------------</span>

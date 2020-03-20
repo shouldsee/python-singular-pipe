@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability &mdash; spiper 0.1.2 documentation</title>
+  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability &mdash; spiper 0.1.3 documentation</title>
   
 
   
@@ -59,7 +59,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.1.3
               </div>
             
           
@@ -207,6 +207,8 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 </pre></div>
 </div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#### get a list of changed_files</span>
+<span class="c1"># rm -rfv /tmp/test_remote/*</span>
+<span class="nb">set</span> -euo pipefail<span class="p">;</span>
 <span class="nv">commit</span><span class="o">=</span>7c317b
 spiper get_changed_files <span class="se">\</span>
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span> <span class="se">\</span>
@@ -219,48 +221,31 @@ spiper get_changed_files <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
   --comma /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 
-
-
 <span class="c1">### reduce redundancy</span>
 <span class="nv">ARR</span><span class="o">=(</span>spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/<span class="nv">$commit</span> <span class="se">\</span>
   spiper_mock_flow:run_and_backup <span class="se">\</span>
   /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup <span class="o">)</span>
 
 spiper get_changed_files <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1"># [Flow running] mock=None</span>
-<span class="c1"># [workflow]done</span>
-<span class="c1"># [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.random_seq.seq&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.random_seq_const.seq&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.transcribe.fasta&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.mutate.fasta&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.source.py&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.random_seq.output.seq&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.random_seq_const.output.seq&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.transcribe.output.fasta&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.subflow.mutate.output.fasta&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.output.log&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.source.py&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.plot_graph.deptree_json&#39;),</span>
-<span class="c1">#  File(&#39;/tmp/test_remote/root.backup.plot_graph.deptree_dot_txt&#39;)]</span>
 
 spiper run <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-
-
-<span class="c1"># [Flow running] mock=None</span>
-<span class="c1"># [fn] /tmp/test_remote/root.backup.plot_graph.deptree_dot_txt.svg</span>
-<span class="c1"># [workflow]done</span>
 
 spiper get_changed_files <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
 <span class="c1"># [No files changed by this workflow]&#39;</span>
 
-spiper get_all_deps <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+spiper caller_show_deps <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
 <span class="c1"># [File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;)]</span>
 
-spiper get_all_deps --which_flow <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
+spiper caller_show_deps --which_flow <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
 <span class="c1"># [(File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;),</span>
 <span class="c1">#   [File(&#39;spiper:///tmp/test_remote/root.source.py&#39;),</span>
 <span class="c1">#    File(&#39;spiper:///tmp/test_remote/root.backup.source.py&#39;)])]</span>
+spiper file_show_deps /tmp/test_remote/root.transcribe.fasta
+
+<span class="c1">### ignore --plain to enable ANSI color</span>
+spiper caller_show_log <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span> --plain                       
+
+spiper file_show_log /tmp/test_remote/root.transcribe.fasta --plain  
 
 spiper --help &gt;/dev/null
 </pre></div>
