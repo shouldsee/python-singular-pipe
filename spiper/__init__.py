@@ -1,5 +1,12 @@
 from orderedattrdict import AttrDict as _dict
 from jinja2 import Template, StrictUndefined
+def jinja2_format(s,**context):
+	# d = context.copy()
+	d = __builtins__.copy()
+	d.update(context)
+	# .update(__builtins__)
+	return Template(s,undefined=StrictUndefined).render(**d)
+
 # from spiper.version import get_version,VERSION
 version_info = (  # SEMANTIC
         0,        # major
@@ -28,14 +35,6 @@ rcParams = RcParams()
 rcParams['dir_layout'] = 'clean'
 # rcParams['dir_layout'] = 'flat'
 
-
-def jinja2_format(s,**context):
-	# d = context.copy()
-	d = __builtins__.copy()
-	d.update(context)
-	# .update(__builtins__)
-	return Template(s,undefined=StrictUndefined).render(**d)
-	# __builtins__.items()+context.items())  )
 
 
 template = '''
@@ -73,7 +72,7 @@ See https://shouldsee.github.io/spiper/
 Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 
 ```bash
-{{open(dir/"examples/003_remote_bash.log.sh",'r').read()}}
+{{open(dir/"examples/003_remote_bash.sh.log",'r').read()}}
 ```
 
 {{todo}}

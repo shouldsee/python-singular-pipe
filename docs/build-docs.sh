@@ -1,5 +1,6 @@
 set -e
 ### install package first
+python3 build-readme.py
 
 NAME=spiper
 VERSION=`python3 -c "import setup; print(setup.config['version'])"`

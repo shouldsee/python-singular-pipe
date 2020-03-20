@@ -301,5 +301,5 @@ def backup(self, prefix, flow = Caller, _output=[]):
 
 # Case.test_tag = main
 
-if __name__ == '__main__':
-	main()
+# if __name__ == '__main__':
+# 	main()

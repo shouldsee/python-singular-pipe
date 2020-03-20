@@ -666,11 +666,13 @@ class RemotePythonObject(object):
 			module_name = module_name.replace('TOPLEVEL',self.package.package_name)
 		self.module_name = module_name or self.package.package_name
 		self.attribute_name = attribute_name
+		
 	def __repr__(self):
 		return ("{self.__class__.__name__}"
 		"("
 			"attribute_name={self.attribute_name!r},"
-			"module_name={self.module_name!r}"
+			"module_name={self.module_name!r},"
+			"package={self.package!r},"
 		")").format(**locals())
 	def loaded(self):
 		self.package.loaded()

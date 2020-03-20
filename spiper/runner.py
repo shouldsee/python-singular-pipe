@@ -30,12 +30,14 @@ import io
 import inspect
 import json
 import warnings
+import autopep8
 
 from itertools import zip_longest
 from collections import namedtuple
 import collections
 from functools import partial
 from orderedattrdict import AttrDict as _dict
+
 # _dict = collections.OrderedDict
 
 def _dumps(obj):
@@ -175,6 +177,13 @@ def get_all_deps(job, *args, which_flow=0, **kw):
 	res = mock_run(job,*args,**kw).get_all_deps(which_flow=which_flow)
 	mock_undo(job,*args,**kw)
 	return res	
+def _get_all_subflows(caller,):
+	lst = []
+	lst.append(caller)
+	for flow in caller.subflow.values():
+		lst.append( _get_all_subflows(flow))
+	return lst
+
 
 from spiper._header import is_scalar
 from pprint import pprint
@@ -205,12 +214,14 @@ class Caller(object):
 		--------------------
 		'''
 		inputs = [x for x in _get_all_inputs(caller)]
-		outputs = set(list_flatten(_get_all_files(caller,changed=0)))
+		output_files = set(list_flatten(_get_all_files(caller,changed=0)))
+		output_callers = list_flatten(_get_all_subflows(caller))
 		out = collections.defaultdict(lambda:[])
 		# which_flow = 1
 		for v,flow in inputs:
-			if v in outputs:
+			if v in output_files or v in output_callers:
 				continue
+
 			if is_scalar(v):
 				continue
 			if which_flow:
@@ -293,7 +304,7 @@ class Caller(object):
 
 	@property
 	def dotname(self):
-		return "%s.%s"%( (inspect.getmodule(self.f) or object()).__name__, self.f.__qualname__)
+		return "%s:%s"%( (inspect.getmodule(self.f) or object()).__name__, self.f.__qualname__)
 	@property
 	def subflow(self):
 		return self._subflow
@@ -460,7 +471,7 @@ class Caller(object):
 		### argument to jobs without prefix
 		### argument with name ending with '_' will be discarded in idenitty
 		# _job_args = [v for k,v in self.arg_tuples[1:] if not k.endswith('_')]
-		# _job_args = [v for k,v in self.arg_tuples[:] if not k.endswith('_')]
+		# _job_args = [v for k,v in self.arg_tuples[:]
 		# _job_args = list(zip(*self.arg_tuples[1:])) 
 		_input = [
 			FakeCode( self.f.__code__),
@@ -473,18 +484,26 @@ class Caller(object):
 		'''
 		f = self.f
 		res = collections.OrderedDict([
-				('job', repr(f.__code__)),
 				('dotname',self.dotname),
 				# ('dotname',"%s.%s"%(inspect.getmodule(f).__name__, f.__qualname__)),
-				('arg_tuples', collections.OrderedDict([
-					(
-						k,
-						"%s.%s::%s"%(type(v).__module__,type(v).__qualname__, repr(v).strip('"'"'") ),
-						# str(type(v))+':'+repr(v).strip('"'"'") ,
-						# _raise(Exception())
-					) for k,v in self.arg_tuples
-					if not k.endswith('_')
-					]) ),
+				('args_tuples',["[{!r:<15},{!s:<30},{!r}]".format(k,
+					"%s.%s"%(type(v).__module__,type(v).__qualname__),
+					v,
+					) for k,v in self.arg_tuples]),
+				('code', repr(f.__code__)),
+				('sourcefile',inspect.getabsfile(f.__code__)),
+				('sourcelines',autopep8.fix_code(inspect.getsource(f)).splitlines() ),
+				# ('arg_tuples', collections.OrderedDict([
+				# 	(
+				# 		k,
+				# 		"%s.%s::%s"%(type(v).__module__,type(v).__qualname__, repr(v).strip('"'"'") ),
+				# 		# str(type(v))+':'+repr(v).strip('"'"'") ,
+				# 		# _raise(Exception())
+				# 	) for k,v in self.arg_tuples
+				# 	if not k.endswith('_')
+				# 	]) ),
+
+					# if self.is_node else []),
 				# ('co_code',f.__code__.co_code),
 				# ('co_consts',f.__code__.co_consts),
 				])

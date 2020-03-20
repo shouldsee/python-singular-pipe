@@ -66,16 +66,18 @@ Options:
 Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 
 ```bash
+### [pybash-0.0.5]
+### [sys.argv] /home/user/.local/lib/python3.5/site-packages/pybash.py --log-stdout
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 commit=7c317b
+### 
+### [  stdout]
+### ---------------
 
-###---------------
-###-- stdout
-
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_changed_files\
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit\
@@ -84,9 +86,8 @@ spiper\
   1\
   2\
   /tmp/test_remote/root.backup
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -95,18 +96,18 @@ spiper\
 ### [workflow]done
 ### [File('/tmp/test_remote/root.workflow.log'),
 ###  File('/tmp/test_remote/root.backup.output..log')]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_changed_files\
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit\
   spiper_mock_flow:run_and_backup\
   --comma\
   /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -115,9 +116,10 @@ spiper\
 ### [workflow]done
 ### [File('/tmp/test_remote/root.workflow.log'),
 ###  File('/tmp/test_remote/root.backup.output..log')]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 ARR=(spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit\
   spiper_mock_flow:run_and_backup\
   /tmp/test_remote/root\
@@ -125,18 +127,17 @@ ARR=(spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$com
   2\
   /tmp/test_remote/root.backup\
   )
+### 
+### [  stdout]
+### ---------------
 
-###---------------
-###-- stdout
-
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_changed_files\
   ${ARR[@]}
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -145,27 +146,27 @@ spiper\
 ### [workflow]done
 ### [File('/tmp/test_remote/root.workflow.log'),
 ###  File('/tmp/test_remote/root.backup.output..log')]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   run\
   ${ARR[@]}
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_changed_files\
   ${ARR[@]}
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -174,15 +175,15 @@ spiper\
 ### [workflow]done
 ### [File('/tmp/test_remote/root.workflow.log'),
 ###  File('/tmp/test_remote/root.backup.output..log')]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_all_deps\
   ${ARR[@]}
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -190,16 +191,16 @@ spiper\
 ### [Flow running] mock=None
 ### [workflow]done
 ### [File('/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py')]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   get_all_deps\
   --which_flow\
   ${ARR[@]}
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
 ### 
 ### [Flow running] mock=None
 ### [workflow]done
@@ -209,15 +210,16 @@ spiper\
 ### [(File('/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py'),
 ###   [File('spiper:///tmp/test_remote/root.source.py'),
 ###    File('spiper:///tmp/test_remote/root.backup.source.py')])]
+### ---------------
 
-###---------------
-###-- command
+### ---------------
+### [ command]
 spiper\
   --help\
   >/dev/null
-
-###---------------
-###-- stdout
+### 
+### [  stdout]
+### ---------------
 
 ```
 

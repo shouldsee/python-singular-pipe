@@ -46,6 +46,7 @@ if 1:
 		# if not shell:
 		assert not shell
 		CMD = list_flatten_strict(CMD)
+		CMD = ['set','-euxo','pipefail;'] + CMD
 		# shell = 1
 		# with file:
 		t0 = time.time()

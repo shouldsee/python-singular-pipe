@@ -1,3 +1,8 @@
+# 0.1.2
+- Adding  `set -euxo pipefail;` to `shell.LoggedShellCommand`
+- Adding `["sourcelines","dotname","sourcefile","code"(previously job)]` to `_types.Caller.to_dict()`
+
+
 # 0.1.1
 - [added] `get_all_deps` in runner.py and cli.py
 - [added] `_types.CopyFile`, `_types.LinkFile` as `_single_file` Node.
