@@ -97,7 +97,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 def main(args=None):
-	__doc__ =r'''
+	r'''
 Usage
 
 	``spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>``
@@ -128,7 +128,7 @@ Arguments:
 		file_show_deps       print dependencies of parent caller for a file
 			--plain
 			--which_flow
-			
+
 		file_show_log        print details of parent caller
 			--plain
 
@@ -168,8 +168,6 @@ Options:
 			args.remove('-v')
 			verbose = 1
 		indent=4
-		def color_header(s):
-			return bcolors.HEADER+"{!s:<14}".format(s)+'\033[39m'
 
 		file_cmds = ['file_show_log','file_upstream','file_show_deps']
 		if args[0] in file_cmds:
@@ -241,7 +239,7 @@ Options:
 							print(f)
 					else:
 						pprint(fs or '[No files changed by this workflow]')
-			elif args[0] == 'node_show_log':
+			elif args[0] == 'caller_show_log':
 				def runner(*a,**kw):
 					return cache_run(*a,**kw,check_only=2)
 				def callback(node):node_dump(node, sys.stdout.write, 0)

@@ -25,8 +25,53 @@ See https://shouldsee.github.io/spiper/
 ### Usage:
 
 ```bash
-Version:spiper-0.1.2
-None
+Version:spiper-0.1.3
+
+Usage
+
+	``spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>``
+
+Example::
+
+	spiper run \
+	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
+	  spiper_mock_flow:run_and_backup \
+	  /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
+
+Arguments:
+	<subcommand>:
+		run                  execute the workflow
+		get_all_files        print all files governed by workflow
+			--plain          print a newline-separated list instead of pprint
+
+		get_changed_files    print all files changed by workflow
+			--plain          print a newline-separated list instead of pprint
+
+		caller_show_deps     print all dependencies governed by workflow (legacy: get_all_deps)
+			--plain          print a newline-separated list instead of pprint
+			--which_flow     printing which subflow/node requries this dependency
+
+		caller_show_log      print details of a call, including `arg_tuples,sourcecode,sourcefile`
+			--plain
+
+		file_show_deps       print dependencies of parent caller for a file
+			--plain
+			--which_flow
+
+		file_show_log        print details of parent caller
+			--plain
+
+	<package>:
+		a string compatible with pep-508
+	<workflow_entrypoint>:
+		a string  "<module>:<object_name>" where object is like a `spipe.types.Node()`
+	<workflow_arguments>:
+		a comma-separated list of arguments for the workflow
+
+Options:
+	--help: show this help
+
+	
 
 ```
 
@@ -41,7 +86,7 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 ### ---------------
 ### [ command]
 set\
-  -uso\
+  -euo\
   pipefail;
 ### 
 ### [  stdout]
@@ -209,10 +254,50 @@ spiper\
   --plain
 ### 
 ### [  stdout]
-### Version:spiper-0.1.2
-### None
-### Version:spiper-0.1.2
-### None
+### node:
+###     prefix_named:
+###         /tmp/test_remote/root.run_and_backup
+###     job_type:
+###         FlowFunction
+###     will_change:
+###         True, FlowFunction will always be executed
+###     dotname:
+###         spiper_mock_flow:run_and_backup
+###     sourcefile:
+###         /home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py
+###     info_dict:
+###         OrderedDict([('args_tuples',
+###                       ["['prefix'       ,spiper._types.File            "
+###                        ",File('/tmp/test_remote/root')]",
+###                        "['seed'         ,builtins.int                  ,1]",
+###                        "['L'            ,builtins.int                  ,2]",
+###                        "['backup_prefix',builtins.str                  "
+###                        ",'/tmp/test_remote/root.backup']",
+###                        "['_output'      ,builtins.list                 ,[]]"]),
+###                      ('code',
+###                       '<code object run_and_backup at 0x7ff848384ae0, file '
+###                       '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
+###                       'line 133>')])
+###     sourcecode:
+###         @Flow
+###         def run_and_backup(
+###                 self, prefix,
+###                 seed=int, L=int,
+###                 backup_prefix=str,  # we don't want to track backup_prefix
+###                 _output=[
+###                 # File('log'),
+###                 ]):
+### 
+###             # execute the flow
+###             flow = self.runner(workflow, prefix, seed, L)
+### 
+###             # perform backup
+###             backup_result = self.runner(backup, backup_prefix, flow)
+### 
+###             # plot a dependency graph into the backup directory
+###             graph_out = self.runner(plot_graph, backup_prefix, backup_result)
+###             print('[workflow]done')
+###             return self
 ### ---------------
 
 ### ---------------
@@ -223,8 +308,8 @@ spiper\
   --plain
 ### 
 ### [  stdout]
-### [95mfile:         [39m
-###     [95mname:         [39m
+### file:
+###     name:
 ###         /tmp/test_remote/root.transcribe.fasta
 ###     node:
 ###         prefix_named:
@@ -243,9 +328,9 @@ spiper\
 ###                              "['input'        ,spiper._types.File            "
 ###                              ",File('/tmp/test_remote/root.random_seq.seq')]",
 ###                              "['_output'      ,builtins.list                 ,['fasta']]"],
-###              'code': '<code object transcribe at 0x7f6fdeb4e4b0, file '
+###              'code': '<code object transcribe at 0x7f7520f10390, file '
 ###                      '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
-###                      'line 25>'}
+###                      'line 23>'}
 ###         sourcecode:
 ###             def transcribe(self, prefix, input=File, _output=['fasta']):
 ###                 with open(input, 'r') as fi:

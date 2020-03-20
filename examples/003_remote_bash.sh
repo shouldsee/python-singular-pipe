@@ -1,6 +1,7 @@
 #### get a list of changed_files
 # rm -rfv /tmp/test_remote/*
-set -uso pipefail;
+set -euo pipefail;
+
 commit=7c317b
 spiper get_changed_files \
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit \
