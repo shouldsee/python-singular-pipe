@@ -1,3 +1,13 @@
+# 0.1.3
+- improving cli
+- adding subcommands:
+  - `caller_show_deps` <- `get_all_deps` 
+    - print dependencies. options `--plain`
+  - `file_show_deps` : print dependencies for parent caller
+  - `file_show_log`  : print details fro parent caller
+  - `caller_show_log`: print details of a caller including `prefix_named, arg_tuples, sourcecode, sourcefile`
+  - need to separate `file` and `caller` commands properly
+
 # 0.1.2
 - Adding  `set -euxo pipefail;` to `shell.LoggedShellCommand`
 - Adding `["sourcelines","dotname","sourcefile","code"(previously job)]` to `_types.Caller.to_dict()`

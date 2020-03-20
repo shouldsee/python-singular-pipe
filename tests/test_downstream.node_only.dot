@@ -1,5 +1,152 @@
 strict digraph G {
 	rankdir=TB
+	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" -> SINK
+	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" [label=<		
+	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	  <TR>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
+	  </TR>
+
+	  
+	  	
+		  <TR>
+		  	<TD ALIGN="LEFT">dotname</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">base:simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix_named</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2.simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">s</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">ATG</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">digitFile</TD>
+		  	<TD ALIGN="LEFT">InputFile</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">_output</TD>
+		  	<TD ALIGN="LEFT">list</TD>
+		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
+		  </TR>
+	    
+	</TABLE>
+	> shape=plaintext]
+	"/home/user/.temp/singular-pipe_test_build/root.simple_job" -> "/home/user/.temp/singular-pipe_test_build/job2.simple_job"
+	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" [label=<		
+	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	  <TR>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
+	  </TR>
+
+	  
+	  	
+		  <TR>
+		  	<TD ALIGN="LEFT">dotname</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">base:simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix_named</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2.simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">s</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">ATG</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">digitFile</TD>
+		  	<TD ALIGN="LEFT">InputFile</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">_output</TD>
+		  	<TD ALIGN="LEFT">list</TD>
+		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
+		  </TR>
+	    
+	</TABLE>
+	> shape=plaintext]
+	"/home/user/.temp/singular-pipe_test_build/root.simple_job" [label=<		
+	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+	  <TR>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
+	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
+	  </TR>
+
+	  
+	  	
+		  <TR>
+		  	<TD ALIGN="LEFT">dotname</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">base:simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix_named</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">prefix</TD>
+		  	<TD ALIGN="LEFT">File</TD>
+		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">s</TD>
+		  	<TD ALIGN="LEFT">str</TD>
+		    <TD ALIGN="LEFT">ATG</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">digitFile</TD>
+		  	<TD ALIGN="LEFT">InputFile</TD>
+		    <TD ALIGN="LEFT">/tmp/digit.txt</TD>
+		  </TR>
+	    
+		  <TR>
+		  	<TD ALIGN="LEFT">_output</TD>
+		  	<TD ALIGN="LEFT">list</TD>
+		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
+		  </TR>
+	    
+	</TABLE>
+	> shape=plaintext]
+	SOURCE -> "/home/user/.temp/singular-pipe_test_build/root.simple_job"
 	"/home/user/.temp/singular-pipe_test_build/job3.dimple_job" -> SINK
 	"/home/user/.temp/singular-pipe_test_build/job3.dimple_job" [label=<		
 	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
@@ -14,7 +161,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph:dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -69,7 +216,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph:dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -123,7 +270,7 @@ strict digraph G {
 		  <TR>
 		  	<TD ALIGN="LEFT">dotname</TD>
 		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">graph.dimple_job</TD>
+		    <TD ALIGN="LEFT">graph:dimple_job</TD>
 		  </TR>
 	    
 		  <TR>
@@ -165,151 +312,4 @@ strict digraph G {
 	</TABLE>
 	> shape=plaintext]
 	SOURCE -> "/home/user/.temp/singular-pipe_test_build/job2.dimple_job"
-	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" -> SINK
-	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" [label=<		
-	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-	  <TR>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
-	  </TR>
-
-	  
-	  	
-		  <TR>
-		  	<TD ALIGN="LEFT">dotname</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">base.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix_named</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">s</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">ATG</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">digitFile</TD>
-		  	<TD ALIGN="LEFT">InputFile</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">_output</TD>
-		  	<TD ALIGN="LEFT">list</TD>
-		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
-		  </TR>
-	    
-	</TABLE>
-	> shape=plaintext]
-	"/home/user/.temp/singular-pipe_test_build/root.simple_job" -> "/home/user/.temp/singular-pipe_test_build/job2.simple_job"
-	"/home/user/.temp/singular-pipe_test_build/job2.simple_job" [label=<		
-	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-	  <TR>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
-	  </TR>
-
-	  
-	  	
-		  <TR>
-		  	<TD ALIGN="LEFT">dotname</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">base.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix_named</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/job2</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">s</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">ATG</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">digitFile</TD>
-		  	<TD ALIGN="LEFT">InputFile</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job.out_txt</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">_output</TD>
-		  	<TD ALIGN="LEFT">list</TD>
-		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
-		  </TR>
-	    
-	</TABLE>
-	> shape=plaintext]
-	"/home/user/.temp/singular-pipe_test_build/root.simple_job" [label=<		
-	<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-	  <TR>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">attr</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">type</TD>
-	    <TD ALIGN="LEFT" BGCOLOR="lightblue">value</TD>
-	  </TR>
-
-	  
-	  	
-		  <TR>
-		  	<TD ALIGN="LEFT">dotname</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">base.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix_named</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root.simple_job</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">prefix</TD>
-		  	<TD ALIGN="LEFT">File</TD>
-		    <TD ALIGN="LEFT">/home/user/.temp/singular-pipe_test_build/root</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">s</TD>
-		  	<TD ALIGN="LEFT">str</TD>
-		    <TD ALIGN="LEFT">ATG</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">digitFile</TD>
-		  	<TD ALIGN="LEFT">InputFile</TD>
-		    <TD ALIGN="LEFT">/tmp/digit.txt</TD>
-		  </TR>
-	    
-		  <TR>
-		  	<TD ALIGN="LEFT">_output</TD>
-		  	<TD ALIGN="LEFT">list</TD>
-		    <TD ALIGN="LEFT">[File('out_txt')]</TD>
-		  </TR>
-	    
-	</TABLE>
-	> shape=plaintext]
-	SOURCE -> "/home/user/.temp/singular-pipe_test_build/root.simple_job"
 }

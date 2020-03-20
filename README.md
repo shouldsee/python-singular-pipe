@@ -26,39 +26,7 @@ See https://shouldsee.github.io/spiper/
 
 ```bash
 Version:spiper-0.1.2
-
-Usage
-
-	``spiper <subcommand> <package> <workflow_entrypoint> <workflow_arguments>``
-
-Example::
-
-	spiper run \
-	  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master \
-	  spiper_mock_flow:run_and_backup \
-	  /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
-
-Arguments:
-	<subcommand>:
-		run                  execute the workflow
-		get_all_files        print all files governed by workflow
-			--plain          print a newline-separated list instead of pprint
-		get_changed_files    print all files changed by workflow
-			--plain          print a newline-separated list instead of pprint
-		get_all_deps         print all dependencies governed by workflow
-			--plain          print a newline-separated list instead of pprint
-			--which_flow     printing which subflow/node requries this dependency
-	<package>:
-		a string compatible with pep-508
-	<workflow_entrypoint>:
-		a string  "<module>:<object_name>" where object is like a `spipe.types.Node()`
-	<workflow_arguments>:
-		a comma-separated list of arguments for the workflow
-
-Options:
-	--help: show this help
-
-	
+None
 
 ```
 
@@ -69,6 +37,15 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 ```bash
 ### [pybash-0.0.5]
 ### [sys.argv] /home/user/.local/lib/python3.5/site-packages/pybash.py --log-stdout
+
+### ---------------
+### [ command]
+set\
+  -uso\
+  pipefail;
+### 
+### [  stdout]
+### ---------------
 
 ### ---------------
 ### [ command]
@@ -181,7 +158,7 @@ spiper\
 ### ---------------
 ### [ command]
 spiper\
-  get_all_deps\
+  caller_show_deps\
   ${ARR[@]}
 ### 
 ### [  stdout]
@@ -197,7 +174,7 @@ spiper\
 ### ---------------
 ### [ command]
 spiper\
-  get_all_deps\
+  caller_show_deps\
   --which_flow\
   ${ARR[@]}
 ### 
@@ -211,6 +188,70 @@ spiper\
 ### [(File('/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py'),
 ###   [File('spiper:///tmp/test_remote/root.source.py'),
 ###    File('spiper:///tmp/test_remote/root.backup.source.py')])]
+### ---------------
+
+### ---------------
+### [ command]
+spiper\
+  file_show_deps\
+  /tmp/test_remote/root.transcribe.fasta
+### 
+### [  stdout]
+### /tmp/test_remote/root.transcribe.fasta
+### [File('/tmp/test_remote/root.random_seq.seq')]
+### ---------------
+
+### ---------------
+### [ command]
+spiper\
+  caller_show_log\
+  ${ARR[@]}\
+  --plain
+### 
+### [  stdout]
+### Version:spiper-0.1.2
+### None
+### Version:spiper-0.1.2
+### None
+### ---------------
+
+### ---------------
+### [ command]
+spiper\
+  file_show_log\
+  /tmp/test_remote/root.transcribe.fasta\
+  --plain
+### 
+### [  stdout]
+### [95mfile:         [39m
+###     [95mname:         [39m
+###         /tmp/test_remote/root.transcribe.fasta
+###     node:
+###         prefix_named:
+###             /tmp/test_remote/root.transcribe
+###         job_type:
+###             NodeFunction
+###         will_change:
+###             NA when viewing a node image
+###         dotname:
+###             spiper_mock_flow:transcribe
+###         sourcefile:
+###             /home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py
+###         info_dict:
+###             {'args_tuples': ["['prefix'       ,spiper._types.File            "
+###                              ",File('/tmp/test_remote/root')]",
+###                              "['input'        ,spiper._types.File            "
+###                              ",File('/tmp/test_remote/root.random_seq.seq')]",
+###                              "['_output'      ,builtins.list                 ,['fasta']]"],
+###              'code': '<code object transcribe at 0x7f6fdeb4e4b0, file '
+###                      '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
+###                      'line 25>'}
+###         sourcecode:
+###             def transcribe(self, prefix, input=File, _output=['fasta']):
+###                 with open(input, 'r') as fi:
+###                     with open(self.output.fasta, 'w') as fo:
+###                         fo.write(fi.read().replace('T', 'U'))
+###                 return self
 ### ---------------
 
 ### ---------------

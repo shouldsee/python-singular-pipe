@@ -14,6 +14,8 @@ from spiper._types import CantGuessCaller, UndefinedTypeRoutine
 from spiper._types import TooManyArgumentsError
 from spiper._types import NodeFunction,FlowFunction
 from spiper._types import DirtyKey
+from spiper._types import Code
+
 
 from spiper._header import list_remove_scalar
 
@@ -304,7 +306,7 @@ class Caller(object):
 
 	@property
 	def dotname(self):
-		return "%s:%s"%( (inspect.getmodule(self.f) or object()).__name__, self.f.__qualname__)
+		return "%s:%s"%( (inspect.getmodule(self.f) or (lambda:None)).__name__, self.f.__qualname__)
 	@property
 	def subflow(self):
 		return self._subflow
@@ -478,6 +480,25 @@ class Caller(object):
 			self.arg_values,
 		]		
 		return _input
+
+	@property
+	def is_fake(self):
+		return not isinstance(self.f.__code__, Code)
+	@property
+	def sourcefile(self):
+		if not isinstance(self.f.__code__, Code):
+			return '[null]sourcefile not available for FakeCode'
+		else:
+			return inspect.getabsfile(self.f.__code__)			
+
+	@property
+	def sourcelines(self):
+		if not isinstance(self.f.__code__, Code):
+			return '[null]sourcelines not available for FakeCode'
+		else:
+			return autopep8.fix_code(inspect.getsource(self.f)).splitlines()
+	
+	
 	def to_dict(self):
 		'''
 		For visualisation / json.dumps
@@ -491,8 +512,10 @@ class Caller(object):
 					v,
 					) for k,v in self.arg_tuples]),
 				('code', repr(f.__code__)),
-				('sourcefile',inspect.getabsfile(f.__code__)),
-				('sourcelines',autopep8.fix_code(inspect.getsource(f)).splitlines() ),
+				('sourcefile',self.sourcefile),
+				('sourcelines', self.sourcelines),
+				# ('sourcefile',inspect.getabsfile(f.__code__)),
+				# ('sourcelines',autopep8.fix_code(inspect.getsource(f)).splitlines() ),
 				# ('arg_tuples', collections.OrderedDict([
 				# 	(
 				# 		k,
@@ -511,8 +534,9 @@ class Caller(object):
 
 	def __repr__(self):
 		f = self.f
-		return '%s.%s(%s)'%(
-			self.__class__.__module__,
+		# return '%s.%s(%s)'%(
+		return '%s(%s)'%(
+			# self.__class__.__module__,
 			self.__class__.__name__,
 			','.join(['%s=%r'%(k,getattr(self,k)) for k in ['dotname','prefix_named']]),
 			# self.dotname, self.prefix_named,
@@ -639,6 +663,12 @@ class Caller(object):
 	>
 	'''.strip()
 		return jinja2_format(s, node=self)	
+	def load_ident_file_key(self,key):
+		with open(self.input_ident_file,'r') as f:
+			d = json.load(f)
+			if key is None:
+				return d
+			return d[key]
 
 	def update_meta(self, _input, _output):
 		'''
@@ -671,7 +701,7 @@ class Caller(object):
 		p = MyPickleSession()
 			 # comment = [[repr(x) for x in _output],get_identity(_output)] ) ### outputs are all
 		input_image = [
-				('comment',      _caller.to_dict()),
+				('to_dict',      _caller.to_dict()),
 				('modules',      p.pop_modules_list(  lambda: p.dumps_sniff_b64( _caller))),
 				('caller_dump',  p.pop_buffer()),
 				('ident',        p.dumps_b64(_input_ident)),
@@ -738,10 +768,6 @@ def get_all_files(job, *args, allow=[File],flat=1, **kw):
 	mock_undo(job,*args,**kw)
 	return res
 
-	# if allow:
-	# 	#### [FRAGILE]
-	# 	res = [x for x in res if type(x) in allow]
-	# return res	
 
 # symbolicResult =  object()
 # def cache_run(job, *args, dir):
@@ -846,8 +872,11 @@ class _Runner(object):
 			last_caller._subflow[ _caller.__name__ ] = _caller				
 
 
-		if check_only:	
+		if check_only == 1:	
 			return use_cache
+		elif check_only == 2:
+			_caller.use_cache = use_cache
+			return _caller
 
 		if check_changed:
 			if check_changed >=2:
@@ -991,6 +1020,7 @@ def file_to_node(obj, strict, dir_layout,):
 	One can only guess the prefix by removing the suffix
 	'''
 	err = CantGuessCaller("Cannot guess the Caller() for %r"%obj) 
+	obj = obj.realpath()
 
 	# res = obj.rsplit('.',2)
 	# if len(res)!=3:
