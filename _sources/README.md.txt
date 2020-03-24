@@ -88,14 +88,8 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 ### [ command]
 set\
   -euo\
-  pipefail;
-### 
-### [  stdout]
-### ---------------
-
-### ---------------
-### [ command]
-commit=7c317b
+  pipefail;\
+  commit=7c317b
 ### 
 ### [  stdout]
 ### ---------------
@@ -256,7 +250,7 @@ spiper\
 ###                        ",'/tmp/test_remote/root.backup']",
 ###                        "['_output'      ,builtins.list                 ,[]]"]),
 ###                      ('code',
-###                       '<code object run_and_backup at 0x7f7665c78ae0, file '
+###                       '<code object run_and_backup at 0x7f47cb33bae0, file '
 ###                       '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
 ###                       'line 133>')])
 ###     sourcecode:
