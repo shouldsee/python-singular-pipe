@@ -20,6 +20,7 @@
    lib/index.rst
    indexes.rst
    license.rst
+   changelog.rst
 
 Overview
 ===================

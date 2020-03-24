@@ -5,4 +5,3 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 * :ref:`modules`
-
