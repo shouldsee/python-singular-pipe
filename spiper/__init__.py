@@ -42,6 +42,10 @@ template = '''
 
 ## spiper: Utilities to make a pipeline, with singularity integration and caching ability.
 
+### Documentation
+
+Written with sphinx. See https://shouldsee.github.io/spiper/
+
 ### Dependencies:
 
 - A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
@@ -57,9 +61,6 @@ template = '''
 pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 ```
 
-### Documentation
-
-See https://shouldsee.github.io/spiper/
 
 ### Usage:
 

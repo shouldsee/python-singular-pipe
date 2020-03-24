@@ -3,6 +3,10 @@
 
 ## spiper: Utilities to make a pipeline, with singularity integration and caching ability.
 
+### Documentation
+
+Written with sphinx. See https://shouldsee.github.io/spiper/
+
 ### Dependencies:
 
 - A pip manager compatible with PEP 508 URL requirements see [examples](https://www.python.org/dev/peps/pep-0508/#examples):
@@ -18,14 +22,11 @@
 pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 ```
 
-### Documentation
-
-See https://shouldsee.github.io/spiper/
 
 ### Usage:
 
 ```bash
-Version:spiper-0.1.3
+Version:spiper-0.1.4
 
 Usage
 
@@ -275,7 +276,7 @@ spiper\
 ###                        ",'/tmp/test_remote/root.backup']",
 ###                        "['_output'      ,builtins.list                 ,[]]"]),
 ###                      ('code',
-###                       '<code object run_and_backup at 0x7ff848384ae0, file '
+###                       '<code object run_and_backup at 0x7f7613c6cae0, file '
 ###                       '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
 ###                       'line 133>')])
 ###     sourcecode:
@@ -352,6 +353,19 @@ spiper\
 
 
 ### ToDo
+	- [ ] Adding definition for other file operation:
+		- node_clone     duplicate a node
+		  - node_detach    cache all dependencies of a node to local
+          - node_cplink    create a spiper-synced sopy
+        - node_mv        move a node and link meta to another location
+        - file_clone      create a hardlink
+          - file_cplink    create a spiper-synced copy
+  		  - file_mirror    
+  	    - file_mv        move a file to another location
+  	    - file_commit    commit manual changes to a file
+  	    - file_pull
+  	    - node_pull      
+	- [ ] Adding file pointers between flow and subflow.
 	- [ ] print more logs during runtime.
 	- [ ] extensive tests for RPO(). 
 		- [ ] Figure out how to avoid pip install
