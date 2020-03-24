@@ -11,7 +11,7 @@ def jinja2_format(s,**context):
 version_info = (  # SEMANTIC
         0,        # major
         1,        # minor
-        3,        # patch
+        4,        # patch
 )
 def get_version(VERSION=version_info):
     version = "%i.%i.%i" % (VERSION[0], VERSION[1], VERSION[2])
@@ -87,6 +87,19 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 
 todo = '''
 ### ToDo
+	- [ ] Adding definition for other file operation:
+		- node_clone     duplicate a node
+		  - node_detach    cache all dependencies of a node to local
+          - node_cplink    create a spiper-synced sopy
+        - node_mv        move a node and link meta to another location
+        - file_clone      create a hardlink
+          - file_cplink    create a spiper-synced copy
+  		  - file_mirror    
+  	    - file_mv        move a file to another location
+  	    - file_commit    commit manual changes to a file
+  	    - file_pull
+  	    - node_pull      
+	- [ ] Adding file pointers between flow and subflow.
 	- [ ] print more logs during runtime.
 	- [ ] extensive tests for RPO(). 
 		- [ ] Figure out how to avoid pip install

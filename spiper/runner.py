@@ -756,6 +756,7 @@ def mock_undo(job, *args, mock = -1, **kw):
 	return cache_run(job,*args, mock=mock,**kw)
 
 def get_changed_files(job, *args, allow=[File],flat=1, **kw):
+	mock_undo(job,*args,**kw)
 	res = mock_run(job,*args,**kw).get_changed_files(flat)
 	mock_undo(job,*args,**kw)
 	if allow:
@@ -900,34 +901,41 @@ class _Runner(object):
 			if verbose >= 2:
 				import pdb; pdb.set_trace()
 
-		# if last_caller is not None:
-		# print("%r\n  %r"%(last_caller,_caller)) if verbose >=2 else None
-
 		#### if any of the output file is mock, then do not use cache
 		#### if input and output are not changed, then mocking is skipped.
-		if use_cache:
-			result = _caller.load_cache()
-		else:
-			if mock == 1:
-				_ = '''
-				The current file will be replaced with a mock file to propagate the signal downwards
-				'''
+		# if use_cache:
+		# 	result = _caller.load_cache()
+		# else:
+		if mock == 1:
+			_ = '''
+			The current file will be replaced with a mock file to propagate the signal downwards
+			'''
+			if use_cache == 0:
 				_caller.mock_do(output_ident_changed, 1, verbose)
-				result = _caller(runner,config_runner) if not is_node else _caller
+			else:
+				pass
+				#### remove mock files if not using cache ?
+				_caller.mock_undo(1, verbose)				
+				
+			result = _caller(runner,config_runner) if not is_node else _caller
 
-			elif mock == -1:
-				#### unmock
-				#### restore mocked file if available
-				_caller.mock_undo(1, verbose)
-				result = _caller(runner,config_runner) if not is_node else _caller
+		elif mock == -1:
+			#### unmock
+			#### restore mocked file if available
+			_caller.mock_undo(1, verbose)
+			result = _caller(runner,config_runner) if not is_node else _caller
 
-			elif mock == 0:
-				_caller.mock_undo(1, verbose)
+		elif mock == 0:
+			_caller.mock_undo(1, verbose)
+			if use_cache == 1: ### must be node
+				result = _caller.load_cache()
+			else:  
 				result = _caller(runner, config_runner )
 				_caller.update_meta(_input, _output)
-			else:
-				assert 0, 'Mock value not understood mock=%r'%mock
+		else:
+			assert 0, 'Mock value not understood mock=%r'%mock
 		return result
+
 
 		# return _caller, result
 		# if is_node:
