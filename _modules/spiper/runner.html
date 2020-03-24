@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper.runner &mdash; spiper 0.1.3 documentation</title>
+  <title>spiper.runner &mdash; spiper 0.1.4 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.1.3
+                0.1.4
               </div>
             
           
@@ -908,6 +908,7 @@
 	<span class="k">return</span> <span class="n">cache_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">mock</span><span class="o">=</span><span class="n">mock</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="get_changed_files"><a class="viewcode-back" href="../../lib/index.html#spiper.types.get_changed_files">[docs]</a><span class="k">def</span> <span class="nf">get_changed_files</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">allow</span><span class="o">=</span><span class="p">[</span><span class="n">File</span><span class="p">],</span><span class="n">flat</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 	<span class="n">res</span> <span class="o">=</span> <span class="n">mock_run</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">get_changed_files</span><span class="p">(</span><span class="n">flat</span><span class="p">)</span>
 	<span class="n">mock_undo</span><span class="p">(</span><span class="n">job</span><span class="p">,</span><span class="o">*</span><span class="n">args</span><span class="p">,</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span>
 	<span class="k">if</span> <span class="n">allow</span><span class="p">:</span>
@@ -1052,34 +1053,41 @@
 			<span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
 				<span class="kn">import</span> <span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
 
-		<span class="c1"># if last_caller is not None:</span>
-		<span class="c1"># print(&quot;%r\n  %r&quot;%(last_caller,_caller)) if verbose &gt;=2 else None</span>
-
 		<span class="c1">#### if any of the output file is mock, then do not use cache</span>
 		<span class="c1">#### if input and output are not changed, then mocking is skipped.</span>
-		<span class="k">if</span> <span class="n">use_cache</span><span class="p">:</span>
-			<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">load_cache</span><span class="p">()</span>
-		<span class="k">else</span><span class="p">:</span>
-			<span class="k">if</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-				<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">				The current file will be replaced with a mock file to propagate the signal downwards</span>
-<span class="s1">				&#39;&#39;&#39;</span>
+		<span class="c1"># if use_cache:</span>
+		<span class="c1"># 	result = _caller.load_cache()</span>
+		<span class="c1"># else:</span>
+		<span class="k">if</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="n">_</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">			The current file will be replaced with a mock file to propagate the signal downwards</span>
+<span class="s1">			&#39;&#39;&#39;</span>
+			<span class="k">if</span> <span class="n">use_cache</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
 				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_do</span><span class="p">(</span><span class="n">output_ident_changed</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="k">pass</span>
+				<span class="c1">#### remove mock files if not using cache ?</span>
+				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>				
+				
+			<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
 
-			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-				<span class="c1">#### unmock</span>
-				<span class="c1">#### restore mocked file if available</span>
-				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
-				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
+		<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+			<span class="c1">#### unmock</span>
+			<span class="c1">#### restore mocked file if available</span>
+			<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+			<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span><span class="n">config_runner</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">is_node</span> <span class="k">else</span> <span class="n">_caller</span>
 
-			<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-				<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+		<span class="k">elif</span> <span class="n">mock</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="n">_caller</span><span class="o">.</span><span class="n">mock_undo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">use_cache</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1">### must be node</span>
+				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="o">.</span><span class="n">load_cache</span><span class="p">()</span>
+			<span class="k">else</span><span class="p">:</span>  
 				<span class="n">result</span> <span class="o">=</span> <span class="n">_caller</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">config_runner</span> <span class="p">)</span>
 				<span class="n">_caller</span><span class="o">.</span><span class="n">update_meta</span><span class="p">(</span><span class="n">_input</span><span class="p">,</span> <span class="n">_output</span><span class="p">)</span>
-			<span class="k">else</span><span class="p">:</span>
-				<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Mock value not understood mock=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mock</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">assert</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Mock value not understood mock=</span><span class="si">%r</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">mock</span>
 		<span class="k">return</span> <span class="n">result</span>
+
 
 		<span class="c1"># return _caller, result</span>
 		<span class="c1"># if is_node:</span>
