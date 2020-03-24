@@ -1,5 +1,8 @@
 # 0.1.4
 - Fixed a bug in `_types._Runner._run` causing incorrect values of use_cache in get_changed_files.
+- [need:test] pulling changes to an executed long pipeline. get_changed_files() should emit correct values 
+even if the pipeline has been updated. 
+- [need:test] version change in RPO()
 
 # 0.1.3
 - improving cli
