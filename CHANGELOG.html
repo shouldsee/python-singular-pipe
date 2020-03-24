@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>0.1.4 &mdash; spiper 0.1.4 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> spiper
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples/index.html">2. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lib/index.html">3. API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="indexes.html">4. Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">5. CHANGELOG</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">spiper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>0.1.4</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/CHANGELOG.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>0.1.4<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Fixed a bug in <code class="docutils literal notranslate"><span class="pre">_types._Runner._run</span></code> causing incorrect values of use_cache in get_changed_files.</p></li>
+<li><p>[need:test] pulling changes to an executed long pipeline. get_changed_files() should emit correct values
+even if the pipeline has been updated.</p></li>
+<li><p>[need:test] version change in RPO()</p></li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h1>0.1.3<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>improving cli</p></li>
+<li><p>adding subcommands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">caller_show_deps</span></code> &lt;- <code class="docutils literal notranslate"><span class="pre">get_all_deps</span></code></p>
+<ul>
+<li><p>print dependencies. options <code class="docutils literal notranslate"><span class="pre">--plain</span></code></p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file_show_deps</span></code> : print dependencies for parent caller</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">file_show_log</span></code>  : print details fro parent caller</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">caller_show_log</span></code>: print details of a caller including <code class="docutils literal notranslate"><span class="pre">prefix_named,</span> <span class="pre">arg_tuples,</span> <span class="pre">sourcecode,</span> <span class="pre">sourcefile</span></code></p></li>
+<li><p>need to separate <code class="docutils literal notranslate"><span class="pre">file</span></code> and <code class="docutils literal notranslate"><span class="pre">caller</span></code> commands properly</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h1>0.1.2<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Adding  <code class="docutils literal notranslate"><span class="pre">set</span> <span class="pre">-euxo</span> <span class="pre">pipefail;</span></code> to <code class="docutils literal notranslate"><span class="pre">shell.LoggedShellCommand</span></code></p></li>
+<li><p>Adding <code class="docutils literal notranslate"><span class="pre">[&quot;sourcelines&quot;,&quot;dotname&quot;,&quot;sourcefile&quot;,&quot;code&quot;(previously</span> <span class="pre">job)]</span></code> to <code class="docutils literal notranslate"><span class="pre">_types.Caller.to_dict()</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h1>0.1.1<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[added] <code class="docutils literal notranslate"><span class="pre">get_all_deps</span></code> in runner.py and cli.py</p></li>
+<li><p>[added] <code class="docutils literal notranslate"><span class="pre">_types.CopyFile</span></code>, <code class="docutils literal notranslate"><span class="pre">_types.LinkFile</span></code> as <code class="docutils literal notranslate"><span class="pre">_single_file</span></code> Node.</p></li>
+<li><p>[removed] <code class="docutils literal notranslate"><span class="pre">spiper.test.mock.test_tag</span></code> in favour for <code class="docutils literal notranslate"><span class="pre">spiper.tes.mock.test_rpo</span></code></p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h1>0.1.0<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[changed] <code class="docutils literal notranslate"><span class="pre">prefix_named</span> <span class="pre">=</span> <span class="pre">'{prefix}.{job_name}-{tag}</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">prefix_named</span> <span class="pre">=</span> <span class="pre">'{prefix}.{job_name}_{tag}</span></code></p></li>
+<li><p>[changed] indentation for shell.LoggedSingularityCommand()</p></li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h1>0.0.9<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[changed] get_changed_files behaviour for FlowFunction().  FlowFunction will always
+be executed with use_cache = False.</p></li>
+<li><p>[warn] if _output != [] for FlowFunction()</p></li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h1>0.0.8<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[changed] funcsig for spiper.shell.LoggedSinuglarityCommand(prefix, cmd, image, log_file). add ‘–workdir’</p></li>
+<li><p>[added] spiper.shell.LoggedSinuglarityCommandList(prefix,cmd,image). returns a cmd_list for singularity exec</p></li>
+<li><p>[note] –workdir for singularity is important for providing storage for created temporary files.</p></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h1>0.0.7<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[fix] [need:test] check for write access during get_changed_files() and in mock_do(</p></li>
+<li><p>[added] spiper._types.Path() wrapper  with check_writable() method</p></li>
+</ul>
+</div>
+<div class="section" id="id9">
+<h1>0.0.6<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>[fix] force Caller.<strong>call</strong> to cache self if is Node</p></li>
+<li><p>[add] spiper._header.Concat</p></li>
+<li><p>[add] spiper._header.list_to_string</p></li>
+<li><p>[fix] spiper.shell.LoggedSingularityCommand to sniff Files with
+_header.list_to_string</p></li>
+<li><p>[add] spiper._header.resolve_spiper to intepret ‘..subflow..xxx..output..bam’
+[need: test]</p></li>
+<li><p>[fix] RPO to better intepret pep508 [need: test] [need: use pep508-parser]</p></li>
+<li><p>[fix] use pip&gt;=19.0. [need: test expected RPO() func]</p></li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Feng Geng
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

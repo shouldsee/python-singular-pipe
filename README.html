@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability &mdash; spiper 0.1.4 documentation</title>
+  <title>spiper: Utilities to make a pipeline, with singularity integration and caching ability. &mdash; spiper 0.1.4 documentation</title>
   
 
   
@@ -34,8 +34,7 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Installation" href="install/index.html" /> 
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -49,7 +48,7 @@
           
 
           
-            <a href="#" class="icon icon-home"> spiper
+            <a href="index.html" class="icon icon-home"> spiper
           
 
           
@@ -103,7 +102,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">spiper</a>
+          <a href="index.html">spiper</a>
         
       </nav>
 
@@ -132,15 +131,15 @@
 
   <ul class="wy-breadcrumbs">
     
-      <li><a href="#">Docs</a> &raquo;</li>
+      <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper</span></code>: Utilities to make a pipeline, with singularity integration and caching ability</li>
+      <li>spiper: Utilities to make a pipeline, with singularity integration and caching ability.</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/README.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -153,61 +152,86 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="spiper-utilities-to-make-a-pipeline-with-singularity-integration-and-caching-ability">
-<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper</span></code>: Utilities to make a pipeline, with singularity integration and caching ability<a class="headerlink" href="#spiper-utilities-to-make-a-pipeline-with-singularity-integration-and-caching-ability" title="Permalink to this headline">¶</a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="install/index.html">1. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install/index.html#dependencies">1.1. Dependencies</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install/index.html#id1">1.2. Installation</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples/index.html">2. Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#workflow-execution-as-file-synchronisation">2.1. Workflow execution as file synchronisation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#running-a-remote-package-function">2.2. Running a remote package/function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#visualising-dependency-graph">2.3. Visualising Dependency graph</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#creating-a-cached-node">2.4. Creating a cached Node</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/index.html#configure-directory-layout">2.5. Configure directory layout</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="lib/index.html">3. API</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#spiper-types">3.1. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.types</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#id1">3.2. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper._types</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#spiper-shell">3.3. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.shell</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#spiper-runner">3.4. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.runner</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#spiper-graph">3.5. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.graph</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="lib/index.html#spiper-cli">3.6. <code class="xref py py-mod docutils literal notranslate"><span class="pre">spiper.cli</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="indexes.html">4. Indices and tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">5. CHANGELOG</a></li>
-</ul>
+  <a class="reference external image-reference" href="https://travis-ci.com/shouldsee/spiper"><img alt="Build Status" src="https://travis-ci.com/shouldsee/spiper.svg?branch=master" /></a>
+<div class="section" id="spiper-utilities-to-make-a-pipeline-with-singularity-integration-and-caching-ability">
+<h1>spiper: Utilities to make a pipeline, with singularity integration and caching ability.<a class="headerlink" href="#spiper-utilities-to-make-a-pipeline-with-singularity-integration-and-caching-ability" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>Written with sphinx. See <a class="reference external" href="https://shouldsee.github.io/spiper/">https://shouldsee.github.io/spiper/</a></p>
 </div>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Pipeline construction is a long-standing problem in bioinformatics. Writing pipelines
-quickly in a portable, reproducible and human-readable pipeline is always a
-challenging task. To address these issues, I wrote <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code> after reading
-about many other pipeline management packages. The major features making <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code>
-different are</p>
+<div class="section" id="dependencies">
+<h2>Dependencies:<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p><strong>Distributed file monitoring instead of a global file index</strong>   (compared to gnu-make, snakemake)</p></li>
-<li><p><strong>Importable and documentable pipelines since they are python functions</strong> (similar to ruffus/luigi)</p></li>
-<li><p><strong>Hierarchical execution as inherited from python functions</strong></p></li>
-<li><p><strong>No support for job-scheduling at the moment</strong> (contribution welcome!)</p></li>
-<li><p><a class="reference internal" href="examples/index.html#example-workflow-filesync"><span class="std std-ref">Workflow execution as file synchronisation</span></a></p></li>
-<li><p><a class="reference internal" href="examples/index.html#example-remote-code"><span class="std std-ref">Running a remote package/function</span></a></p></li>
-<li><p><strong>Declaring pipeline/function-level dependency.</strong></p></li>
-<li><p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">spiper</span></code> syntax is very close to WDL syntax. It should be possible to auto-generate</p></li>
+<li><p>A pip manager compatible with PEP 508 URL requirements see <a class="reference external" href="https://www.python.org/dev/peps/pep-0508/#examples">examples</a>:</p>
+<ul>
+<li><p>For python3, this means <code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--upgrade</span> <span class="pre">pip&gt;=19.0</span></code> (see pip3 <a class="reference external" href="https://pip.pypa.io/en/stable/news/#id245">changelog</a>)</p></li>
+<li><p>For python2, err python2 is not yet supported</p></li>
 </ul>
-<p>WDL code and submit to a cromwell server.</p>
+</li>
+<li><p>Optional: singularity &gt;= 3.5.3 to use <code class="docutils literal notranslate"><span class="pre">spiper.types.LoggedSingularityExecCommand()</span></code>. (try to install with <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">install_singular.sh</span> <span class="pre">/opt/singularity</span></code>, assuming ubuntu and use sudo for apt packages)</p></li>
+<li><p>Optional: dot binary for plotting graphs with <code class="docutils literal notranslate"><span class="pre">spiper.graph.plot_simple_graph()</span></code>.(try install with <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">-y</span> <span class="pre">graphviz</span></code>)</p></li>
+<li><p>see requirements.txt</p></li>
+</ul>
 </div>
-<div class="section" id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">## install 0.0.5</span>
-pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip3 install spiper@https://github.com/shouldsee/spiper/tarball/master --user
 </pre></div>
 </div>
+</div>
+<div class="section" id="usage">
+<h2>Usage:<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Version:spiper-0.1.4
+
+Usage
+
+    <span class="sb">``</span>spiper &lt;subcommand&gt; &lt;package&gt; &lt;workflow_entrypoint&gt; &lt;workflow_arguments&gt;<span class="sb">``</span>
+
+Example::
+
+    spiper run <span class="se">\</span>
+      spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/master <span class="se">\</span>
+      spiper_mock_flow:run_and_backup <span class="se">\</span>
+      /tmp/test_remote/root <span class="m">1</span> <span class="m">2</span> /tmp/test_remote/root.backup
+
+Arguments:
+    &lt;subcommand&gt;:
+        run                  execute the workflow
+        get_all_files        print all files governed by workflow
+            --plain          print a newline-separated list instead of pprint
+
+        get_changed_files    print all files changed by workflow
+            --plain          print a newline-separated list instead of pprint
+
+        caller_show_deps     print all dependencies governed by workflow <span class="o">(</span>legacy: get_all_deps<span class="o">)</span>
+            --plain          print a newline-separated list instead of pprint
+            --which_flow     printing which subflow/node requries this dependency
+
+        caller_show_log      print details of a call, including <span class="sb">`</span>arg_tuples,sourcecode,sourcefile<span class="sb">`</span>
+            --plain
+
+        file_show_deps       print dependencies of parent <span class="nb">caller</span> <span class="k">for</span> a file
+            --plain
+            --which_flow
+
+        file_show_log        print details of parent <span class="nb">caller</span>
+            --plain
+
+    &lt;package&gt;:
+        a string compatible with pep-508
+    &lt;workflow_entrypoint&gt;:
+        a string  <span class="s2">&quot;&lt;module&gt;:&lt;object_name&gt;&quot;</span> where object is like a <span class="sb">`</span>spipe.types.Node<span class="o">()</span><span class="sb">`</span>
+    &lt;workflow_arguments&gt;:
+        a comma-separated list of arguments <span class="k">for</span> the workflow
+
+Options:
+    --help: show this <span class="nb">help</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-a-remote-pipeline">
+<h2>Running a remote pipeline<a class="headerlink" href="#running-a-remote-pipeline" title="Permalink to this headline">¶</a></h2>
+<p>Pipeline living at <a class="reference external" href="https://github.com/shouldsee/spiper_mock_flow">https://github.com/shouldsee/spiper_mock_flow</a></p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">### [pybash-0.0.5]</span>
 <span class="c1">### [sys.argv] /home/user/.local/lib/python3.5/site-packages/pybash.py --log-stdout</span>
 
@@ -216,14 +240,14 @@ pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 set<span class="se">\</span>
   -euo<span class="se">\</span>
   pipefail<span class="p">;</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### ---------------</span>
 
 <span class="c1">### ---------------</span>
 <span class="c1">### [ command]</span>
 <span class="nv">commit</span><span class="o">=</span>7c317b
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### ---------------</span>
 
@@ -237,12 +261,12 @@ spiper<span class="se">\</span>
   <span class="m">1</span><span class="se">\</span>
   <span class="m">2</span><span class="se">\</span>
   /tmp/test_remote/root.backup
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
@@ -258,7 +282,7 @@ spiper<span class="se">\</span>
   <span class="m">2</span><span class="se">\</span>
   /tmp/test_remote/root.backup<span class="se">\</span>
   <span class="o">)</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### ---------------</span>
 
@@ -267,12 +291,12 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
@@ -284,9 +308,9 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   run<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### ---------------</span>
@@ -296,12 +320,12 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   get_changed_files<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.workflow.log&#39;),</span>
@@ -313,12 +337,12 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   caller_show_deps<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;)]</span>
@@ -330,12 +354,12 @@ spiper<span class="se">\</span>
   caller_show_deps<span class="se">\</span>
   --which_flow<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [Flow running] mock=None</span>
 <span class="c1">### [workflow]done</span>
 <span class="c1">### [(File(&#39;/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py&#39;),</span>
@@ -348,7 +372,7 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   file_show_deps<span class="se">\</span>
   /tmp/test_remote/root.transcribe.fasta
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### /tmp/test_remote/root.transcribe.fasta</span>
 <span class="c1">### [File(&#39;/tmp/test_remote/root.random_seq.seq&#39;)]</span>
@@ -360,7 +384,7 @@ spiper<span class="se">\</span>
   caller_show_log<span class="se">\</span>
   <span class="si">${</span><span class="nv">ARR</span><span class="p">[@]</span><span class="si">}</span><span class="se">\</span>
   --plain
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### node:</span>
 <span class="c1">###     prefix_named:</span>
@@ -395,13 +419,13 @@ spiper<span class="se">\</span>
 <span class="c1">###                 _output=[</span>
 <span class="c1">###                 # File(&#39;log&#39;),</span>
 <span class="c1">###                 ]):</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">###             # execute the flow</span>
 <span class="c1">###             flow = self.runner(workflow, prefix, seed, L)</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">###             # perform backup</span>
 <span class="c1">###             backup_result = self.runner(backup, backup_prefix, flow)</span>
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">###             # plot a dependency graph into the backup directory</span>
 <span class="c1">###             graph_out = self.runner(plot_graph, backup_prefix, backup_result)</span>
 <span class="c1">###             print(&#39;[workflow]done&#39;)</span>
@@ -414,7 +438,7 @@ spiper<span class="se">\</span>
   file_show_log<span class="se">\</span>
   /tmp/test_remote/root.transcribe.fasta<span class="se">\</span>
   --plain
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### file:</span>
 <span class="c1">###     name:</span>
@@ -452,19 +476,75 @@ spiper<span class="se">\</span>
 spiper<span class="se">\</span>
   --help<span class="se">\</span>
   &gt;/dev/null
-<span class="c1">### </span>
+<span class="c1">###</span>
 <span class="c1">### [  stdout]</span>
 <span class="c1">### ---------------</span>
 </pre></div>
 </div>
-<dl class="field-list simple">
-<dt class="field-odd">Author</dt>
-<dd class="field-odd"><p>Feng Geng</p>
-</dd>
-<dt class="field-even">Email</dt>
-<dd class="field-even"><p><a class="reference external" href="mailto:shouldsee&#46;gem&#37;&#52;&#48;gmail&#46;com">shouldsee<span>&#46;</span>gem<span>&#64;</span>gmail<span>&#46;</span>com</a></p>
-</dd>
-</dl>
+</div>
+<div class="section" id="todo">
+<h2>ToDo<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>- [ ] Adding definition for other file operation:
+    - node_clone     duplicate a node
+      - node_detach    cache all dependencies of a node to local
+      - node_cplink    create a spiper-synced sopy
+    - node_mv        move a node and link meta to another location
+    - file_clone      create a hardlink
+      - file_cplink    create a spiper-synced copy
+      - file_mirror
+    - file_mv        move a file to another location
+    - file_commit    commit manual changes to a file
+    - file_pull
+    - node_pull
+- [ ] Adding file pointers between flow and subflow.
+- [ ] print more logs during runtime.
+- [ ] extensive tests for RPO().
+    - [ ] Figure out how to avoid pip install
+    - [ ] construct setup.py for single-file script
+- [ ] Adding wrapper for WDL.
+- [x] Running a remote module
+    - [x] `spiper.mock.test_remote()` add some tests for spiper._types.PythonModule()
+- [ ] use _header.resolve_piper(). Auto-backup all output files. job_backup_copy()
+- [ ] [need:test] Adding Glob() and RecursiveGlob() to allow for easy file matching
+- [ ] Add timed_run() to print out execution times for each job.
+- [ ] Polish graph to have input-output node
+- Ability to relocate nodes.
+- [x] (see config_runner(tag=DirtyKey(&#39;Some tag&#39;)))(func, prefix) must be unique within each workflow
+- [x] Added MyPickleSession to sniff python dependency. Use protocol 3 by default
+- [ ] adds error tests for Caller.cache and Caller.__call__
+- [ ] cache_run_deep() to compute a dynamic graph and recursively
+    cache_run() from top to bottom.
+- [x] (see `mock_run()`) Caller.method() to populate Caller.output() for constructing symbolic graphs.
+- [x] In get_upstream()/get_downstream(), how to treat File that belongs to a Prefix?
+    - [x] it should come with a pointer pointing back to the Prefix.
+    - Prefix in get_input_identity() will be globbed and snapshotted
+    - Prefix in get_upstream() will be treated as a standalone
+    - If a File has been included in a OutputPrefix(),
+- [x] fix get_upstream() if possible
+- [x] test_loadable_subprocess() test the outputted caller_dump is loadable from other directories
+- shellcmd
+    - [x] capture stderr and stdout of subprocess.check_output(),
+    - [x] logging the command executed into .cmd file
+    - [x] with optional log file.
+- [x] adding an outward_pk file to complement input_pk and auto-sync
+    - the outward_pk should record identity of the output file and input file.
+    - the input_ident is useful
+- [x] produce a dependency graph
+    - get_upstream_files()
+    - get_downstream_nodes()
+- [x] (Done as HttpResponse(),  ) Adding InputHTTP()
+    - [ ] better subclassing requests.Request()?
+- [ ] implements version_check when reading input_json / output_json
+- [ ] Adding OutputHTTP() object
+- [ ] (abandoned)import module from online.
+- [ ] migrate valid cache folder and preserving inner dependency and re-connect cutted dependency
+- [ ] implementing checks for output nodes to make sure Files.to_ident() are changed
+</pre></div>
+</div>
+</div>
+<div class="section" id="screenshots">
+<h2>Screenshots<a class="headerlink" href="#screenshots" title="Permalink to this headline">¶</a></h2>
+<a class="reference external image-reference" href="./tests/test_downstream.node_only.dot.svg"><img alt="" src="./tests/test_downstream.node_only.dot.svg" /></a>
 </div>
 </div>
 
@@ -473,13 +553,6 @@ spiper<span class="se">\</span>
            
           </div>
           <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="install/index.html" class="btn btn-neutral float-right" title="1. Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-    </div>
   
 
   <hr/>
