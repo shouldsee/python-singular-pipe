@@ -567,8 +567,8 @@ class Caller(object):
 		return result 
 
 	def __call__(self, runner, config_runner=None):
-		if not isinstance(runner,partial):
-			runner = partial(runner)
+		# if not isinstance(runner,partial):
+		# 	runner = partial(runner)
 		self.runner = runner
 		self.config_runner = config_runner
 		# self.runner = partial( runner, last_caller=last_caller)
@@ -784,26 +784,39 @@ def cache_run(job, *args,
 	return _cache_run(job,args,dir_layout,mock,check_only,check_changed,force,verbose,last_caller,tag)
 
 def _cache_run(job, args, dir_layout,mock,check_only,check_changed,force,verbose, last_caller, tag):
-	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose).run(job, *args,last_caller=last_caller,tag=tag)
+	return _Runner(dir_layout,mock,check_only,check_changed,force,verbose,last_caller,tag).run(job, *args)
+	# ,last_caller=last_caller,tag=tag)
 
 class _Runner(object):
-	def __init__(self, dir_layout,  mock, check_only,check_changed,force,verbose ):
-		self.dir_layout = dir_layout
-		self.mock = mock
-		self.check_only = check_only
+	def __init__(self, dir_layout,  mock, check_only,check_changed,force,verbose, last_caller, tag):
+		self.dir_layout    = dir_layout
+		self.mock          = mock
+		self.check_only    = check_only
 		self.check_changed = check_changed
-		self.force = force
-		self.verbose = verbose
+		self.force         = force
+		self.verbose       = verbose
+		self.last_caller   = last_caller
+		self.tag           = tag
+
+	def config_runner(self,**kw):
+		d = self.__dict__.copy()
+		d.update(kw)
+		return _Runner(**d)
+
 	def before_run(self, job, args):
 		pass
 	def after_run(self, job, args):
 		pass
 
 	def run(self, job, *args, last_caller = None, tag = None):
-		result = self._run(job, args, last_caller, tag)
+		result = self._run(job, args, self.last_caller, self.tag)
+		# result = self._run(job, args, last_caller, tag)
 		return result
 	__call__ = run
 
+	@property
+	def is_meta_run(self): 
+		return bool(self.check_only) or bool(self.check_changed) or (self.mock!=0)
 	def _run(self, job, args, last_caller, tag):
 		'''
 		return: job_result
@@ -829,8 +842,10 @@ class _Runner(object):
 		#####  Caller.from_input() would also cast types for inputs
 		# _input          = args		
 		# runner          = partial(self.run, last_caller=_caller)
-		runner          = partial(self, last_caller=_caller)
-		config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
+		# runner          = partial(self, last_caller=_caller)
+		runner          = self.config_runner(last_caller = _caller)
+		config_runner   = runner.config_runner
+		# config_runner   = lambda _caller=_caller,**kw:partial(self, last_caller=_caller, **kw)
 		func_name       = get_func_name()
 		prefix          = args[0]
 

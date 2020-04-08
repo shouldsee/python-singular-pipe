@@ -20,6 +20,7 @@
    lib/index.rst
    indexes.rst
    license.rst
+   CHANGELOG.md
 
 Overview
 ===================
@@ -48,7 +49,7 @@ Quickstart
     ## install 0.0.5
     pip3 install spiper@https://github.com/shouldsee/spiper/tarball/0.0.5 --user
 
-.. literalinclude:: examples/003_remote_bash.sh
+.. literalinclude:: examples/003_remote_bash.sh.log
   :language: bash
 
 

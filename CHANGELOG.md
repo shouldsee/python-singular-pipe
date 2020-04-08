@@ -1,3 +1,9 @@
+CHANGELOG
+-------------------------
+
+# 0.1.5
+- added runner.is_meta_run for better Flow specification
+
 # 0.1.4
 - Fixed a bug in `_types._Runner._run` causing incorrect values of use_cache in get_changed_files.
 - [need:test] pulling changes to an executed long pipeline. get_changed_files() should emit correct values 

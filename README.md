@@ -88,14 +88,8 @@ Pipeline living at https://github.com/shouldsee/spiper_mock_flow
 ### [ command]
 set\
   -euo\
-  pipefail;
-### 
-### [  stdout]
-### ---------------
-
-### ---------------
-### [ command]
-commit=7c317b
+  pipefail;\
+  commit=7c317b
 ### 
 ### [  stdout]
 ### ---------------
@@ -110,26 +104,6 @@ spiper\
   1\
   2\
   /tmp/test_remote/root.backup
-### 
-### [  stdout]
-### 
-### [Flow running] mock=None
-### [workflow]done
-### 
-### [Flow running] mock=None
-### [workflow]done
-### [File('/tmp/test_remote/root.workflow.log'),
-###  File('/tmp/test_remote/root.backup.output..log')]
-### ---------------
-
-### ---------------
-### [ command]
-spiper\
-  get_changed_files\
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit\
-  spiper_mock_flow:run_and_backup\
-  --comma\
-  /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
 ### 
 ### [  stdout]
 ### 
@@ -276,7 +250,7 @@ spiper\
 ###                        ",'/tmp/test_remote/root.backup']",
 ###                        "['_output'      ,builtins.list                 ,[]]"]),
 ###                      ('code',
-###                       '<code object run_and_backup at 0x7f7613c6cae0, file '
+###                       '<code object run_and_backup at 0x7f47cb33bae0, file '
 ###                       '"/home/user/.local/lib/python3.5/site-packages/spiper_mock_flow.py", '
 ###                       'line 133>')])
 ###     sourcecode:

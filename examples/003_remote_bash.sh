@@ -1,20 +1,13 @@
 #### get a list of changed_files
 # rm -rfv /tmp/test_remote/*
-set -euo pipefail;
+set -euo pipefail; commit=7c317b
 
-commit=7c317b
 spiper get_changed_files \
   spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit \
   spiper_mock_flow:run_and_backup \
   /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup
 
-### or use a comma-separated list of arguments
-spiper get_changed_files \
-  spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit \
-  spiper_mock_flow:run_and_backup \
-  --comma /tmp/test_remote/root,1,2,/tmp/test_remote/root.backup
-
-### reduce redundancy
+### reduce redundancy in bash call
 ARR=(spiper_mock_flow@https://github.com/shouldsee/spiper_mock_flow/tarball/$commit \
   spiper_mock_flow:run_and_backup \
   /tmp/test_remote/root 1 2 /tmp/test_remote/root.backup )

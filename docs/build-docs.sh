@@ -10,7 +10,7 @@ ODIR=`realpath $PWD`
 DIR=../singular_pipe_docs
 DIR=`realpath $DIR`
 mkdir -p $DIR
-cp -rfl $NAME examples scripts -t $DIR
+cp -rfl $NAME examples scripts *.md -t $DIR
 cp -rfl docs/* -t $DIR
 sphinx-build -b html $DIR $DIR/_build
 

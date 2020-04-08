@@ -44,7 +44,7 @@ extensions = [
 'sphinx.ext.autodoc',
 'sphinx.ext.viewcode',
 'sphinx.ext.autosummary',
-
+'m2r',
 # 'sphinx.ext.napoleon'
 ]
 pygments_style = 'sphinx'
