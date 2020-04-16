@@ -14,7 +14,7 @@ if [ -e $EXE ]; then
 else
 
 _down(){
-        curl -LC- "$@"
+        curl -sL "$@"
 }
 
 
