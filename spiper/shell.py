@@ -128,6 +128,7 @@ if 1:
 		if debug: print(json.dumps(list(map(repr,leafs)),indent=4,))
 
 		FS,modes = make_files_for( leafs + extra_files)
+		FS = list(set(FS))
 		if debug: print(json.dumps(list(map(repr,FS)),indent=4,))
 
 		bfs = [':'.join([f,f,m]) for f,m in zip(FS,modes)]
